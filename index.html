@@ -14,12 +14,12 @@
       rel="stylesheet"
     />
   </head>
-  <body>
+  <body class="bg-slate-400">
     <!-- Header Start -->
-    <header class="bg-black h-auto flex-wrap-reverse justify-center items-center sm:flex sm:justify-between sm:px-14 px-5 py-3">
+    <header class="bg-black h-auto flex-wrap-reverse justify-center items-center sm:flex sm:justify-between sm:px-10 px-5 py-3">
         <!-- Search Box Start -->
          <div class="flex gap-4">
-             <i class="fa-solid fa-bars sm:hidden block text-lg text-white "></i>
+             <i id="menu-icon" class="fa-solid fa-bars sm:hidden block text-lg text-white cursor-pointer" onclick="toggleNavbar()"></i>
              <div class="relative w-full">
                  <input
                  type="search"
@@ -56,16 +56,60 @@
       </div>
     </header>
     <!-- Header End -->
-    <nav class="bg-black border-t-2 border-slate-900 h-16 flex justify-center items-center px-14">
-        <ul class="flex gap-10 text-white">
-            <li>Link 1</li>
+
+     <!-- Navbar Start -->
+    <nav id="navbar" class="bg-black border-t-2 relative border-slate-900 h-auto hidden sm:flex justify-center items-center px-14">
+        <ul class="flex  flex-col sm:flex-row gap-4 sm:gap-10 text-white text-center py-3 ">
+            <li class="hover:cursor-pointer" id="shop" onclick="toggleShop()">Shop
+              <i class="fa-solid fa-angle-down ml-1 align-middle text-sm"></i>
+              <ul class="hidden w-full absolute bg-white text-black  grid-cols-2 sm:grid-cols-4 gap-10 z-10 top-12 left-0 p-10 " id="menu">
+                <li class="text-start font-semibold">
+                  SubLink
+                  <ul class="mt-2 font-thin flex flex-col gap-1">
+                    <a href="#"><li class="hover:underline hover:cursor-pointer">Sub-Sub Link</li></a>
+                    <a href="#"><li class="hover:underline hover:cursor-pointer">Sub-Sub Link</li></a>
+                    <a href="#"><li class="hover:underline hover:cursor-pointer">Sub-Sub Link</li></a>
+                  </ul>
+                </li>
+                <li class="text-start font-semibold">
+                  SubLink
+                  <ul class="mt-2 font-thin flex flex-col gap-1">
+                    <a href="#"><li class="hover:underline hover:cursor-pointer">Sub-Sub Link</li></a>
+                    <a href="#"><li class="hover:underline hover:cursor-pointer">Sub-Sub Link</li></a>
+                    <a href="#"><li class="hover:underline hover:cursor-pointer">Sub-Sub Link</li></a>
+                  </ul>
+                </li>
+                <li class="text-start font-semibold">
+                  SubLink
+                  <ul class="mt-2 font-thin flex flex-col gap-1">
+                    <a href="#"><li class="hover:underline hover:cursor-pointer">Sub-Sub Link</li></a>
+                    <a href="#"><li class="hover:underline hover:cursor-pointer">Sub-Sub Link</li></a>
+                    <a href="#"><li class="hover:underline hover:cursor-pointer">Sub-Sub Link</li></a>
+                  </ul>
+                </li>
+                <li class="text-start font-semibold">
+                  SubLink
+                  <ul class="mt-2 font-thin flex flex-col gap-1">
+                    <a href="#"><li class="hover:underline hover:cursor-pointer">Sub-Sub Link</li></a>
+                    <a href="#"><li class="hover:underline hover:cursor-pointer">Sub-Sub Link</li></a>
+                    <a href="#"><li class="hover:underline hover:cursor-pointer">Sub-Sub Link</li></a>
+                  </ul>
+                </li>
+              </ul>
+              
+            </li>
             <li>Link 2</li>
             <li>Link 3</li>
             <li>Link 4</li>
             <li>Link 5</li>
-            <li>Link 6</li>
-            <li>Link 7</li>
+            <a href="#"><li class="hover:underline hover:cursor-pointer">About</li></a>
+            <a href="#"><li class="hover:underline hover:cursor-pointer">Contact</li></a>
         </ul>
     </nav>
-  </body> 
+    <!-- Navbar End -->
+
+   
+  </body>
+  <!-- scripts -->
+   <script src="/js/script.js"></script>
 </html>
