@@ -1,42 +1,54 @@
-<div className="w-full flex justify-center items-center">
-      <div className="lg:p-10 md:p-10 py-10 px-3 shadow-2xl border-2 my-10 w-5/6 md:w-4/6 lg:w-3/6 flex flex-col items-center gap-10">
-        <div>
-          <h1 className="text-center text-4xl font-bold mb-3">Login</h1>
-          <p>
-            Don't have an account?
-           <a href="signup.php">   
-               <span className="text-green-600 ml-1 font-semibold underline">
-                   Register
-                </span>
-            </a>
-                
-          </p>
+<?php
+include "header.php";
+?>
+   
+   <div class="bg-gray-100 flex items-center justify-center py-24">
+    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-sm">
+      <h2 class="text-2xl font-semibold text-center mb-6">Login</h2>
+
+      <form>
+        <!-- Email Input -->
+        <div class="mb-4">
+          <label for="email" class="block text-gray-700 font-medium mb-2">Email</label>
+          <input
+            type="email"
+            id="email"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
+            placeholder="Enter your email"
+            required
+          />
         </div>
-       
-        <div>
-          <form className="flex flex-col gap-5">
-            <input
-              type="email"
-              id="email"
-              placeholder="Email"
-              className="px-3 py-4 border border-green-500 outline-yellow-500 rounded-md w-full md:w-96"
-            />
-            <div className="relative">
-              <input
-                type="password"
-                id="password"
-                placeholder="Password"
-                className="px-3 py-4 border border-green-500 outline-yellow-500 rounded-md pr-12 w-full md:w-96"
-              />
-             
-            </div>
-            <button
-              type="submit"
-              className="px-5 py-4 text-white bg-lime-500 rounded-md font-semibold hover:bg-lime-600 transition ease-in-out duration-300 hover:drop-shadow-xl "
-            >
-              Login
-            </button>
-          </form>
+
+        <!-- Password Input -->
+        <div class="mb-6">
+          <label for="password" class="block text-gray-700 font-medium mb-2">Password</label>
+          <input
+            type="password"
+            id="password"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
+            placeholder="Enter your password"
+            required
+          />
         </div>
-      </div>
+
+        <!-- Submit Button -->
+        <div class="mb-4">
+          <button
+            type="submit"
+            class="w-full bg-amber-500 text-white py-2 px-4 rounded-md hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-400"
+          >
+            Login
+          </button>
+        </div>
+      </form>
+
+      <!-- Create Account -->
+      <p class="text-sm text-center text-gray-600">
+        Don't have an account? <br>
+        <a href="register.php" class="text-amber-500 hover:underline"><b>Create Account</b></a>
+      </p>
     </div>
+</div>
+    <?php
+include "footer.php";
+?>
