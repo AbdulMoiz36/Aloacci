@@ -14,7 +14,7 @@ if(isset($_POST['login'])){
    $count=mysqli_num_rows($res);
     if($count>0){
       $row=mysqli_fetch_assoc($res);
-      if($row['Status']==0){
+      if($row['status']==0){
         $msg = "Your Account is Deactivated";
       }else{
         $_SESSION['ADMIN_LOGIN']='yes';

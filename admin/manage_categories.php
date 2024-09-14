@@ -54,7 +54,7 @@ if(isset($_REQUEST['submit'])){
          mysqli_query($con,"update categories set categories='$cat' where id='$_id'");
        }
        else{
-         mysqli_query($con,"insert into categories (categories,status) Value ('$cat','1')");
+         mysqli_query($con,"insert into categories (categories) Value ('$cat')");
        }
    
        echo "<script>window.location.href='categories.php'</script>";

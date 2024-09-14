@@ -1,5 +1,84 @@
 "use strict";
 
+$("#message_send").click(function () {
+  iziToast.success({
+    // title: 'Hello, world!',
+    message: 'Message sent successfully',
+    position: 'topRight'
+  });
+});
+
+$("#review_submitted").click(function () {
+  iziToast.success({
+    // title: 'Hello, world!',
+    message: 'Review Submitted successfully',
+    position: 'topRight'
+  });
+});
+
+$("#feedback_send").click(function () {
+  iziToast.success({
+    // title: 'Hello, world!',
+    message: 'Feedback Submitted successfully',
+    position: 'topRight'
+  });
+});
+$("#cart_add").click(function () {
+  iziToast.success({
+    // title: 'Hello, world!',
+    message: 'Product added to cart successfully',
+    position: 'topRight'
+  });
+});
+
+$("#registration_success").click(function () {
+  iziToast.success({
+    // title: 'Hello, world!',
+    message: 'Thank you for registration.',
+    position: 'topRight'
+  });
+});
+
+$("#password_update").click(function () {
+  iziToast.success({
+    // title: 'Hello, world!',
+    message: 'Password updated successfully',
+    position: 'topRight'
+  });
+});
+
+$("#profile_update").click(function () {
+  iziToast.success({
+    // title: 'Hello, world!',
+    message: 'Profile updated successfully',
+    position: 'topRight'
+  });
+});
+
+$("#reset_link").click(function () {
+  iziToast.success({
+    // title: 'Hello, world!',
+    message: 'We have just sent a reset link to your email. Please check inbox.',
+    position: 'topRight'
+  });
+});
+
+$("#reset_password").click(function () {
+  iziToast.success({
+    // title: 'Hello, world!',
+    message: 'Password has been updated',
+    position: 'topRight'
+  });
+});
+
+$("#info").click(function () {
+  iziToast.info({
+    // title: 'Hello, world!',
+    message: 'This email is already in use',
+    position: 'topRight'
+  });
+});
+
 $("#toastr-1").click(function () {
   iziToast.info({
     title: 'Hello, world!',
