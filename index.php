@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 
@@ -153,3 +154,16 @@
 <script src="./js/custom.js"></script>
 
 </html>
+=======
+<?php
+include "header.php";
+?>
+
+
+
+<?php
+include "footer.php";
+?>
+   
+ 
+>>>>>>> 5b0840ea26d770a64d4257df109de34a33b90beb

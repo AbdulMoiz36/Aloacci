@@ -2,6 +2,7 @@
     font-family: "Poppins", sans-serif;
     font-weight: 300;
     font-style: normal;
+    letter-spacing: 2px;
 }
 /* Remove 'X' clear button on Webkit browsers (Chrome, Safari, Edge) */
 input[type="search"]::-webkit-search-cancel-button {
@@ -12,6 +13,7 @@ input[type="search"]::-webkit-search-cancel-button {
   #head-search {
     padding-right: 2.5rem; /* Ensure enough space for the search icon */
   }
+  
   
   .shop:hover{
     border-bottom: 2px solid gray;
