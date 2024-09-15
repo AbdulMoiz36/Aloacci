@@ -91,7 +91,7 @@ include 'functions.php';
           <?php
 
             // Fetch categories
-            $categoriesQuery = mysqli_query($con, "SELECT * FROM categories");
+            $categoriesQuery = mysqli_query($con, "SELECT * FROM categories WHERE `status` = 1 ");
             while ($category = mysqli_fetch_assoc($categoriesQuery)) {
                 echo '<li class="text-start font-semibold"> <a href="#" class="font-semibold">';
                 echo htmlspecialchars($category['categories']);
