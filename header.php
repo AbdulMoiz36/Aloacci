@@ -98,7 +98,7 @@ include 'functions.php';
                 echo '</a><ul class="mt-2 font-thin flex flex-col gap-1">';
                 
                 // Fetch sub-categories for this category
-                $subCategoriesQuery = mysqli_query($con, "SELECT * FROM sub_categories WHERE category_id = '".$category['id']."'");
+                $subCategoriesQuery = mysqli_query($con, "SELECT * FROM sub_categories WHERE category_id = '".$category['id']."' AND status = 1");
                 while ($subCategory = mysqli_fetch_assoc($subCategoriesQuery)) {
                     echo '<a href="#"><li class="hover:underline hover:cursor-pointer">';
                     echo htmlspecialchars($subCategory['sub_categories']);
