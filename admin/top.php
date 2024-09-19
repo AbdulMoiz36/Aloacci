@@ -28,7 +28,7 @@ $row = mysqli_fetch_array($res);
 <head>
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
-  <title>Otika - Admin Dashboard Template</title>
+  <title>Aloacci - Admin Dashboard</title>
   <!-- General CSS Files -->
   <link rel="stylesheet" href="assets/css/app.min.css">
   <link rel="stylesheet" href="assets/bundles/datatables/datatables.min.css">
@@ -76,7 +76,7 @@ $row = mysqli_fetch_array($res);
         <aside id="sidebar-wrapper">
           <div class="sidebar-brand">
             <a href="categories.php"> <img alt="image" src="../image/logo.png" class="header-logo" /> <span
-                class="logo-name">Art Arena</span>
+                class="logo-name">Aloacci</span>
             </a>
           </div>
           <ul class="sidebar-menu">
@@ -86,6 +86,9 @@ $row = mysqli_fetch_array($res);
             ?>
             <li class="dropdown <?= $active=="categories.php"? 'active':''; ?>">
               <a href="categories.php" class="nav-link"><i data-feather="monitor"></i><span>Categories</span></a>
+            </li>
+            <li class="dropdown <?= $active=="sub_categories.php"? 'active':''; ?>">
+              <a href="sub_categories.php" class="nav-link"><i data-feather="monitor"></i><span>Sub Categories</span></a>
             </li>
             <li class="dropdown <?= $active=="product.php"? 'active':''; ?>">
               <a href="product.php" class="nav-link"><i data-feather="monitor"></i><span>Products</span></a>
