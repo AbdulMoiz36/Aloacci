@@ -4,7 +4,6 @@ include 'functions.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -60,12 +59,11 @@ include 'functions.php';
     <div class="flex justify-center space-x-10 text-white items-center">
       <!-- Account -->
       <div class="flex items-center space-x-3 text-lg sm:text-xl">
-
         <?php
         if(isset($_SESSION['USER_LOGIN'])){
         ?>
         <i class="fas fa-user"></i>
-        <a href="logout.php">Logout</a>
+        <a href="account.php">Account</a>
         <?php
         }else{
         ?>
