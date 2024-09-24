@@ -1,5 +1,59 @@
 <?php
-include 'header.php'
+include 'header.php';
+// Get the selected sorting option
+$sort_by = isset($_GET['sort_by']) ? $_GET['sort_by'] : '';
+
+// Define the sorting query
+$sort_query = '';
+if ($sort_by == 'name_asc') {
+    $sort_query = "ORDER BY Name ASC";
+} elseif ($sort_by == 'price_asc') {
+    $sort_query = "ORDER BY Price ASC";
+} elseif ($sort_by == 'price_desc') {
+    $sort_query = "ORDER BY Price DESC";
+} elseif ($sort_by == 'newest') {
+    $sort_query = "ORDER BY Id DESC";
+}
+
+// Fetch categories
+$sql = "SELECT * FROM categories";
+$res = mysqli_query($con, $sql);
+$cat_arr = array();
+while ($row = mysqli_fetch_assoc($res)) {
+    $cat_arr[] = $row;
+}
+
+function fetch_products_with_categories($con, $type = '', $limit = '', $cat_id = '', $sort_query = '')
+{
+    // Fetch product data
+    $sql = "SELECT product.*, categories.Categories AS CategoryName 
+            FROM product
+            JOIN categories ON product.category_id = categories.Id
+            WHERE product.status=1";
+
+    if ($cat_id != '') {
+        $sql .= " AND product.categories_id=$cat_id";
+    }
+
+    // Append the sorting query
+    if ($sort_query != '') {
+        $sql .= " " . $sort_query;
+    }
+
+    if ($limit != '') {
+        $sql .= " LIMIT $limit";
+    }
+
+    $res = mysqli_query($con, $sql);
+    $data = array();
+    while ($row = mysqli_fetch_assoc($res)) {
+        $data[] = $row;
+    }
+    return $data;
+}
+// Fetch products with categories
+$products = fetch_products_with_categories($con, '', '', '', $sort_query);
+
 ?>
 
 <div class="w-full p-10 ">
@@ -56,12 +110,15 @@ include 'header.php'
     <div class="w-full md:w-5/6 p-3 flex  ">
         <div class="w-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
             <!-- Product Card Start-->
+            <?php
+                        foreach ($products as $list) {
+                        ?>
             <div class="relative bg-white shadow-md rounded-lg overflow-visible group">
                 <div class="relative">
                     <!-- Default Image -->
-                    <img src="./img/product-1.jpg" alt="Product 1" class="w-full h-3/4 object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0">
+                    <img src="./image/<?= $list['image'] ?>" alt="Product 1" class="w-full h-3/4 object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0">
                     <!-- Image to show on hover -->
-                    <img src="./img/product-1-2.jpg" alt="Product 1 Hover" class="w-full h-3/4 object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100 absolute top-0 left-0">
+                    <img src="./image/<?= $list['image'] ?>" alt="Product 1 Hover" class="w-full h-3/4 object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100 absolute top-0 left-0">
                 </div>
                 <!-- Add to cart -->
                 <a href="#">
@@ -70,183 +127,18 @@ include 'header.php'
                     </div>
                 </a>
                 <div class="p-4">
-                    <h2 class="font-bold text-lg">Product 1</h2>
+                    <h2 class="font-bold text-lg"><?= $list['name'] ?></h2>
                     <p class="text-gray-600">Description of Product 1</p>
                     <!-- Price Section -->
                     <div class="flex items-center space-x-2">
-                        <span class="text-red-500 font-semibold">Rs.2,140</span>
+                        <span class="text-red-500 font-semibold">Rs.<?= $list['price'] ?></span>
                     </div>
                 </div>
             </div>
             <!-- Product Card End-->
-            <!-- Product Card Start-->
-            <div class="relative bg-white shadow-md rounded-lg overflow-visible group">
-                <div class="relative">
-                    <!-- Default Image -->
-                    <img src="./img/product-1.jpg" alt="Product 1" class="w-full h-3/4 object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0">
-                    <!-- Image to show on hover -->
-                    <img src="./img/product-1-2.jpg" alt="Product 1 Hover" class="w-full h-3/4 object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100 absolute top-0 left-0">
-                </div>
-                <!-- Add to cart -->
-                <a href="#">
-                    <div class="absolute -top-2 -right-2 bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full p-3 flex items-center justify-center text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out cursor-pointer">
-                        <i class="fas fa-plus text-white pl-0.5 font-semibold"></i>
-                    </div>
-                </a>
-                <div class="p-4">
-                    <h2 class="font-bold text-lg">Product 1</h2>
-                    <p class="text-gray-600">Description of Product 1</p>
-                    <!-- Price Section -->
-                    <div class="flex items-center space-x-2">
-                        <span class="text-red-500 font-semibold">Rs.2,140</span>
-                    </div>
-                </div>
-            </div>
-            <!-- Product Card End-->
-            <!-- Product Card Start-->
-            <div class="relative bg-white shadow-md rounded-lg overflow-visible group">
-                <div class="relative">
-                    <!-- Default Image -->
-                    <img src="./img/product-1.jpg" alt="Product 1" class="w-full h-3/4 object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0">
-                    <!-- Image to show on hover -->
-                    <img src="./img/product-1-2.jpg" alt="Product 1 Hover" class="w-full h-3/4 object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100 absolute top-0 left-0">
-                </div>
-                <!-- Add to cart -->
-                <a href="#">
-                    <div class="absolute -top-2 -right-2 bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full p-3 flex items-center justify-center text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out cursor-pointer">
-                        <i class="fas fa-plus text-white pl-0.5 font-semibold"></i>
-                    </div>
-                </a>
-                <div class="p-4">
-                    <h2 class="font-bold text-lg">Product 1</h2>
-                    <p class="text-gray-600">Description of Product 1</p>
-                    <!-- Price Section -->
-                    <div class="flex items-center space-x-2">
-                        <span class="text-red-500 font-semibold">Rs.2,140</span>
-                    </div>
-                </div>
-            </div>
-            <!-- Product Card End-->
-            <!-- Product Card Start-->
-            <div class="relative bg-white shadow-md rounded-lg overflow-visible group">
-                <div class="relative">
-                    <!-- Default Image -->
-                    <img src="./img/product-1.jpg" alt="Product 1" class="w-full h-3/4 object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0">
-                    <!-- Image to show on hover -->
-                    <img src="./img/product-1-2.jpg" alt="Product 1 Hover" class="w-full h-3/4 object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100 absolute top-0 left-0">
-                </div>
-                <!-- Add to cart -->
-                <a href="#">
-                    <div class="absolute -top-2 -right-2 bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full p-3 flex items-center justify-center text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out cursor-pointer">
-                        <i class="fas fa-plus text-white pl-0.5 font-semibold"></i>
-                    </div>
-                </a>
-                <div class="p-4">
-                    <h2 class="font-bold text-lg">Product 1</h2>
-                    <p class="text-gray-600">Description of Product 1</p>
-                    <!-- Price Section -->
-                    <div class="flex items-center space-x-2">
-                        <span class="text-red-500 font-semibold">Rs.2,140</span>
-                    </div>
-                </div>
-            </div>
-            <!-- Product Card End-->
-            <!-- Product Card Start-->
-            <div class="relative bg-white shadow-md rounded-lg overflow-visible group">
-                <div class="relative">
-                    <!-- Default Image -->
-                    <img src="./img/product-1.jpg" alt="Product 1" class="w-full h-3/4 object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0">
-                    <!-- Image to show on hover -->
-                    <img src="./img/product-1-2.jpg" alt="Product 1 Hover" class="w-full h-3/4 object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100 absolute top-0 left-0">
-                </div>
-                <!-- Add to cart -->
-                <a href="#">
-                    <div class="absolute -top-2 -right-2 bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full p-3 flex items-center justify-center text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out cursor-pointer">
-                        <i class="fas fa-plus text-white pl-0.5 font-semibold"></i>
-                    </div>
-                </a>
-                <div class="p-4">
-                    <h2 class="font-bold text-lg">Product 1</h2>
-                    <p class="text-gray-600">Description of Product 1</p>
-                    <!-- Price Section -->
-                    <div class="flex items-center space-x-2">
-                        <span class="text-red-500 font-semibold">Rs.2,140</span>
-                    </div>
-                </div>
-            </div>
-            <!-- Product Card End-->
-            <!-- Product Card Start-->
-            <div class="relative bg-white shadow-md rounded-lg overflow-visible group">
-                <div class="relative">
-                    <!-- Default Image -->
-                    <img src="./img/product-1.jpg" alt="Product 1" class="w-full h-3/4 object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0">
-                    <!-- Image to show on hover -->
-                    <img src="./img/product-1-2.jpg" alt="Product 1 Hover" class="w-full h-3/4 object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100 absolute top-0 left-0">
-                </div>
-                <!-- Add to cart -->
-                <a href="#">
-                    <div class="absolute -top-2 -right-2 bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full p-3 flex items-center justify-center text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out cursor-pointer">
-                        <i class="fas fa-plus text-white pl-0.5 font-semibold"></i>
-                    </div>
-                </a>
-                <div class="p-4">
-                    <h2 class="font-bold text-lg">Product 1</h2>
-                    <p class="text-gray-600">Description of Product 1</p>
-                    <!-- Price Section -->
-                    <div class="flex items-center space-x-2">
-                        <span class="text-red-500 font-semibold">Rs.2,140</span>
-                    </div>
-                </div>
-            </div>
-            <!-- Product Card End-->
-            <!-- Product Card Start-->
-            <div class="relative bg-white shadow-md rounded-lg overflow-visible group">
-                <div class="relative">
-                    <!-- Default Image -->
-                    <img src="./img/product-1.jpg" alt="Product 1" class="w-full h-3/4 object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0">
-                    <!-- Image to show on hover -->
-                    <img src="./img/product-1-2.jpg" alt="Product 1 Hover" class="w-full h-3/4 object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100 absolute top-0 left-0">
-                </div>
-                <!-- Add to cart -->
-                <a href="#">
-                    <div class="absolute -top-2 -right-2 bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full p-3 flex items-center justify-center text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out cursor-pointer">
-                        <i class="fas fa-plus text-white pl-0.5 font-semibold"></i>
-                    </div>
-                </a>
-                <div class="p-4">
-                    <h2 class="font-bold text-lg">Product 1</h2>
-                    <p class="text-gray-600">Description of Product 1</p>
-                    <!-- Price Section -->
-                    <div class="flex items-center space-x-2">
-                        <span class="text-red-500 font-semibold">Rs.2,140</span>
-                    </div>
-                </div>
-            </div>
-            <!-- Product Card End-->
-            <!-- Product Card Start-->
-            <div class="relative bg-white shadow-md rounded-lg overflow-visible group">
-                <div class="relative">
-                    <!-- Default Image -->
-                    <img src="./img/product-1.jpg" alt="Product 1" class="w-full h-3/4 object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0">
-                    <!-- Image to show on hover -->
-                    <img src="./img/product-1-2.jpg" alt="Product 1 Hover" class="w-full h-3/4 object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100 absolute top-0 left-0">
-                </div>
-                <!-- Add to cart -->
-                <a href="#">
-                    <div class="absolute -top-2 -right-2 bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full p-3 flex items-center justify-center text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out cursor-pointer">
-                        <i class="fas fa-plus text-white pl-0.5 font-semibold"></i>
-                    </div>
-                </a>
-                <div class="p-4">
-                    <h2 class="font-bold text-lg">Product 1</h2>
-                    <p class="text-gray-600">Description of Product 1</p>
-                    <!-- Price Section -->
-                    <div class="flex items-center space-x-2">
-                        <span class="text-red-500 font-semibold">Rs.2,140</span>
-                    </div>
-                </div>
-            </div>
-            <!-- Product Card End-->
+            <?php
+                        }
+                        ?>
 
             <!-- Repeat for more products... -->
         </div>

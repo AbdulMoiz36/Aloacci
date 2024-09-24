@@ -1,5 +1,22 @@
 <?php
 include 'header.php';
+$product_id = mysqli_real_escape_string($con,$_GET['id']);
+
+if($product_id>0){
+    $get_product = get_product($con,'','',$product_id);
+}
+else{
+    echo "<script>window.location.href='index.php'</script>";
+}
+// Check if the content is favorited by the user
+$is_favorited = false;
+if (isset($_SESSION['USER_LOGIN'])) {
+    $user_id = $_SESSION['USER_ID'];
+    $sql_check_favorite = mysqli_query($con, "SELECT * FROM wishlist WHERE user_id = $user_id AND product_id = $product_id");
+    if (mysqli_num_rows($sql_check_favorite) > 0) {
+        $is_favorited = true;
+    }
+}
 ?>
 
 <section class="container">
@@ -8,19 +25,19 @@ include 'header.php';
         <div class="w-100 md:w-1/2 flex gap-2">
             <!-- Thumbnail Images -->
             <div class="w-1/6 space-y-2">
-                <img src="./img/product-1.jpg" alt="Thumbnail 1" class="cursor-pointer border-2 border-slate-200" onclick="changeImage(this.src)">
-                <img src="./img/product-1-2.jpg" alt="Thumbnail 2" class="cursor-pointer border-2 border-slate-200" onclick="changeImage(this.src)">
+                <img src="./image/<?= $get_product['0']['image'] ?>" alt="Thumbnail 1" class="cursor-pointer border-2 border-slate-200" onclick="changeImage(this.src)">
+                <img src="./image/<?= $get_product['0']['image'] ?>" alt="Thumbnail 2" class="cursor-pointer border-2 border-slate-200" onclick="changeImage(this.src)">
             </div>
             <!-- Larger Image -->
             <div class="w-5/6">
-                <img id="mainImage" src="./img/product-1.jpg" alt="Selected Product Image" class="border-2 border-slate-200 max-h-[850px]">
+                <img id="mainImage" src="./image/<?= $get_product['0']['image'] ?>" alt="Selected Product Image" class="border-2 border-slate-200 max-h-[850px]">
             </div>
         </div>
 
         <!-- Product Details Section -->
         <div class="w-full md:w-1/2 flex flex-col justify-center md:justify-start p-10 gap-6">
             <div>
-                <h1 class="font-bold text-3xl">Product Name</h1>
+                <h1 class="font-bold text-3xl"><?= $get_product['0']['name'] ?></h1>
                 <p class="">12 Reviews</p>
             </div>
             <div>
@@ -34,7 +51,7 @@ include 'header.php';
             </div>
             <div>
                 <p class="font-semibold">Price:</p>
-                <p class="text-xl font-semibold text-red-500">Rs.1,725</p>
+                <p class="text-xl font-semibold text-red-500">Rs.<?= $get_product['0']['price'] ?></p>
             </div>
             <div>
                 <p class="font-semibold">Quantity:</p>
