@@ -1,12 +1,12 @@
 <footer class="bg-black text-white py-10">
-  <div class="container mx-auto px-20">
+  <div class="container mx-auto px-5 lg:px-20">
 
     <!-- Grid Layout for Footer -->
     <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
 
       <!-- Column 1: Logo Section -->
       <div class="mb-6 md:mb-0 flex justify-center">
-        <img src="./img/logo.png" alt="Company Logo" class="w-3/4 md:w-2/4 mb-4">
+        <img src="./img/logo.png" alt="Company Logo" class="w-3/4 md:w-3/4 lg:w-2/4 mb-4">
       </div>
 
       <!-- Column 2: About Section -->
@@ -49,5 +49,7 @@
     </div>
   </div>
 </footer>
+<!-- Scripts -->
+<script src="./js/shop.js"></script>
 </body>
 </html>

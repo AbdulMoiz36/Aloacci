@@ -12,7 +12,8 @@ include 'functions.php';
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Custom Styling -->
   <link rel="stylesheet" href="./css/style.css" />
-  <!-- Font Awesome 6.6.0 -->
+  <link rel="stylesheet" href="./css/checkbox.css" />
+  <!-- Font Awesome 6.0.0 -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />

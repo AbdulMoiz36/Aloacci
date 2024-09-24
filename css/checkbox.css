@@ -1,0 +1,44 @@
+ /* Checkbox */
+
+/* Hide default checkbox */
+.custom-checkbox {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #e2e8f0;
+    border-radius: 0.25rem; 
+    background-color: #fff; 
+    outline: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+/* Checked state: filled amber background */
+.custom-checkbox:checked {
+    background-color: #fbbf24; 
+    border-color: #fbbf24; 
+}
+
+/* Add padding effect inside the checkbox */
+.custom-checkbox:checked::before {
+    content: '';
+    display: block;
+    width: 18px; 
+    height: 18px;
+    background-color: #fbbf24; 
+    border-radius: 0.25rem;
+}
+
+/* Increase the size of checkbox */
+.custom-checkbox {
+    width: 20px;
+    height: 20px;
+}
+
+/* Hover effect */
+.custom-checkbox:hover {
+    border-color: #fbbf24; 
+}
+
