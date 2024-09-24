@@ -25,12 +25,15 @@ if (isset($_SESSION['USER_LOGIN'])) {
         <div class="w-100 md:w-1/2 flex gap-2">
             <!-- Thumbnail Images -->
             <div class="w-1/6 space-y-2">
-                <img src="./image/<?= $get_product['0']['image'] ?>" alt="Thumbnail 1" class="cursor-pointer border-2 border-slate-200" onclick="changeImage(this.src)">
-                <img src="./image/<?= $get_product['0']['image'] ?>" alt="Thumbnail 2" class="cursor-pointer border-2 border-slate-200" onclick="changeImage(this.src)">
+                <img src="./image/<?= $get_product['0']['image'] ?>" alt="Thumbnail 1"
+                    class="cursor-pointer border-2 border-slate-200" onclick="changeImage(this.src)">
+                <img src="./image/<?= $get_product['0']['image'] ?>" alt="Thumbnail 2"
+                    class="cursor-pointer border-2 border-slate-200" onclick="changeImage(this.src)">
             </div>
             <!-- Larger Image -->
             <div class="w-5/6">
-                <img id="mainImage" src="./image/<?= $get_product['0']['image'] ?>" alt="Selected Product Image" class="border-2 border-slate-200 max-h-[850px]">
+                <img id="mainImage" src="./image/<?= $get_product['0']['image'] ?>" alt="Selected Product Image"
+                    class="border-2 border-slate-200 max-h-[850px]">
             </div>
         </div>
 
@@ -56,30 +59,96 @@ if (isset($_SESSION['USER_LOGIN'])) {
                 <p class="font-semibold">Price:</p>
                 <p class="text-xl font-semibold text-red-500">Rs.<?= $get_product['0']['price'] ?></p>
             </div>
-            <div>
-                <p class="font-semibold">Quantity:</p>
-                <!-- Quantity Selector -->
-                <div class="flex items-center space-x-2">
-                    <!-- Decrement Button -->
-                    <button onclick="decrement()" class="bg-gray-200 text-gray-700 px-3 py-1 rounded hover:bg-gray-300">-</button>
-                    <!-- Quantity Input -->
-                    <input id="quantity" type="number" min="1" value="1" class="w-16 text-center border border-gray-300 rounded-md py-1" />
-                    <!-- Increment Button -->
-                    <button onclick="increment()" class="bg-gray-200 text-gray-700 px-3 py-1 rounded hover:bg-gray-300">+</button>
-                </div>
+            <!-- Stock -->
+            <?php
+                $productSoldQtyByProductId=productSoldQtyByProductId($con,$get_product['0']['id']);
+                $cart_show='yes';
+                if($get_product['0']['qty']>$productSoldQtyByProductId){
+                    $stock='In Stock';
+                }else{
+                    $stock='Not in Stock';
+                    $cart_show='';
+                }
+                ?>
+
+            <div class="products--meta">
+                <p>
+                    <span>Availability:</span>
+                    <?php
+                if($cart_show!=''){
+                ?>
+                    <span class="mb-4"><?= $stock ?></span>
+                    <?php
+                }else{
+                ?>
+                    <span style="color:red;" class="mb-4"><?= $stock ?></span>
+                    <?php
+                }
+                ?>
+                </p>
             </div>
             <div>
-                <button class="w-full p-3 border-2 border-black text-lg font-semibold rounded-full mb-2">Add To Cart</button>
-                <button class="w-full p-3 border-2 border-red-800 text-lg font-semibold rounded-full bg-red-700 text-white">Buy It Now</button>
+                <p class="font-semibold">Quantity:</p>
+
+                <form method="post">
+                    <!-- Quantity Selector -->
+                    <div class="flex items-center space-x-2">
+                        <!-- Decrement Button -->
+                        <span class="qty-minus"
+                            onclick="var effect = document.getElementById('qty'); var qty = effect.value; if( !isNaN( qty ) && qty > 1 ) effect.value--;return false;"><i
+                                class="fa fa-minus" aria-hidden="true"></i></span>
+                        <!-- Quantity Input -->
+                        <input id="qty" style="border: none;" name="quantity" type="number" min="1" value="1"
+                            class="w-16 text-center border border-gray-300 rounded-md py-1" />
+                        <!-- Increment Button -->
+                        <span class="qty-plus"
+                            onclick="var effect = document.getElementById('qty'); var qty = effect.value; if( !isNaN( qty )) effect.value++;return false;"><i
+                                class="fa fa-plus" aria-hidden="true"></i></span>
+                    </div>
+            </div>
+            <?php
+                        if(!isset($_SESSION['USER_LOGIN'])){
+                            ?>
+            <div>
+                <a href="login.php" style="padding:15px 250px 15px 255px;"
+                    class="border-2 border-black text-lg font-semibold rounded-full mb-2">Add To Cart</a>
+            </div>
+            <?php
+                        }
+                        else{
+                            ?>
+            <a href="javascript:void(0)" onclick="manage_cart('<?= $get_product['0']['id']?>','add'); "
+                style="padding:15px 250px 15px 255px;"
+                class="border-2 border-black text-lg font-semibold rounded-full mb-2">Add To Cart</a>
+
+            <?php
+                        }
+                        ?>
+            </form>
+
+            <div>
+                <button
+                    class="w-full p-3 border-2 border-red-800 text-lg font-semibold rounded-full bg-red-700 text-white">Buy
+                    It Now</button>
             </div>
             <!-- Tabs -->
             <div>
                 <div class="flex justify-evenly flex-wrap lg:flex-nowrap align-middle">
-                    <button class="tab-button font-semibold rounded-tl-lg text-white bg-slate-900 p-3 w-full hover:bg-slate-200 hover:text-black" onclick="showTab('tab1')">Breif</button>
-                    <button class="tab-button font-semibold text-white bg-slate-900 p-3 w-full hover:bg-slate-200 hover:text-black" onclick="showTab('tab2')">Description</button>
-                    <button class="tab-button font-semibold text-white bg-slate-900 p-3 w-full hover:bg-slate-200 hover:text-black" onclick="showTab('tab3')">Performance</button>
-                    <button class="tab-button font-semibold text-white bg-slate-900 p-3 w-full hover:bg-slate-200 hover:text-black" onclick="showTab('tab4')">Shipping</button>
-                    <button class="tab-button font-semibold rounded-tr-lg text-white bg-slate-900 p-3 w-full hover:bg-slate-200 hover:text-black" onclick="showTab('tab5')">Unboxing Video</button>
+                    <button
+                        class="tab-button font-semibold rounded-tl-lg text-white bg-slate-900 p-3 w-full hover:bg-slate-200 hover:text-black"
+                        onclick="showTab('tab1')">Breif</button>
+                    <button
+                        class="tab-button font-semibold text-white bg-slate-900 p-3 w-full hover:bg-slate-200 hover:text-black"
+                        onclick="showTab('tab2')">Description</button>
+                    <button
+                        class="tab-button font-semibold text-white bg-slate-900 p-3 w-full hover:bg-slate-200 hover:text-black"
+                        onclick="showTab('tab3')">Performance</button>
+                    <button
+                        class="tab-button font-semibold text-white bg-slate-900 p-3 w-full hover:bg-slate-200 hover:text-black"
+                        onclick="showTab('tab4')">Shipping</button>
+                    <button
+                        class="tab-button font-semibold rounded-tr-lg text-white bg-slate-900 p-3 w-full hover:bg-slate-200 hover:text-black"
+                        onclick="showTab('tab5')">Unboxing Video</button>
                 </div>
 
                 <!-- Tab Content -->
@@ -119,8 +188,8 @@ if (isset($_SESSION['USER_LOGIN'])) {
                 <div class="border-y border-slate-300 py-5">
                     <div class="flex flex-col gap-4">
                         <div class="flex gap-2">
-                        <p class="font-semibold text-xl">User Name</p>
-                        <p class="text-gray-500">1 Year Ago</p>
+                            <p class="font-semibold text-xl">User Name</p>
+                            <p class="text-gray-500">1 Year Ago</p>
                         </div>
                         <div><i class="fa-solid fa-star"></i>
                             <i class="fa-solid fa-star"></i>
@@ -129,7 +198,9 @@ if (isset($_SESSION['USER_LOGIN'])) {
                             <i class="fa-solid fa-star"></i>
                         </div>
                         <div>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus consequuntur facilis nemo? Iure, dolorum molestias. Aperiam iusto nam necessitatibus, dolorum voluptas sed vel consectetur possimus nulla! Unde odit nobis omnis.</p>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus consequuntur facilis
+                                nemo? Iure, dolorum molestias. Aperiam iusto nam necessitatibus, dolorum voluptas sed
+                                vel consectetur possimus nulla! Unde odit nobis omnis.</p>
                         </div>
                     </div>
                 </div>
@@ -137,8 +208,6 @@ if (isset($_SESSION['USER_LOGIN'])) {
         </div>
     </div>
 </section>
-
-
 
 <?php
 include 'footer.php';
