@@ -49,7 +49,15 @@
     </div>
   </div>
 </footer>
-<!-- Scripts -->
-<script src="./js/shop.js"></script>
+<!-- JS -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Custom -->
+    <!-- scripts -->
+    <script src="./js/script.js" ></script>
+    <script src="./js/shop.js"></script>
+    <script src="./js/custom.js"></script>
+    <!-- toaster -->
+     <script src="./admin/assets/bundles/izitoast/js/iziToast.min.js"></script>
+     <script src="./admin/assets/js/page/toastr.js"></script>
 </body>
 </html>

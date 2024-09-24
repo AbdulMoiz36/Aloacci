@@ -23,16 +23,6 @@ include 'functions.php';
     rel="stylesheet" />
     <!-- Toaster -->
     <link rel="stylesheet" href="./admin/assets/bundles/izitoast/css/iziToast.min.css">
-    
-    <!-- JS -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- scripts -->
-    <script src="./js/script.js"></script>
-    <!-- Custom -->
-    <script src="./js/custom.js"></script>
-    <!-- toaster -->
-     <script src="./admin/assets/bundles/izitoast/js/iziToast.min.js"></script>
-     <script src="./admin/assets/js/page/toastr.js"></script>
 </head>
 
 <body>
