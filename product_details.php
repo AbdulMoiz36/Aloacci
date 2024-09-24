@@ -19,10 +19,12 @@ include 'header.php';
 
         <!-- Product Details Section -->
         <div class="w-full md:w-1/2 flex flex-col justify-center md:justify-start p-10 gap-6">
+            <!-- Product Name And Total Reviews -->
             <div>
                 <h1 class="font-bold text-3xl">Product Name</h1>
                 <p class="">12 Reviews</p>
             </div>
+            <!-- Options -->
             <div>
                 <p class="font-semibold">Format:</p>
                 <div class="border-2 border-black p-2 cursor-pointer w-fit my-2">
@@ -32,6 +34,7 @@ include 'header.php';
                     <p>Perfume Spray (100ml)</p>
                 </div>
             </div>
+            <!-- Price -->
             <div>
                 <p class="font-semibold">Price:</p>
                 <p class="text-xl font-semibold text-red-500">Rs.1,725</p>
