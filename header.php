@@ -1,6 +1,20 @@
 <?php
-include 'config.php';
-include 'functions.php';
+require "config.php";
+require "functions.php";
+require "add_cart_func.php";
+
+// $active = substr($_SERVER['SCRIPT_NAME'], strrpos($_SERVER['SCRIPT_NAME'],"/")+1);
+$cart_total = 0;
+$sql = "select * from categories";
+$res = mysqli_query($con,$sql);
+$cat_arr=array();
+while($row=mysqli_fetch_assoc($res)){
+    $cat_arr[]=$row;
+}
+
+$obj=new add_to_cart();
+$totalProduct=$obj->totalProduct();
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -27,6 +41,7 @@ include 'functions.php';
 <body>
 
   <button hidden id="registration_success"></button>
+  <button hidden id="cart_add"></button>
 
   <!-- Header Start -->
   <header
@@ -65,8 +80,24 @@ include 'functions.php';
       </div>
       <!-- Cart -->
       <div class="flex items-center space-x-3 text-lg sm:text-xl">
+      <?php
+                        if(!isset($_SESSION['USER_LOGIN'])){
+                            ?>
+        <a href="login.php">
         <i class="fa-sharp fa-solid fa-bag-shopping"></i>
         <span>Cart</span>
+        </a>
+      <?php
+                        }
+                        else{
+                            ?>
+                            <a href="cart.php">
+                            <i class="fa-sharp fa-solid fa-bag-shopping"></i><?php echo $totalProduct ?>
+                            <span>Cart</span>
+                            </a>
+                            <?php
+                        }
+                        ?>
       </div>
     </div>
   </header>

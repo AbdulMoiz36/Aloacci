@@ -116,3 +116,39 @@ function user_login() {
         });
     }
 }
+
+function manage_cart(pid, type) {
+    let qty;
+    if (type === 'update') {
+        qty = jQuery("#" + pid + "qty").val();
+    } else {
+        qty = jQuery("#qty").val();
+    }
+    
+    if (qty <= 0) {
+        alert('Quantity must be greater than zero.');
+        return;
+    }
+
+    jQuery.ajax({
+        url: 'manage_cart.php',
+        type: 'post',
+        data: { pid: pid, qty: qty, type: type },
+        success: function(result) {
+            if (result === 'not_avaliable') {
+                alert('Qty Not Available');
+            } else {
+                // Update the cart quantity badge
+                jQuery('.cart-quantity').html('(' + result + ')');
+                if (type === 'update' || type === 'remove') {
+                    window.location.reload();
+                } else {
+                    jQuery("#cart_add").click();
+                }
+            }
+        },
+        error: function() {
+            alert('An error occurred while processing your request.');
+        }
+    });
+}
