@@ -111,34 +111,34 @@ $products = fetch_products_with_categories($con, '', '', '', $sort_query);
         <div class="w-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
             <!-- Product Card Start-->
             <?php
-                        foreach ($products as $list) {
-                        ?>
-            <div class="relative bg-white shadow-md rounded-lg overflow-visible group">
-                <div class="relative">
-                    <!-- Default Image -->
-                    <img src="./image/<?= $list['image'] ?>" alt="Product 1" class="w-full h-3/4 object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0">
-                    <!-- Image to show on hover -->
-                    <img src="./image/<?= $list['image'] ?>" alt="Product 1 Hover" class="w-full h-3/4 object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100 absolute top-0 left-0">
-                </div>
-                <!-- Add to cart -->
-                <a href="#">
-                    <div class="absolute -top-2 -right-2 bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full p-3 flex items-center justify-center text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out cursor-pointer">
-                        <i class="fas fa-plus text-white pl-0.5 font-semibold"></i>
+            foreach ($products as $list) {
+            ?>
+                <div class="relative bg-white shadow-md rounded-lg overflow-visible group">
+                    <div class="relative">
+                        <!-- Default Image -->
+                        <img src="./image/<?= $list['image'] ?>" alt="Product 1" class="w-full h-3/4 object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0">
+                        <!-- Image to show on hover -->
+                        <img src="./image/<?= $list['image'] ?>" alt="Product 1 Hover" class="w-full h-3/4 object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100 absolute top-0 left-0">
                     </div>
-                </a>
-                <div class="p-4">
-                    <h2 class="font-bold text-lg"><?= $list['name'] ?></h2>
-                    <p class="text-gray-600">Description of Product 1</p>
-                    <!-- Price Section -->
-                    <div class="flex items-center space-x-2">
-                        <span class="text-red-500 font-semibold">Rs.<?= $list['price'] ?></span>
+                    <!-- Add to cart -->
+                    <a href="#">
+                        <div class="absolute -top-2 -right-2 bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full p-3 flex items-center justify-center text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out cursor-pointer">
+                            <i class="fas fa-plus text-white pl-0.5 font-semibold"></i>
+                        </div>
+                    </a>
+                    <div class="p-4">
+                        <h2 class="font-bold text-lg"><?= $list['name'] ?></h2>
+                        <p class="text-gray-600">Description of Product 1</p>
+                        <!-- Price Section -->
+                        <div class="flex items-center space-x-2">
+                            <span class="text-red-500 font-semibold">Rs.<?= $list['price'] ?></span>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <!-- Product Card End-->
+                <!-- Product Card End-->
             <?php
-                        }
-                        ?>
+            }
+            ?>
 
             <!-- Repeat for more products... -->
         </div>
