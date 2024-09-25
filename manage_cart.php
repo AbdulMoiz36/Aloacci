@@ -28,9 +28,10 @@ try {
             $obj->removeProduct($pid);
             break;
         case 'update':
+            // Update the product quantity in the session or database
             $obj->updateProduct($pid, $qty);
             break;
-    }
+    }    
 
     echo $obj->totalProduct();
 } catch (Exception $e) {

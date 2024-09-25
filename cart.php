@@ -31,12 +31,14 @@ else {
                     <!-- Quantity Selector -->
                     <div class="flex items-center">
                         <!-- Decrement Button -->
-                        <button onclick="decrement()" class="bg-gray-200 text-gray-700 px-3 py-1 rounded hover:bg-gray-300">-</button>
+                        <button onclick="decrement('<?= $key ?>')" class="bg-gray-200 text-gray-700 px-3 py-1 rounded hover:bg-gray-300">-</button>
+
                         <!-- Quantity Input -->
-                        <input id="quantity" type="number" min="1" value="<?= $qty?>" class="w-16 text-center border border-gray-300 rounded-md py-1" />
+                        <input id="quantity_<?= $key ?>" type="number" min="1" value="<?= $qty ?>" class="w-16 text-center border border-gray-300 rounded-md py-1" />
+
                         <!-- Increment Button -->
-                        <button onclick="increment()" class="bg-gray-200 text-gray-700 px-3 py-1 rounded hover:bg-gray-300">+</button>
-                    </div>
+                        <button onclick="increment('<?= $key ?>')" class="bg-gray-200 text-gray-700 px-3 py-1 rounded hover:bg-gray-300">+</button>
+                        </div>
                     <div class="flex justify-between">
                         <a href="javascript:void(0)" onclick="manage_cart('<?php echo $key?>','remove')" class="font-semibold underline cursor-pointer">Remove</a>
                         <p class="font-semibold text-lg">Rs.<?= $price?></p>
@@ -52,7 +54,7 @@ else {
             <div class="bg-gray-100 p-10">
                 <div class="flex justify-around text-wrap">
                     <p class="font-semibold text-xl">Subtotal:</p>
-                    <p class="font-semibold text-xl">Rs.<?= $qty*$price ?></p>
+                    <p class="font-semibold text-xl">Rs.<?= $cart_total ?></p>
                 </div>
                 <div class="mt-7">
                     <button class="w-full p-2 border-2 border-red-800 font-semibold rounded-full  bg-red-700 text-white">Checkout</button>

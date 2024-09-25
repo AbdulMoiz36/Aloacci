@@ -120,11 +120,14 @@ function user_login() {
 function manage_cart(pid, type) {
     let qty;
     if (type === 'update') {
-        qty = jQuery("#" + pid + "qty").val();
+        qty = jQuery("#quantity_" + pid).val();
     } else {
         qty = jQuery("#qty").val();
     }
-    
+
+    console.log("Product ID: " + pid);  // For debugging
+    console.log("Quantity: " + qty);    // For debugging
+
     if (qty <= 0) {
         alert('Quantity must be greater than zero.');
         return;
@@ -135,10 +138,10 @@ function manage_cart(pid, type) {
         type: 'post',
         data: { pid: pid, qty: qty, type: type },
         success: function(result) {
+            console.log("AJAX success response: " + result);  // For debugging
             if (result === 'not_avaliable') {
                 alert('Qty Not Available');
             } else {
-                // Update the cart quantity badge
                 jQuery('.cart-quantity').html('(' + result + ')');
                 if (type === 'update' || type === 'remove') {
                     window.location.reload();
@@ -152,3 +155,23 @@ function manage_cart(pid, type) {
         }
     });
 }
+
+function increment(pid) {
+    console.log("Increment button clicked for product ID: " + pid);  // For debugging
+    let quantity = document.getElementById('quantity_' + pid).value;
+    quantity = parseInt(quantity) + 1;
+    document.getElementById('quantity_' + pid).value = quantity;
+    manage_cart(pid, 'update');
+}
+
+function decrement(pid) {
+    console.log("Decrement button clicked for product ID: " + pid);  // For debugging
+    let quantity = document.getElementById('quantity_' + pid).value;
+    if (quantity > 1) {
+        quantity = parseInt(quantity) - 1;
+        document.getElementById('quantity_' + pid).value = quantity;
+        manage_cart(pid, 'update');
+    }
+}
+
+

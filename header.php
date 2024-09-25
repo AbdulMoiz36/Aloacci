@@ -92,9 +92,10 @@ $totalProduct=$obj->totalProduct();
                         else{
                             ?>
                             <a href="cart.php">
-                            <i class="fa-sharp fa-solid fa-bag-shopping"></i><?php echo $totalProduct ?>
-                            <span>Cart</span>
+                                <i class="fa-sharp fa-solid fa-bag-shopping" aria-hidden="true"></i>
+                                <span>Cart <span class="cart-quantity">(<?php echo $totalProduct ?>)</span></span>
                             </a>
+
                             <?php
                         }
                         ?>
