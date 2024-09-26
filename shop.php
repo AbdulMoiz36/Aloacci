@@ -111,38 +111,32 @@ $products = fetch_products_with_categories($con, '', '', '', $sort_query);
         <?php
         foreach ($products as $list) {
         ?>
-          <a href="product_details.php?id=<?= $list['id'] ?>">
-    <div class="w-96 md:w-72 h-[40rem] md:h-[30rem] flex gap-2 flex-col relative group">
-        <!-- Plus icon with hover effect -->
-        <div class="z-10 absolute -top-2 -right-2 bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full p-3 flex items-center justify-center text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out cursor-pointer">
-            <i class="fas fa-plus text-white pl-0.5 font-semibold"></i>
-        </div>
+            <a href="product_details.php?id=<?= $list['id'] ?>">
+                <div class="w-96 md:w-72 h-[40rem] md:h-[30rem] flex gap-2 flex-col relative group">
+                    <!-- Plus icon with hover effect -->
+                    <div class="z-10 absolute -top-2 -right-2 bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full p-3 flex items-center justify-center text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out cursor-pointer">
+                        <i class="fas fa-plus text-white pl-0.5 font-semibold"></i>
+                    </div>
 
-        <!-- Product image wrapper -->
-        <div class="relative h-[70%] w-full">
-            <!-- Default image -->
-            <img src="./img/product-1.jpg" alt="Product 1" class="h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0">
-            <!-- Second image to show on hover -->
-            <img src="./img/product-1-2.jpg" alt="Product 2 Hover" class="absolute top-0 left-0 h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100">
-        </div>
+                    <!-- Product image wrapper -->
+                    <div class="relative h-[70%] w-full">
+                        <!-- Default image -->
+                        <img src="./img/product-1.jpg" alt="Product 1" class="h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0">
+                        <!-- Second image to show on hover -->
+                        <img src="./img/product-1-2.jpg" alt="Product 2 Hover" class="absolute top-0 left-0 h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100">
+                    </div>
 
-        <!-- Product details -->
-        <div class="px-4 py-2">
-            <p class="font-bold text-xl">Product Name</p>
-            <p class="text-gray-600">Description</p>
-            <p class="text-red-600 font-bold text-xl">Rs.2267</p>
-        </div>
-    </div>
-</a>
-
-
+                    <!-- Product details -->
+                    <div class="px-4 py-2">
+                        <p class="font-bold text-xl">Product Name</p>
+                        <p class="text-gray-600">Description</p>
+                        <p class="text-red-600 font-bold text-xl">Rs.2267</p>
+                    </div>
+                </div>
+            </a>
         <?php
         }
         ?>
-
-
-
-
     </div>
 </section>
 
