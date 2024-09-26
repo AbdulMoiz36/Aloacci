@@ -127,10 +127,10 @@ $products = fetch_products_with_categories($con, '', '', '', $sort_query);
                     </div>
 
                     <!-- Product details -->
-                    <div class="px-4 py-2">
+                    <div class="px-4 py-2 flex flex-col gap-2 justify-evenly">
                         <p class="font-bold text-xl">Product Name</p>
                         <p class="text-gray-600">Description</p>
-                        <p class="text-red-600 font-bold text-xl">Rs.2267</p>
+                        <p class="text-red-600 font-extrabold text-xl">Rs.2267</p>
                     </div>
                 </div>
             </a>
