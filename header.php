@@ -6,14 +6,14 @@ require "add_cart_func.php";
 // $active = substr($_SERVER['SCRIPT_NAME'], strrpos($_SERVER['SCRIPT_NAME'],"/")+1);
 $cart_total = 0;
 $sql = "select * from categories";
-$res = mysqli_query($con,$sql);
-$cat_arr=array();
-while($row=mysqli_fetch_assoc($res)){
-    $cat_arr[]=$row;
+$res = mysqli_query($con, $sql);
+$cat_arr = array();
+while ($row = mysqli_fetch_assoc($res)) {
+  $cat_arr[] = $row;
 }
 
-$obj=new add_to_cart();
-$totalProduct=$obj->totalProduct();
+$obj = new add_to_cart();
+$totalProduct = $obj->totalProduct();
 
 ?>
 <!DOCTYPE html>
@@ -32,8 +32,8 @@ $totalProduct=$obj->totalProduct();
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Didact+Gothic&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Didact+Gothic&display=swap" rel="stylesheet">
   <!-- Toaster -->
   <link rel="stylesheet" href="./admin/assets/bundles/izitoast/css/iziToast.min.css">
 </head>
@@ -80,24 +80,34 @@ $totalProduct=$obj->totalProduct();
       </div>
       <!-- Cart -->
       <div class="flex items-center space-x-3 text-lg sm:text-xl">
-      <?php
-                        if(!isset($_SESSION['USER_LOGIN'])){
-                            ?>
-        <a href="login.php">
-        <i class="fa-sharp fa-solid fa-bag-shopping"></i>
-        <span>Cart</span>
-        </a>
-      <?php
-                        }
-                        else{
-                            ?>
-                            <a href="cart.php">
-                            <i class="fa-sharp fa-solid fa-bag-shopping"></i><?php echo $totalProduct ?>
-                            <span>Cart</span>
-                            </a>
-                            <?php
-                        }
-                        ?>
+        <?php
+        if (!isset($_SESSION['USER_LOGIN'])) {
+        ?>
+          <a href="login.php">
+            <i class="fa-sharp fa-solid fa-bag-shopping"></i>
+            <span>Cart</span>
+          </a>
+        <?php
+        } else {
+        ?>
+          <a href="cart.php" class=" flex items-center">
+            <!-- Cart Icon -->
+            <div class=" relative">
+              <i class="fa-sharp fa-solid fa-bag-shopping text-xl"></i>
+              <!-- Badge showing total products -->
+              <span class="absolute top-0 -right-2 transform translate-x-2 -translate-y-2 bg-red-600 text-white rounded-full px-2 py-0.5 text-xs font-bold">
+                <?php echo $totalProduct ?>
+              </span>
+            </div>
+
+            <!-- Cart Text -->
+            <span class="ml-2">Cart</span>
+
+
+          </a>
+        <?php
+        }
+        ?>
       </div>
     </div>
   </header>

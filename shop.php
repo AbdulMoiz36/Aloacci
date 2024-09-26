@@ -112,7 +112,7 @@ $products = fetch_products_with_categories($con, '', '', '', $sort_query);
         foreach ($products as $list) {
         ?>
             <a href="product_details.php?id=<?= $list['id'] ?>">
-                <div class="w-96 md:w-72 h-[40rem] md:h-[30rem] flex gap-2 flex-col relative group">
+                <div class="w-96 md:w-72 h-[40rem] md:h-[30rem] flex gap-2 flex-col relative group shadow">
                     <!-- Plus icon with hover effect -->
                     <div class="z-10 absolute -top-2 -right-2 bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full p-3 flex items-center justify-center text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out cursor-pointer">
                         <i class="fas fa-plus text-white pl-0.5 font-semibold"></i>
