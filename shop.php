@@ -147,7 +147,7 @@ $products = fetch_products_with_categories($con, '', '', '', $sort_query);
 
 <!-- Modal -->
 <div id="modalOverlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-40"></div>
-<div id="modal" class="fixed inset-0 flex items-center justify-center hidden z-50">
+<div id="modal" class="fixed inset-0 items-center justify-center hidden z-50">
     <div class="bg-white p-10 rounded-lg shadow-lg w-5/6 md:w-1/3 relative">
         <h2 class="text-2xl font-bold mb-4">Product Name</h2>
         <!-- Options -->
@@ -181,6 +181,7 @@ $products = fetch_products_with_categories($con, '', '', '', $sort_query);
 
     openModalBtn.addEventListener('click', () => {
         modal.classList.remove('hidden');
+        modal.classList.add('flex');
         modalOverlay.classList.remove('hidden');
     });
 
