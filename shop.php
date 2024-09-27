@@ -128,7 +128,7 @@ $products = fetch_products_with_categories($con, '', '', '', $sort_query);
                     </div>
 
                     <!-- Product details -->
-                    <div class="px-4 py-2 flex flex-col gap-2 justify-evenly">
+                    <div class="px-4 py-2 h-full flex flex-col justify-evenly">
                     <a href="product_details.php?id=<?= $list['id'] ?>" class="product-link w-full">
 
                         <p class="font-bold text-xl">Product Name</p>
