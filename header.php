@@ -92,10 +92,9 @@ $totalProduct=$obj->totalProduct();
                         else{
                             ?>
                             <a href="cart.php">
-                                <i class="fa-sharp fa-solid fa-bag-shopping" aria-hidden="true"></i>
-                                <span>Cart <span class="cart-quantity">(<?php echo $totalProduct ?>)</span></span>
+                            <i class="fa-sharp fa-solid fa-bag-shopping"></i><?php echo $totalProduct ?>
+                            <span>Cart</span>
                             </a>
-
                             <?php
                         }
                         ?>
@@ -140,10 +139,10 @@ $totalProduct=$obj->totalProduct();
           ?>
         </ul>
       </li>
-      <li>Link 2</li>
-      <li>Link 3</li>
-      <li>Link 4</li>
-      <li>Link 5</li>
+      <a href="shop.php">Aloacci Steals</a>
+      <a href="shop.php">Less than 1500</a>
+      <a href="shop.php">Attars</a>
+      <a href="shop.php">Bundles</a>
       <a href="#">
         <li class="hover:underline hover:cursor-pointer">About</li>
       </a>

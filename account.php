@@ -1,5 +1,13 @@
 <?php
 include "header.php";
+
+// have to login first//
+if(isset($_SESSION['USER_LOGIN']) && $_SESSION['USER_LOGIN']!=''){
+}
+else {
+    echo "<script>window.location.href='index.php'</script>";
+   die();
+}
 ?>
 
 <section class="container md:p-10 flex justify-center align-middle">

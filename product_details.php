@@ -27,7 +27,7 @@ if (isset($_SESSION['USER_LOGIN'])) {
             <div class="w-1/6 space-y-2">
                 <img src="./image/<?= $get_product['0']['image'] ?>" alt="Thumbnail 1"
                     class="cursor-pointer border-2 border-slate-200" onclick="changeImage(this.src)">
-                <img src="./image/<?= $get_product['0']['image'] ?>" alt="Thumbnail 2"
+                <img src="./image/<?= $get_product['0']['image2'] ?>" alt="Thumbnail 2"
                     class="cursor-pointer border-2 border-slate-200" onclick="changeImage(this.src)">
             </div>
             <!-- Larger Image -->
