@@ -111,34 +111,90 @@ $products = fetch_products_with_categories($con, '', '', '', $sort_query);
         <?php
         foreach ($products as $list) {
         ?>
-            <a href="product_details.php?id=<?= $list['id'] ?>">
                 <div class="w-96 md:w-72 h-[40rem] md:h-[30rem] flex gap-2 flex-col relative group shadow">
                     <!-- Plus icon with hover effect -->
-                    <div class="z-10 absolute -top-2 -right-2 bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full p-3 flex items-center justify-center text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out cursor-pointer">
+                    <div id="openModalBtn" class="z-10 absolute -top-2 -right-2 bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full p-3 flex items-center justify-center text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out cursor-pointer">
                         <i class="fas fa-plus text-white pl-0.5 font-semibold"></i>
                     </div>
-
+                    
                     <!-- Product image wrapper -->
                     <div class="relative h-[70%] w-full">
+                        <a href="product_details.php?id=<?= $list['id'] ?>" class="product-link w-full">
                         <!-- Default image -->
                         <img src="./img/product-1.jpg" alt="Product 1" class="h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0">
                         <!-- Second image to show on hover -->
                         <img src="./img/product-1-2.jpg" alt="Product 2 Hover" class="absolute top-0 left-0 h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100">
+                    </a>
                     </div>
 
                     <!-- Product details -->
                     <div class="px-4 py-2 flex flex-col gap-2 justify-evenly">
+                    <a href="product_details.php?id=<?= $list['id'] ?>" class="product-link w-full">
+
                         <p class="font-bold text-xl">Product Name</p>
                         <p class="text-gray-600">Description</p>
                         <p class="text-red-600 font-extrabold text-xl">Rs.2267</p>
+                        </a>
                     </div>
                 </div>
-            </a>
         <?php
         }
         ?>
     </div>
 </section>
+
+<!-- Modal Overlay -->
+
+<!-- Modal -->
+<div id="modalOverlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-40"></div>
+<div id="modal" class="fixed inset-0 flex items-center justify-center hidden z-50">
+    <div class="bg-white p-10 rounded-lg shadow-lg w-5/6 md:w-1/3 relative">
+        <h2 class="text-2xl font-bold mb-4">Product Name</h2>
+        <!-- Options -->
+        <div class="mt-2">
+                <p class="font-semibold">Format:</p>
+                <div class="border-2 border-black p-2 cursor-pointer w-fit my-2">
+                    <p>Perfume Spray (50ml)</p>
+                </div>
+                <div class="border-2 border-black p-2 cursor-pointer w-fit my-2">
+                    <p>Perfume Spray (100ml)</p>
+                </div>
+            </div>
+            <!-- Price -->
+            <div class="mt-2">
+                <p class="font-semibold">Price:</p>
+                <p class="text-xl font-semibold text-red-500">Rs.2789</p>
+            </div>
+            <button
+                    class="w-full mt-5 p-3 border-2 border-red-800 text-lg font-semibold rounded-full bg-red-700 text-white">Add to Cart</button>
+         <button id="closeModalBtn" class="absolute -top-2 -right-2 font-bold bg-red-700 text-white px-4 py-2 rounded-full hover:bg-red-600 focus:outline-none">
+            X
+        </button>
+    </div>
+</div>
+
+<script>
+    const openModalBtn = document.getElementById('openModalBtn');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+    const modal = document.getElementById('modal');
+    const modalOverlay = document.getElementById('modalOverlay');
+
+    openModalBtn.addEventListener('click', () => {
+        modal.classList.remove('hidden');
+        modalOverlay.classList.remove('hidden');
+    });
+
+    closeModalBtn.addEventListener('click', () => {
+        modal.classList.add('hidden');
+        modalOverlay.classList.add('hidden');
+    });
+
+    // Close modal if clicked outside
+    modalOverlay.addEventListener('click', () => {
+        modal.classList.add('hidden');
+        modalOverlay.classList.add('hidden');
+    });
+</script>
 
 <?php
 include "footer.php";
