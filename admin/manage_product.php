@@ -9,7 +9,10 @@ isAdmin();
 $msg = '';
 $category_id = '';
 $name = '';
+$format = '';
+$format2 = '';
 $price = '';
+$price2 = '';
 $qty = '';
 $image = '';
 $image2 = '';
@@ -20,20 +23,34 @@ $image_required = 'required';
 if (isset($_GET['id']) && $_GET['id'] != '') {
     $image_required = '';
     $_id = get_safe_value($con, $_GET['id']);
+    
+    // Fetch product details from product table
     $res = mysqli_query($con, "select * from product where id=$_id");
-
     $check = mysqli_num_rows($res);
 
     if ($check > 0) {
         $row = mysqli_fetch_array($res);
         $category_id = $row['category_id'];
         $name = $row['name'];
-        $price = $row['price'];
         $qty = $row['qty'];
         $breif = $row['breif'];
         $description = $row['description'];
         $image = $row['image'];
         $image2 = $row['image2'];
+
+        // Fetch product formats and prices from product_format table
+        $format_res = mysqli_query($con, "SELECT * FROM product_format WHERE product_id=$_id");
+        $formats = [];
+        while ($format_row = mysqli_fetch_assoc($format_res)) {
+            $formats[] = $format_row;
+        }
+
+        if (!empty($formats)) {
+            $format = $formats[0]['format'];
+            $price = $formats[0]['price'];
+            $format2 = isset($formats[1]) ? $formats[1]['format'] : '';
+            $price2 = isset($formats[1]) ? $formats[1]['price'] : '';
+        }
     } else {
         header('Location: product.php');
         die();
@@ -43,35 +60,29 @@ if (isset($_GET['id']) && $_GET['id'] != '') {
 if (isset($_REQUEST['submit'])) {
     $category_id = get_safe_value($con, $_REQUEST['categories_id']);
     $name = get_safe_value($con, $_REQUEST['name']);
+    $format = get_safe_value($con, $_REQUEST['format']);
     $price = get_safe_value($con, $_REQUEST['price']);
+    $format2 = get_safe_value($con, $_REQUEST['format2']);
+    $price2 = get_safe_value($con, $_REQUEST['price2']);
     $qty = get_safe_value($con, $_REQUEST['qty']);
     $breif = get_safe_value($con, $_REQUEST['breif']);
     $description = get_safe_value($con, $_REQUEST['description']);
 
-    $res = mysqli_query($con, "select * from product where category_id='$category_id' and name='$name' and price='$price' and qty='$qty' and breif='$breif' and description='$description'");
-
+    // Validation for product existence
+    $res = mysqli_query($con, "select * from product where category_id='$category_id' and name='$name'");
     $check = mysqli_num_rows($res);
 
-    if ($check > 0) {
-        if (isset($_GET['id']) && $_GET['id'] != '') {
-            $getData = mysqli_fetch_assoc($res);
-            if ($_id == $getData['id']) {
-                // Existing product
-            } else {
-                $msg = "Product Already Exists";
-            }
-        } else {
-            $msg = "Product Already Exists";
-        }
+    if ($check > 0 && (!isset($_GET['id']) || $_GET['id'] != $row['id'])) {
+        $msg = "Product Already Exists";
     }
 
     // Image validation
-    if ($_FILES['image']['type'] != '' && ($_FILES['image']['type'] != 'image/png' && $_FILES['image']['type'] != 'image/jpg' && $_FILES['image']['type'] != 'image/jpeg')) {
-        $msg = "Please select only png, jpg or jpeg format for Image 1";
+    if ($_FILES['image']['type'] != '' && !in_array($_FILES['image']['type'], ['image/png', 'image/jpg', 'image/jpeg'])) {
+        $msg = "Please select only png, jpg, or jpeg format for Image 1";
     }
 
-    if ($_FILES['image2']['type'] != '' && ($_FILES['image2']['type'] != 'image/png' && $_FILES['image2']['type'] != 'image/jpg' && $_FILES['image2']['type'] != 'image/jpeg')) {
-        $msg = "Please select only png, jpg or jpeg format for Image 2";
+    if ($_FILES['image2']['type'] != '' && !in_array($_FILES['image2']['type'], ['image/png', 'image/jpg', 'image/jpeg'])) {
+        $msg = "Please select only png, jpg, or jpeg format for Image 2";
     }
 
     if ($msg == '') {
@@ -91,8 +102,15 @@ if (isset($_REQUEST['submit'])) {
                 move_uploaded_file($tempname2, $folder2);
             }
 
-            $p_update = "update product set category_id='$category_id',name='$name',price='$price',qty='$qty',breif='$breif',description='$description',image='$image',image2='$image2' where id='$_id'";
-            mysqli_query($con, $p_update);
+            mysqli_query($con, "update product set category_id='$category_id', name='$name', qty='$qty', breif='$breif', description='$description', image='$image', image2='$image2' where id='$_id'");
+
+            // Update format and price in product_format table
+            mysqli_query($con, "DELETE FROM product_format WHERE product_id='$_id'");
+            mysqli_query($con, "INSERT INTO product_format (product_id, format, price) VALUES ('$_id', '$format', '$price')");
+            if ($format2 != '' && $price2 != '') {
+                mysqli_query($con, "INSERT INTO product_format (product_id, format, price) VALUES ('$_id', '$format2', '$price2')");
+            }
+
         } else {
             // Insert new product
             $image = $_FILES["image"]["name"];
@@ -105,7 +123,14 @@ if (isset($_REQUEST['submit'])) {
             $folder2 = "../image/" . $image2;
             move_uploaded_file($tempname2, $folder2);
 
-            mysqli_query($con, "insert into product (category_id,name,price,qty,breif,description,status,image,image2) Value ('$category_id','$name','$price','$qty','$breif','$description','1','$image','$image2')");
+            mysqli_query($con, "INSERT INTO product (category_id, name, qty, breif, description, status, image, image2) VALUES ('$category_id', '$name', '$qty', '$breif', '$description', '1', '$image', '$image2')");
+            $product_id = mysqli_insert_id($con);
+
+            // Insert format and price in product_format table
+            mysqli_query($con, "INSERT INTO product_format (product_id, format, price) VALUES ('$product_id', '$format', '$price')");
+            if ($format2 != '' && $price2 != '') {
+                mysqli_query($con, "INSERT INTO product_format (product_id, format, price) VALUES ('$product_id', '$format2', '$price2')");
+            }
         }
 
         echo "<script>window.location.href='product.php'</script>";
@@ -153,10 +178,28 @@ if (isset($_REQUEST['submit'])) {
 							value="<?= $name ?>">
 					</div>
 
-					<div class="form-group">
+                    <div class="form-group col-6">
+						<label for="categories" class="form-control-label">Format</label>
+						<input type="text" name="format" placeholder="Enter Product Format" class="form-control" required
+							value="<?= $format ?>">
+					</div>
+
+					<div class="form-group col-6">
 						<label for="categories" class="form-control-label">Price</label>
 						<input type="text" name="price" placeholder="Enter Product price" class="form-control" required
 							value="<?= $price ?>">
+					</div>
+
+                    <div class="form-group col-6">
+						<label for="categories" class="form-control-label">Format 2</label>
+						<input type="text" name="format2" placeholder="Enter Product Format 2" class="form-control"
+							value="<?= $format2 ?>">
+					</div>
+
+					<div class="form-group col-6">
+						<label for="categories" class="form-control-label">Price</label>
+						<input type="text" name="price2" placeholder="Enter Product Price 2" class="form-control"
+							value="<?= $price2 ?>">
 					</div>
 
 					<div class="form-group">

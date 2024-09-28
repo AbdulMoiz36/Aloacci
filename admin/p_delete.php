@@ -6,13 +6,23 @@ include "functions.php";
 /* Restrict employee to access this page */
 isAdmin();
 
+if(isset($_REQUEST['id']) && is_numeric($_REQUEST['id'])) {
+    $_id = mysqli_real_escape_string($con, $_REQUEST['id']);
 
-$_id=$_REQUEST['id'];
+    /* Delete related records in product_format first to maintain referential integrity */
+    $deleteFormats = "DELETE FROM product_format WHERE product_id = $_id";
+    $resFormats = mysqli_query($con, $deleteFormats);
 
-$delete = "delete from product where id=$_id";
+    /* Now delete the product from the product table */
+    $deleteProduct = "DELETE FROM product WHERE id = $_id";
+    $resProduct = mysqli_query($con, $deleteProduct);
 
-$res = mysqli_query($con,$delete);
-
-header('Location: product.php');
-
-?>
+    /* Check if the query executed successfully and redirect */
+    if($resProduct) {
+        header('Location: product.php');
+    } else {
+        echo "Error deleting product.";
+    }
+} else {
+    echo "Invalid product ID.";
+}

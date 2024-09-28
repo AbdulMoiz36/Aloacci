@@ -54,41 +54,54 @@ include 'header.php';
     </div>
 
     <!-- Products section -->
-    <div class="w-full p-3 flex flex-wrap justify-center gap-5 ">
-        <?php
-        $get_product=get_product($con,'','','');
-        foreach ($get_product as $list) {
-        ?>
-                <div class="w-96 md:w-72 h-[40rem] md:h-[30rem] flex gap-2 flex-col relative group shadow">
-                    <!-- Plus icon with hover effect -->
-                    <div id="openModalBtn" class="z-10 absolute -top-2 -right-2 bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full p-3 flex items-center justify-center text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out cursor-pointer">
-                        <i class="fas fa-plus text-white pl-0.5 font-semibold"></i>
-                    </div>
-                    
-                    <!-- Product image wrapper -->
-                    <div class="relative h-[70%] w-full">
-                        <a href="product_details.php?id=<?= $list['id'] ?>" class="product-link w-full">
-                        <!-- Default image -->
-                        <img src="./image/<?= $list['image'] ?>" alt="Product 1" class="h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0">
-                        <!-- Second image to show on hover -->
-                        <img src="./image/<?= $list['image2'] ?>" alt="Product 2 Hover" class="absolute top-0 left-0 h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100">
-                    </a>
-                    </div>
+    <div class="w-full p-3 flex flex-wrap justify-center gap-5">
+    <?php
+    $get_product = get_product($con, '', '', '', '');
+    $displayed_products = []; // Array to track displayed products
 
-                    <!-- Product details -->
-                    <div class="px-4 py-2 h-full flex flex-col justify-evenly">
-                    <a href="product_details.php?id=<?= $list['id'] ?>" class="product-link w-full">
-
-                        <p class="font-bold text-xl"><?= $list['name'] ?></p>
-                        <p class="text-gray-600">Description</p>
-                        <p class="text-red-600 font-extrabold text-xl">Rs.<?= $list['price'] ?></p>
-                        </a>
-                    </div>
-                </div>
-        <?php
+    foreach ($get_product as $list) {
+        // Only display the product if it hasn't been displayed yet
+        if (in_array($list['id'], $displayed_products)) {
+            continue; // Skip this product if it has already been displayed
         }
-        ?>
-    </div>
+
+        // Add the product ID to the displayed array
+        $displayed_products[] = $list['id'];
+
+        // Fetch the first format and price
+        $firstFormat = $list['format'];
+        $firstPrice = $list['price'];
+    ?>
+        <div class="w-96 md:w-72 h-[40rem] md:h-[30rem] flex gap-2 flex-col relative group shadow">
+            <!-- Plus icon with hover effect -->
+            <div id="openModalBtn" class="z-10 absolute -top-2 -right-2 bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full p-3 flex items-center justify-center text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out cursor-pointer">
+                <i class="fas fa-plus text-white pl-0.5 font-semibold"></i>
+            </div>
+
+            <!-- Product image wrapper -->
+            <div class="relative h-[70%] w-full">
+                <a href="product_details.php?id=<?= $list['id'] ?>" class="product-link w-full">
+                    <!-- Default image -->
+                    <img src="./image/<?= $list['image'] ?>" alt="<?= $list['name'] ?>" class="h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0">
+                    <!-- Second image to show on hover -->
+                    <img src="./image/<?= $list['image2'] ?>" alt="<?= $list['name'] ?> Hover" class="absolute top-0 left-0 h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100">
+                </a>
+            </div>
+
+            <!-- Product details -->
+            <div class="px-4 py-2 h-full flex flex-col justify-evenly">
+                <a href="product_details.php?id=<?= $list['id'] ?>" class="product-link w-full">
+                    <p class="font-bold text-xl"><?= $list['name'] ?></p>
+                    <p class="text-gray-600">Description</p>
+                    <p class="text-red-600 font-extrabold text-xl">Rs. <?= $firstPrice ?></p>
+                </a>
+            </div>
+        </div>
+    <?php
+    }
+    ?>
+</div>
+
 </section>
 
 <!-- Modal Overlay -->
