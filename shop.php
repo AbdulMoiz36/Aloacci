@@ -55,52 +55,52 @@ include 'header.php';
 
     <!-- Products section -->
     <div class="w-full p-3 flex flex-wrap justify-center gap-5">
-    <?php
-    $get_product = get_product($con, '', '', '', '');
-    $displayed_products = []; // Array to track displayed products
+        <?php
+        $get_product = get_product($con, '', '', '', '');
+        $displayed_products = []; // Array to track displayed products
 
-    foreach ($get_product as $list) {
-        // Only display the product if it hasn't been displayed yet
-        if (in_array($list['id'], $displayed_products)) {
-            continue; // Skip this product if it has already been displayed
+        foreach ($get_product as $list) {
+            // Only display the product if it hasn't been displayed yet
+            if (in_array($list['id'], $displayed_products)) {
+                continue; // Skip this product if it has already been displayed
+            }
+
+            // Add the product ID to the displayed array
+            $displayed_products[] = $list['id'];
+
+            // Fetch the first format and price
+            $firstFormat = $list['format'];
+            $firstPrice = $list['price'];
+        ?>
+            <div class="w-96 md:w-72 h-[40rem] md:h-[30rem] flex gap-2 flex-col relative group shadow">
+                <!-- Plus icon with hover effect -->
+                <div class="openModalBtn z-10 absolute -top-2 -right-2 bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full p-3 flex items-center justify-center text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out cursor-pointer">
+                    <i class="fas fa-plus text-white pl-0.5 font-semibold"></i>
+                </div>
+
+                <!-- Product image wrapper -->
+                <div class="relative h-[70%] w-full">
+                    <a href="product_details.php?id=<?= $list['id'] ?>" class="product-link w-full">
+                        <!-- Default image -->
+                        <img src="./image/<?= $list['image'] ?>" alt="<?= $list['name'] ?>" class="h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0">
+                        <!-- Second image to show on hover -->
+                        <img src="./image/<?= $list['image2'] ?>" alt="<?= $list['name'] ?> Hover" class="absolute top-0 left-0 h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100">
+                    </a>
+                </div>
+
+                <!-- Product details -->
+                <div class="px-4 py-2 h-full flex flex-col justify-evenly">
+                    <a href="product_details.php?id=<?= $list['id'] ?>" class="product-link w-full">
+                        <p class="font-bold text-xl"><?= $list['name'] ?></p>
+                        <p class="text-gray-600">Description</p>
+                        <p class="text-red-600 font-extrabold text-xl">Rs. <?= $firstPrice ?></p>
+                    </a>
+                </div>
+            </div>
+        <?php
         }
-
-        // Add the product ID to the displayed array
-        $displayed_products[] = $list['id'];
-
-        // Fetch the first format and price
-        $firstFormat = $list['format'];
-        $firstPrice = $list['price'];
-    ?>
-        <div class="w-96 md:w-72 h-[40rem] md:h-[30rem] flex gap-2 flex-col relative group shadow">
-            <!-- Plus icon with hover effect -->
-            <div id="openModalBtn" class="z-10 absolute -top-2 -right-2 bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full p-3 flex items-center justify-center text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out cursor-pointer">
-                <i class="fas fa-plus text-white pl-0.5 font-semibold"></i>
-            </div>
-
-            <!-- Product image wrapper -->
-            <div class="relative h-[70%] w-full">
-                <a href="product_details.php?id=<?= $list['id'] ?>" class="product-link w-full">
-                    <!-- Default image -->
-                    <img src="./image/<?= $list['image'] ?>" alt="<?= $list['name'] ?>" class="h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0">
-                    <!-- Second image to show on hover -->
-                    <img src="./image/<?= $list['image2'] ?>" alt="<?= $list['name'] ?> Hover" class="absolute top-0 left-0 h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100">
-                </a>
-            </div>
-
-            <!-- Product details -->
-            <div class="px-4 py-2 h-full flex flex-col justify-evenly">
-                <a href="product_details.php?id=<?= $list['id'] ?>" class="product-link w-full">
-                    <p class="font-bold text-xl"><?= $list['name'] ?></p>
-                    <p class="text-gray-600">Description</p>
-                    <p class="text-red-600 font-extrabold text-xl">Rs. <?= $firstPrice ?></p>
-                </a>
-            </div>
-        </div>
-    <?php
-    }
-    ?>
-</div>
+        ?>
+    </div>
 
 </section>
 
@@ -113,37 +113,40 @@ include 'header.php';
         <h2 class="text-2xl font-bold mb-4">Product Name</h2>
         <!-- Options -->
         <div class="mt-2">
-                <p class="font-semibold">Format:</p>
-                <div class="border-2 border-black p-2 cursor-pointer w-fit my-2">
-                    <p>Perfume Spray (50ml)</p>
-                </div>
-                <div class="border-2 border-black p-2 cursor-pointer w-fit my-2">
-                    <p>Perfume Spray (100ml)</p>
-                </div>
+            <p class="font-semibold">Format:</p>
+            <div class="border-2 border-black p-2 cursor-pointer w-fit my-2">
+                <p>Perfume Spray (50ml)</p>
             </div>
-            <!-- Price -->
-            <div class="mt-2">
-                <p class="font-semibold">Price:</p>
-                <p class="text-xl font-semibold text-red-500">Rs.2789</p>
+            <div class="border-2 border-black p-2 cursor-pointer w-fit my-2">
+                <p>Perfume Spray (100ml)</p>
             </div>
-            <button
-                    class="w-full mt-5 p-3 border-2 border-red-800 text-lg font-semibold rounded-full bg-red-700 text-white">Add to Cart</button>
-         <button id="closeModalBtn" class="absolute -top-2 -right-2 font-bold bg-red-700 text-white px-4 py-2 rounded-full hover:bg-red-600 focus:outline-none">
+        </div>
+        <!-- Price -->
+        <div class="mt-2">
+            <p class="font-semibold">Price:</p>
+            <p class="text-xl font-semibold text-red-500">Rs.2789</p>
+        </div>
+        <button
+            class="w-full mt-5 p-3 border-2 border-red-800 text-lg font-semibold rounded-full bg-red-700 text-white">Add to Cart</button>
+        <button id="closeModalBtn" class="absolute -top-2 -right-2 font-bold bg-red-700 text-white px-4 py-2 rounded-full hover:bg-red-600 focus:outline-none">
             X
         </button>
     </div>
 </div>
 
 <script>
-    const openModalBtn = document.getElementById('openModalBtn');
+    const openModalBtns = document.querySelectorAll('.openModalBtn');
     const closeModalBtn = document.getElementById('closeModalBtn');
     const modal = document.getElementById('modal');
     const modalOverlay = document.getElementById('modalOverlay');
 
-    openModalBtn.addEventListener('click', () => {
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
-        modalOverlay.classList.remove('hidden');
+    // Add event listener to all modal open buttons
+    openModalBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            modalOverlay.classList.remove('hidden');
+        });
     });
 
     closeModalBtn.addEventListener('click', () => {
