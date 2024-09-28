@@ -1,58 +1,5 @@
 <?php
 include 'header.php';
-// Get the selected sorting option
-$sort_by = isset($_GET['sort_by']) ? $_GET['sort_by'] : '';
-
-// Define the sorting query
-$sort_query = '';
-if ($sort_by == 'name_asc') {
-    $sort_query = "ORDER BY Name ASC";
-} elseif ($sort_by == 'price_asc') {
-    $sort_query = "ORDER BY Price ASC";
-} elseif ($sort_by == 'price_desc') {
-    $sort_query = "ORDER BY Price DESC";
-} elseif ($sort_by == 'newest') {
-    $sort_query = "ORDER BY Id DESC";
-}
-
-// Fetch categories
-$sql = "SELECT * FROM categories";
-$res = mysqli_query($con, $sql);
-$cat_arr = array();
-while ($row = mysqli_fetch_assoc($res)) {
-    $cat_arr[] = $row;
-}
-
-function fetch_products_with_categories($con, $type = '', $limit = '', $cat_id = '', $sort_query = '')
-{
-    // Fetch product data
-    $sql = "SELECT product.*, categories.Categories AS CategoryName 
-            FROM product
-            JOIN categories ON product.category_id = categories.Id
-            WHERE product.status=1";
-
-    if ($cat_id != '') {
-        $sql .= " AND product.categories_id=$cat_id";
-    }
-
-    // Append the sorting query
-    if ($sort_query != '') {
-        $sql .= " " . $sort_query;
-    }
-
-    if ($limit != '') {
-        $sql .= " LIMIT $limit";
-    }
-
-    $res = mysqli_query($con, $sql);
-    $data = array();
-    while ($row = mysqli_fetch_assoc($res)) {
-        $data[] = $row;
-    }
-    return $data;
-}
-// Fetch products with categories
-$products = fetch_products_with_categories($con, '', '', '', $sort_query);
 
 ?>
 
@@ -109,7 +56,8 @@ $products = fetch_products_with_categories($con, '', '', '', $sort_query);
     <!-- Products section -->
     <div class="w-full p-3 flex flex-wrap justify-center gap-5 ">
         <?php
-        foreach ($products as $list) {
+        $get_product=get_product($con,'','','');
+        foreach ($get_product as $list) {
         ?>
                 <div class="w-96 md:w-72 h-[40rem] md:h-[30rem] flex gap-2 flex-col relative group shadow">
                     <!-- Plus icon with hover effect -->
@@ -123,7 +71,7 @@ $products = fetch_products_with_categories($con, '', '', '', $sort_query);
                         <!-- Default image -->
                         <img src="./image/<?= $list['image'] ?>" alt="Product 1" class="h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0">
                         <!-- Second image to show on hover -->
-                        <img src="./img/product-1-2.jpg" alt="Product 2 Hover" class="absolute top-0 left-0 h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100">
+                        <img src="./image/<?= $list['image2'] ?>" alt="Product 2 Hover" class="absolute top-0 left-0 h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100">
                     </a>
                     </div>
 
@@ -131,9 +79,9 @@ $products = fetch_products_with_categories($con, '', '', '', $sort_query);
                     <div class="px-4 py-2 h-full flex flex-col justify-evenly">
                     <a href="product_details.php?id=<?= $list['id'] ?>" class="product-link w-full">
 
-                        <p class="font-bold text-xl">Product Name</p>
+                        <p class="font-bold text-xl"><?= $list['name'] ?></p>
                         <p class="text-gray-600">Description</p>
-                        <p class="text-red-600 font-extrabold text-xl">Rs.2267</p>
+                        <p class="text-red-600 font-extrabold text-xl">Rs.<?= $list['price'] ?></p>
                         </a>
                     </div>
                 </div>

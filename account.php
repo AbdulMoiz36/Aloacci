@@ -1,5 +1,12 @@
 <?php
 include "header.php";
+// User must login first to access this page.//
+if(isset($_SESSION['USER_LOGIN']) && $_SESSION['USER_LOGIN']!=''){
+}
+else {
+    echo "<script>window.location.href='index.php'</script>";
+   die();
+}
 $user_id = $_SESSION['USER_ID'];
 $sql = mysqli_query($con,"SELECT `name`,`email`,`mobile`,`address`,`city` FROM `users` WHERE `id` = '$user_id'");
 $user = mysqli_fetch_assoc($sql);

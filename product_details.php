@@ -1,177 +1,130 @@
 <?php
 include 'header.php';
-$product_id = mysqli_real_escape_string($con,$_GET['id']);
+$product_id = mysqli_real_escape_string($con, $_GET['id']);
 
-if($product_id>0){
-    $get_product = get_product($con,'','',$product_id);
-}
-else{
+if ($product_id > 0) {
+    $get_product = get_product($con, '', '', $product_id);
+} else {
     echo "<script>window.location.href='index.php'</script>";
 }
+
+// Escape product data for output
+$product_image = htmlspecialchars($get_product[0]['image']);
+$product_image2 = htmlspecialchars($get_product[0]['image2']);
+$product_name = htmlspecialchars($get_product[0]['name']);
+$product_price = htmlspecialchars($get_product[0]['price']);
+$product_formats = array_map('htmlspecialchars', array_column($get_product, 'format'));
+$product_prices = array_map('htmlspecialchars', array_column($get_product, 'price'));
 ?>
 
 <section class="container">
     <div class="flex flex-wrap p-2 md:p-10">
-        <!-- Images Section -->
         <div class="w-100 md:w-1/2 flex gap-2">
-            <!-- Thumbnail Images -->
             <div class="w-1/6 space-y-2">
-                <img src="./image/<?= $get_product['0']['image'] ?>" alt="Thumbnail 1"
-                    class="cursor-pointer border-2 border-slate-200" onclick="changeImage(this.src)">
-                <img src="./image/<?= $get_product['0']['image2'] ?>" alt="Thumbnail 2"
-                    class="cursor-pointer border-2 border-slate-200" onclick="changeImage(this.src)">
+                <img src="./image/<?= $product_image ?>" alt="Thumbnail 1" class="cursor-pointer border-2 border-slate-200" onclick="changeImage(this.src)">
+                <img src="./image/<?= $product_image2 ?>" alt="Thumbnail 2" class="cursor-pointer border-2 border-slate-200" onclick="changeImage(this.src)">
             </div>
-            <!-- Larger Image -->
             <div class="w-5/6">
-                <img id="mainImage" src="./image/<?= $get_product['0']['image'] ?>" alt="Selected Product Image"
-                    class="border-2 border-slate-200 max-h-[850px]">
+                <img id="mainImage" src="./image/<?= $product_image ?>" alt="Selected Product Image" class="border-2 border-slate-200 max-h-[850px]">
             </div>
         </div>
 
-        <!-- Product Details Section -->
         <div class="w-full md:w-1/2 flex flex-col justify-center md:justify-start p-10 gap-6">
-            <!-- Product Name And Total Reviews -->
             <div>
-                <h1 class="font-bold text-3xl"><?= $get_product['0']['name'] ?></h1>
-                <p class="">12 Reviews</p>
+                <h1 class="font-bold text-3xl"><?= $product_name ?></h1>
+                <p>12 Reviews</p>
             </div>
-            <!-- Options -->
+
             <div>
                 <p class="font-semibold">Format:</p>
-                <div class="border-2 border-black p-2 cursor-pointer w-fit my-2">
-                    <p>Perfume Spray (50ml)</p>
-                </div>
-                <div class="border-2 border-black p-2 cursor-pointer w-fit my-2">
-                    <p>Perfume Spray (100ml)</p>
-                </div>
+                <select id="formatSelect" class="border-2 border-black p-2 cursor-pointer w-fit my-2" onchange="updatePrice()">
+                    <?php foreach ($product_formats as $index => $format): ?>
+                        <option value="<?= $product_prices[$index] ?>"><?= $format ?></option>
+                    <?php endforeach; ?>
+                </select>
             </div>
-            <!-- Price -->
+
+            <script>
+                function updatePrice() {
+                    var formatSelect = document.getElementById('formatSelect');
+                    var selectedPrice = formatSelect.value || '<?= $product_price ?>'; // Default to the initial price
+                    document.getElementById('price').innerText = 'Rs.' + selectedPrice;
+                }
+            </script>
+
             <div>
                 <p class="font-semibold">Price:</p>
-                <p class="text-xl font-semibold text-red-500">Rs.<?= $get_product['0']['price'] ?></p>
+                <p id="price" class="text-xl font-semibold text-red-500">Rs.<?= $product_price ?></p>
             </div>
-            <!-- Stock -->
+
             <?php
-                $productSoldQtyByProductId=productSoldQtyByProductId($con,$get_product['0']['id']);
-                $cart_show='yes';
-                if($get_product['0']['qty']>$productSoldQtyByProductId){
-                    $stock='In Stock';
-                }else{
-                    $stock='Not in Stock';
-                    $cart_show='';
-                }
-                ?>
+                $productSoldQtyByProductId = productSoldQtyByProductId($con, $get_product[0]['id']);
+                $cart_show = 'yes';
+                $stock = ($get_product[0]['qty'] > $productSoldQtyByProductId) ? 'In Stock' : 'Not in Stock';
+                if ($stock === 'Not in Stock') $cart_show = '';
+            ?>
 
             <div class="products--meta">
                 <p>
                     <span>Availability:</span>
-                    <?php
-                if($cart_show!=''){
-                ?>
-                    <span class="mb-4"><?= $stock ?></span>
-                    <?php
-                }else{
-                ?>
-                    <span style="color:red;" class="mb-4"><?= $stock ?></span>
-                    <?php
-                }
-                ?>
+                    <span class="<?= $cart_show ? '' : 'text-red-600' ?> mb-4"><?= $stock ?></span>
                 </p>
             </div>
+
             <div>
                 <p class="font-semibold">Quantity:</p>
-
                 <form method="post">
-                    <!-- Quantity Selector -->
                     <div class="flex items-center space-x-2">
-                        <!-- Decrement Button -->
-                        <span class="qty-minus"
-                            onclick="var effect = document.getElementById('qty'); var qty = effect.value; if( !isNaN( qty ) && qty > 1 ) effect.value--;return false;"><i
-                                class="fa fa-minus" aria-hidden="true"></i></span>
-                        <!-- Quantity Input -->
-                        <input id="qty" style="border: none;" name="quantity" type="number" min="1" value="1"
-                            class="w-16 text-center border border-gray-300 rounded-md py-1" />
-                        <!-- Increment Button -->
-                        <span class="qty-plus"
-                            onclick="var effect = document.getElementById('qty'); var qty = effect.value; if( !isNaN( qty )) effect.value++;return false;"><i
-                                class="fa fa-plus" aria-hidden="true"></i></span>
+                        <span class="qty-minus" onclick="changeQty(-1)"><i class="fa fa-minus" aria-hidden="true"></i></span>
+                        <input id="qty" name="quantity" type="number" min="1" value="1" class="w-16 text-center border border-gray-300 rounded-md py-1" />
+                        <span class="qty-plus" onclick="changeQty(1)"><i class="fa fa-plus" aria-hidden="true"></i></span>
                     </div>
-            </div>
-            <?php
-                        if(!isset($_SESSION['USER_LOGIN'])){
-                            ?>
-            <div>
-                <a href="login.php" style="padding:15px 250px 15px 255px;"
-                    class="border-2 border-black text-lg font-semibold rounded-full mb-2">Add To Cart</a>
-            </div>
-            <?php
-                        }
-                        else{
-                            ?>
-            <a href="javascript:void(0)" onclick="manage_cart('<?= $get_product['0']['id']?>','add'); "
-                style="padding:15px 250px 15px 255px;"
-                class="border-2 border-black text-lg font-semibold rounded-full mb-2">Add To Cart</a>
 
-            <?php
+                    <script>
+                        function changeQty(change) {
+                            var qtyInput = document.getElementById('qty');
+                            var newValue = parseInt(qtyInput.value) + change;
+                            qtyInput.value = newValue > 0 ? newValue : 1; // Prevent negative or zero quantities
                         }
-                        ?>
+                    </script>
+            </div>
+
+            <?php if (!isset($_SESSION['USER_LOGIN'])): ?>
+                <div>
+                    <a href="login.php" class="border-2 border-black text-lg font-semibold rounded-full mb-2" style="padding:15px 250px;">Add To Cart</a>
+                </div>
+            <?php else: ?>
+                <a href="javascript:void(0)" onclick="manage_cart('<?= $get_product[0]['id'] ?>','add');" class="border-2 border-black text-lg font-semibold rounded-full mb-2" style="padding:15px 250px;">Add To Cart</a>
+            <?php endif; ?>
             </form>
 
             <div>
-                <button
-                    class="w-full p-3 border-2 border-red-800 text-lg font-semibold rounded-full bg-red-700 text-white">Buy
-                    It Now</button>
+                <button class="w-full p-3 border-2 border-red-800 text-lg font-semibold rounded-full bg-red-700 text-white">Buy It Now</button>
             </div>
+
             <!-- Tabs -->
             <div>
                 <div class="flex justify-evenly flex-wrap lg:flex-nowrap align-middle">
-                    <button
-                        class="tab-button font-semibold rounded-tl-lg text-white bg-slate-900 p-3 w-full hover:bg-slate-200 hover:text-black"
-                        onclick="showTab('tab1')">Breif</button>
-                    <button
-                        class="tab-button font-semibold text-white bg-slate-900 p-3 w-full hover:bg-slate-200 hover:text-black"
-                        onclick="showTab('tab2')">Description</button>
-                    <button
-                        class="tab-button font-semibold text-white bg-slate-900 p-3 w-full hover:bg-slate-200 hover:text-black"
-                        onclick="showTab('tab3')">Performance</button>
-                    <button
-                        class="tab-button font-semibold text-white bg-slate-900 p-3 w-full hover:bg-slate-200 hover:text-black"
-                        onclick="showTab('tab4')">Shipping</button>
-                    <button
-                        class="tab-button font-semibold rounded-tr-lg text-white bg-slate-900 p-3 w-full hover:bg-slate-200 hover:text-black"
-                        onclick="showTab('tab5')">Unboxing Video</button>
+                    <?php
+                    $tabs = ['Brief', 'Description', 'Performance', 'Shipping', 'Unboxing Video'];
+                    foreach ($tabs as $index => $tab) {
+                        $activeClass = $index === 0 ? 'bg-slate-900' : 'bg-slate-900';
+                        echo "<button class='tab-button font-semibold text-white $activeClass p-3 w-full hover:bg-slate-200 hover:text-black' onclick='showTab(\"tab" . ($index + 1) . "\")'>$tab</button>";
+                    }
+                    ?>
                 </div>
 
-                <!-- Tab Content -->
                 <div class="bg-white p-6 rounded-b-lg shadow-lg">
-                    <div id="tab1" class="tab-content active">
-                        <h2 class="text-xl font-semibold">Tab 1 Content</h2>
-                        <p>This is the content for Tab 1.</p>
-                    </div>
-
-                    <div id="tab2" class="tab-content">
-                        <h2 class="text-xl font-semibold">Tab 2 Content</h2>
-                        <p>This is the content for Tab 2.</p>
-                    </div>
-
-                    <div id="tab3" class="tab-content">
-                        <h2 class="text-xl font-semibold">Tab 3 Content</h2>
-                        <p>This is the content for Tab 3.</p>
-                    </div>
-
-                    <div id="tab4" class="tab-content">
-                        <h2 class="text-xl font-semibold">Tab 4 Content</h2>
-                        <p>This is the content for Tab 4.</p>
-                    </div>
-
-                    <div id="tab5" class="tab-content">
-                        <h2 class="text-xl font-semibold">Tab 5 Content</h2>
-                        <p>This is the content for Tab 5.</p>
-                    </div>
+                    <?php foreach ($tabs as $index => $tab): ?>
+                        <div id="tab<?= $index + 1 ?>" class="tab-content <?= $index === 0 ? 'active' : '' ?>">
+                            <h2 class="text-xl font-semibold">Tab <?= $index + 1 ?> Content</h2>
+                            <p>This is the content for Tab <?= $index + 1 ?>.</p>
+                        </div>
+                    <?php endforeach; ?>
                 </div>
             </div>
-
         </div>
+
         <!-- Reviews -->
         <div class="w-full mt-20">
             <h2 class="text-center text-4xl mb-4 font-bold">Reviews</h2>
@@ -182,16 +135,15 @@ else{
                             <p class="font-semibold text-xl">User Name</p>
                             <p class="text-gray-500">1 Year Ago</p>
                         </div>
-                        <div><i class="fa-solid fa-star"></i>
+                        <div>
+                            <i class="fa-solid fa-star"></i>
                             <i class="fa-solid fa-star"></i>
                             <i class="fa-solid fa-star"></i>
                             <i class="fa-solid fa-star"></i>
                             <i class="fa-solid fa-star"></i>
                         </div>
                         <div>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus consequuntur facilis
-                                nemo? Iure, dolorum molestias. Aperiam iusto nam necessitatibus, dolorum voluptas sed
-                                vel consectetur possimus nulla! Unde odit nobis omnis.</p>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus consequuntur facilis nemo? Iure, dolorum molestias. Aperiam iusto nam necessitatibus, dolorum voluptas sed vel consectetur possimus nulla! Unde odit nobis omnis.</p>
                         </div>
                     </div>
                 </div>
@@ -200,6 +152,4 @@ else{
     </div>
 </section>
 
-<?php
-include 'footer.php';
-?>
+<?php include 'footer.php'; ?>

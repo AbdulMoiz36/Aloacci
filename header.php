@@ -3,15 +3,6 @@ require "config.php";
 require "functions.php";
 require "add_cart_func.php";
 
-// $active = substr($_SERVER['SCRIPT_NAME'], strrpos($_SERVER['SCRIPT_NAME'],"/")+1);
-$cart_total = 0;
-$sql = "select * from categories";
-$res = mysqli_query($con, $sql);
-$cat_arr = array();
-while ($row = mysqli_fetch_assoc($res)) {
-  $cat_arr[] = $row;
-}
-
 $obj = new add_to_cart();
 $totalProduct = $obj->totalProduct();
 
@@ -95,7 +86,7 @@ $totalProduct = $obj->totalProduct();
             <div class=" relative">
               <i class="fa-sharp fa-solid fa-bag-shopping text-xl"></i>
               <!-- Badge showing total products -->
-              <span class="absolute top-0 -right-2 transform translate-x-2 -translate-y-2 bg-red-600 text-white rounded-full px-2 py-0.5 text-xs font-bold">
+              <span class="cart-quantity absolute top-0 -right-2 transform translate-x-2 -translate-y-2 bg-red-600 text-white rounded-full px-2 py-0.5 text-xs font-bold">
                 <?php echo $totalProduct ?>
               </span>
             </div>

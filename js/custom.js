@@ -118,17 +118,17 @@ function user_login() {
 }
 
 function manage_cart(pid, type) {
-    let qty;
+    let quantity;
     if (type === 'update') {
-        qty = jQuery("#quantity_" + pid).val();
+        quantity = jQuery("#quantity_" + pid).val();
     } else {
-        qty = jQuery("#qty").val();
+        quantity = jQuery("#qty").val();
     }
 
     console.log("Product ID: " + pid);  // For debugging
-    console.log("Quantity: " + qty);    // For debugging
+    console.log("Quantity: " + quantity); // For debugging
 
-    if (qty <= 0) {
+    if (quantity <= 0) {
         alert('Quantity must be greater than zero.');
         return;
     }
@@ -136,13 +136,19 @@ function manage_cart(pid, type) {
     jQuery.ajax({
         url: 'manage_cart.php',
         type: 'post',
-        data: { pid: pid, qty: qty, type: type },
+        data: { pid: pid, qty: quantity, type: type },
         success: function(result) {
             console.log("AJAX success response: " + result);  // For debugging
-            if (result === 'not_avaliable') {
-                alert('Qty Not Available');
+            if (result === 'not_available') {
+                alert('Quantity Not Available');
             } else {
-                jQuery('.cart-quantity').html('(' + result + ')');
+                const cartQuantity = parseInt(result, 10);
+                if (!isNaN(cartQuantity)) {
+                    jQuery('.cart-quantity').html('(' + cartQuantity + ')');
+                } else {
+                    console.error('Invalid quantity response: ' + result);
+                }
+
                 if (type === 'update' || type === 'remove') {
                     window.location.reload();
                 } else {
@@ -150,11 +156,14 @@ function manage_cart(pid, type) {
                 }
             }
         },
-        error: function() {
-            alert('An error occurred while processing your request.');
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.error("AJAX error: " + textStatus + ", " + errorThrown);
+            alert('An error occurred while processing your request. Please try again.');
         }
     });
 }
+
+
 
 function increment(pid) {
     console.log("Increment button clicked for product ID: " + pid);  // For debugging

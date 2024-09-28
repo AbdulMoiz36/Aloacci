@@ -14,7 +14,7 @@ try {
     $pending_qty = $productQty - $productSoldQtyByProductId;
 
     if ($qty > $pending_qty && $type !== 'remove') {
-        echo "not_avaliable";
+        echo "not_available";
         exit;
     }
 
@@ -37,4 +37,3 @@ try {
 } catch (Exception $e) {
     echo 'An error occurred: ' . $e->getMessage();
 }
-?>

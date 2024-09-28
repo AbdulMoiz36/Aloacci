@@ -1,5 +1,6 @@
 <?php
 include 'header.php';
+// User must login first to access this page.//
 if(isset($_SESSION['USER_LOGIN']) && $_SESSION['USER_LOGIN']!=''){
 }
 else {

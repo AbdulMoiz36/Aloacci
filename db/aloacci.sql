@@ -185,7 +185,6 @@ CREATE TABLE `product` (
   `image` varchar(255) NOT NULL,
   `image2` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
-  `price` float NOT NULL,
   `qty` int(11) NOT NULL,
   `description` varchar(5000) NOT NULL,
   `breif` varchar(2000) NOT NULL,
