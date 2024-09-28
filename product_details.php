@@ -8,15 +8,6 @@ if($product_id>0){
 else{
     echo "<script>window.location.href='index.php'</script>";
 }
-// Check if the content is favorited by the user
-$is_favorited = false;
-if (isset($_SESSION['USER_LOGIN'])) {
-    $user_id = $_SESSION['USER_ID'];
-    $sql_check_favorite = mysqli_query($con, "SELECT * FROM wishlist WHERE user_id = $user_id AND product_id = $product_id");
-    if (mysqli_num_rows($sql_check_favorite) > 0) {
-        $is_favorited = true;
-    }
-}
 ?>
 
 <section class="container">
