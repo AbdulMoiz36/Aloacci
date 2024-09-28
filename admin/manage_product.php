@@ -141,20 +141,20 @@ if (isset($_REQUEST['submit'])) {
 ?>
 
 <div class="row">
-	<div class="col-12">
-		<div class="card">
-			<div class="card-header">
-				<h4>Products</h4><span>Form</span>
-			</div>
-			<form method="post" enctype="multipart/form-data">
-				<div class="card-body card-block">
-					<div class="form-group">
-						<label for="categories" class="form-control-label">Categories</label>
-						<select class="form-control" name="categories_id">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h4>Products</h4><span>Form</span>
+            </div>
+            <form method="post" enctype="multipart/form-data">
+                <div class="card-body card-block">
+                    <div class="form-group">
+                        <label for="categories" class="form-control-label">Categories</label>
+                        <select class="form-control" name="categories_id">
 
-							<option selected disabled>Select Category</option>
+                            <option selected disabled>Select Category</option>
 
-							<?php
+                            <?php
 
 									$select = mysqli_query($con,"select * from categories");
 
@@ -169,78 +169,82 @@ if (isset($_REQUEST['submit'])) {
 
 									?>
 
-						</select>
+                        </select>
 
-					</div>
-					<div class="form-group">
-						<label for="categories" class="form-control-label">Product name</label>
-						<input type="text" name="name" placeholder="Enter Product name" class="form-control" required
-							value="<?= $name ?>">
-					</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="categories" class="form-control-label">Product name</label>
+                        <input type="text" name="name" placeholder="Enter Product name" class="form-control" required
+                            value="<?= $name ?>">
+                    </div>
 
-                    <div class="form-group col-6">
-						<label for="categories" class="form-control-label">Format</label>
-						<input type="text" name="format" placeholder="Enter Product Format" class="form-control" required
-							value="<?= $format ?>">
-					</div>
+                    <div class="form-row">
+                        <div class="form-group col-6">
+                            <label for="categories" class="form-control-label">Format</label>
+                            <input type="text" name="format" placeholder="Enter Product Format" class="form-control"
+                                required value="<?= $format ?>">
+                        </div>
 
-					<div class="form-group col-6">
-						<label for="categories" class="form-control-label">Price</label>
-						<input type="text" name="price" placeholder="Enter Product price" class="form-control" required
-							value="<?= $price ?>">
-					</div>
+                        <div class="form-group col-6">
+                            <label for="categories" class="form-control-label">Price</label>
+                            <input type="text" name="price" placeholder="Enter Product price" class="form-control"
+                                required value="<?= $price ?>">
+                        </div>
+                    </div>
 
-                    <div class="form-group col-6">
-						<label for="categories" class="form-control-label">Format 2</label>
-						<input type="text" name="format2" placeholder="Enter Product Format 2" class="form-control"
-							value="<?= $format2 ?>">
-					</div>
+                    <div class="form-row">
+                        <div class="form-group col-6">
+                            <label for="categories" class="form-control-label">Format 2</label>
+                            <input type="text" name="format2" placeholder="Enter Product Format 2" class="form-control"
+                                value="<?= $format2 ?>">
+                        </div>
 
-					<div class="form-group col-6">
-						<label for="categories" class="form-control-label">Price</label>
-						<input type="text" name="price2" placeholder="Enter Product Price 2" class="form-control"
-							value="<?= $price2 ?>">
-					</div>
+                        <div class="form-group col-6">
+                            <label for="categories" class="form-control-label">Price</label>
+                            <input type="text" name="price2" placeholder="Enter Product Price 2" class="form-control"
+                                value="<?= $price2 ?>">
+                        </div>
+                    </div>
 
-					<div class="form-group">
-						<label for="categories" class="form-control-label">Qty</label>
-						<input type="text" name="qty" placeholder="Enter Qty" class="form-control" required
-							value="<?= $qty ?>">
-					</div>
+                    <div class="form-group">
+                        <label for="categories" class="form-control-label">Qty</label>
+                        <input type="text" name="qty" placeholder="Enter Qty" class="form-control" required
+                            value="<?= $qty ?>">
+                    </div>
 
-					<div class="form-group">
-						<label for="categories" class="form-control-label">Image</label>
-						<input type="file" name="image" class="form-control" <?= $image_required ?>>
-					</div>
+                    <div class="form-group">
+                        <label for="categories" class="form-control-label">Image</label>
+                        <input type="file" name="image" class="form-control" <?= $image_required ?>>
+                    </div>
 
-					<div class="form-group">
-						<label for="categories" class="form-control-label">Image 2</label>
-						<input type="file" name="image2" class="form-control" <?= $image_required ?>>
-					</div>
+                    <div class="form-group">
+                        <label for="categories" class="form-control-label">Image 2</label>
+                        <input type="file" name="image2" class="form-control" <?= $image_required ?>>
+                    </div>
 
-					<div class="form-group">
-						<label for="categories" class="form-control-label">Brief</label>
-						<textarea name="breif" placeholder="Enter Product Brief"
-							class="form-control"><?= $breif ?></textarea>
-					</div>
+                    <div class="form-group">
+                        <label for="categories" class="form-control-label">Brief</label>
+                        <textarea name="breif" placeholder="Enter Product Brief"
+                            class="form-control"><?= $breif ?></textarea>
+                    </div>
 
-					<div class="form-group">
-						<label for="categories" class="form-control-label">Description</label>
-						<textarea name="description" placeholder="Enter Product Description"
-							class="form-control"><?= $description ?></textarea>
-					</div>
+                    <div class="form-group">
+                        <label for="categories" class="form-control-label">Description</label>
+                        <textarea name="description" placeholder="Enter Product Description"
+                            class="form-control"><?= $description ?></textarea>
+                    </div>
 
-					<button id="payment-button" name="submit" type="submit" class="btn btn-lg btn-primary btn-block">
-						<span id="payment-button-amount">Submit</span>
-					</button>
-					<div style="color: red; margin-top: 10px;">
-						<?= $msg ?>
-					</div>
-				</div>
-			</form>
-		</div>
-	</div>
+                    <button id="payment-button" name="submit" type="submit" class="btn btn-lg btn-primary btn-block">
+                        <span id="payment-button-amount">Submit</span>
+                    </button>
+                    <div style="color: red; margin-top: 10px;">
+                        <?= $msg ?>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 
-	<?php
+    <?php
 include "footer.php"
 ?>
