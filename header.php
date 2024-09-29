@@ -58,13 +58,13 @@ $totalProduct = $obj->totalProduct();
         <?php
         if (isset($_SESSION['USER_LOGIN'])) {
         ?>
-          <i class="fas fa-user"></i>
-          <a href="account.php">Account</a>
+        <i class="fas fa-user"></i>
+        <a href="account.php">Account</a>
         <?php
         } else {
         ?>
-          <i class="fas fa-user"></i>
-          <a href="login.php">Login</a>
+        <i class="fas fa-user"></i>
+        <a href="login.php">Login</a>
         <?php
         }
         ?>
@@ -74,28 +74,28 @@ $totalProduct = $obj->totalProduct();
         <?php
         if (!isset($_SESSION['USER_LOGIN'])) {
         ?>
-          <a href="login.php">
-            <i class="fa-sharp fa-solid fa-bag-shopping"></i>
-            <span>Cart</span>
-          </a>
+        <a href="login.php">
+          <i class="fa-sharp fa-solid fa-bag-shopping"></i>
+          <span>Cart</span>
+        </a>
         <?php
         } else {
         ?>
-          <a href="cart.php" class=" flex items-center">
-            <!-- Cart Icon -->
-            <div class=" relative">
-              <i class="fa-sharp fa-solid fa-bag-shopping text-xl"></i>
-              <!-- Badge showing total products -->
-              <span class="cart-quantity absolute top-0 -right-2 transform translate-x-2 -translate-y-2 bg-red-600 text-white rounded-full px-2 py-0.5 text-xs font-bold">
-                <?php echo $totalProduct ?>
-              </span>
-            </div>
+        <a href="cart.php" class=" flex items-center">
+          <!-- Cart Icon -->
+          <div class=" relative">
+            <i class="fa-sharp fa-solid fa-bag-shopping text-xl"></i>
+            <!-- Badge showing total products -->
+            <span class="cart-quantity absolute top-0 -right-2 transform translate-x-2 -translate-y-2 bg-red-600 text-white rounded-full px-2 py-0.5 text-xs font-bold">
+              <?php echo $totalProduct ?>
+            </span>
+          </div>
 
-            <!-- Cart Text -->
-            <span class="ml-2">Cart</span>
+          <!-- Cart Text -->
+          <span class="ml-2">Cart</span>
 
-
-          </a>
+          
+        </a>
         <?php
         }
         ?>

@@ -163,24 +163,24 @@ function manage_cart(pid, type) {
     });
 }
 
+function changeQuantity(pid, change) {
+    console.log((change > 0 ? "Increment" : "Decrement") + " button clicked for product ID: " + pid);
+    let quantityInput = document.getElementById('quantity_' + pid);
+    let quantity = parseInt(quantityInput.value) + change;
 
-
-function increment(pid) {
-    console.log("Increment button clicked for product ID: " + pid);  // For debugging
-    let quantity = document.getElementById('quantity_' + pid).value;
-    quantity = parseInt(quantity) + 1;
-    document.getElementById('quantity_' + pid).value = quantity;
+    if (quantity < 1) return; // Prevent going below 1
+    quantityInput.value = quantity;
     manage_cart(pid, 'update');
 }
 
-function decrement(pid) {
-    console.log("Decrement button clicked for product ID: " + pid);  // For debugging
-    let quantity = document.getElementById('quantity_' + pid).value;
-    if (quantity > 1) {
-        quantity = parseInt(quantity) - 1;
-        document.getElementById('quantity_' + pid).value = quantity;
-        manage_cart(pid, 'update');
-    }
+// Usage
+function increment(pid) {
+    changeQuantity(pid, 1);
 }
+
+function decrement(pid) {
+    changeQuantity(pid, -1);
+}
+
 
 

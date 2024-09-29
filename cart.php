@@ -13,15 +13,24 @@ else {
     <h1 class="text-4xl font-bold text-center">Cart</h1>
     <div class="flex flex-col md:flex-row mt-10">
         <div class="w-full md:w-4/6">
-                <?php
+            <?php
 						if(isset($_SESSION['cart'])){
 							$cart_total=0;
-							foreach($_SESSION['cart'] as $key=>$val){
-							$productArr=get_product($con,'','',$key);
-							$image=$productArr[0]['image'];
-                            $pname=$productArr[0]['name'];
-							$price=$productArr[0]['price'];
-							$qty=$val['qty'];
+							foreach($_SESSION['cart'] as $key => $val) {
+                                $productArr = get_product($con, '', '', $key);
+                                
+                                if (!empty($productArr)) {
+                                    // Proceed to display product details
+                                    $image = $productArr[0]['image'];
+                                    $pname = $productArr[0]['name'];
+                                    $price = $productArr[0]['price'];
+                                    $qty = isset($val['qty']) && $val['qty'] > 0 ? $val['qty'] : 1;
+
+                                    // ...
+                                } else {
+                                    // Handle the case where the product is not found
+                                    echo "<p>Product not found!</p>";
+                                }                        
                             $cart_total=$cart_total+($price*$qty);
 						?>
             <div class="flex gap-5 border-b border-slate-200 pb-3 p-10">
@@ -32,21 +41,25 @@ else {
                     <!-- Quantity Selector -->
                     <div class="flex items-center">
                         <!-- Decrement Button -->
-                        <button onclick="decrement('<?= $key ?>')" class="bg-gray-200 text-gray-700 px-3 py-1 rounded hover:bg-gray-300">-</button>
+                        <button onclick="decrement('<?= $key ?>')"
+                            class="bg-gray-200 text-gray-700 px-3 py-1 rounded hover:bg-gray-300">-</button>
 
                         <!-- Quantity Input -->
-                        <input id="quantity_<?= $key ?>" type="number" min="1" value="<?= $qty ?>" class="w-16 text-center border border-gray-300 rounded-md py-1" />
+                        <input id="quantity_<?= $key ?>" type="number" min="1" value="<?= $qty ?>"
+                            class="w-16 text-center border border-gray-300 rounded-md py-1" />
 
                         <!-- Increment Button -->
-                        <button onclick="increment('<?= $key ?>')" class="bg-gray-200 text-gray-700 px-3 py-1 rounded hover:bg-gray-300">+</button>
-                        </div>
+                        <button onclick="increment('<?= $key ?>')"
+                            class="bg-gray-200 text-gray-700 px-3 py-1 rounded hover:bg-gray-300">+</button>
+                    </div>
                     <div class="flex justify-between">
-                        <a href="javascript:void(0)" onclick="manage_cart('<?php echo $key?>','remove')" class="font-semibold underline cursor-pointer">Remove</a>
+                        <a href="javascript:void(0)" onclick="manage_cart('<?php echo $key?>','remove')"
+                            class="font-semibold underline cursor-pointer">Remove</a>
                         <p class="font-semibold text-lg">Rs.<?= $price?></p>
                     </div>
                 </div>
             </div>
-                <?php
+            <?php
                             }
                         }
                         ?>
@@ -58,7 +71,8 @@ else {
                     <p class="font-semibold text-xl">Rs.<?= $cart_total ?></p>
                 </div>
                 <div class="mt-7">
-                    <button class="w-full p-2 border-2 border-red-800 font-semibold rounded-full  bg-red-700 text-white">Checkout</button>
+                    <button
+                        class="w-full p-2 border-2 border-red-800 font-semibold rounded-full  bg-red-700 text-white">Checkout</button>
                 </div>
                 <div class="mt-7">
                     <p class="text-center text-sm">Taxes and Shipping calculated at checkout.</p>
