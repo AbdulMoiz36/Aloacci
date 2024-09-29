@@ -115,7 +115,7 @@ $totalProduct = $obj->totalProduct();
         <i class="fa-solid fa-angle-down ml-1 align-middle text-sm"></i>
         <!-- Menu For Shop -->
         <ul
-          class="hidden w-full absolute bg-white text-black shadow-xl grid-cols-2 sm:grid-cols-4 gap-10 z-10 top-12 left-0 p-10"
+          class="hidden w-full absolute bg-white text-black shadow-xl grid-cols-2 sm:grid-cols-4 gap-10 z-50 top-12 left-0 p-10"
           id="menu">
           <?php
 
