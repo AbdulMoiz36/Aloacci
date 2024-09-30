@@ -66,9 +66,9 @@ $product_prices = array_map('htmlspecialchars', array_column($get_product, 'pric
                 <p class="font-semibold">Select Format:</p>
                 <div id="format-container" class="flex flex-col">
                     <?php foreach ($product_formats as $index => $format): ?>
-                    <div class="format-option border-2 border-black p-2 cursor-pointer my-2"
+                    <div class="format-option border-2 border-black p-2 cursor-pointer my-2 <?= $index === 0 ? 'bg-gray-200' : '' ?>"
                         data-price="<?= $product_prices[$index] ?>">
-                        <?= $format ?> - Rs. <?= $product_prices[$index] ?>
+                        <?= $format ?>
                     </div>
                     <?php endforeach; ?>
                 </div>
@@ -111,7 +111,7 @@ $product_prices = array_map('htmlspecialchars', array_column($get_product, 'pric
 
                 function addToCart(productId) {
                     const selectedFormat = document.querySelector(
-                    '#format-container .bg-gray-200'); // Get the selected format
+                        '#format-container .bg-gray-200'); // Get the selected format
                     const quantity = document.getElementById('qty').value; // Get the quantity
                     if (selectedFormat) {
                         const format = selectedFormat.innerText.split(' - ')[0]; // Get the format text (remove price)
@@ -140,7 +140,7 @@ $product_prices = array_map('htmlspecialchars', array_column($get_product, 'pric
             <script>
                 function addToCart(productId) {
                     const selectedFormat = document.querySelector(
-                    '#format-container .bg-gray-200'); // Get the selected format
+                        '#format-container .bg-gray-200'); // Get the selected format
                     const quantity = document.getElementById('qty').value; // Get the quantity
                     if (selectedFormat) {
                         const format = selectedFormat.innerText.split(' - ')[0]; // Get the format text (remove price)

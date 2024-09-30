@@ -32,7 +32,6 @@ $totalProduct = $obj->totalProduct();
 <body>
 
   <button hidden id="registration_success"></button>
-  <button hidden id="cart_add"></button>
 
   <!-- Header Start -->
   <header

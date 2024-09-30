@@ -63,8 +63,8 @@ if (isset($_SESSION['USER_LOGIN']) && $_SESSION['USER_LOGIN'] != '') {
                     <p id="cart-total" class="font-semibold text-xl">Rs. <?= $cart_total ?></p>
                 </div>
                 <div class="mt-7">
-                    <button
-                        class="w-full p-2 border-2 border-red-800 font-semibold rounded-full bg-red-700 text-white">Checkout</button>
+                    <a href="checkout.php"><button
+                    class="w-full p-2 border-2 border-red-800 font-semibold rounded-full bg-red-700 text-white">Checkout</button></a>
                 </div>
                 <div class="mt-7">
                     <p class="text-center text-sm">Taxes and Shipping calculated at checkout.</p>
