@@ -99,8 +99,19 @@ include 'header.php';
                     <img src="./image/<?= $list['image'] ?>" alt="<?= $list['name'] ?>"
                         class="h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0">
                     <!-- Second image to show on hover -->
+                    <?php
+                    if($list['image2'] != ''){
+                    ?>
                     <img src="./image/<?= $list['image2'] ?>" alt="<?= $list['name'] ?> Hover"
+                    class="absolute top-0 left-0 h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100">
+                    <?php
+                    }else{
+                        ?>
+                        <img src="./image/<?= $list['image'] ?>" alt="<?= $list['name'] ?> Hover"
                         class="absolute top-0 left-0 h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100">
+                        <?php
+                    }
+                    ?>
                 </a>
             </div>
 
