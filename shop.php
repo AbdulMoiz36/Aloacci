@@ -123,8 +123,8 @@ include 'header.php';
 <div id="modalOverlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-40"></div>
 
 <!-- Modal -->
-<div id="modal" class="fixed inset-0 flex items-center justify-center hidden z-50">
-    <div class="bg-white p-10 rounded-lg shadow-lg w-5/6 md:w-1/3 relative">
+<div id="modal" class="fixed inset-0 items-center justify-center hidden z-50">
+    <div class="bg-white p-10 rounded-lg shadow-lg w-5/6 md:w-2/3 lg:w-1/3 relative">
         <h2 class="text-2xl font-bold mb-4" id="modal-product-name">Product Name</h2>
         <!-- Options -->
         <div id="modal-formats" class="mt-2">
@@ -161,21 +161,27 @@ include 'header.php';
         </div>
         <!-- Inside the Modal -->
         <?php if (!isset($_SESSION['USER_LOGIN'])): ?>
-        <a href="login.php"
-            class="border-2 border-black text-lg font-semibold rounded-full mb-2" style="padding:12px 150px;">Add To
-            Cart</a>
+            <a href="login.php">
+                <div 
+                class="w-full p-3 border-2 text-center border-black text-lg font-semibold rounded-full text-black">Add To
+                Cart</div>
+            </a>
             <?php else: ?>
-                <a href="javascript:void(0)" id="addToCartBtn"
-            class="border-2 border-black text-lg font-semibold rounded-full mb-2" style="padding:12px 150px;">Add To
-            Cart</a>
+                <a href="javascript:void(0)">
+                    <div id="addToCartBtn"
+                    class="w-full p-3 border-2 text-center border-black text-lg font-semibold rounded-full text-black" >Add To
+                    Cart</div>
+                </a>
             <?php endif; ?>
-        <button style="margin-top: 20px;"
-            class="w-full p-3 border-2 border-red-800 text-lg font-semibold rounded-full bg-red-700 text-white">Buy It
-            Now</button>
-        <button id="closeModalBtn"
-            class="absolute -top-2 -right-2 font-bold bg-red-700 text-white px-4 py-2 rounded-full hover:bg-red-600 focus:outline-none">
-            X
-        </button>
+            <a href="product_details.php?id=" >
+                <div style="margin-top: 20px;"
+                class="w-full p-3 border-2 text-center border-red-800 text-lg font-semibold rounded-full bg-red-700 text-white">Buy It
+                Now</div>
+            </a>
+                <div id="closeModalBtn"
+            class="absolute -top-2 -right-2 hover:cursor-pointer font-bold bg-red-700 text-white px-4 py-2 rounded-full hover:bg-red-600 focus:outline-none">
+            <i class="fa-solid fa-xmark"></i>
+        </div>
     </div>
 </div>
 
@@ -223,6 +229,7 @@ include 'header.php';
             currentProductId = btn.getAttribute('data-product-id');
             // Show modal
             modal.classList.remove('hidden');
+            modal.classList.add('flex');
             modalOverlay.classList.remove('hidden');
         });
     });
