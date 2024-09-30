@@ -1,11 +1,10 @@
 <?php
 include 'header.php';
 // User must login first to access this page.//
-if(isset($_SESSION['USER_LOGIN']) && $_SESSION['USER_LOGIN']!=''){
-}
-else {
+if (isset($_SESSION['USER_LOGIN']) && $_SESSION['USER_LOGIN'] != '') {
+} else {
     echo "<script>window.location.href='index.php'</script>";
-   die();
+    die();
 }
 ?>
 
@@ -14,65 +13,58 @@ else {
     <div class="flex flex-col md:flex-row mt-10">
         <div class="w-full md:w-4/6">
             <?php
-						if(isset($_SESSION['cart'])){
-							$cart_total=0;
-							foreach($_SESSION['cart'] as $key => $val) {
-                                $productArr = get_product($con, '', '', $key);
-                                
-                                if (!empty($productArr)) {
-                                    // Proceed to display product details
-                                    $image = $productArr[0]['image'];
-                                    $pname = $productArr[0]['name'];
-                                    $price = $productArr[0]['price'];
-                                    $qty = isset($val['qty']) && $val['qty'] > 0 ? $val['qty'] : 1;
+            if (isset($_SESSION['cart'])) {
+                $cart_total = 0;
+                foreach ($_SESSION['cart'] as $key => $val) {
+                    $productArr = get_product($con, '', '', $key);
+                    $image = $productArr[0]['image'];
+                    $pname = $productArr[0]['name'];
+                    $qty = $val['qty'];
+                    $price = $val['price']; // Get the price from the session
+                    $selected_format = $val['format']; // Get the selected format
 
-                                    // ...
-                                } else {
-                                    // Handle the case where the product is not found
-                                    echo "<p>Product not found!</p>";
-                                }                        
-                            $cart_total=$cart_total+($price*$qty);
-						?>
+                    $cart_total += ($price * $qty);
+            ?>
             <div class="flex gap-5 border-b border-slate-200 pb-3 p-10">
                 <div class="w-1/6"><img src="./image/<?= $image ?>" class="rounded-md" alt=""></div>
                 <div class="w-5/6 flex flex-col justify-evenly">
-                    <p class="font-bold text-lg"><?= $pname?></p>
-                    <p><span class="font-semibold">Format:</span>Perfume Spray (50ml)</p>
+                    <p class="font-bold text-lg"><?= $pname ?></p>
+                    <p><span class="font-semibold">Format:</span> <?= $selected_format ?></p>
                     <!-- Quantity Selector -->
-                    <div class="flex items-center">
-                        <!-- Decrement Button -->
-                        <button onclick="decrement('<?= $key ?>')"
-                            class="bg-gray-200 text-gray-700 px-3 py-1 rounded hover:bg-gray-300">-</button>
-
-                        <!-- Quantity Input -->
-                        <input id="quantity_<?= $key ?>" type="number" min="1" value="<?= $qty ?>"
-                            class="w-16 text-center border border-gray-300 rounded-md py-1" />
-
-                        <!-- Increment Button -->
-                        <button onclick="increment('<?= $key ?>')"
-                            class="bg-gray-200 text-gray-700 px-3 py-1 rounded hover:bg-gray-300">+</button>
+                    <div style="margin-bottom:20px">
+                        <p class="font-semibold">Quantity:</p>
+                        <div class="flex items-center space-x-2">
+                            <span class="qty-minus" onclick="changeQty('<?= $key ?>', -1)"><i class="fa fa-minus"
+                                    aria-hidden="true"></i></span>
+                            <input id="qty_<?= $key ?>" name="quantity" type="number" min="1" value="<?= $qty ?>"
+                                class="w-16 text-center border border-gray-300 rounded-md py-1"
+                                onchange="updateCartTotal('<?= $key ?>')" />
+                            <span class="qty-plus" onclick="changeQty('<?= $key ?>', 1)"><i class="fa fa-plus"
+                                    aria-hidden="true"></i></span>
+                        </div>
                     </div>
+
                     <div class="flex justify-between">
-                        <a href="javascript:void(0)" onclick="manage_cart('<?php echo $key?>','remove')"
+                        <a href="javascript:void(0)" onclick="manage_cart('<?php echo $key ?>', 'remove')"
                             class="font-semibold underline cursor-pointer">Remove</a>
-                        <p class="font-semibold text-lg">Rs.<?= $price?></p>
+                        <p class="font-semibold text-lg">Rs. <?= $price ?></p>
                     </div>
                 </div>
             </div>
             <?php
-                            }
-                        }
-                        ?>
+                }
+            }
+            ?>
         </div>
-        <div class=" w-full md:w-2/6">
+        <div class="w-full md:w-2/6">
             <div class="bg-gray-100 p-10">
                 <div class="flex justify-around text-wrap">
                     <p class="font-semibold text-xl">Subtotal:</p>
-                    <p class="font-semibold text-xl">Rs.<?= $cart_total ?></p>
+                    <p id="cart-total" class="font-semibold text-xl">Rs. <?= $cart_total ?></p>
                 </div>
                 <div class="mt-7">
                     <button
-                        class="w-full p-2 border-2 border-red-800 font-semibold rounded-full  bg-red-700 text-white">Checkout</button>
+                        class="w-full p-2 border-2 border-red-800 font-semibold rounded-full bg-red-700 text-white">Checkout</button>
                 </div>
                 <div class="mt-7">
                     <p class="text-center text-sm">Taxes and Shipping calculated at checkout.</p>
@@ -81,6 +73,42 @@ else {
         </div>
     </div>
 </section>
+
+<script>
+    function changeQty(productId, change) {
+        var qtyInput = document.getElementById('qty_' + productId);
+        var newValue = parseInt(qtyInput.value) + change;
+        qtyInput.value = newValue > 0 ? newValue : 1; // Prevent negative or zero quantities
+        updateCartTotal(productId); // Update cart total when quantity changes
+    }
+
+    function updateCartTotal(productId) {
+    var qtyInput = document.getElementById('qty_' + productId);
+    var quantity = parseInt(qtyInput.value);
+    var price = <?= json_encode(array_column($_SESSION['cart'], 'price')) ?>; // Get prices from session data
+    var pricePerUnit = price[productId]; // Get price of current product
+    var subtotalElement = document.getElementById('cart-total');
+
+    // Calculate new total
+    var newTotal = 0;
+    <?php foreach ($_SESSION['cart'] as $key => $val): ?>
+        newTotal += (parseInt(document.getElementById('qty_<?= $key ?>').value) * <?= $val['price'] ?>);
+    <?php endforeach; ?>
+    subtotalElement.innerText = 'Rs. ' + newTotal; // Update total display
+
+    // Update the session on the server
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "update_cart.php", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            console.log(xhr.responseText); // Optional: check response for debugging
+        }
+    };
+    xhr.send("productId=" + productId + "&quantity=" + quantity);
+}
+
+</script>
 
 <?php
 include 'footer.php';

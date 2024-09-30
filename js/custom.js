@@ -117,18 +117,12 @@ function user_login() {
     }
 }
 
-function manage_cart(pid, type) {
-    let quantity;
-    if (type === 'update') {
-        quantity = jQuery("#quantity_" + pid).val();
-    } else {
-        quantity = jQuery("#qty").val();
-    }
-
+function manage_cart(pid, type, qty, format, price) {
     console.log("Product ID: " + pid);  // For debugging
-    console.log("Quantity: " + quantity); // For debugging
+    console.log("Quantity: " + qty); // For debugging
+    console.log("Selected Format: " + format); // For debugging
 
-    if (quantity <= 0) {
+    if (qty <= 0) {
         alert('Quantity must be greater than zero.');
         return;
     }
@@ -136,7 +130,7 @@ function manage_cart(pid, type) {
     jQuery.ajax({
         url: 'manage_cart.php',
         type: 'post',
-        data: { pid: pid, qty: quantity, type: type },
+        data: { pid: pid, qty: qty, type: type, format: format, price: price }, // Send all necessary data
         success: function(result) {
             console.log("AJAX success response: " + result);  // For debugging
             if (result === 'not_available') {
@@ -148,12 +142,7 @@ function manage_cart(pid, type) {
                 } else {
                     console.error('Invalid quantity response: ' + result);
                 }
-
-                if (type === 'update' || type === 'remove') {
-                    window.location.reload();
-                } else {
-                    jQuery("#cart_add").click();
-                }
+                window.location.reload(); // Reload the page to reflect the cart updates
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
@@ -162,6 +151,7 @@ function manage_cart(pid, type) {
         }
     });
 }
+
 
 function changeQuantity(pid, change) {
     console.log((change > 0 ? "Increment" : "Decrement") + " button clicked for product ID: " + pid);

@@ -160,9 +160,15 @@ include 'header.php';
                 </script>
         </div>
         <!-- Inside the Modal -->
-        <a href="javascript:void(0)" id="addToCartBtn"
+        <?php if (!isset($_SESSION['USER_LOGIN'])): ?>
+        <a href="login.php"
             class="border-2 border-black text-lg font-semibold rounded-full mb-2" style="padding:12px 150px;">Add To
             Cart</a>
+            <?php else: ?>
+                <a href="javascript:void(0)" id="addToCartBtn"
+            class="border-2 border-black text-lg font-semibold rounded-full mb-2" style="padding:12px 150px;">Add To
+            Cart</a>
+            <?php endif; ?>
         <button style="margin-top: 20px;"
             class="w-full p-3 border-2 border-red-800 text-lg font-semibold rounded-full bg-red-700 text-white">Buy It
             Now</button>
@@ -230,13 +236,14 @@ include 'header.php';
     });
     // Add to Cart button event listener
     document.getElementById('addToCartBtn').addEventListener('click', () => {
-        // Assuming you have a way to get the selected format's price
         const selectedFormat = document.querySelector('#format-container .bg-gray-200');
+        const quantity = document.getElementById('qty').value; // Get the quantity from the input
         if (selectedFormat) {
-            const price = selectedFormat.dataset.price; // You may want to use this price for your logic
+            const format = selectedFormat.innerText; // Get the selected format text
+            const price = selectedFormat.dataset.price; // Get the selected format price
+            // Call manage_cart with the current product ID, selected format, and quantity
+            manage_cart(currentProductId, 'add', quantity, format, price); // Pass the quantity and format
         }
-        // Call manage_cart with the current product ID
-        manage_cart(currentProductId, 'add');
     });
 </script>
 

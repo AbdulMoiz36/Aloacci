@@ -47,39 +47,6 @@ $product_prices = array_map('htmlspecialchars', array_column($get_product, 'pric
                 <p>12 Reviews</p>
             </div>
 
-            <!-- Selectable Formats -->
-            <div>
-                <p class="font-semibold">Format:</p>
-                <div id="format-container" class="flex gap-2">
-                    <?php foreach ($product_formats as $index => $format): ?>
-                    <div class="border-2 border-black p-2 cursor-pointer w-fit my-2 <?= $index === 0 ? 'bg-gray-200' : '' ?>"
-                        data-price="<?= $product_prices[$index] ?>" onclick="selectFormat(this)">
-                        <?= $format ?>
-                    </div>
-                    <?php endforeach; ?>
-                </div>
-            </div>
-
-            <script>
-                function selectFormat(formatDiv) {
-                    // Remove 'selected' class from all format divs
-                    document.querySelectorAll('#format-container div').forEach(div => {
-                        div.classList.remove('bg-gray-200');
-                    });
-                    // Add 'selected' class to the clicked format
-                    formatDiv.classList.add('bg-gray-200');
-                    // Update price according to selected format
-                    var selectedPrice = formatDiv.getAttribute('data-price');
-                    document.getElementById('price').innerText = 'Rs.' + selectedPrice;
-                }
-            </script>
-
-            <!-- Price -->
-            <div>
-                <p class="font-semibold">Price:</p>
-                <p id="price" class="text-xl font-semibold text-red-500">Rs.<?= $product_price ?></p>
-            </div>
-
             <?php
                 $productSoldQtyByProductId = productSoldQtyByProductId($con, $get_product[0]['id']);
                 $cart_show = 'yes';
@@ -92,6 +59,20 @@ $product_prices = array_map('htmlspecialchars', array_column($get_product, 'pric
                     <span>Availability:</span>
                     <span class="<?= $cart_show ? '' : 'text-red-600' ?> mb-4"><?= $stock ?></span>
                 </p>
+            </div>
+
+            <!-- Product Formats and Prices -->
+            <div class="mt-4">
+                <p class="font-semibold">Select Format:</p>
+                <div id="format-container" class="flex flex-col">
+                    <?php foreach ($product_formats as $index => $format): ?>
+                    <div class="format-option border-2 border-black p-2 cursor-pointer my-2"
+                        data-price="<?= $product_prices[$index] ?>">
+                        <?= $format ?> - Rs. <?= $product_prices[$index] ?>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+                <p id="product-price" class="font-semibold text-lg mt-2">Price: Rs. <?= $product_prices[0] ?></p>
             </div>
 
             <!-- Quantity Selector -->
@@ -116,6 +97,33 @@ $product_prices = array_map('htmlspecialchars', array_column($get_product, 'pric
                     </script>
             </div>
 
+            <script>
+                // Handle format selection and price update
+                document.querySelectorAll('.format-option').forEach(option => {
+                    option.addEventListener('click', function() {
+                        document.querySelectorAll('.format-option').forEach(opt => opt.classList.remove(
+                            'bg-gray-200'));
+                        this.classList.add('bg-gray-200');
+                        const price = this.dataset.price;
+                        document.getElementById('product-price').innerText = `Price: Rs. ${price}`;
+                    });
+                });
+
+                function addToCart(productId) {
+                    const selectedFormat = document.querySelector(
+                    '#format-container .bg-gray-200'); // Get the selected format
+                    const quantity = document.getElementById('qty').value; // Get the quantity
+                    if (selectedFormat) {
+                        const format = selectedFormat.innerText.split(' - ')[0]; // Get the format text (remove price)
+                        const price = selectedFormat.dataset.price; // Get the price of the selected format
+                        // Call manage_cart with the current product ID, selected format, and quantity
+                        manage_cart(productId, 'add', quantity, format, price); // Pass the quantity and format
+                    } else {
+                        alert("Please select a format before adding to cart.");
+                    }
+                }
+            </script>
+
             <!-- Add to Cart Button -->
             <?php if (!isset($_SESSION['USER_LOGIN'])): ?>
             <div>
@@ -123,11 +131,27 @@ $product_prices = array_map('htmlspecialchars', array_column($get_product, 'pric
                     style="padding:15px 250px;">Add To Cart</a>
             </div>
             <?php else: ?>
-            <a href="javascript:void(0)" onclick="manage_cart('<?= $get_product[0]['id'] ?>','add');"
-                class="border-2 border-black text-lg font-semibold rounded-full mb-2" style="padding:15px 250px;">Add To
-                Cart</a>
+            <button id="addToCartBtn" class="border-2 border-black text-lg font-semibold rounded-full mb-2"
+                style="padding:15px 250px;" onclick="addToCart('<?= $get_product[0]['id'] ?>')">Add To Cart</button>
             <?php endif; ?>
+
             </form>
+
+            <script>
+                function addToCart(productId) {
+                    const selectedFormat = document.querySelector(
+                    '#format-container .bg-gray-200'); // Get the selected format
+                    const quantity = document.getElementById('qty').value; // Get the quantity
+                    if (selectedFormat) {
+                        const format = selectedFormat.innerText.split(' - ')[0]; // Get the format text (remove price)
+                        const price = selectedFormat.dataset.price; // Get the price of the selected format
+                        // Call manage_cart with the current product ID, selected format, and quantity
+                        manage_cart(productId, 'add', quantity, format, price); // Pass the quantity and format
+                    } else {
+                        alert("Please select a format before adding to cart.");
+                    }
+                }
+            </script>
 
             <!-- Buy It Now Button -->
             <div>
