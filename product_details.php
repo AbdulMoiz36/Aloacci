@@ -22,16 +22,16 @@ $product_prices = array_map('htmlspecialchars', array_column($get_product, 'pric
         <div class="w-100 md:w-1/2 flex gap-2">
             <!-- Sidebar Thumbnails (only displayed if there is more than one image) -->
             <?php if (!empty($product_image2)): ?>
-            <div class="w-1/6 space-y-2">
-                <?php if (!empty($product_image)): ?>
-                <img src="./image/<?= $product_image ?>" alt="Thumbnail 1"
-                    class="cursor-pointer border-2 border-slate-200" onclick="changeImage(this.src)">
-                <?php endif; ?>
-                <?php if (!empty($product_image2)): ?>
-                <img src="./image/<?= $product_image2 ?>" alt="Thumbnail 2"
-                    class="cursor-pointer border-2 border-slate-200" onclick="changeImage(this.src)">
-                <?php endif; ?>
-            </div>
+                <div class="w-1/6 space-y-2">
+                    <?php if (!empty($product_image)): ?>
+                        <img src="./image/<?= $product_image ?>" alt="Thumbnail 1"
+                            class="cursor-pointer border-2 border-slate-200" onclick="changeImage(this.src)">
+                    <?php endif; ?>
+                    <?php if (!empty($product_image2)): ?>
+                        <img src="./image/<?= $product_image2 ?>" alt="Thumbnail 2"
+                            class="cursor-pointer border-2 border-slate-200" onclick="changeImage(this.src)">
+                    <?php endif; ?>
+                </div>
             <?php endif; ?>
 
             <!-- Main Image -->
@@ -48,10 +48,10 @@ $product_prices = array_map('htmlspecialchars', array_column($get_product, 'pric
             </div>
 
             <?php
-                $productSoldQtyByProductId = productSoldQtyByProductId($con, $get_product[0]['id']);
-                $cart_show = 'yes';
-                $stock = ($get_product[0]['qty'] > $productSoldQtyByProductId) ? 'In Stock' : 'Not in Stock';
-                if ($stock === 'Not in Stock') $cart_show = '';
+            $productSoldQtyByProductId = productSoldQtyByProductId($con, $get_product[0]['id']);
+            $cart_show = 'yes';
+            $stock = ($get_product[0]['qty'] > $productSoldQtyByProductId) ? 'In Stock' : 'Not in Stock';
+            if ($stock === 'Not in Stock') $cart_show = '';
             ?>
 
             <div class="products--meta">
@@ -66,10 +66,10 @@ $product_prices = array_map('htmlspecialchars', array_column($get_product, 'pric
                 <p class="font-semibold">Select Format:</p>
                 <div id="format-container" class="flex flex-col">
                     <?php foreach ($product_formats as $index => $format): ?>
-                    <div class="format-option border-2 border-black p-2 cursor-pointer my-2 <?= $index === 0 ? 'bg-gray-200' : '' ?>"
-                        data-price="<?= $product_prices[$index] ?>">
-                        <?= $format ?>
-                    </div>
+                        <div class="format-option border-2 border-black p-2 cursor-pointer my-2 <?= $index === 0 ? 'bg-gray-200' : '' ?> w-fit"
+                            data-price="<?= $product_prices[$index] ?>">
+                            <?= $format ?> - Rs. <?= $product_prices[$index] ?>
+                        </div>
                     <?php endforeach; ?>
                 </div>
                 <p id="product-price" class="font-semibold text-lg mt-2">Price: Rs. <?= $product_prices[0] ?></p>
@@ -80,11 +80,11 @@ $product_prices = array_map('htmlspecialchars', array_column($get_product, 'pric
                 <p class="font-semibold">Quantity:</p>
                 <form method="post">
                     <div class="flex items-center space-x-2">
-                        <span class="qty-minus" onclick="changeQty(-1)"><i class="fa fa-minus"
+                        <span class="qty-minus hover:cursor-pointer" onclick="changeQty(-1)"><i class="fa fa-minus"
                                 aria-hidden="true"></i></span>
                         <input id="qty" name="quantity" type="number" min="1" value="1"
                             class="w-16 text-center border border-gray-300 rounded-md py-1" />
-                        <span class="qty-plus" onclick="changeQty(1)"><i class="fa fa-plus"
+                        <span class="qty-plus hover:cursor-pointer " onclick="changeQty(1)"><i class="fa fa-plus"
                                 aria-hidden="true"></i></span>
                     </div>
 
@@ -126,13 +126,13 @@ $product_prices = array_map('htmlspecialchars', array_column($get_product, 'pric
 
             <!-- Add to Cart Button -->
             <?php if (!isset($_SESSION['USER_LOGIN'])): ?>
-            <div>
-                <a href="login.php" class="border-2 border-black text-lg font-semibold rounded-full mb-2"
-                    style="padding:15px 250px;">Add To Cart</a>
-            </div>
+                <div>
+                    <a href="login.php" class="border-2 border-black text-lg font-semibold rounded-full mb-2"
+                        style="padding:15px 250px;">Add To Cart</a>
+                </div>
             <?php else: ?>
-            <button id="addToCartBtn" class="border-2 border-black text-lg font-semibold rounded-full mb-2"
-                style="padding:15px 250px;" onclick="addToCart('<?= $get_product[0]['id'] ?>')">Add To Cart</button>
+                <button id="addToCartBtn" class="border-2 border-black text-lg font-semibold rounded-full mb-2"
+                    style="padding:15px 250px;" onclick="addToCart('<?= $get_product[0]['id'] ?>')">Add To Cart</button>
             <?php endif; ?>
 
             </form>
@@ -155,10 +155,8 @@ $product_prices = array_map('htmlspecialchars', array_column($get_product, 'pric
 
             <!-- Buy It Now Button -->
             <div>
-                <button
-                    class="w-full p-3 border-2 border-red-800 text-lg font-semibold rounded-full bg-red-700 text-white">Buy
-                    It Now</button>
-            </div>
+            <button class="w-full p-3 border-2 border-amber-600 text-lg font-semibold shadow-sm hover:shadow-lg transition-shadow ease-in-out duration-300 rounded-full bg-yellow-500 text-white">Buy It Now</button>
+            </div>  
 
             <!-- Tabs -->
             <div>
@@ -167,17 +165,17 @@ $product_prices = array_map('htmlspecialchars', array_column($get_product, 'pric
                     $tabs = ['Brief', 'Description', 'Performance', 'Shipping', 'Unboxing Video'];
                     foreach ($tabs as $index => $tab) {
                         $activeClass = $index === 0 ? 'bg-slate-900' : 'bg-slate-900';
-                        echo "<button class='tab-button font-semibold text-white $activeClass p-3 w-full hover:bg-slate-200 hover:text-black' onclick='showTab(\"tab" . ($index + 1) . "\")'>$tab</button>";
+                        echo "<button class='tab-button font-bold text-white $activeClass p-3 w-full hover:bg-slate-200 hover:text-black' onclick='showTab(\"tab" . ($index + 1) . "\")'>$tab</button>";
                     }
                     ?>
                 </div>
 
                 <div class="bg-white p-6 rounded-b-lg shadow-lg">
                     <?php foreach ($tabs as $index => $tab): ?>
-                    <div id="tab<?= $index + 1 ?>" class="tab-content <?= $index === 0 ? 'active' : '' ?>">
-                        <h2 class="text-xl font-semibold">Tab <?= $index + 1 ?> Content</h2>
-                        <p>This is the content for Tab <?= $index + 1 ?>.</p>
-                    </div>
+                        <div id="tab<?= $index + 1 ?>" class="tab-content <?= $index === 0 ? 'active' : '' ?>">
+                            <h2 class="text-xl font-semibold">Tab <?= $index + 1 ?> Content</h2>
+                            <p>This is the content for Tab <?= $index + 1 ?>.</p>
+                        </div>
                     <?php endforeach; ?>
                 </div>
             </div>

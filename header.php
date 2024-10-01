@@ -146,7 +146,7 @@ $totalProduct = $obj->totalProduct();
       <a href="#">
         <li class="hover:underline hover:cursor-pointer">About</li>
       </a>
-      <a href="#">
+      <a href="contact.php">
         <li class="hover:underline hover:cursor-pointer">Contact</li>
       </a>
     </ul>
