@@ -86,9 +86,9 @@ $osql = mysqli_query($con, "SELECT o.total_price, o.id, o.date, os.name as order
 
             <div class="w-full md:w-4/12 pt-5 md:pt-0 md:p-5 border-l-2 border-slate-200">
                 <h1 class="text-2xl font-bold underline mb-2">Account Details</h1>
-                <p class="font-semibold mb-2"><?= $user['name'] ?></p>
-                <p class="font-semibold mb-2"><?= $user['email'] ?></p>
-                <p class="font-semibold mb-2"><?= $user['mobile'] ?></p>
+                <p class=" mb-2"><?= $user['name'] ?></p>
+                <p class=" mb-2"><?= $user['email'] ?></p>
+                <p class=" mb-2"><?= $user['mobile'] ?></p>
                 <p class="text-gray-700 mb-2 text-wrap"><?= $user['address'] ?>, <?= $user['city'] ?></p>
                 <a href="edit_address.php"><button class="p-2 rounded-md text-white font-semibold bg-amber-500 mt-4">Edit Address</button></a>
             </div>
