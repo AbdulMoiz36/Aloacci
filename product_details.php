@@ -61,7 +61,7 @@ $product_prices = array_map('htmlspecialchars', array_column($get_product, 'pric
                     <?php foreach ($product_formats as $index => $format): ?>
                         <div class="format-option border-2 border-black p-2 cursor-pointer my-2 <?= $index === 0 ? 'bg-gray-200' : '' ?> w-fit"
                             data-price="<?= $product_prices[$index] ?>">
-                            <?= $format ?> - Rs. <?= $product_prices[$index] ?>
+                            <?= $format ?>ml - Rs. <?= $product_prices[$index] ?>
                         </div>
                     <?php endforeach; ?>
                 </div>
