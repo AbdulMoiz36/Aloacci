@@ -11,7 +11,7 @@ $cart_total = 0;
 
 <section class="px-2 py-5 md:px-32 md:py-10 w-full">
     <h1 class="text-4xl font-bold text-center">Cart</h1>
-    <div class="flex flex-col md:flex-row mt-10">
+    <div class="flex flex-col md:flex-row mt-10 gap-2">
         <div class="w-full md:w-4/6">
             <?php
             if (isset($_SESSION['cart'])) {
@@ -24,7 +24,7 @@ $cart_total = 0;
                     $price = $val['price']; // Get the price from the session
                     $selected_format = $val['format']; // Get the selected format
 
-                    $cart_total += ($price * $qty);
+                    $cart_total += $price * $qty;
             ?>
             <div class="flex gap-5 border-b border-slate-200 pb-3 p-10">
                 <div class="w-1/6"><img src="./image/<?= $image ?>" class="rounded-md" alt=""></div>
@@ -65,7 +65,7 @@ $cart_total = 0;
                 </div>
                 <div class="mt-7">
                     <a href="checkout.php"><button
-                    class="w-full p-2 border-2 border-red-800 font-semibold rounded-full bg-red-700 text-white">Checkout</button></a>
+                    class="w-full p-2 border-2 hover:cursor-pointer bg-gradient-to-bl from-yellow-500 via-yellow-500 to-amber-600 shadow-sm hover:shadow-lg transition-shadow ease-in-out duration-300 font-semibold rounded-full text-white">Checkout</button></a>
                 </div>
                 <div class="mt-7">
                     <p class="text-center text-sm">Taxes and Shipping calculated at checkout.</p>
