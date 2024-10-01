@@ -21,7 +21,6 @@ $res = mysqli_query($con,$select);
                                        <th>User Id</th>
                                        <th>Order Date</th>
                                        <th>Address</th>
-                                       <th>Comment</th>
                                        <th>Order Status</th>
                                     </tr>
                                  </thead>
@@ -36,10 +35,7 @@ $res = mysqli_query($con,$select);
                                        <td> <?= $row['date'] ?> </td>
                                        <td style="text-transform: none">
                                        <?= $row['address'] ?>
-                                       <?= $row['city'] ?>
-                                       <?= $row['pincode'] ?>
                                        </td>
-                                       <td> <?= $row['comment'] ?> </td>
                                        <td>
                                        <?php
                                           if($row['order_status']=='1'){

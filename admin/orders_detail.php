@@ -27,7 +27,7 @@ if(isset($_POST['update_order_status'])){
                                  </thead>
                                  <tbody>
                                     <?php
-                                        $res=mysqli_query($con,"select distinct(orders_detail.id), orders_detail.*,product.image,product.name,orders.address,orders.city,orders.pincode from orders_detail,product ,orders where orders_detail.order_id='$order_id' and orders_detail.product_id=product.id GROUP by orders_detail.id");
+                                        $res=mysqli_query($con,"select distinct(orders_detail.id), orders_detail.*,product.image,product.name,orders.address,orders.city from orders_detail,product ,orders where orders_detail.order_id='$order_id' and orders_detail.product_id=product.id GROUP by orders_detail.id");
                                         $total_price=0;
 
                                         $userInfo=mysqli_fetch_assoc(mysqli_query($con,"select orders.*,users.name from orders,users where orders.id='$order_id' and orders.User_id=users.id"));
@@ -37,7 +37,6 @@ if(isset($_POST['update_order_status'])){
                                         $mobile=$userInfo['mobile'];
                                         $address=$userInfo['address'];
                                         $city=$userInfo['city'];
-                                        $pincode=$userInfo['pincode'];
                                         while($row=mysqli_fetch_assoc($res)){
                                         $total_price=$total_price+($row['qty']*$row['price'])
                                     ?>
@@ -70,7 +69,7 @@ if(isset($_POST['update_order_status'])){
                       </div>
                       <div style="color:black"; class="card-header">
                         <h4>Address</h4>
-                        <?= $address ?>, <?= $city ?>, <?= $pincode ?>
+                        <?= $address ?>, <?= $city ?>
                       </div>
                       <div style="color:black"; class="card-header">
                         <h4>Order Status</h4>
@@ -83,7 +82,7 @@ if(isset($_POST['update_order_status'])){
                         <div class="card-body card-block">
                           <div class="form-group">
                             <select class="form-control" name="update_order_status">
-                              <option>Select Status</option>
+                              <option selected disabled>Select Status</option>
                         <?php
                         $select = mysqli_query($con,"select * from order_status");
                         while($row = mysqli_fetch_array($select)){

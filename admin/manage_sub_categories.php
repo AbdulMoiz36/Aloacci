@@ -84,7 +84,7 @@ if(isset($_GET['id']) && $_GET['id'] !=''){
 									<label for="categories" class=" form-control-label">Categories</label>
                                     <select class="form-control" name="categories_id">
 
-									<option value="">Select Category</option>
+									<option value="" selected disabled>Select Category</option>
 
 									<?php
 

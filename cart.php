@@ -6,6 +6,7 @@ if (isset($_SESSION['USER_LOGIN']) && $_SESSION['USER_LOGIN'] != '') {
     echo "<script>window.location.href='index.php'</script>";
     die();
 }
+$cart_total = 0;
 ?>
 
 <section class="px-2 py-5 md:px-32 md:py-10 w-full">
