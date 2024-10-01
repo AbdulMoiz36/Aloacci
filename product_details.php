@@ -54,13 +54,6 @@ $product_prices = array_map('htmlspecialchars', array_column($get_product, 'pric
             if ($stock === 'Not in Stock') $cart_show = '';
             ?>
 
-            <div class="products--meta">
-                <p>
-                    <span>Availability:</span>
-                    <span class="<?= $cart_show ? '' : 'text-red-600' ?> mb-4"><?= $stock ?></span>
-                </p>
-            </div>
-
             <!-- Product Formats and Prices -->
             <div class="mt-4">
                 <p class="font-semibold">Select Format:</p>
@@ -73,6 +66,13 @@ $product_prices = array_map('htmlspecialchars', array_column($get_product, 'pric
                     <?php endforeach; ?>
                 </div>
                 <p id="product-price" class="font-semibold text-lg mt-2">Price: Rs. <?= $product_prices[0] ?></p>
+            </div>
+
+            <div class="products--meta">
+                <p>
+                    <span>Availability:</span>
+                    <span class="<?= $cart_show ? '' : 'text-red-600' ?> mb-4"><?= $stock ?></span>
+                </p>
             </div>
 
             <!-- Quantity Selector -->

@@ -8,6 +8,7 @@ isAdmin();
 
 $msg = '';
 $category_id = '';
+$sub_category_id = '';
 $name = '';
 $format = '';
 $format2 = '';
@@ -31,6 +32,7 @@ if (isset($_GET['id']) && $_GET['id'] != '') {
     if ($check > 0) {
         $row = mysqli_fetch_array($res);
         $category_id = $row['category_id'];
+        $sub_category_id = $row['sub_category_id'];
         $name = $row['name'];
         $qty = $row['qty'];
         $breif = $row['breif'];
@@ -59,6 +61,7 @@ if (isset($_GET['id']) && $_GET['id'] != '') {
 
 if (isset($_REQUEST['submit'])) {
     $category_id = get_safe_value($con, $_REQUEST['categories_id']);
+    $sub_category_id = get_safe_value($con, $_REQUEST['sub_categories_id']);
     $name = get_safe_value($con, $_REQUEST['name']);
     $format = get_safe_value($con, $_REQUEST['format']);
     $price = get_safe_value($con, $_REQUEST['price']);
@@ -69,7 +72,7 @@ if (isset($_REQUEST['submit'])) {
     $description = get_safe_value($con, $_REQUEST['description']);
 
     // Validation for product existence
-    $res = mysqli_query($con, "select * from product where category_id='$category_id' and name='$name'");
+    $res = mysqli_query($con, "select * from product where category_id='$category_id' and sub_category_id='$sub_category_id' and name='$name'");
     $check = mysqli_num_rows($res);
 
     if ($check > 0 && (!isset($_GET['id']) || $_GET['id'] != $row['id'])) {
@@ -102,13 +105,13 @@ if (isset($_REQUEST['submit'])) {
                 move_uploaded_file($tempname2, $folder2);
             }
 
-            mysqli_query($con, "update product set category_id='$category_id', name='$name', qty='$qty', breif='$breif', description='$description', image='$image', image2='$image2' where id='$_id'");
+            mysqli_query($con, "update product set category_id='$category_id', sub_category_id='$sub_category_id', name='$name', qty='$qty', breif='$breif', description='$description', image='$image', image2='$image2' where id='$_id'");
 
             // Update format and price in product_format table
             mysqli_query($con, "DELETE FROM product_format WHERE product_id='$_id'");
-            mysqli_query($con, "INSERT INTO product_format (product_id, format, price) VALUES ('$_id', '$format', '$price')");
+            mysqli_query($con, "INSERT INTO product_format (`product_id`, `format`, `price`) VALUES ('$_id', '$format', '$price')");
             if ($format2 != '' && $price2 != '') {
-                mysqli_query($con, "INSERT INTO product_format (product_id, format, price) VALUES ('$_id', '$format2', '$price2')");
+                mysqli_query($con, "INSERT INTO product_format (`product_id`, `format`, `price`) VALUES ('$_id', '$format2', '$price2')");
             }
 
         } else {
@@ -123,13 +126,13 @@ if (isset($_REQUEST['submit'])) {
             $folder2 = "../image/" . $image2;
             move_uploaded_file($tempname2, $folder2);
 
-            mysqli_query($con, "INSERT INTO product (category_id, name, qty, breif, description, status, image, image2) VALUES ('$category_id', '$name', '$qty', '$breif', '$description', '1', '$image', '$image2')");
+            mysqli_query($con, "INSERT INTO product (`category_id`, `sub_category_id`, `name`, `qty`, `breif`, `description`, `status`, `image`, `image2`) VALUES ('$category_id', '$sub_category_id', '$name', '$qty', '$breif', '$description', '1', '$image', '$image2')");
             $product_id = mysqli_insert_id($con);
 
             // Insert format and price in product_format table
-            mysqli_query($con, "INSERT INTO product_format (product_id, format, price) VALUES ('$product_id', '$format', '$price')");
+            mysqli_query($con, "INSERT INTO product_format (`product_id`, `format`, `price`) VALUES ('$product_id', '$format', '$price')");
             if ($format2 != '' && $price2 != '') {
-                mysqli_query($con, "INSERT INTO product_format (product_id, format, price) VALUES ('$product_id', '$format2', '$price2')");
+                mysqli_query($con, "INSERT INTO product_format (`product_id`, `format`, `price`) VALUES ('$product_id', '$format2', '$price2')");
             }
         }
 
@@ -172,6 +175,32 @@ if (isset($_REQUEST['submit'])) {
                         </select>
 
                     </div>
+
+                    <div class="form-group">
+                        <label for="categories" class="form-control-label">Sub Categories</label>
+                        <select class="form-control" name="sub_categories_id">
+
+                            <option selected disabled>Select Sub Category</option>
+
+                            <?php
+
+									$select1 = mysqli_query($con,"select * from sub_categories");
+
+									while($row = mysqli_fetch_array($select1)){
+										if($row['id']==$category_id){
+											echo "<option selected value=".$row['id']."> ".$row['sub_categories']." </option>";
+										}
+										else{
+											echo "<option value=".$row['id']."> ".$row['sub_categories']." </option>";
+										}
+									}
+
+									?>
+
+                        </select>
+
+                    </div>
+
                     <div class="form-group">
                         <label for="categories" class="form-control-label">Product name</label>
                         <input type="text" name="name" placeholder="Enter Product name" class="form-control" required
