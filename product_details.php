@@ -146,14 +146,6 @@ $product_prices = array_map('htmlspecialchars', array_column($get_product, 'pric
             const price = selectedFormat.dataset.price; // Get the price of the selected format
             // Call manage_cart with the current product ID, selected format, and quantity
             manage_cart(productId, 'add', quantity, format, price); // Pass the quantity and format
-        } else {
-            // Show a SweetAlert warning if no format is selected
-            Swal.fire({
-                icon: 'warning',
-                title: 'Format Required',
-                text: 'Please select a format before adding to the cart.',
-                confirmButtonText: 'OK'
-            });
         }
     }
 </script>
