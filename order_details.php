@@ -24,9 +24,7 @@ $sql = mysqli_query($con,"SELECT o.*,od.* FROM orders as o JOIN orders_detail as
                         <p class="font-semibold text-base leading-7 text-black mt-4">Order Payment : <span class="text-gray-400 font-medium"> 18th march
                             2021</span></p>
                     </div>
-                    <button
-                        class="rounded-full py-3 px-7 font-semibold text-sm leading-7 text-white bg-indigo-600 max-lg:mt-5 shadow-sm shadow-transparent transition-all duration-500 hover:bg-indigo-700 hover:shadow-indigo-400">Track
-                        Your Order</button>
+                   
                 </div>
                 <div class="w-full px-3 min-[400px]:px-6">
                     <div class="flex flex-col lg:flex-row items-center py-6 border-b border-gray-200 gap-6 w-full">
@@ -142,19 +140,7 @@ $sql = mysqli_query($con,"SELECT o.*,od.* FROM orders as o JOIN orders_detail as
                     </div>
 
                 </div>
-                <div class="w-full border-t border-gray-200 px-6 flex flex-col lg:flex-row items-center justify-between ">
-                    <div class="flex flex-col sm:flex-row items-center max-lg:border-b border-gray-200">
-                        <button
-                            class="flex outline-0 py-6 sm:pr-6  sm:border-r border-gray-200 whitespace-nowrap gap-2 items-center justify-center font-semibold group text-lg text-black bg-white transition-all duration-500 hover:text-indigo-600">
-                            <svg class="stroke-black transition-all duration-500 group-hover:stroke-indigo-600" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22"
-                                fill="none">
-                                <path d="M5.5 5.5L16.5 16.5M16.5 5.5L5.5 16.5" stroke="" stroke-width="1.6"
-                                    stroke-linecap="round" />
-                            </svg>
-                            Cancel Order
-                        </button>
-                        <p class="font-medium text-lg text-gray-900 pl-6 py-3 max-lg:text-center">Paid using Credit Card <span class="text-gray-500">ending with 8822</span></p>
-                    </div>
+                <div class="w-full border-t border-gray-200 px-6 flex flex-col lg:flex-row items-center justify-end ">
                     <p class="font-semibold text-lg text-black py-6">Total Price: <span class="text-indigo-600"> $200.00</span></p>
                 </div>
 
