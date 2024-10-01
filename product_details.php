@@ -138,20 +138,25 @@ $product_prices = array_map('htmlspecialchars', array_column($get_product, 'pric
             </form>
 
             <script>
-                function addToCart(productId) {
-                    const selectedFormat = document.querySelector(
-                        '#format-container .bg-gray-200'); // Get the selected format
-                    const quantity = document.getElementById('qty').value; // Get the quantity
-                    if (selectedFormat) {
-                        const format = selectedFormat.innerText.split(' - ')[0]; // Get the format text (remove price)
-                        const price = selectedFormat.dataset.price; // Get the price of the selected format
-                        // Call manage_cart with the current product ID, selected format, and quantity
-                        manage_cart(productId, 'add', quantity, format, price); // Pass the quantity and format
-                    } else {
-                        alert("Please select a format before adding to cart.");
-                    }
-                }
-            </script>
+    function addToCart(productId) {
+        const selectedFormat = document.querySelector('#format-container .bg-gray-200'); // Get the selected format
+        const quantity = document.getElementById('qty').value; // Get the quantity
+        if (selectedFormat) {
+            const format = selectedFormat.innerText.split(' - ')[0]; // Get the format text (remove price)
+            const price = selectedFormat.dataset.price; // Get the price of the selected format
+            // Call manage_cart with the current product ID, selected format, and quantity
+            manage_cart(productId, 'add', quantity, format, price); // Pass the quantity and format
+        } else {
+            // Show a SweetAlert warning if no format is selected
+            Swal.fire({
+                icon: 'warning',
+                title: 'Format Required',
+                text: 'Please select a format before adding to the cart.',
+                confirmButtonText: 'OK'
+            });
+        }
+    }
+</script>
 
             <!-- Buy It Now Button -->
             <div>

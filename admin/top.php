@@ -38,7 +38,7 @@ $row = mysqli_fetch_array($res);
   <link rel="stylesheet" href="assets/css/components.css">
   <!-- Custom style CSS -->
   <link rel="stylesheet" href="assets/css/custom.css">
-  <link rel='shortcut icon' type='image/x-icon' href='assets/img/favicon.ico' />
+  <link rel='shortcut icon' type='image/x-icon' href='../img/logo-cropped-bottom.png' />
 </head>
 
 <body>
@@ -75,7 +75,7 @@ $row = mysqli_fetch_array($res);
       <div class="main-sidebar sidebar-style-2">
         <aside id="sidebar-wrapper">
           <div class="sidebar-brand">
-            <a href="categories.php"> <img alt="image" src="../image/logo.png" class="header-logo" /> <span
+            <a href="categories.php"> <img alt="image" src="../img/logo-cropped-bottom.png" class="header-logo" /> <span
                 class="logo-name">Aloacci</span>
             </a>
           </div>

@@ -26,11 +26,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $sql = "INSERT INTO `contact_us` (`name`, `email`, `message`, `date`) VALUES ('$name', '$email', '$message', NOW())";
     
     if (mysqli_query($con, $sql)) {
-        // Success message or redirect
-        echo '<script>alert("Your message has been sent successfully!");</script>';
+        // Success message using SweetAlert
+        echo '<script>
+                Swal.fire({
+                    icon: "success",
+                    title: "Message Sent!",
+                    text: "Your message has been sent successfully!",
+                    confirmButtonText: "OK"
+                });
+              </script>';
     } else {
-        // Error handling
-        echo '<script>alert("There was an error sending your message. Please try again later.");</script>';
+        // Error handling using SweetAlert
+        echo '<script>
+                Swal.fire({
+                    icon: "error",
+                    title: "Error!",
+                    text: "There was an error sending your message. Please try again later.",
+                    confirmButtonText: "OK"
+                });
+              </script>';
     }
 }
 ?>
