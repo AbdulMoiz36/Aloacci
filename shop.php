@@ -116,14 +116,14 @@ if ($sub_category_id) {
     </div>
 
     <!-- Product details -->
-    <div class="px-4 py-2 h-full flex flex-col justify-evenly">
-        <a href="product_details.php?id=<?= $list['id'] ?>" class="product-link w-full">
-            <p class="font-bold text-xl"><?= $list['name'] ?></p>
-            <!-- Add max-width for ellipsis to work -->
-            <p class="text-gray-600 overflow-hidden text-ellipsis "><?= $list['description'] ?></p>
-            <p class="text-red-600 font-extrabold text-xl">Rs. <?= $product_formats[0]['price'] ?></p>
-        </a>
-    </div>
+<div class="px-4 py-2 h-full flex flex-col justify-evenly">
+    <a href="product_details.php?id=<?= $list['id'] ?>" class="product-link w-full">
+        <p class="font-bold text-xl"><?= $list['name'] ?></p>
+        <p class="text-gray-600 overflow-hidden text-ellipsis line-clamp-2"><?= $list['description'] ?></p>
+        <p class="text-red-600 font-extrabold text-xl">Rs. <?= $product_formats[0]['price'] ?></p>
+    </a>
+</div>
+
 </div>
 
         <?php
