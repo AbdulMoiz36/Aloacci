@@ -3,17 +3,39 @@ include 'header.php';
 // Get the category or sub-category id from the URL
 $category_id = isset($_GET['category_id']) ? $_GET['category_id'] : '';
 $sub_category_id = isset($_GET['sub_category_id']) ? $_GET['sub_category_id'] : '';
+$price_filter = isset($_GET['price_filter']) ? $_GET['price_filter'] : '';
 
-// Modify the product query to filter based on category or sub-category
-if ($sub_category_id) {
-    // If sub-category is clicked, filter products by sub-category
+// Modify the product query to filter based on category, sub-category, or price filter
+if ($price_filter == 'less_1500') {
+    // Filter products where the price is less than 1500
+    $get_product = get_product($con, '', $category_id, '', '', false, $sub_category_id, 1500);
+} else if ($sub_category_id) {
+    // Filter products by sub-category
     $get_product = get_product($con, '', '', '', '', false, $sub_category_id);
 } else if ($category_id) {
-    // If category is clicked, filter products by category
+    // Filter products by category
     $get_product = get_product($con, '', $category_id);
 } else {
-    // If no category or sub-category is clicked, get all products
+    // Get all products if no filters applied
     $get_product = get_product($con);
+}
+
+// Fetch distinct genders using a JOIN between product and gender tables
+$genderQuery = mysqli_query($con, "SELECT DISTINCT g.gender, g.id FROM gender g 
+                                   JOIN product p ON g.id = p.gender_id 
+                                   WHERE p.status = 1");
+$genders = [];
+while ($row = mysqli_fetch_assoc($genderQuery)) {
+    $genders[] = $row;
+}
+
+// Fetch distinct genders using a JOIN between product and genre tables
+$genreQuery = mysqli_query($con, "SELECT DISTINCT g.genre, g.id FROM genre g 
+                                   JOIN product p ON g.id = p.genre_id 
+                                   WHERE p.status = 1");
+$genres = [];
+while ($row = mysqli_fetch_assoc($genreQuery)) {
+    $genres[] = $row;
 }
 ?>
 
@@ -48,25 +70,54 @@ if ($sub_category_id) {
             <!-- Selected values will be added here dynamically -->
         </div>
 
+        <!-- Gender filter section -->
         <div class="mt-4">
             <div class="relative">
                 <!-- Dropdown trigger -->
-                <p class="font-semibold cursor-pointer text-xl" id="dropdown-btn">
-                    Genders
+                <p class="font-semibold cursor-pointer text-xl" id="dropdown-gender-btn">
+    Genders
+    <span class="ml-2"><i class="fa-solid fa-angle-down" id="dropdown-gender-icon"></i></span>
+</p>
+                <!-- Dropdown content -->
+                <div id="dropdown-gender-content" class="mt-2 text-lg">
+                    <?php
+            foreach ($genders as $gender) {
+                ?>
+                    <label class="flex items-center hover:bg-gray-200 p-2 cursor-pointer">
+                        <input type="checkbox" value="<?= htmlspecialchars($gender['id']) ?>"
+                            id="checkbox-<?= strtolower($gender['gender']) ?>" class="custom-checkbox mr-2"
+                            onclick="updateSelectedValues()">
+                        <?= htmlspecialchars($gender['gender']) ?>
+                    </label>
+                    <?php
+            }
+            ?>
+                </div>
+            </div>
+        </div>
+
+        <!-- genre filter section -->
+        <div class="mt-4">
+            <div class="relative">
+                <!-- Dropdown trigger -->
+                <p class="font-semibold cursor-pointer text-xl" id="dropdown-genre-btn">
+                    Genre
                     <span class="ml-2"><i class="fa-solid fa-angle-down" id="dropdown-icon"></i></span>
                 </p>
                 <!-- Dropdown content -->
-                <div id="dropdown-content" class="mt-2 text-lg">
+                <div id="dropdown-genre-content" class="mt-2 text-lg">
+                    <?php
+            foreach ($genres as $genre) {
+                ?>
                     <label class="flex items-center hover:bg-gray-200 p-2 cursor-pointer">
-                        <input type="checkbox" value="Men" id="checkbox-men" class="custom-checkbox mr-2"
+                        <input type="checkbox" value="<?= htmlspecialchars($genre['id']) ?>"
+                            id="checkbox-<?= strtolower($genre['genre']) ?>" class="custom-checkbox mr-2"
                             onclick="updateSelectedValues()">
-                        Men
+                        <?= htmlspecialchars($genre['genre']) ?>
                     </label>
-                    <label class="flex items-center hover:bg-gray-200 p-2 cursor-pointer">
-                        <input type="checkbox" value="Women" id="checkbox-women" class="custom-checkbox mr-2"
-                            onclick="updateSelectedValues()">
-                        Women
-                    </label>
+                    <?php
+            }
+            ?>
                 </div>
             </div>
         </div>
@@ -74,7 +125,7 @@ if ($sub_category_id) {
 
     <!-- Products section -->
     <div class="w-full p-3 flex flex-wrap justify-center gap-5">
-    <?php
+        <?php
     $unique_products = [];
     foreach ($get_product as $list) {
         if (in_array($list['id'], $unique_products)) continue;
@@ -90,41 +141,41 @@ if ($sub_category_id) {
             }
         }
     ?>
-            <div class="w-96 md:w-72 h-[40rem] md:h-[30rem] flex gap-2 flex-col relative group shadow">
-    <!-- Plus icon with hover effect -->
-    <div class="openModalBtn z-10 absolute -top-2 -right-2 bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full p-3 flex items-center justify-center text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out cursor-pointer"
-        data-product-id="<?= $list['id'] ?>" data-product-name="<?= $list['name'] ?>"
-        data-product-formats="<?= htmlspecialchars(json_encode($product_formats)) ?>">
-        <i class="fas fa-plus text-white pl-0.5 font-semibold"></i>
-    </div>
+        <div class="w-96 md:w-72 h-[40rem] md:h-[30rem] flex gap-2 flex-col relative group shadow">
+            <!-- Plus icon with hover effect -->
+            <div class="openModalBtn z-10 absolute -top-2 -right-2 bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full p-3 flex items-center justify-center text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out cursor-pointer"
+                data-product-id="<?= $list['id'] ?>" data-product-name="<?= $list['name'] ?>"
+                data-product-formats="<?= htmlspecialchars(json_encode($product_formats)) ?>">
+                <i class="fas fa-plus text-white pl-0.5 font-semibold"></i>
+            </div>
 
-    <!-- Product image wrapper -->
-    <div class="relative h-[70%] w-full">
-        <a href="product_details.php?id=<?= $list['id'] ?>" class="product-link w-full">
-            <!-- Default image -->
-            <img src="./image/<?= $list['image'] ?>" alt="<?= $list['name'] ?>"
-                class="h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0">
-            <!-- Second image to show on hover -->
-            <?php if ($list['image2'] != '') { ?>
-                <img src="./image/<?= $list['image2'] ?>" alt="<?= $list['name'] ?> Hover"
-                    class="absolute top-0 left-0 h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100">
-            <?php } else { ?>
-                <img src="./image/<?= $list['image'] ?>" alt="<?= $list['name'] ?> Hover"
-                    class="absolute top-0 left-0 h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100">
-            <?php } ?>
-        </a>
-    </div>
+            <!-- Product image wrapper -->
+            <div class="relative h-[70%] w-full">
+                <a href="product_details.php?id=<?= $list['id'] ?>" class="product-link w-full">
+                    <!-- Default image -->
+                    <img src="./image/<?= $list['image'] ?>" alt="<?= $list['name'] ?>"
+                        class="h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0">
+                    <!-- Second image to show on hover -->
+                    <?php if ($list['image2'] != '') { ?>
+                    <img src="./image/<?= $list['image2'] ?>" alt="<?= $list['name'] ?> Hover"
+                        class="absolute top-0 left-0 h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100">
+                    <?php } else { ?>
+                    <img src="./image/<?= $list['image'] ?>" alt="<?= $list['name'] ?> Hover"
+                        class="absolute top-0 left-0 h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100">
+                    <?php } ?>
+                </a>
+            </div>
 
-    <!-- Product details -->
-    <div class="px-4 py-2 h-full flex flex-col justify-evenly">
-        <a href="product_details.php?id=<?= $list['id'] ?>" class="product-link w-full">
-            <p class="font-bold text-xl"><?= $list['name'] ?></p>
-            <!-- Add max-width for ellipsis to work -->
-            <p class="text-gray-600 overflow-hidden text-ellipsis "><?= $list['description'] ?></p>
-            <p class="text-red-600 font-extrabold text-xl">Rs. <?= $product_formats[0]['price'] ?></p>
-        </a>
-    </div>
-</div>
+            <!-- Product details -->
+            <div class="px-4 py-2 h-full flex flex-col justify-evenly">
+                <a href="product_details.php?id=<?= $list['id'] ?>" class="product-link w-full">
+                    <p class="font-bold text-xl"><?= $list['name'] ?></p>
+                    <!-- Add max-width for ellipsis to work -->
+                    <p class="text-gray-600 overflow-hidden text-ellipsis "><?= $list['description'] ?></p>
+                    <p class="text-red-600 font-extrabold text-xl">Rs. <?= $product_formats[0]['price'] ?></p>
+                </a>
+            </div>
+        </div>
 
         <?php
         }
@@ -174,21 +225,23 @@ if ($sub_category_id) {
         </div>
         <!-- Inside the Modal -->
         <?php if (!isset($_SESSION['USER_LOGIN'])): ?>
-            <a href="login.php">
-                <div
-                    class="w-full p-3 border-2 text-center border-black text-lg font-semibold rounded-full text-black">Add To
-                    Cart</div>
-            </a>
+        <a href="login.php">
+            <div class="w-full p-3 border-2 text-center border-black text-lg font-semibold rounded-full text-black">Add
+                To
+                Cart</div>
+        </a>
         <?php else: ?>
-            <a href="javascript:void(0)">
-                <div id="addToCartBtn"
-                    class="w-full p-3 border-2 text-center border-black text-lg font-semibold rounded-full text-black">Add To
-                    Cart</div>
-            </a>
+        <a href="javascript:void(0)">
+            <div id="addToCartBtn"
+                class="w-full p-3 border-2 text-center border-black text-lg font-semibold rounded-full text-black">Add
+                To
+                Cart</div>
+        </a>
         <?php endif; ?>
         <a href="product_details.php?id=">
             <div style="margin-top: 20px;"
-                class="w-full p-3 border-2 hover:cursor-pointer bg-gradient-to-bl from-yellow-500 via-yellow-500 to-amber-600 shadow-sm hover:shadow-lg transition-shadow ease-in-out duration-300 font-semibold rounded-full text-white text-center">Buy It
+                class="w-full p-3 border-2 hover:cursor-pointer bg-gradient-to-bl from-yellow-500 via-yellow-500 to-amber-600 shadow-sm hover:shadow-lg transition-shadow ease-in-out duration-300 font-semibold rounded-full text-white text-center">
+                Buy It
                 Now</div>
         </a>
         <div id="closeModalBtn"

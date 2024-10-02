@@ -143,7 +143,7 @@ $totalProduct = $obj->totalProduct();
 
         </ul>
       </li>
-      <a href="shop.php">Less than 1500</a>
+      <a href="shop.php?price_filter=less_1500">Less than 1500</a>
       <a href="#">
         <li class="hover:underline hover:cursor-pointer">About</li>
       </a>
