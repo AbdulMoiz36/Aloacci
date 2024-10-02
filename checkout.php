@@ -18,6 +18,7 @@ if (isset($_SESSION['cart'])) {
         $productArr = get_product($con, '', '', $key);
         $price = $val['price'];
         $qty = $val['qty'];
+        $selected_format = $val['format'];
         $total_price = $price * $qty;
         $cart_total += $total_price; // Calculate total
     }
@@ -39,10 +40,11 @@ if (isset($_POST['submit'])) {
 
     foreach ($_SESSION['cart'] as $key => $val) {
         $productArr = get_product($con, '', '', $key);
-        $price = $productArr[0]['price'];
+        $price = $val['price'];;
         $qty = $val['qty'];
+        $selected_format = $val['format'];
 
-        mysqli_query($con, "INSERT INTO orders_detail (order_id, product_id, qty, price) VALUES ('$order_id', '$key', '$qty', '$price')");
+        mysqli_query($con, "INSERT INTO orders_detail (order_id, product_id, format, qty, price) VALUES ('$order_id', '$key', '$selected_format', '$qty', '$price')");
     }
 
     unset($_SESSION['cart']);
@@ -58,7 +60,7 @@ if (isset($_POST['submit'])) {
             <form method="POST" class="mt-5 flex flex-col gap-8">
                 <div class="flex flex-col">
                     <label for="">Email:</label>
-                    <input type="text" name="email" value="<?= $data['email'] ?>" class="border placeholder:text-sm border-gray-300 rounded-md outline-none p-2">
+                    <input type="text" name="email" value="<?= $data['email'] ?>" disabled class="border placeholder:text-sm border-gray-300 rounded-md outline-none p-2">
                 </div>
                 <div class="flex flex-col">
                     <label for="">City:</label>
