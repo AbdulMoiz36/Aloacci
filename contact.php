@@ -50,16 +50,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 ?>
 
 <section class="py-10 w-full flex justify-center align-middle">
-    <div class="w-full md:w-4/6 shadow-lg p-8 flex flex-col justify-center">
+    <div class="w-full md:w-4/6 shadow-lg p-8 flex flex-col justify-center border">
         <h1 class="text-4xl font-bold underline text-center">Contact Us</h1>
         <form action="" method="POST" class="mt-8 w-full flex justify-center">
-            <div class="flex flex-col gap-8 p-8">
+            <div class="flex flex-col gap-8 py-8">
                 <div class="flex gap-4">
-                    <div>
+                    <div class="flex flex-col">
                         <label for="name" class="text-xl">Name:</label>
                         <input type="text" name="name" value="<?=$name?>" class="p-1 rounded-lg border" required>
                     </div>
-                    <div>
+                    <div class="flex flex-col">
                         <label for="email" class="text-xl">Email:</label>
                         <input type="email" name="email" value="<?=$email?>" class="p-1 rounded-lg border" required>
                     </div>
