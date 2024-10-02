@@ -37,7 +37,7 @@ $product_prices = array_map('htmlspecialchars', array_column($get_product, 'pric
             <!-- Main Image -->
             <div class="<?= empty($product_image2) ? 'w-full' : 'w-5/6' ?>">
                 <img id="mainImage" src="./image/<?= $product_image ?>" alt="Selected Product Image"
-                    class="border-2 border-slate-200 max-h-[850px]">
+                    class="border-2 border-slate-200 max-h-[850px] mx-auto">
             </div>
         </div>
 
