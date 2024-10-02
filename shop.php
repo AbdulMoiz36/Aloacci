@@ -318,6 +318,14 @@ while ($row = mysqli_fetch_assoc($genreQuery)) {
             manage_cart(currentProductId, 'add', quantity, format, price); // Pass the quantity and format
         }
     });
+    // modal close with escape key
+    document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+        modal.classList.add('hidden');
+        modalOverlay.classList.add('hidden');
+    }
+});
+
 </script>
 
 <?php
