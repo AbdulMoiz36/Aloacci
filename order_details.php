@@ -81,7 +81,7 @@ function getStatusClass($status)
                                         </div>
                                     </div>
                                 </div>
-                                <div class="flex justify-start md:justify-end gap-5 md:gap-10">
+                                <div class="flex flex-col md:flex-row justify-start md:justify-end gap-5 md:gap-10">
                                     <div class="col-span-1 flex items-center max-lg:mt-3">
                                         <div class="flex gap-3 lg:block">
                                             <p class="font-medium text-sm leading-7 text-black">Price</p>
@@ -99,7 +99,7 @@ function getStatusClass($status)
                                     <div class="col-span-2 flex items-center max-lg:mt-3">
                                         <div class="flex gap-3 lg:block">
                                             <p class="font-medium text-sm leading-7 text-black">Write A Review</p>
-                                            <a href="#" class="font-medium text-sm leading-6 whitespace-nowrap py-1 px-3 rounded-full lg:mt-3 flex items-center justify-center">
+                                            <a href="review.php?id=<?=$order_d['product_id']?>" class="font-medium text-sm leading-6 whitespace-nowrap py-1 px-3 rounded-full lg:mt-3 flex items-center justify-center">
                                                 <i class="fa-regular fa-pen-to-square"></i>
                                             </a>
                                         </div>
