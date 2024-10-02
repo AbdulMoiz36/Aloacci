@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 27, 2024 at 11:02 PM
--- Server version: 10.4.28-MariaDB
--- PHP Version: 8.2.4
+-- Generation Time: Oct 02, 2024 at 02:41 PM
+-- Server version: 10.4.25-MariaDB
+-- PHP Version: 8.1.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -36,7 +36,7 @@ CREATE TABLE `admin_user` (
   `email` varchar(50) NOT NULL,
   `mobile` varchar(50) NOT NULL,
   `status` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `admin_user`
@@ -56,7 +56,7 @@ INSERT INTO `admin_user` (`id`, `image`, `name`, `password`, `role`, `email`, `m
 CREATE TABLE `categories` (
   `id` int(11) NOT NULL,
   `categories` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `categories`
@@ -88,7 +88,7 @@ CREATE TABLE `contact_us` (
   `subject` varchar(255) NOT NULL,
   `message` text NOT NULL,
   `date` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `contact_us`
@@ -97,6 +97,65 @@ CREATE TABLE `contact_us` (
 INSERT INTO `contact_us` (`id`, `name`, `email`, `subject`, `message`, `date`) VALUES
 (2, 'Abid', 'abid211@gmail.com', 'Subject', 'Message', '2022-11-02 20:52:48'),
 (40, 'Sajjad', 'sajjadsaleem341@gmail.com', 'Test', 'Lorem', '2024-08-24 11:32:58');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `gender`
+--
+
+CREATE TABLE `gender` (
+  `id` int(11) NOT NULL,
+  `gender` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `gender`
+--
+
+INSERT INTO `gender` (`id`, `gender`) VALUES
+(1, 'Men'),
+(2, 'Women'),
+(3, 'Unisex');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `genre`
+--
+
+CREATE TABLE `genre` (
+  `id` int(11) NOT NULL,
+  `genre` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `genre`
+--
+
+INSERT INTO `genre` (`id`, `genre`) VALUES
+(1, 'Arabic'),
+(2, 'French');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `lasting`
+--
+
+CREATE TABLE `lasting` (
+  `id` int(11) NOT NULL,
+  `lasting` int(2) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `lasting`
+--
+
+INSERT INTO `lasting` (`id`, `lasting`) VALUES
+(1, 7),
+(2, 12),
+(3, 24);
 
 -- --------------------------------------------------------
 
@@ -112,21 +171,18 @@ CREATE TABLE `orders` (
   `mobile` varchar(15) NOT NULL,
   `address` varchar(255) NOT NULL,
   `city` varchar(50) NOT NULL,
-  `area` varchar(255) NOT NULL,
-  `pincode` int(11) NOT NULL,
-  `comment` text NOT NULL,
   `total_price` float NOT NULL,
   `order_status` int(11) NOT NULL,
   `date` date NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `orders`
 --
 
-INSERT INTO `orders` (`id`, `tracking_id`, `user_id`, `email`, `mobile`, `address`, `city`, `area`, `pincode`, `comment`, `total_price`, `order_status`, `date`) VALUES
-(1, '#3111744', 22, 'sajjadsaleem341@gmail.com', '03112656651', '194', 'Karachi', 'Gulshan', 78025, 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Hic consequuntur dolor reiciendis eos. Earum dolorem incidunt totam cumque architecto ab.', 715, 5, '2024-08-25'),
-(2, '#8355603', 22, 'sajjadsaleem341@gmail.com', '03112656651', 'karachi sindh', 'Karachi', 'Gulshan', 89, 'lorem', 1050, 1, '2024-08-26');
+INSERT INTO `orders` (`id`, `tracking_id`, `user_id`, `email`, `mobile`, `address`, `city`, `total_price`, `order_status`, `date`) VALUES
+(1, '#2041746', 22, 'sajjadsaleem341@gmail.com', '03112656651', 'H#194, St#01, Scheme 33', 'Karachi', 5200, 2, '2024-10-02'),
+(2, '#2424901', 1, 'kashif321@gmail.com', '32165498700', 'H#194, St#01', 'Karachi', 4700, 1, '2024-10-02');
 
 -- --------------------------------------------------------
 
@@ -138,18 +194,20 @@ CREATE TABLE `orders_detail` (
   `id` int(11) NOT NULL,
   `order_id` int(11) NOT NULL,
   `product_id` int(11) NOT NULL,
+  `format` int(11) NOT NULL,
   `qty` int(11) NOT NULL,
   `price` float NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `orders_detail`
 --
 
-INSERT INTO `orders_detail` (`id`, `order_id`, `product_id`, `qty`, `price`) VALUES
-(1, 1, 1540648, 1, 15),
-(2, 1, 1938977, 2, 350),
-(3, 2, 1938977, 3, 350);
+INSERT INTO `orders_detail` (`id`, `order_id`, `product_id`, `format`, `qty`, `price`) VALUES
+(1, 1, 3, 50, 2, 1400),
+(2, 1, 2, 50, 3, 800),
+(3, 2, 2, 100, 2, 1500),
+(4, 2, 1, 50, 1, 1700);
 
 -- --------------------------------------------------------
 
@@ -160,7 +218,7 @@ INSERT INTO `orders_detail` (`id`, `order_id`, `product_id`, `qty`, `price`) VAL
 CREATE TABLE `order_status` (
   `id` int(11) NOT NULL,
   `name` varchar(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `order_status`
@@ -182,32 +240,30 @@ INSERT INTO `order_status` (`id`, `name`) VALUES
 CREATE TABLE `product` (
   `id` int(11) NOT NULL,
   `category_id` int(11) NOT NULL,
+  `sub_category_id` int(11) NOT NULL,
   `image` varchar(255) NOT NULL,
   `image2` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
   `qty` int(11) NOT NULL,
+  `gender_id` int(11) NOT NULL,
+  `genre_id` int(11) NOT NULL,
+  `type_id` int(11) NOT NULL,
+  `season_id` int(11) NOT NULL,
+  `sillage_id` int(11) NOT NULL,
+  `lasting_id` int(11) NOT NULL,
   `description` varchar(5000) NOT NULL,
   `breif` varchar(2000) NOT NULL,
   `status` tinyint(4) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `product`
 --
 
-INSERT INTO `product` (`id`, `category_id`, `image`, `image2`, `name`, `price`, `qty`, `description`, `breif`, `status`) VALUES
-(1, 3, '10.jpg', '11.jpg', 'Crocus Plant', 15, 20, '', 'lorem', 1),
-(2, 2, '48.png', '', 'Crocus Plant', 15, 60, 'Crocuses are small, perennial bulbs that burst into bloom early in the spring, often emerging through the snow. They are known for their vibrant colors, including yellow, purple, white, and shades of pink. The flowers are typically cup-shaped with three petals, and they are often fragrant. Crocuses are popular in gardens and containers, adding a splash of color to the landscape.', 'A vibrant spring bulb flower with delicate petals and a cup-like shape.', 1),
-(3, 2, '40.png', '', 'Cactus Flower', 350, 50, 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters.', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text', 1),
-(4, 2, '43.png', '', 'Ficus Ginseng Bonsai', 200, 30, 'The Ficus Ginseng Bonsai is a popular houseplant prized for its striking appearance. It features a thick, gnarled trunk that resembles ginseng roots, adding a touch of exotic charm to any space. The tree boasts vibrant green leaves and a compact size, making it ideal for indoor cultivation. With proper care, this bonsai can thrive for years, becoming a beautiful and low-maintenance addition to your home.', 'A unique and captivating bonsai tree known for its distinctive ginseng-like roots.', 1),
-(5, 2, '45.png', '', 'Olive Plant', 150, 20, 'The Olive plant is a symbol of peace and longevity, known for its resilience and ability to thrive in harsh conditions. It features silvery-green leaves, twisted branches, and a gnarled trunk that adds character over time. Olive trees are popular ornamental plants, often used in Mediterranean-style gardens and as bonsai specimens. While they can produce edible olives, they are primarily grown for their aesthetic appeal.', 'A classic Mediterranean plant with silvery-green leaves and twisted branches.', 1),
-(6, 3, '47.png', '', 'Cordyline australis', 50, 40, 'The Cordyline australis, also known as the Red-tipped Cabbage Palm, is a versatile and eye-catching plant native to New Zealand. It\'s characterized by its tall, slender trunk and long, sword-shaped leaves that are typically green with reddish or pinkish tips, though the coloration can vary depending on the cultivar. This plant is a popular choice for both indoor and outdoor gardens, adding a touch of tropical flair to any space. It\'s relatively low-maintenance and can thrive in a variety of conditions.', 'A striking tropical tree with long, sword-like leaves that often have red or pink tips.', 1),
-(7, 3, '41.png', '', 'Tulips', 20, 80, 'Tulips are bulbous perennial plants renowned for their large, showy flowers. They come in a wide variety of colors, including pink, red, yellow, white, purple, and even black. Tulips are popular spring flowers and are often used in bouquets and gardens. Their delicate petals and slender stems create a cheerful and elegant display, making them a beloved choice for floral arrangements and landscape design.', 'Tulips are bulbous perennial plants known for their large, showy flowers. They come in a wide variety of colors, including pink, red, yellow, white, purple, and even black. Tulips are popular spring flowers and are often used in bouquets and gardens.', 1),
-(8, 5, '46.png', '', 'Adenium Obesum', 30, 60, 'The Adenium Obesum, commonly known as the Desert Rose, is a captivating succulent native to Africa and the Arabian Peninsula. It\'s characterized by its thick, swollen trunk and fleshy branches, which store water in arid conditions. The plant produces beautiful, trumpet-shaped flowers in various colors, including red, pink, white, and yellow. Adenium Obesum is a popular choice for indoor and outdoor gardens, adding a touch of exotic beauty to any space.', 'A succulent plant with thick, woody stems and vibrant, trumpet-shaped flowers.', 1),
-(9, 5, '44.png', '', 'Boxwood Topiary', 40, 50, 'The Boxwood Topiary is a popular choice for ornamental gardens and landscaping due to its versatility and low maintenance. Its dense, evergreen foliage can be trained into various shapes, but the classic spherical form is particularly striking. This plant is known for its durability and ability to withstand pruning, making it a popular choice for creating formal hedges, borders, and sculptural features.', 'A spherical plant with dense green foliage. Perfect choice for ornamental gardens and landscaping.', 1),
-(10, 1, '49.jpg', '', 'Recuerdos Plant', 15, 60, 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.', 1),
-(11, 2, '44.png', '47.png', 'Kashif', 350, 200, 'l', 'l', 1),
-(12, 5, '46.png', '45.png', 'Sameer', 15, 100, 'ss', 'ass', 1);
+INSERT INTO `product` (`id`, `category_id`, `sub_category_id`, `image`, `image2`, `name`, `qty`, `gender_id`, `genre_id`, `type_id`, `season_id`, `sillage_id`, `lasting_id`, `description`, `breif`, `status`) VALUES
+(1, 1, 1, 'lostsymbol.jpeg', 'lostsymbol_40_11zon.jpeg', 'Musk', 50, 1, 2, 2, 1, 3, 3, 'Reference site about Lorem Ipsum, giving information on its origins, as well as a random Lipsum generator.', 'In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before the final copy is available.', 1),
+(2, 1, 2, 'lostsymbol_40_11zon.jpeg', 'lostsymbol.jpeg', 'Musk e Fakhir', 100, 3, 2, 1, 2, 1, 2, 'Reference site about Lorem Ipsum, giving information on its origins', 'In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before the final copy is available.', 1),
+(3, 2, 3, 'lostsymbol.jpeg', '', 'Blue Sea', 25, 2, 1, 2, 1, 2, 1, 'Organizations recognize the value of analytics.', '', 1);
 
 -- --------------------------------------------------------
 
@@ -219,8 +275,21 @@ CREATE TABLE `product_format` (
   `id` int(11) NOT NULL,
   `product_id` int(11) NOT NULL,
   `format` varchar(50) NOT NULL,
-  `price` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `price` int(11) NOT NULL,
+  `qty` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `product_format`
+--
+
+INSERT INTO `product_format` (`id`, `product_id`, `format`, `price`, `qty`) VALUES
+(17, 1, '50', 1700, 0),
+(18, 1, '100', 3200, 0),
+(19, 2, '50', 800, 0),
+(20, 2, '100', 1500, 0),
+(21, 3, '12', 350, 0),
+(22, 3, '50', 1400, 0);
 
 -- --------------------------------------------------------
 
@@ -234,7 +303,48 @@ CREATE TABLE `reviews` (
   `product_id` int(11) NOT NULL,
   `rating` int(11) NOT NULL,
   `comment` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `season`
+--
+
+CREATE TABLE `season` (
+  `id` int(11) NOT NULL,
+  `season` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `season`
+--
+
+INSERT INTO `season` (`id`, `season`) VALUES
+(1, 'Summer'),
+(2, 'Winter'),
+(3, 'Autumn'),
+(4, 'Spring');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sillage`
+--
+
+CREATE TABLE `sillage` (
+  `id` int(11) NOT NULL,
+  `sillage` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `sillage`
+--
+
+INSERT INTO `sillage` (`id`, `sillage`) VALUES
+(1, 'Strong'),
+(2, 'Light'),
+(3, 'Medium');
 
 -- --------------------------------------------------------
 
@@ -247,15 +357,15 @@ CREATE TABLE `sub_categories` (
   `category_id` int(11) NOT NULL,
   `sub_categories` varchar(50) NOT NULL,
   `status` tinyint(4) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `sub_categories`
 --
 
 INSERT INTO `sub_categories` (`id`, `category_id`, `sub_categories`, `status`) VALUES
-(1, 1, 'Men', 0),
-(2, 1, 'Women', 0),
+(1, 1, 'Men', 1),
+(2, 1, 'Women', 1),
 (3, 2, 'Explorer', 1),
 (4, 2, 'Executive', 1),
 (5, 2, 'Elite', 1),
@@ -263,6 +373,25 @@ INSERT INTO `sub_categories` (`id`, `category_id`, `sub_categories`, `status`) V
 (7, 3, 'Lady Eve', 1),
 (8, 3, 'Dauntless', 1),
 (13, 3, 'Saiful Malook', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `type`
+--
+
+CREATE TABLE `type` (
+  `id` int(11) NOT NULL,
+  `type` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `type`
+--
+
+INSERT INTO `type` (`id`, `type`) VALUES
+(1, 'Citrus'),
+(2, 'Floral');
 
 -- --------------------------------------------------------
 
@@ -279,7 +408,7 @@ CREATE TABLE `users` (
   `city` varchar(50) NOT NULL,
   `address` varchar(100) NOT NULL,
   `date` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `users`
@@ -291,18 +420,6 @@ INSERT INTO `users` (`id`, `name`, `email`, `password`, `mobile`, `city`, `addre
 (23, 'Salman', 'salman321@gmail.com', 'salman321', '65498732112', '', '', '2022-12-02 01:09:58'),
 (24, 'Amir', 'amir@gmail.com', 'amir', '03115625891', '', '', '2024-09-14 04:04:02'),
 (25, 'Moiz', 'moiz@gmail.com', 'moiz', '02136589511', '', '', '2024-09-14 04:16:21');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `wishlist`
---
-
-CREATE TABLE `wishlist` (
-  `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `product_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Indexes for dumped tables
@@ -325,6 +442,24 @@ ALTER TABLE `categories`
 -- Indexes for table `contact_us`
 --
 ALTER TABLE `contact_us`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `gender`
+--
+ALTER TABLE `gender`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `genre`
+--
+ALTER TABLE `genre`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `lasting`
+--
+ALTER TABLE `lasting`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -369,6 +504,18 @@ ALTER TABLE `reviews`
   ADD KEY `product_id` (`product_id`);
 
 --
+-- Indexes for table `season`
+--
+ALTER TABLE `season`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `sillage`
+--
+ALTER TABLE `sillage`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `sub_categories`
 --
 ALTER TABLE `sub_categories`
@@ -376,18 +523,16 @@ ALTER TABLE `sub_categories`
   ADD KEY `category_id` (`category_id`);
 
 --
+-- Indexes for table `type`
+--
+ALTER TABLE `type`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `wishlist`
---
-ALTER TABLE `wishlist`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `product_id` (`product_id`),
-  ADD KEY `user_id` (`user_id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -412,6 +557,24 @@ ALTER TABLE `contact_us`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
+-- AUTO_INCREMENT for table `gender`
+--
+ALTER TABLE `gender`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `genre`
+--
+ALTER TABLE `genre`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `lasting`
+--
+ALTER TABLE `lasting`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
@@ -421,7 +584,7 @@ ALTER TABLE `orders`
 -- AUTO_INCREMENT for table `orders_detail`
 --
 ALTER TABLE `orders_detail`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `order_status`
@@ -433,13 +596,13 @@ ALTER TABLE `order_status`
 -- AUTO_INCREMENT for table `product`
 --
 ALTER TABLE `product`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `product_format`
 --
 ALTER TABLE `product_format`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `reviews`
@@ -448,22 +611,34 @@ ALTER TABLE `reviews`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `season`
+--
+ALTER TABLE `season`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `sillage`
+--
+ALTER TABLE `sillage`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT for table `sub_categories`
 --
 ALTER TABLE `sub_categories`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
+-- AUTO_INCREMENT for table `type`
+--
+ALTER TABLE `type`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
-
---
--- AUTO_INCREMENT for table `wishlist`
---
-ALTER TABLE `wishlist`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- Constraints for dumped tables
@@ -493,13 +668,6 @@ ALTER TABLE `reviews`
 --
 ALTER TABLE `sub_categories`
   ADD CONSTRAINT `sub_categories_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Constraints for table `wishlist`
---
-ALTER TABLE `wishlist`
-  ADD CONSTRAINT `wishlist_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
-  ADD CONSTRAINT `wishlist_ibfk_3` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
