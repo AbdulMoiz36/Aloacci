@@ -6,7 +6,7 @@ function get_safe_value($con,$str){
     }
 }
 
-function get_product($con, $limit = '', $cat_id = '', $product_id = '', $search_str = '', bool $getQuery = false) {
+function get_product($con, $limit = '', $cat_id = '', $product_id = '', $search_str = '', $getQuery = false, $sub_cat_id = '') {
     $sql = "SELECT product.*, categories.categories, product_format.format, product_format.price 
             FROM product 
             JOIN categories ON product.category_id = categories.id 
@@ -14,7 +14,11 @@ function get_product($con, $limit = '', $cat_id = '', $product_id = '', $search_
             WHERE product.status = 1";
 
     if ($cat_id !== "") {
-        $sql .= " AND category_id = $cat_id ";
+        $sql .= " AND product.category_id = $cat_id ";
+    }
+
+    if ($sub_cat_id !== "") {
+        $sql .= " AND product.sub_category_id = $sub_cat_id ";
     }
 
     if ($product_id !== "") {
@@ -36,12 +40,13 @@ function get_product($con, $limit = '', $cat_id = '', $product_id = '', $search_
     }
 
     $res = mysqli_query($con, $sql);
-    $data = array();
+    $data = [];
     while ($row = mysqli_fetch_assoc($res)) {
         $data[] = $row;
     }
     return $data;
 }
+
 
 
 function productSoldQtyByProductId($con,$pid){

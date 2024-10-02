@@ -60,13 +60,13 @@ $totalProduct = $obj->totalProduct();
         <?php
         if (isset($_SESSION['USER_LOGIN'])) {
         ?>
-          <i class="fas fa-user"></i>
-          <a href="account.php">Account</a>
+        <i class="fas fa-user"></i>
+        <a href="account.php">Account</a>
         <?php
         } else {
         ?>
-          <i class="fas fa-user"></i>
-          <a href="login.php">Login</a>
+        <i class="fas fa-user"></i>
+        <a href="login.php">Login</a>
         <?php
         }
         ?>
@@ -76,28 +76,28 @@ $totalProduct = $obj->totalProduct();
         <?php
         if (!isset($_SESSION['USER_LOGIN'])) {
         ?>
-          <a href="login.php">
-            <i class="fa-sharp fa-solid fa-bag-shopping"></i>
-            <span>Cart</span>
-          </a>
+        <a href="login.php">
+          <i class="fa-sharp fa-solid fa-bag-shopping"></i>
+          <span>Cart</span>
+        </a>
         <?php
         } else {
         ?>
-          <a href="cart.php" class=" flex items-center">
-            <!-- Cart Icon -->
-            <div class=" relative">
-              <i class="fa-sharp fa-solid fa-bag-shopping text-xl"></i>
-              <!-- Badge showing total products -->
-              <span class="cart-quantity absolute top-0 -right-2 transform translate-x-2 -translate-y-2 bg-amber-600 text-white rounded-full px-2 py-0.5 text-xs font-bold">
-                <?php echo $totalProduct ?>
-              </span>
-            </div>
+        <a href="cart.php" class=" flex items-center">
+          <!-- Cart Icon -->
+          <div class=" relative">
+            <i class="fa-sharp fa-solid fa-bag-shopping text-xl"></i>
+            <!-- Badge showing total products -->
+            <span
+              class="cart-quantity absolute top-0 -right-2 transform translate-x-2 -translate-y-2 bg-amber-600 text-white rounded-full px-2 py-0.5 text-xs font-bold">
+              <?php echo $totalProduct ?>
+            </span>
+          </div>
 
-            <!-- Cart Text -->
-            <span class="ml-2">Cart</span>
+          <!-- Cart Text -->
+          <span class="ml-2">Cart</span>
 
-
-          </a>
+        </a>
         <?php
         }
         ?>
@@ -120,25 +120,27 @@ $totalProduct = $obj->totalProduct();
           class="hidden w-full absolute bg-white text-black shadow-xl grid-cols-2 sm:grid-cols-4 gap-10 z-50 top-12 left-0 p-10"
           id="menu">
           <?php
-          // Fetch categories
-          $categoriesQuery = mysqli_query($con, "SELECT * FROM categories");
-          while ($category = mysqli_fetch_assoc($categoriesQuery)) {
-            echo '<li class="text-start font-semibold"> <a href="shop.php" class="font-semibold">';
-            echo htmlspecialchars($category['categories']);
-            echo '</a><ul class="mt-2 font-thin flex flex-col gap-1">';
+            // Fetch categories
+            $categoriesQuery = mysqli_query($con, "SELECT * FROM categories");
+            while ($category = mysqli_fetch_assoc($categoriesQuery)) {
+                echo '<li class="text-start font-semibold"> 
+                        <a href="shop.php?category_id=' . $category['id'] . '" class="font-semibold">';
+                echo htmlspecialchars($category['categories']);
+                echo '</a><ul class="mt-2 font-thin flex flex-col gap-1">';
 
-            // Fetch sub-categories for this category
-            $subCategoriesQuery = mysqli_query($con, "SELECT * FROM sub_categories WHERE category_id = '" . $category['id'] . "' AND `status` = 1");
-            while ($subCategory = mysqli_fetch_assoc($subCategoriesQuery)) {
-              echo '<a href="shop.php"><li class="hover:underline hover:cursor-pointer">';
-              echo htmlspecialchars($subCategory['sub_categories']);
-              echo '</li></a>';
+                // Fetch sub-categories for this category
+                $subCategoriesQuery = mysqli_query($con, "SELECT * FROM sub_categories WHERE category_id = '" . $category['id'] . "' AND `status` = 1");
+                while ($subCategory = mysqli_fetch_assoc($subCategoriesQuery)) {
+                    echo '<a href="shop.php?sub_category_id=' . $subCategory['id'] . '"><li class="hover:underline hover:cursor-pointer">';
+                    echo htmlspecialchars($subCategory['sub_categories']);
+                    echo '</li></a>';
+                }
+
+                echo '</ul>';
+                echo '</li>';
             }
-
-            echo '</ul>';
-            echo '</li>';
-          }
           ?>
+
         </ul>
       </li>
       <a href="shop.php">Less than 1500</a>

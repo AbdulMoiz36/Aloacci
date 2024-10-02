@@ -1,10 +1,25 @@
 <?php
 include 'header.php';
+// Get the category or sub-category id from the URL
+$category_id = isset($_GET['category_id']) ? $_GET['category_id'] : '';
+$sub_category_id = isset($_GET['sub_category_id']) ? $_GET['sub_category_id'] : '';
+
+// Modify the product query to filter based on category or sub-category
+if ($sub_category_id) {
+    // If sub-category is clicked, filter products by sub-category
+    $get_product = get_product($con, '', '', '', '', false, $sub_category_id);
+} else if ($category_id) {
+    // If category is clicked, filter products by category
+    $get_product = get_product($con, '', $category_id);
+} else {
+    // If no category or sub-category is clicked, get all products
+    $get_product = get_product($con);
+}
 ?>
 
 <div class="w-full p-10 ">
     <h1 class="font-bold text-4xl">Products</h1>
-    <p><?= count(array_unique(array_column(get_product($con), 'id'))) ?> Products</p>
+    <p><?= count(array_unique(array_column($get_product, 'id'))) ?> Products</p>
 </div>
 
 <!-- Sticky filter and sort section -->
@@ -59,30 +74,22 @@ include 'header.php';
 
     <!-- Products section -->
     <div class="w-full p-3 flex flex-wrap justify-center gap-5">
-        <?php
-        $get_product = get_product($con);
-        $unique_products = []; // Array to track unique products
+    <?php
+    $unique_products = [];
+    foreach ($get_product as $list) {
+        if (in_array($list['id'], $unique_products)) continue;
+        $unique_products[] = $list['id'];
 
-        foreach ($get_product as $list) {
-            // Only display the product if it hasn't been displayed yet
-            if (in_array($list['id'], $unique_products)) {
-                continue; // Skip this product if it has already been displayed
+        $product_formats = []; // Get product formats
+        foreach ($get_product as $p) {
+            if ($p['id'] == $list['id']) {
+                $product_formats[] = [
+                    'format' => $p['format'],
+                    'price' => $p['price']
+                ];
             }
-
-            // Add the product ID to the unique products array
-            $unique_products[] = $list['id'];
-
-            // Fetch all formats and prices for the product
-            $product_formats = []; // Stores format and price for this product
-            foreach ($get_product as $p) {
-                if ($p['id'] == $list['id']) {
-                    $product_formats[] = [
-                        'format' => $p['format'],
-                        'price' => $p['price']
-                    ];
-                }
-            }
-        ?>
+        }
+    ?>
             <div class="w-96 md:w-72 h-[40rem] md:h-[30rem] flex gap-2 flex-col relative group shadow">
     <!-- Plus icon with hover effect -->
     <div class="openModalBtn z-10 absolute -top-2 -right-2 bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full p-3 flex items-center justify-center text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out cursor-pointer"
