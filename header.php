@@ -88,7 +88,7 @@ $totalProduct = $obj->totalProduct();
             <div class=" relative">
               <i class="fa-sharp fa-solid fa-bag-shopping text-xl"></i>
               <!-- Badge showing total products -->
-              <span class="cart-quantity absolute top-0 -right-2 transform translate-x-2 -translate-y-2 bg-red-600 text-white rounded-full px-2 py-0.5 text-xs font-bold">
+              <span class="cart-quantity absolute top-0 -right-2 transform translate-x-2 -translate-y-2 bg-amber-600 text-white rounded-full px-2 py-0.5 text-xs font-bold">
                 <?php echo $totalProduct ?>
               </span>
             </div>
@@ -120,18 +120,17 @@ $totalProduct = $obj->totalProduct();
           class="hidden w-full absolute bg-white text-black shadow-xl grid-cols-2 sm:grid-cols-4 gap-10 z-50 top-12 left-0 p-10"
           id="menu">
           <?php
-
           // Fetch categories
           $categoriesQuery = mysqli_query($con, "SELECT * FROM categories");
           while ($category = mysqli_fetch_assoc($categoriesQuery)) {
-            echo '<li class="text-start font-semibold"> <a href="#" class="font-semibold">';
+            echo '<li class="text-start font-semibold"> <a href="shop.php" class="font-semibold">';
             echo htmlspecialchars($category['categories']);
             echo '</a><ul class="mt-2 font-thin flex flex-col gap-1">';
 
             // Fetch sub-categories for this category
             $subCategoriesQuery = mysqli_query($con, "SELECT * FROM sub_categories WHERE category_id = '" . $category['id'] . "' AND `status` = 1");
             while ($subCategory = mysqli_fetch_assoc($subCategoriesQuery)) {
-              echo '<a href="#"><li class="hover:underline hover:cursor-pointer">';
+              echo '<a href="shop.php"><li class="hover:underline hover:cursor-pointer">';
               echo htmlspecialchars($subCategory['sub_categories']);
               echo '</li></a>';
             }
@@ -142,10 +141,7 @@ $totalProduct = $obj->totalProduct();
           ?>
         </ul>
       </li>
-      <a href="shop.php">Aloacci Steals</a>
       <a href="shop.php">Less than 1500</a>
-      <a href="shop.php">Attars</a>
-      <a href="shop.php">Bundles</a>
       <a href="#">
         <li class="hover:underline hover:cursor-pointer">About</li>
       </a>

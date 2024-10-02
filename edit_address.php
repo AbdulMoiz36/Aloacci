@@ -28,7 +28,7 @@ $user = mysqli_fetch_assoc($sql);
             </label>
 
             <!-- Change button type to 'submit' to trigger form submission -->
-            <button type="submit" name="update" class="w-full p-2 border-2 hover:cursor-pointer border-red-800 hover:bg-red-900 font-semibold rounded-full mt-4 bg-red-700 text-white">Update Address</button>
+            <button type="submit" name="update" class="w-full p-2 border-2 hover:cursor-pointer bg-gradient-to-bl from-yellow-500 via-yellow-500 to-amber-600 shadow-sm hover:shadow-lg transition-shadow ease-in-out duration-300 font-semibold rounded-full mt-4 text-white">Update Address</button>
         </form>
     </div>
 </section>

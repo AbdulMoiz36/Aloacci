@@ -9,7 +9,7 @@ include 'header.php';
 
 <!-- Sticky filter and sort section -->
 <div
-    class="w-full py-3 flex justify-around md:justify-end px-2 md:px-10 border-b-2 border-slate-200 sticky top-1 z-10 bg-white">
+    class="w-full py-3 flex justify-around md:justify-end px-2 md:px-10 border-b-2 border-slate-200 sticky md:static top-0 z-10 bg-white">
     <p class="md:hidden cursor-pointer" id="filter-btn"><span class="mr-2"><i
                 class="fa-solid fa-sliders"></i></span>Filter</p>
     <div>
@@ -181,11 +181,11 @@ include 'header.php';
         <?php endif; ?>
         <a href="product_details.php?id=">
             <div style="margin-top: 20px;"
-                class="w-full p-3 border-2 text-center border-red-800 text-lg font-semibold rounded-full bg-red-700 text-white">Buy It
+                class="w-full p-3 border-2 hover:cursor-pointer bg-gradient-to-bl from-yellow-500 via-yellow-500 to-amber-600 shadow-sm hover:shadow-lg transition-shadow ease-in-out duration-300 font-semibold rounded-full text-white text-center">Buy It
                 Now</div>
         </a>
         <div id="closeModalBtn"
-            class="absolute -top-2 -right-2 hover:cursor-pointer font-bold bg-red-700 text-white px-4 py-2 rounded-full hover:bg-red-600 focus:outline-none">
+            class="absolute -top-2 -right-2 hover:cursor-pointer shadow-md hover:shadow-xl font-bold bg-gradient-to-bl from-yellow-500 via-yellow-500 to-amber-600 text-white px-4 py-2 rounded-full hover:bg-red-600 focus:outline-none">
             <i class="fa-solid fa-xmark"></i>
         </div>
     </div>
@@ -211,7 +211,7 @@ include 'header.php';
             productFormats.forEach((formatObj, index) => {
                 const formatDiv = document.createElement('div');
                 formatDiv.className = 'border-2 border-black p-2 cursor-pointer w-fit my-2';
-                formatDiv.innerText = `${formatObj.format}`;
+                formatDiv.innerText = `${formatObj.format}ml`;
                 formatDiv.dataset.price = formatObj.price;
                 // Select the first format by default
                 if (index === 0) {

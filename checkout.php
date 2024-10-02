@@ -58,7 +58,7 @@ if (isset($_POST['submit'])) {
             <form method="POST" class="mt-5 flex flex-col gap-8">
                 <div class="flex flex-col">
                     <label for="">Email:</label>
-                    <input type="text" name="email" value="<?= $data['email'] ?>" disabled class="border placeholder:text-sm border-gray-300 rounded-md outline-none p-2">
+                    <input type="text" name="email" value="<?= $data['email'] ?>" class="border placeholder:text-sm border-gray-300 rounded-md outline-none p-2">
                 </div>
                 <div class="flex flex-col">
                     <label for="">City:</label>

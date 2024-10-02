@@ -61,7 +61,7 @@ $product_prices = array_map('htmlspecialchars', array_column($get_product, 'pric
                     <?php foreach ($product_formats as $index => $format): ?>
                         <div class="format-option border-2 border-black p-2 cursor-pointer my-2 <?= $index === 0 ? 'bg-gray-200' : '' ?> w-fit"
                             data-price="<?= $product_prices[$index] ?>">
-                            <?= $format ?> - Rs. <?= $product_prices[$index] ?>
+                            <?= $format ?>ml - Rs. <?= $product_prices[$index] ?>
                         </div>
                     <?php endforeach; ?>
                 </div>
@@ -127,12 +127,12 @@ $product_prices = array_map('htmlspecialchars', array_column($get_product, 'pric
             <!-- Add to Cart Button -->
             <?php if (!isset($_SESSION['USER_LOGIN'])): ?>
                 <div>
-                    <a href="login.php" class="border-2 border-black text-lg font-semibold rounded-full mb-2"
-                        style="padding:15px 250px;">Add To Cart</a>
+                    <a href="login.php" class="border-2 border-black text-lg font-semibold rounded-full mb-2 p-3"
+                        >Add To Cart</a>
                 </div>
             <?php else: ?>
-                <button id="addToCartBtn" class="border-2 border-black text-lg font-semibold rounded-full mb-2"
-                    style="padding:15px 250px;" onclick="addToCart('<?= $get_product[0]['id'] ?>')">Add To Cart</button>
+                <button id="addToCartBtn" class="border-2 border-black text-lg font-semibold rounded-full mb-2 p-3"
+                     onclick="addToCart('<?= $get_product[0]['id'] ?>')">Add To Cart</button>
             <?php endif; ?>
 
             </form>
@@ -152,7 +152,7 @@ $product_prices = array_map('htmlspecialchars', array_column($get_product, 'pric
 
             <!-- Buy It Now Button -->
             <div>
-            <button class="w-full p-3 border-2 border-amber-600 text-lg font-semibold shadow-sm hover:shadow-lg transition-shadow ease-in-out duration-300 rounded-full bg-yellow-500 text-white">Buy It Now</button>
+            <button class="w-full p-3 border-2 hover:cursor-pointer bg-gradient-to-bl from-yellow-500 via-yellow-500 to-amber-600 shadow-sm hover:shadow-xl transition-shadow ease-in-out duration-300 font-semibold rounded-full text-white">Buy It Now</button>
             </div>  
 
             <!-- Tabs -->
