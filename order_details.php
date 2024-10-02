@@ -34,7 +34,7 @@ function getStatusClass($status)
         <h2 class="font-manrope font-bold text-4xl leading-10 text-black text-center">
             Order Details
         </h2>
-        <p class="mt-4 font-normal text-lg leading-8 text-gray-500 mb-11 text-center">Dear <?=$order['user_name']?>, Thank You for making a purchase.</p>
+        <p class="mt-4 font-normal text-lg leading-8 text-gray-500 mb-11 text-center">Dear <?= $order['user_name'] ?>, Thank You for making a purchase.</p>
         <div class="main-box border border-gray-200 rounded-xl pt-6 max-w-xl max-lg:mx-auto lg:max-w-full bg-slate-50">
             <div
                 class="flex flex-col lg:flex-row lg:items-center justify-between px-6 pb-6 border-b border-gray-200">
@@ -58,7 +58,7 @@ function getStatusClass($status)
                     $product_image = $order_d['image'];
                     $product_name = $order_d['name'];
                     $quantity = $order_d['qty'];
-                    $price = $order_d['price']; 
+                    $price = $order_d['price'];
                 ?>
 
                     <!-- Order Detail Structure -->
@@ -96,6 +96,15 @@ function getStatusClass($status)
                                             </p>
                                         </div>
                                     </div>
+                                    <div class="col-span-2 flex items-center max-lg:mt-3">
+                                        <div class="flex gap-3 lg:block">
+                                            <p class="font-medium text-sm leading-7 text-black">Write A Review</p>
+                                            <a href="#" class="font-medium text-sm leading-6 whitespace-nowrap py-1 px-3 rounded-full lg:mt-3 flex items-center justify-center">
+                                                <i class="fa-regular fa-pen-to-square"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -109,6 +118,7 @@ function getStatusClass($status)
             </div>
             <div class="w-full border-t border-gray-200 px-6 flex flex-col lg:flex-row items-center justify-between ">
 
+                <p class="font-semibold text-lg text-black py-6">Shipping: <span class="text-amber-600">Rs.<?= $order['total_price'] ?></span></p>
                 <p class="font-semibold text-lg text-black py-6">Address: <span class="text-amber-600"><?= $order['address'] ?>,<?= $order['city'] ?></span></p>
                 <p class="font-semibold text-lg text-black py-6">Total Price: <span class="text-amber-600">Rs.<?= $order['total_price'] ?></span></p>
             </div>
