@@ -153,53 +153,62 @@ if (isset($_REQUEST['submit'])) {
                 <div class="card-body card-block">
                     <div class="form-group">
                         <label for="categories" class="form-control-label">Categories</label>
-                        <select class="form-control" name="categories_id">
-
+                        <select class="form-control" name="categories_id" id="category">
                             <option selected disabled>Select Category</option>
-
                             <?php
-
-									$select = mysqli_query($con,"select * from categories");
-
-									while($row = mysqli_fetch_array($select)){
-										if($row['id']==$category_id){
-											echo "<option selected value=".$row['id']."> ".$row['categories']." </option>";
-										}
-										else{
-											echo "<option value=".$row['id']."> ".$row['categories']." </option>";
-										}
-									}
-
-									?>
-
+                                $categories = mysqli_query($con, "SELECT * FROM categories");
+                                while ($row = mysqli_fetch_array($categories)) {
+                                    $selected = ($row['id'] == $category_id) ? 'selected' : '';
+                                    echo "<option value='{$row['id']}' $selected>{$row['categories']}</option>";
+                                }
+                            ?>
                         </select>
-
                     </div>
 
                     <div class="form-group">
-                        <label for="categories" class="form-control-label">Sub Categories</label>
-                        <select class="form-control" name="sub_categories_id">
-
+                        <label for="sub_categories" class="form-control-label">Sub Categories</label>
+                        <select class="form-control" name="sub_categories_id" id="sub_category">
                             <option selected disabled>Select Sub Category</option>
-
-                            <?php
-
-									$select1 = mysqli_query($con,"select * from sub_categories");
-
-									while($row = mysqli_fetch_array($select1)){
-										if($row['id']==$category_id){
-											echo "<option selected value=".$row['id']."> ".$row['sub_categories']." </option>";
-										}
-										else{
-											echo "<option value=".$row['id']."> ".$row['sub_categories']." </option>";
-										}
-									}
-
-									?>
-
+                            <!-- Subcategories will be loaded by AJAX based on the selected category -->
                         </select>
-
                     </div>
+
+                    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                    <script>
+                        $(document).ready(function() {
+                            var category_id = $('#category').val();
+                            var selected_sub_category_id = "<?php echo $sub_category_id; ?>";
+                            // Load subcategories if a category is already selected
+                            if (category_id) {
+                                $.ajax({
+                                    url: 'get_subcategories.php',
+                                    type: 'POST',
+                                    data: {
+                                        category_id: category_id
+                                    },
+                                    success: function(data) {
+                                        $('#sub_category').html(data);
+                                        // Set the selected subcategory after the options are loaded
+                                        $('#sub_category').val(selected_sub_category_id);
+                                    }
+                                });
+                            }
+                            // Load subcategories dynamically when the category is changed
+                            $('#category').change(function() {
+                                var category_id = $(this).val();
+                                $.ajax({
+                                    url: 'get_subcategories.php',
+                                    type: 'POST',
+                                    data: {
+                                        category_id: category_id
+                                    },
+                                    success: function(data) {
+                                        $('#sub_category').html(data);
+                                    }
+                                });
+                            });
+                        });
+                    </script>
 
                     <div class="form-group">
                         <label for="categories" class="form-control-label">Product name</label>
@@ -248,7 +257,7 @@ if (isset($_REQUEST['submit'])) {
 
                     <div class="form-group">
                         <label for="categories" class="form-control-label">Image 2</label>
-                        <input type="file" name="image2" class="form-control" <?= $image_required ?>>
+                        <input type="file" name="image2" class="form-control">
                     </div>
 
                     <div class="form-group">
