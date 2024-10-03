@@ -22,30 +22,27 @@ if (isset($_SESSION['USER_ID'])) {
     $user = mysqli_fetch_array($sql);
     $email = $user['email'];
 }
+$pid = $_GET['pid'];
+$oid = $_GET['oid'];
 
-$id = $_GET['id'];
-
-$psql = mysqli_query($con, "SELECT `name` FROM `product` WHERE `id` = '$id'");
+$psql = mysqli_query($con, "SELECT `name` FROM `product` WHERE `id` = '$pid'");
 $product = mysqli_fetch_array($psql);
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Get form data from POST request
-    $name = mysqli_real_escape_string($con, $_POST['name']);
-    $email = mysqli_real_escape_string($con, $_POST['email']);
+   
     $message = mysqli_real_escape_string($con, $_POST['message']);
-    $rating = $_POST['rating']; // Get the selected rating
+    $rating = $_POST['rating']; 
 
     // Handle image upload
     if (isset($_FILES['image']) && $_FILES['image']['error'] == UPLOAD_ERR_OK) {
         $image_tmp_name = $_FILES['image']['tmp_name'];
         $image_name = $_FILES['image']['name'];
-        $image_path = 'uploads/' . basename($image_name); // Set the path to save the image
+        $image_path = 'image/' . basename($image_name);
 
         // Move the uploaded file to the desired directory
         if (move_uploaded_file($image_tmp_name, $image_path)) {
-            // Insert data into 'contact_us' table
-            $sql = "INSERT INTO `contact_us` (`name`, `email`, `message`, `rating`, `image`, `date`) VALUES ('$name', '$email', '$message', '$rating', '$image_path', NOW())"; // Add image path to the query
+            $sql = "INSERT INTO `reviews` (`order_id`, `product_id`, `comment`, `rating`, `image`, `date`) VALUES ('$oid', '$pid', '$message', '$rating', '$image_path', NOW())";
 
             if (mysqli_query($con, $sql)) {
                 // Success message using SweetAlert
