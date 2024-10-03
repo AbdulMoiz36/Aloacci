@@ -4,19 +4,38 @@ include 'header.php';
 $category_id = isset($_GET['category_id']) ? $_GET['category_id'] : '';
 $sub_category_id = isset($_GET['sub_category_id']) ? $_GET['sub_category_id'] : '';
 $price_filter = isset($_GET['price_filter']) ? $_GET['price_filter'] : '';
+$search_str = isset($_GET['search']) ? get_safe_value($con, $_GET['search']) : '';
 
-// Modify the product query to filter based on category, sub-category, or price filter
-if ($price_filter == 'less_1500') {
-    // Filter products where the price is less than 1500
+// Function to build the URL with query parameters
+function build_url($base_url, $params) {
+    $query_string = http_build_query(array_filter($params));
+    return $base_url . '?' . $query_string;
+}
+
+// Initialize parameters for the URL
+$params = [
+    'category_id' => $category_id,
+    'sub_category_id' => $sub_category_id,
+    'price_filter' => $price_filter,
+    'search' => $search_str
+];
+
+// Get the base URL
+$base_url = $_SERVER['PHP_SELF'];
+
+// Construct the URL based on the parameters
+$current_url = build_url($base_url, $params);
+
+// Fetch products based on filters
+if ($search_str) {
+    $get_product = get_product($con, '', '', '', $search_str);
+} elseif ($price_filter == 'less_1500') {
     $get_product = get_product($con, '', $category_id, '', '', false, $sub_category_id, 1500);
-} else if ($sub_category_id) {
-    // Filter products by sub-category
+} elseif ($sub_category_id) {
     $get_product = get_product($con, '', '', '', '', false, $sub_category_id);
-} else if ($category_id) {
-    // Filter products by category
+} elseif ($category_id) {
     $get_product = get_product($con, '', $category_id);
 } else {
-    // Get all products if no filters applied
     $get_product = get_product($con);
 }
 
@@ -29,7 +48,7 @@ while ($row = mysqli_fetch_assoc($genderQuery)) {
     $genders[] = $row;
 }
 
-// Fetch distinct genders using a JOIN between product and genre tables
+// Fetch distinct genres using a JOIN between product and genre tables
 $genreQuery = mysqli_query($con, "SELECT DISTINCT g.genre, g.id FROM genre g 
                                    JOIN product p ON g.id = p.genre_id 
                                    WHERE p.status = 1");
@@ -51,10 +70,11 @@ while ($row = mysqli_fetch_assoc($genreQuery)) {
                 class="fa-solid fa-sliders"></i></span>Filter</p>
     <div>
         <label for=""><span class="mr-2"><i class="fa-solid fa-arrow-down-wide-short"></i></span>Sort By: </label>
-        <select>
-            <option value="">One</option>
-            <option value="">Two</option>
-            <option value="">Three</option>
+        <select onchange="window.location.href='<?= $current_url ?>&sort=' + this.value">
+            <option value="">Select</option>
+            <option value="price_low_high">Price: Low to High</option>
+            <option value="price_high_low">Price: High to Low</option>
+            <option value="newest">Newest</option>
         </select>
     </div>
 </div>
@@ -64,8 +84,9 @@ while ($row = mysqli_fetch_assoc($genreQuery)) {
     <!-- Filters div -->
     <div class="w-3/4 md:w-1/5 fixed md:relative border-r-2 border-slate-200 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out bg-white h-screen top-0 z-20 p-5"
         id="filters">
-        <button id="close-filter" class="md:hidden cursor-pointer mb-5 border-b-2 border-slate-400"><span
-                class="mr-2"><i class="fa-solid fa-xmark"></i></span>Close</button>
+        <button id="close-filter" class="md:hidden cursor-pointer mb-5 border-b-2 border-slate-400">
+            <span class="mr-2"><i class="fa-solid fa-xmark"></i></span>Close
+        </button>
         <div id="selected-values" class="flex flex-wrap gap-2">
             <!-- Selected values will be added here dynamically -->
         </div>
@@ -73,76 +94,62 @@ while ($row = mysqli_fetch_assoc($genreQuery)) {
         <!-- Gender filter section -->
         <div class="mt-4">
             <div class="relative">
-                <!-- Dropdown trigger -->
                 <p class="font-semibold cursor-pointer text-xl" id="dropdown-gender-btn">
-    Genders
-    <span class="ml-2"><i class="fa-solid fa-angle-down" id="dropdown-gender-icon"></i></span>
-</p>
-                <!-- Dropdown content -->
+                    Genders
+                    <span class="ml-2"><i class="fa-solid fa-angle-down" id="dropdown-gender-icon"></i></span>
+                </p>
                 <div id="dropdown-gender-content" class="mt-2 text-lg">
-                    <?php
-            foreach ($genders as $gender) {
-                ?>
+                    <?php foreach ($genders as $gender): ?>
                     <label class="flex items-center hover:bg-gray-200 p-2 cursor-pointer">
                         <input type="checkbox" value="<?= htmlspecialchars($gender['id']) ?>"
-                            id="checkbox-<?= strtolower($gender['gender']) ?>" class="custom-checkbox mr-2"
-                            onclick="updateSelectedValues()">
+                            class="gender-checkbox custom-checkbox mr-2" onclick="filterProducts()">
                         <?= htmlspecialchars($gender['gender']) ?>
                     </label>
-                    <?php
-            }
-            ?>
+                    <?php endforeach; ?>
                 </div>
             </div>
         </div>
 
-        <!-- genre filter section -->
+        <!-- Genre filter section -->
         <div class="mt-4">
             <div class="relative">
-                <!-- Dropdown trigger -->
                 <p class="font-semibold cursor-pointer text-xl" id="dropdown-genre-btn">
                     Genre
                     <span class="ml-2"><i class="fa-solid fa-angle-down" id="dropdown-icon"></i></span>
                 </p>
-                <!-- Dropdown content -->
                 <div id="dropdown-genre-content" class="mt-2 text-lg">
-                    <?php
-            foreach ($genres as $genre) {
-                ?>
+                    <?php foreach ($genres as $genre): ?>
                     <label class="flex items-center hover:bg-gray-200 p-2 cursor-pointer">
                         <input type="checkbox" value="<?= htmlspecialchars($genre['id']) ?>"
-                            id="checkbox-<?= strtolower($genre['genre']) ?>" class="custom-checkbox mr-2"
-                            onclick="updateSelectedValues()">
+                            class="genre-checkbox custom-checkbox mr-2" onclick="filterProducts()">
                         <?= htmlspecialchars($genre['genre']) ?>
                     </label>
-                    <?php
-            }
-            ?>
+                    <?php endforeach; ?>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Products section -->
-    <div class="w-full p-3 flex flex-wrap justify-center gap-5">
+    <div id="products-container" class="w-full p-3 flex flex-wrap justify-center gap-5">
         <?php
-    $unique_products = [];
-    foreach ($get_product as $list) {
-        if (in_array($list['id'], $unique_products)) continue;
-        $unique_products[] = $list['id'];
+        $unique_products = [];
+        foreach ($get_product as $list) {
+            if (in_array($list['id'], $unique_products)) continue;
+            $unique_products[] = $list['id'];
 
-        $product_formats = []; // Get product formats
-        foreach ($get_product as $p) {
-            if ($p['id'] == $list['id']) {
-                $product_formats[] = [
-                    'format' => $p['format'],
-                    'price' => $p['price']
-                ];
+            $product_formats = []; // Get product formats
+            foreach ($get_product as $p) {
+                if ($p['id'] == $list['id']) {
+                    $product_formats[] = [
+                        'format' => $p['format'],
+                        'price' => $p['price']
+                    ];
+                }
             }
-        }
-    ?>
-        <div class="w-96 md:w-72 h-[40rem] md:h-[30rem] flex gap-2 flex-col relative group shadow">
-            <!-- Plus icon with hover effect -->
+        ?>
+        <div class="product-card w-96 md:w-72 h-[40rem] md:h-[30rem] flex gap-2 flex-col relative group shadow"
+            data-gender-id="<?= $list['gender_id'] ?>" data-genre-id="<?= $list['genre_id'] ?>">
             <div class="openModalBtn z-10 absolute -top-2 -right-2 bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full p-3 flex items-center justify-center text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out cursor-pointer"
                 data-product-id="<?= $list['id'] ?>" data-product-name="<?= $list['name'] ?>"
                 data-product-formats="<?= htmlspecialchars(json_encode($product_formats)) ?>">
@@ -152,36 +159,85 @@ while ($row = mysqli_fetch_assoc($genreQuery)) {
             <!-- Product image wrapper -->
             <div class="relative h-[70%] w-full">
                 <a href="product_details.php?id=<?= $list['id'] ?>" class="product-link w-full">
-                    <!-- Default image -->
                     <img src="./image/<?= $list['image'] ?>" alt="<?= $list['name'] ?>"
                         class="h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0">
-                    <!-- Second image to show on hover -->
-                    <?php if ($list['image2'] != '') { ?>
+                    <?php if ($list['image2'] != ''): ?>
                     <img src="./image/<?= $list['image2'] ?>" alt="<?= $list['name'] ?> Hover"
                         class="absolute top-0 left-0 h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100">
-                    <?php } else { ?>
+                    <?php else: ?>
                     <img src="./image/<?= $list['image'] ?>" alt="<?= $list['name'] ?> Hover"
                         class="absolute top-0 left-0 h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100">
-                    <?php } ?>
+                    <?php endif; ?>
                 </a>
             </div>
 
-    <!-- Product details -->
-<div class="px-4 py-2 h-full flex flex-col justify-evenly">
-    <a href="product_details.php?id=<?= $list['id'] ?>" class="product-link w-full">
-        <p class="font-bold text-xl"><?= $list['name'] ?></p>
-        <p class="text-gray-600 overflow-hidden text-ellipsis line-clamp-2"><?= $list['description'] ?></p>
-        <p class="text-red-600 font-extrabold text-xl">Rs. <?= $product_formats[0]['price'] ?></p>
-    </a>
-</div>
-
-</div>
-
-        <?php
-        }
-        ?>
+            <!-- Product details -->
+            <div class="px-4 py-2 h-full flex flex-col justify-evenly">
+                <a href="product_details.php?id=<?= $list['id'] ?>"
+                    class="text-lg font-bold hover:underline"><?= htmlspecialchars($list['name']) ?></a>
+                <p class="text-gray-600 overflow-hidden text-ellipsis line-clamp-2">
+                    <?= htmlspecialchars($list['description']) ?></p>
+                <p class="text-lg font-bold text-red-500">Rs. <?= htmlspecialchars($list['price']) ?></p>
+            </div>
+        </div>
+        <?php } ?>
     </div>
 </section>
+
+<script>
+    function filterProducts() {
+        const selectedGenders = Array.from(document.querySelectorAll('.gender-checkbox:checked')).map(checkbox =>
+            checkbox.value);
+        const selectedGenres = Array.from(document.querySelectorAll('.genre-checkbox:checked')).map(checkbox => checkbox
+            .value);
+        // Update URL with selected filters, removing empty parameters
+        const url = new URL(window.location.href);
+        url.searchParams.delete('genders');
+        url.searchParams.delete('genres');
+        if (selectedGenders.length) {
+            url.searchParams.set('genders', selectedGenders.join(','));
+        }
+        if (selectedGenres.length) {
+            url.searchParams.set('genres', selectedGenres.join(','));
+        }
+        window.history.replaceState({}, '', url);
+        const products = document.querySelectorAll('.product-card');
+        products.forEach(product => {
+            const genderId = product.getAttribute('data-gender-id');
+            const genreId = product.getAttribute('data-genre-id');
+            const genderMatch = selectedGenders.length === 0 || selectedGenders.includes(genderId);
+            const genreMatch = selectedGenres.length === 0 || selectedGenres.includes(genreId);
+            if (genderMatch && genreMatch) {
+                // Instead of 'block', use 'flex' if you're using flexbox for layout
+                product.style.display = 'flex'; // or 'grid' if you're using a CSS grid layout
+            } else {
+                product.style.display = 'none';
+            }
+        });
+        const sortSelect = document.querySelector('select');
+        sortSelect.addEventListener('change', function() {
+            const url = new URL(window.location.href);
+            url.searchParams.set('sort', this.value);
+            window.location.href = url.toString();
+        });
+    }
+    // Function to set checkbox states from URL parameters
+    function setCheckboxStates() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const selectedGenders = urlParams.get('genders') ? urlParams.get('genders').split(',') : [];
+        const selectedGenres = urlParams.get('genres') ? urlParams.get('genres').split(',') : [];
+        document.querySelectorAll('.gender-checkbox').forEach(checkbox => {
+            checkbox.checked = selectedGenders.includes(checkbox.value);
+        });
+        document.querySelectorAll('.genre-checkbox').forEach(checkbox => {
+            checkbox.checked = selectedGenres.includes(checkbox.value);
+        });
+        // Call filter function to filter products based on the loaded checkboxes
+        filterProducts();
+    }
+    // Call setCheckboxStates on page load
+    document.addEventListener('DOMContentLoaded', setCheckboxStates);
+</script>
 
 <!-- Modal Overlay -->
 <div id="modalOverlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-40"></div>
@@ -320,12 +376,11 @@ while ($row = mysqli_fetch_assoc($genreQuery)) {
     });
     // modal close with escape key
     document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape') {
-        modal.classList.add('hidden');
-        modalOverlay.classList.add('hidden');
-    }
-});
-
+        if (event.key === 'Escape') {
+            modal.classList.add('hidden');
+            modalOverlay.classList.add('hidden');
+        }
+    });
 </script>
 
 <?php
