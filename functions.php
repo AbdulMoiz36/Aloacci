@@ -6,7 +6,7 @@ function get_safe_value($con,$str){
     }
 }
 
-function get_product($con, $limit = '', $cat_id = '', $product_id = '', $search_str = '', $getQuery = false, $sub_cat_id = '') {
+function get_product($con, $limit = '', $cat_id = '', $product_id = '', $search_str = '', $getQuery = false, $sub_cat_id = '', $max_price = '') {
     $sql = "SELECT product.*, categories.categories, product_format.format, product_format.price 
             FROM product 
             JOIN categories ON product.category_id = categories.id 
@@ -19,6 +19,10 @@ function get_product($con, $limit = '', $cat_id = '', $product_id = '', $search_
 
     if ($sub_cat_id !== "") {
         $sql .= " AND product.sub_category_id = $sub_cat_id ";
+    }
+
+    if ($max_price !== "") {
+        $sql .= " AND product_format.price < $max_price";
     }
 
     if ($product_id !== "") {
@@ -46,6 +50,7 @@ function get_product($con, $limit = '', $cat_id = '', $product_id = '', $search_
     }
     return $data;
 }
+
 
 
 

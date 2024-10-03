@@ -44,8 +44,10 @@ $totalProduct = $obj->totalProduct();
       <i id="menu-icon" class="fa-solid fa-bars sm:hidden block text-lg text-white cursor-pointer"
         onclick="toggleNavbar()"></i>
       <div class="relative w-full">
-        <input type="search" placeholder="Search" name="head-search" id="head-search"
+        <form method="GET" action="shop.php">
+          <input type="search" placeholder="Search" name="search" id="search" value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>"
           class="py-2 px-4 rounded-full w-full outline-none" />
+        </form>
         <i class="fas fa-search absolute right-3 top-1/2 transform -translate-y-1/2 text-black text-lg sm:text-xl"></i>
       </div>
     </div>
@@ -143,7 +145,7 @@ $totalProduct = $obj->totalProduct();
 
         </ul>
       </li>
-      <a href="shop.php">Less than 1500</a>
+      <a href="shop.php?price_filter=less_1500">Less than 1500</a>
       <a href="#">
         <li class="hover:underline hover:cursor-pointer">About</li>
       </a>
