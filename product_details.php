@@ -222,7 +222,7 @@ $product_prices = array_map('htmlspecialchars', array_column($get_product, 'pric
                             </div>
                         </div>
                         <!-- Modal for Image Zoom -->
-                        <div id="imageModal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center hidden">
+                        <div id="imageModal" class="fixed inset-0 bg-black bg-opacity-75  items-center justify-center hidden">
                             <span class="absolute top-5 right-5 text-white text-3xl cursor-pointer" onclick="closeModal()">&times;</span>
                             <img id="modalImage" src="" alt="Zoomed Image" class="max-w-full max-h-full">
                         </div>
@@ -233,6 +233,7 @@ $product_prices = array_map('htmlspecialchars', array_column($get_product, 'pric
                                 const modalImage = document.getElementById('modalImage');
                                 modalImage.src = './' + imageSrc; // Set the modal image source
                                 modal.classList.remove('hidden'); // Show the modal
+                                modal.classList.add('flex'); // Show the modal
                             }
 
                             // Function to close the modal
