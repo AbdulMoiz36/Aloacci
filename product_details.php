@@ -216,11 +216,31 @@ $product_prices = array_map('htmlspecialchars', array_column($get_product, 'pric
                                 <?php if (!empty($review['image'])) { // Check if review has an image 
                                 ?>
                                     <div class="flex justify-center md:justify-start">
-                                        <img src="./<?= htmlspecialchars($review['image']) ?>" alt="Review Image" width="150px">
+                                        <img src="./<?= htmlspecialchars($review['image']) ?>" alt="Review Image" width="150px" class="cursor-pointer" onclick="openModal('<?= htmlspecialchars($review['image']) ?>')">
                                     </div>
                                 <?php } ?>
                             </div>
                         </div>
+                        <!-- Modal for Image Zoom -->
+                        <div id="imageModal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center hidden">
+                            <span class="absolute top-5 right-5 text-white text-3xl cursor-pointer" onclick="closeModal()">&times;</span>
+                            <img id="modalImage" src="" alt="Zoomed Image" class="max-w-full max-h-full">
+                        </div>
+                        <script>
+                            // Function to open the modal and display the clicked image
+                            function openModal(imageSrc) {
+                                const modal = document.getElementById('imageModal');
+                                const modalImage = document.getElementById('modalImage');
+                                modalImage.src = './' + imageSrc; // Set the modal image source
+                                modal.classList.remove('hidden'); // Show the modal
+                            }
+
+                            // Function to close the modal
+                            function closeModal() {
+                                const modal = document.getElementById('imageModal');
+                                modal.classList.add('hidden'); // Hide the modal
+                            }
+                        </script>
                 <?php
                     }
                 } else {
