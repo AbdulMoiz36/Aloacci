@@ -44,10 +44,22 @@ $totalProduct = $obj->totalProduct();
       <i id="menu-icon" class="fa-solid fa-bars sm:hidden block text-lg text-white cursor-pointer"
         onclick="toggleNavbar()"></i>
       <div class="relative w-full">
-        <form method="GET" action="shop.php">
-          <input type="search" placeholder="Search" name="search" id="search" value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>"
-          class="py-2 px-4 rounded-full w-full outline-none" />
+        <form method="GET" action="shop.php" onsubmit="return validateSearch()">
+          <input type="search" placeholder="Search" name="search" id="search"
+            value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>"
+            class="py-2 px-4 rounded-full w-full outline-none" />
         </form>
+
+        <script>
+          function validateSearch() {
+            var searchInput = document.getElementById('search').value
+          .trim(); // Get the search input and trim whitespace
+            if (searchInput === '') {
+              return false; // Prevent form submission if the input is empty
+            }
+            return true; // Allow form submission if the input has a value
+          }
+        </script>
         <i class="fas fa-search absolute right-3 top-1/2 transform -translate-y-1/2 text-black text-lg sm:text-xl"></i>
       </div>
     </div>

@@ -10,18 +10,53 @@ document.getElementById('close-filter').addEventListener('click', function() {
 });
 
 
-
 // Side Menu Dropdown 
 document.getElementById('dropdown-gender-btn').addEventListener('click', function() {
     const dropdownContent = document.getElementById('dropdown-gender-content');
+    const dropdownIcon = document.getElementById('dropdown-gender-icon');
     dropdownContent.classList.toggle('hidden');
-    
+    dropdownIcon.classList.toggle('fa-angle-down');
+    dropdownIcon.classList.toggle('fa-angle-up');
 });
 
 document.getElementById('dropdown-genre-btn').addEventListener('click', function() {
     const dropdownContent = document.getElementById('dropdown-genre-content');
+    const dropdownIcon = document.getElementById('dropdown-genre-icon');
     dropdownContent.classList.toggle('hidden');
-    
+    dropdownIcon.classList.toggle('fa-angle-down');
+    dropdownIcon.classList.toggle('fa-angle-up');
+});
+
+document.getElementById('dropdown-type-btn').addEventListener('click', function() {
+    const dropdownContent = document.getElementById('dropdown-type-content');
+    const dropdownIcon = document.getElementById('dropdown-type-icon');
+    dropdownContent.classList.toggle('hidden');
+    dropdownIcon.classList.toggle('fa-angle-down');
+    dropdownIcon.classList.toggle('fa-angle-up');
+});
+
+document.getElementById('dropdown-season-btn').addEventListener('click', function() {
+    const dropdownContent = document.getElementById('dropdown-season-content');
+    const dropdownIcon = document.getElementById('dropdown-season-icon');
+    dropdownContent.classList.toggle('hidden');
+    dropdownIcon.classList.toggle('fa-angle-down');
+    dropdownIcon.classList.toggle('fa-angle-up');
+});
+
+document.getElementById('dropdown-sillage-btn').addEventListener('click', function() {
+    const dropdownContent = document.getElementById('dropdown-sillage-content');
+    const dropdownIcon = document.getElementById('dropdown-sillage-icon');
+    dropdownContent.classList.toggle('hidden');
+    dropdownIcon.classList.toggle('fa-angle-down');
+    dropdownIcon.classList.toggle('fa-angle-up');
+});
+
+document.getElementById('dropdown-lasting-btn').addEventListener('click', function() {
+    const dropdownContent = document.getElementById('dropdown-lasting-content');
+    const dropdownIcon = document.getElementById('dropdown-lasting-icon');
+    dropdownContent.classList.toggle('hidden');
+    dropdownIcon.classList.toggle('fa-angle-down');
+    dropdownIcon.classList.toggle('fa-angle-up');
 });
 
 

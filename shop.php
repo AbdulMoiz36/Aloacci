@@ -5,6 +5,7 @@ $category_id = isset($_GET['category_id']) ? $_GET['category_id'] : '';
 $sub_category_id = isset($_GET['sub_category_id']) ? $_GET['sub_category_id'] : '';
 $price_filter = isset($_GET['price_filter']) ? $_GET['price_filter'] : '';
 $search_str = isset($_GET['search']) ? get_safe_value($con, $_GET['search']) : '';
+$sort = isset($_GET['sort']) ? $_GET['sort'] : ''; // Get the sort parameter
 
 // Function to build the URL with query parameters
 function build_url($base_url, $params) {
@@ -17,7 +18,8 @@ $params = [
     'category_id' => $category_id,
     'sub_category_id' => $sub_category_id,
     'price_filter' => $price_filter,
-    'search' => $search_str
+    'search' => $search_str,
+    'sort' => $sort // Include sort in the parameters
 ];
 
 // Get the base URL
@@ -26,17 +28,17 @@ $base_url = $_SERVER['PHP_SELF'];
 // Construct the URL based on the parameters
 $current_url = build_url($base_url, $params);
 
-// Fetch products based on filters
+// Fetch products based on filters and sorting
 if ($search_str) {
-    $get_product = get_product($con, '', '', '', $search_str);
+    $get_product = get_product($con, '', '', '', $search_str, false, '', '', $sort); // Pass sort to the function
 } elseif ($price_filter == 'less_1500') {
-    $get_product = get_product($con, '', $category_id, '', '', false, $sub_category_id, 1500);
+    $get_product = get_product($con, '', $category_id, '', '', false, $sub_category_id, 1500, $sort); // Pass sort to the function
 } elseif ($sub_category_id) {
-    $get_product = get_product($con, '', '', '', '', false, $sub_category_id);
+    $get_product = get_product($con, '', '', '', '', false, $sub_category_id, '', $sort); // Pass sort to the function
 } elseif ($category_id) {
-    $get_product = get_product($con, '', $category_id);
+    $get_product = get_product($con, '', $category_id, '', '', false, '', '', $sort); // Pass sort to the function
 } else {
-    $get_product = get_product($con);
+    $get_product = get_product($con, '', '', '', '', '', '', '', $sort); // Pass sort to the function
 }
 
 // Fetch distinct genders using a JOIN between product and gender tables
@@ -56,6 +58,42 @@ $genres = [];
 while ($row = mysqli_fetch_assoc($genreQuery)) {
     $genres[] = $row;
 }
+
+// Fetch distinct types using a JOIN between product and type tables
+$typeQuery = mysqli_query($con, "SELECT DISTINCT g.type, g.id FROM type g 
+                                   JOIN product p ON g.id = p.type_id 
+                                   WHERE p.status = 1");
+$types = [];
+while ($row = mysqli_fetch_assoc($typeQuery)) {
+    $types[] = $row;
+}
+
+// Fetch distinct seasons using a JOIN between product and season tables
+$seasonQuery = mysqli_query($con, "SELECT DISTINCT g.season, g.id FROM season g 
+                                   JOIN product p ON g.id = p.season_id 
+                                   WHERE p.status = 1");
+$seasons = [];
+while ($row = mysqli_fetch_assoc($seasonQuery)) {
+    $seasons[] = $row;
+}
+
+// Fetch distinct sillages using a JOIN between product and sillage tables
+$sillageQuery = mysqli_query($con, "SELECT DISTINCT g.sillage, g.id FROM sillage g 
+                                   JOIN product p ON g.id = p.sillage_id 
+                                   WHERE p.status = 1");
+$sillages = [];
+while ($row = mysqli_fetch_assoc($sillageQuery)) {
+    $sillages[] = $row;
+}
+
+// Fetch distinct lastings using a JOIN between product and lasting tables
+$lastingQuery = mysqli_query($con, "SELECT DISTINCT g.lasting, g.id FROM lasting g 
+                                   JOIN product p ON g.id = p.lasting_id 
+                                   WHERE p.status = 1");
+$lastings = [];
+while ($row = mysqli_fetch_assoc($lastingQuery)) {
+    $lastings[] = $row;
+}
 ?>
 
 <div class="w-full p-10 ">
@@ -72,6 +110,8 @@ while ($row = mysqli_fetch_assoc($genreQuery)) {
         <label for=""><span class="mr-2"><i class="fa-solid fa-arrow-down-wide-short"></i></span>Sort By: </label>
         <select onchange="window.location.href='<?= $current_url ?>&sort=' + this.value">
             <option value="">Select</option>
+            <option value="a_to_z">A to Z</option>
+            <option value="z_to_a">Z to A</option>
             <option value="price_low_high">Price: Low to High</option>
             <option value="price_high_low">Price: High to Low</option>
             <option value="newest">Newest</option>
@@ -128,6 +168,83 @@ while ($row = mysqli_fetch_assoc($genreQuery)) {
                 </div>
             </div>
         </div>
+
+        <!-- Type filter section -->
+        <div class="mt-4">
+            <div class="relative">
+                <p class="font-semibold cursor-pointer text-xl" id="dropdown-type-btn">
+                    Type
+                    <span class="ml-2"><i class="fa-solid fa-angle-down" id="dropdown-icon"></i></span>
+                </p>
+                <div id="dropdown-type-content" class="mt-2 text-lg">
+                    <?php foreach ($types as $type): ?>
+                    <label class="flex items-center hover:bg-gray-200 p-2 cursor-pointer">
+                        <input type="checkbox" value="<?= htmlspecialchars($type['id']) ?>"
+                            class="type-checkbox custom-checkbox mr-2" onclick="filterProducts()">
+                        <?= htmlspecialchars($type['type']) ?>
+                    </label>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        </div>
+
+        <!-- Season filter section -->
+        <div class="mt-4">
+            <div class="relative">
+                <p class="font-semibold cursor-pointer text-xl" id="dropdown-season-btn">
+                    Season
+                    <span class="ml-2"><i class="fa-solid fa-angle-down" id="dropdown-icon"></i></span>
+                </p>
+                <div id="dropdown-season-content" class="mt-2 text-lg">
+                    <?php foreach ($seasons as $season): ?>
+                    <label class="flex items-center hover:bg-gray-200 p-2 cursor-pointer">
+                        <input type="checkbox" value="<?= htmlspecialchars($season['id']) ?>"
+                            class="season-checkbox custom-checkbox mr-2" onclick="filterProducts()">
+                        <?= htmlspecialchars($season['season']) ?>
+                    </label>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sillage filter section -->
+        <div class="mt-4">
+            <div class="relative">
+                <p class="font-semibold cursor-pointer text-xl" id="dropdown-sillage-btn">
+                    Sillage
+                    <span class="ml-2"><i class="fa-solid fa-angle-down" id="dropdown-icon"></i></span>
+                </p>
+                <div id="dropdown-sillage-content" class="mt-2 text-lg">
+                    <?php foreach ($sillages as $sillage): ?>
+                    <label class="flex items-center hover:bg-gray-200 p-2 cursor-pointer">
+                        <input type="checkbox" value="<?= htmlspecialchars($sillage['id']) ?>"
+                            class="sillage-checkbox custom-checkbox mr-2" onclick="filterProducts()">
+                        <?= htmlspecialchars($sillage['sillage']) ?>
+                    </label>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lasting filter section -->
+        <div class="mt-4">
+            <div class="relative">
+                <p class="font-semibold cursor-pointer text-xl" id="dropdown-lasting-btn">
+                    Lasting
+                    <span class="ml-2"><i class="fa-solid fa-angle-down" id="dropdown-icon"></i></span>
+                </p>
+                <div id="dropdown-lasting-content" class="mt-2 text-lg">
+                    <?php foreach ($lastings as $lasting): ?>
+                    <label class="flex items-center hover:bg-gray-200 p-2 cursor-pointer">
+                        <input type="checkbox" value="<?= htmlspecialchars($lasting['id']) ?>"
+                            class="lasting-checkbox custom-checkbox mr-2" onclick="filterProducts()">
+                        <?= htmlspecialchars($lasting['lasting']) ?>
+                    </label>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <!-- Products section -->
@@ -149,7 +266,9 @@ while ($row = mysqli_fetch_assoc($genreQuery)) {
             }
         ?>
         <div class="product-card w-96 md:w-72 h-[40rem] md:h-[30rem] flex gap-2 flex-col relative group shadow"
-            data-gender-id="<?= $list['gender_id'] ?>" data-genre-id="<?= $list['genre_id'] ?>">
+            data-gender-id="<?= $list['gender_id'] ?>" data-genre-id="<?= $list['genre_id'] ?>"
+            data-type-id="<?= $list['type_id'] ?>" data-season-id="<?= $list['season_id'] ?>"
+            data-sillage-id="<?= $list['sillage_id'] ?>" data-lasting-id="<?= $list['lasting_id'] ?>">
             <div class="openModalBtn z-10 absolute -top-2 -right-2 bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full p-3 flex items-center justify-center text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out cursor-pointer"
                 data-product-id="<?= $list['id'] ?>" data-product-name="<?= $list['name'] ?>"
                 data-product-formats="<?= htmlspecialchars(json_encode($product_formats)) ?>">
@@ -188,26 +307,58 @@ while ($row = mysqli_fetch_assoc($genreQuery)) {
     function filterProducts() {
         const selectedGenders = Array.from(document.querySelectorAll('.gender-checkbox:checked')).map(checkbox =>
             checkbox.value);
-        const selectedGenres = Array.from(document.querySelectorAll('.genre-checkbox:checked')).map(checkbox => checkbox
-            .value);
+        const selectedGenres = Array.from(document.querySelectorAll('.genre-checkbox:checked')).map(checkbox =>
+            checkbox.value);
+        const selectedTypes = Array.from(document.querySelectorAll('.type-checkbox:checked')).map(checkbox =>
+            checkbox.value);
+        const selectedSeasons = Array.from(document.querySelectorAll('.season-checkbox:checked')).map(checkbox =>
+            checkbox.value);
+        const selectedSillages = Array.from(document.querySelectorAll('.sillage-checkbox:checked')).map(checkbox =>
+            checkbox.value);
+        const selectedLastings = Array.from(document.querySelectorAll('.lasting-checkbox:checked')).map(checkbox =>
+            checkbox.value);
         // Update URL with selected filters, removing empty parameters
         const url = new URL(window.location.href);
         url.searchParams.delete('genders');
         url.searchParams.delete('genres');
+        url.searchParams.delete('types');
+        url.searchParams.delete('seasons');
+        url.searchParams.delete('sillages');
+        url.searchParams.delete('lastings');
         if (selectedGenders.length) {
             url.searchParams.set('genders', selectedGenders.join(','));
         }
         if (selectedGenres.length) {
             url.searchParams.set('genres', selectedGenres.join(','));
         }
+        if (selectedTypes.length) {
+            url.searchParams.set('types', selectedTypes.join(','));
+        }
+        if (selectedSeasons.length) {
+            url.searchParams.set('seasons', selectedSeasons.join(','));
+        }
+        if (selectedSillages.length) {
+            url.searchParams.set('sillages', selectedSillages.join(','));
+        }
+        if (selectedLastings.length) {
+            url.searchParams.set('lastings', selectedLastings.join(','));
+        }
         window.history.replaceState({}, '', url);
         const products = document.querySelectorAll('.product-card');
         products.forEach(product => {
             const genderId = product.getAttribute('data-gender-id');
             const genreId = product.getAttribute('data-genre-id');
+            const typeId = product.getAttribute('data-type-id');
+            const seasonId = product.getAttribute('data-season-id');
+            const sillageId = product.getAttribute('data-sillage-id');
+            const lastingId = product.getAttribute('data-lasting-id');
             const genderMatch = selectedGenders.length === 0 || selectedGenders.includes(genderId);
             const genreMatch = selectedGenres.length === 0 || selectedGenres.includes(genreId);
-            if (genderMatch && genreMatch) {
+            const typeMatch = selectedTypes.length === 0 || selectedTypes.includes(typeId);
+            const seasonMatch = selectedSeasons.length === 0 || selectedSeasons.includes(seasonId);
+            const sillageMatch = selectedSillages.length === 0 || selectedSillages.includes(sillageId);
+            const lastingMatch = selectedLastings.length === 0 || selectedLastings.includes(lastingId);
+            if (genderMatch && genreMatch && typeMatch && seasonMatch && sillageMatch && lastingMatch) {
                 // Instead of 'block', use 'flex' if you're using flexbox for layout
                 product.style.display = 'flex'; // or 'grid' if you're using a CSS grid layout
             } else {
@@ -220,17 +371,35 @@ while ($row = mysqli_fetch_assoc($genreQuery)) {
             url.searchParams.set('sort', this.value);
             window.location.href = url.toString();
         });
+        document.querySelector(`select option[value="${new URLSearchParams(window.location.search).get('sort')}"]`)
+            .selected = true;
     }
     // Function to set checkbox states from URL parameters
     function setCheckboxStates() {
         const urlParams = new URLSearchParams(window.location.search);
         const selectedGenders = urlParams.get('genders') ? urlParams.get('genders').split(',') : [];
         const selectedGenres = urlParams.get('genres') ? urlParams.get('genres').split(',') : [];
+        const selectedTypes = urlParams.get('types') ? urlParams.get('types').split(',') : [];
+        const selectedSeasons = urlParams.get('seasons') ? urlParams.get('seasons').split(',') : [];
+        const selectedSillages = urlParams.get('sillages') ? urlParams.get('sillages').split(',') : [];
+        const selectedLastings = urlParams.get('lastings') ? urlParams.get('lastings').split(',') : [];
         document.querySelectorAll('.gender-checkbox').forEach(checkbox => {
             checkbox.checked = selectedGenders.includes(checkbox.value);
         });
         document.querySelectorAll('.genre-checkbox').forEach(checkbox => {
             checkbox.checked = selectedGenres.includes(checkbox.value);
+        });
+        document.querySelectorAll('.type-checkbox').forEach(checkbox => {
+            checkbox.checked = selectedTypes.includes(checkbox.value);
+        });
+        document.querySelectorAll('.season-checkbox').forEach(checkbox => {
+            checkbox.checked = selectedSeasons.includes(checkbox.value);
+        });
+        document.querySelectorAll('.sillage-checkbox').forEach(checkbox => {
+            checkbox.checked = selectedSillages.includes(checkbox.value);
+        });
+        document.querySelectorAll('.lasting-checkbox').forEach(checkbox => {
+            checkbox.checked = selectedLastings.includes(checkbox.value);
         });
         // Call filter function to filter products based on the loaded checkboxes
         filterProducts();
