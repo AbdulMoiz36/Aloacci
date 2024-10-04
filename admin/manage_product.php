@@ -144,7 +144,7 @@ if (isset($_REQUEST['submit'])) {
             $folder2 = "../image/" . $image2;
             move_uploaded_file($tempname2, $folder2);
 
-            mysqli_query($con, "INSERT INTO product (`category_id`, `sub_category_id`, `name`, `gender_id`, `genre_id`, `type_id`, `season_id`, `sillage_id`, `type_id`, `qty`, `breif`, `description`, `status`, `image`, `image2`) VALUES ('$category_id', '$sub_category_id', '$name', '$gender_id', '$genre_id', '$type_id', '$season_id', '$sillage_id', '$lasting_id', '$qty', '$breif', '$description', '1', '$image', '$image2')");
+            mysqli_query($con, "INSERT INTO product (`category_id`, `sub_category_id`, `name`, `gender_id`, `genre_id`, `type_id`, `season_id`, `sillage_id`, `lasting`, `qty`, `breif`, `description`, `status`, `image`, `image2`) VALUES ('$category_id', '$sub_category_id', '$name', '$gender_id', '$genre_id', '$type_id', '$season_id', '$sillage_id', '$lasting_id', '$qty', '$breif', '$description', '1', '$image', '$image2')");
             $product_id = mysqli_insert_id($con);
 
             // Insert format and price in product_format table
