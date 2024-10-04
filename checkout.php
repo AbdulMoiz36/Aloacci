@@ -32,9 +32,8 @@ if (isset($_POST['submit'])) {
     $total_price = $cart_total; // Use the calculated total price
     $order_status = '1';
     $date = date('y-m-d h:m:s');
-    $tracking_id = "#" . rand(1111111, 9999999);
 
-    mysqli_query($con, "INSERT INTO orders (tracking_id, user_id, email, mobile, address, city, total_price, order_status, date) VALUES ('$tracking_id', '$user_id', '$email', '$mobile', '$address', '$city', '$total_price', '$order_status', '$date')");
+    mysqli_query($con, "INSERT INTO orders (user_id, email, mobile, address, city, total_price, order_status, date) VALUES ('$user_id', '$email', '$mobile', '$address', '$city', '$total_price', '$order_status', '$date')");
 
     $order_id = mysqli_insert_id($con);
 

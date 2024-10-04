@@ -11,6 +11,7 @@ if ($product_id > 0) {
 // Escape product data for output
 $product_image = htmlspecialchars($get_product[0]['image']);
 $product_image2 = htmlspecialchars($get_product[0]['image2']);
+$product_image3 = htmlspecialchars($get_product[0]['image3']);
 $product_name = htmlspecialchars($get_product[0]['name']);
 $product_price = htmlspecialchars($get_product[0]['price']);
 $brief = htmlspecialchars($get_product[0]['breif']);
@@ -32,6 +33,10 @@ $total_reviews = mysqli_fetch_array($reviewsql);
                     <?php endif; ?>
                     <?php if (!empty($product_image2)): ?>
                         <img src="./image/<?= $product_image2 ?>" alt="Thumbnail 2"
+                            class="cursor-pointer border-2 border-slate-200" onclick="changeImage(this.src)">
+                    <?php endif; ?>
+                    <?php if (!empty($product_image3)): ?>
+                        <img src="./image/<?= $product_image3 ?>" alt="Thumbnail 2"
                             class="cursor-pointer border-2 border-slate-200" onclick="changeImage(this.src)">
                     <?php endif; ?>
                 </div>

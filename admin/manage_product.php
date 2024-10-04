@@ -12,8 +12,14 @@ $sub_category_id = '';
 $name = '';
 $format = '';
 $format2 = '';
+$format3 = '';
+$format4 = '';
+$format5 = '';
 $price = '';
 $price2 = '';
+$price3 = '';
+$price4 = '';
+$price5 = '';
 $gender_id = '';
 $genre_id = '';
 $type_id = '';
@@ -23,6 +29,7 @@ $lasting_id = '';
 $qty = '';
 $image = '';
 $image2 = '';
+$image3 = '';
 $breif = '';
 $description = '';
 $image_required = 'required';
@@ -51,6 +58,7 @@ if (isset($_GET['id']) && $_GET['id'] != '') {
         $description = $row['description'];
         $image = $row['image'];
         $image2 = $row['image2'];
+        $image3 = $row['image3'];
 
         // Fetch product formats and prices from product_format table
         $format_res = mysqli_query($con, "SELECT * FROM product_format WHERE product_id=$_id");
@@ -64,6 +72,12 @@ if (isset($_GET['id']) && $_GET['id'] != '') {
             $price = $formats[0]['price'];
             $format2 = isset($formats[1]) ? $formats[1]['format'] : '';
             $price2 = isset($formats[1]) ? $formats[1]['price'] : '';
+            $format3 = isset($formats[2]) ? $formats[2]['format'] : '';
+            $price3 = isset($formats[2]) ? $formats[2]['price'] : '';
+            $format4 = isset($formats[3]) ? $formats[3]['format'] : '';
+            $price4 = isset($formats[3]) ? $formats[3]['price'] : '';
+            $format5 = isset($formats[4]) ? $formats[4]['format'] : '';
+            $price5 = isset($formats[4]) ? $formats[4]['price'] : '';
         }
     } else {
         header('Location: product.php');
@@ -79,6 +93,12 @@ if (isset($_REQUEST['submit'])) {
     $price = get_safe_value($con, $_REQUEST['price']);
     $format2 = get_safe_value($con, $_REQUEST['format2']);
     $price2 = get_safe_value($con, $_REQUEST['price2']);
+    $format3 = get_safe_value($con, $_REQUEST['format3']);
+    $price3 = get_safe_value($con, $_REQUEST['price3']);
+    $format4 = get_safe_value($con, $_REQUEST['format4']);
+    $price4 = get_safe_value($con, $_REQUEST['price4']);
+    $format5 = get_safe_value($con, $_REQUEST['format5']);
+    $price5 = get_safe_value($con, $_REQUEST['price5']);
     $gender_id = get_safe_value($con, $_REQUEST['gender_id']);
     $genre_id = get_safe_value($con, $_REQUEST['genre_id']);
     $type_id = get_safe_value($con, $_REQUEST['type_id']);
@@ -105,6 +125,9 @@ if (isset($_REQUEST['submit'])) {
     if ($_FILES['image2']['type'] != '' && !in_array($_FILES['image2']['type'], ['image/png', 'image/jpg', 'image/jpeg'])) {
         $msg = "Please select only png, jpg, or jpeg format for Image 2";
     }
+    if ($_FILES['image3']['type'] != '' && !in_array($_FILES['image3']['type'], ['image/png', 'image/jpg', 'image/jpeg'])) {
+        $msg = "Please select only png, jpg, or jpeg format for Image 2";
+    }
 
     if ($msg == '') {
         if (isset($_GET['id']) && $_GET['id'] != '') {
@@ -123,13 +146,29 @@ if (isset($_REQUEST['submit'])) {
                 move_uploaded_file($tempname2, $folder2);
             }
 
-            mysqli_query($con, "update product set category_id='$category_id', sub_category_id='$sub_category_id', name='$name', gender_id='$gender_id', genre_id='$genre_id', type_id='$type_id', season_id='$season_id', sillage_id='$sillage_id', lasting_id='$lasting_id', qty='$qty', breif='$breif', description='$description', image='$image', image2='$image2' where id='$_id'");
+            if ($_FILES["image3"]["name"] != '') {
+                $image3 = $_FILES["image3"]["name"];
+                $tempname3 = $_FILES["image3"]["tmp_name"];
+                $folder3 = "../image/" . $image3;
+                move_uploaded_file($tempname3, $folder3);
+            }
+
+            mysqli_query($con, "update product set category_id='$category_id', sub_category_id='$sub_category_id', name='$name', gender_id='$gender_id', genre_id='$genre_id', type_id='$type_id', season_id='$season_id', sillage_id='$sillage_id', lasting_id='$lasting_id', qty='$qty', breif='$breif', description='$description', image='$image', image2='$image2', image3='$image3' where id='$_id'");
 
             // Update format and price in product_format table
             mysqli_query($con, "DELETE FROM product_format WHERE product_id='$_id'");
             mysqli_query($con, "INSERT INTO product_format (`product_id`, `format`, `price`) VALUES ('$_id', '$format', '$price')");
             if ($format2 != '' && $price2 != '') {
                 mysqli_query($con, "INSERT INTO product_format (`product_id`, `format`, `price`) VALUES ('$_id', '$format2', '$price2')");
+            }
+            if ($format3 != '' && $price3 != '') {
+                mysqli_query($con, "INSERT INTO product_format (`product_id`, `format`, `price`) VALUES ('$_id', '$format3', '$price3')");
+            }
+            if ($format4 != '' && $price4 != '') {
+                mysqli_query($con, "INSERT INTO product_format (`product_id`, `format`, `price`) VALUES ('$_id', '$format4', '$price4')");
+            }
+            if ($format5 != '' && $price5 != '') {
+                mysqli_query($con, "INSERT INTO product_format (`product_id`, `format`, `price`) VALUES ('$_id', '$format5', '$price5')");
             }
 
         } else {
@@ -144,13 +183,27 @@ if (isset($_REQUEST['submit'])) {
             $folder2 = "../image/" . $image2;
             move_uploaded_file($tempname2, $folder2);
 
-            mysqli_query($con, "INSERT INTO product (`category_id`, `sub_category_id`, `name`, `gender_id`, `genre_id`, `type_id`, `season_id`, `sillage_id`, `lasting_id`, `qty`, `breif`, `description`, `status`, `image`, `image2`) VALUES ('$category_id', '$sub_category_id', '$name', '$gender_id', '$genre_id', '$type_id', '$season_id', '$sillage_id', '$lasting_id', '$qty', '$breif', '$description', '1', '$image', '$image2')");
+            $image3 = $_FILES["image3"]["name"];
+            $tempname3 = $_FILES["image3"]["tmp_name"];
+            $folder3 = "../image/" . $image3;
+            move_uploaded_file($tempname3, $folder3);
+
+            mysqli_query($con, "INSERT INTO product (`category_id`, `sub_category_id`, `name`, `gender_id`, `genre_id`, `type_id`, `season_id`, `sillage_id`, `lasting_id`, `qty`, `breif`, `description`, `status`, `image`, `image2`, `image3`) VALUES ('$category_id', '$sub_category_id', '$name', '$gender_id', '$genre_id', '$type_id', '$season_id', '$sillage_id', '$lasting_id', '$qty', '$breif', '$description', '1', '$image', '$image2', '$image3')");
             $product_id = mysqli_insert_id($con);
 
             // Insert format and price in product_format table
             mysqli_query($con, "INSERT INTO product_format (`product_id`, `format`, `price`) VALUES ('$product_id', '$format', '$price')");
             if ($format2 != '' && $price2 != '') {
                 mysqli_query($con, "INSERT INTO product_format (`product_id`, `format`, `price`) VALUES ('$product_id', '$format2', '$price2')");
+            }
+            if ($format3 != '' && $price3 != '') {
+                mysqli_query($con, "INSERT INTO product_format (`product_id`, `format`, `price`) VALUES ('$product_id', '$format3', '$price3')");
+            }
+            if ($format4 != '' && $price4 != '') {
+                mysqli_query($con, "INSERT INTO product_format (`product_id`, `format`, `price`) VALUES ('$product_id', '$format4', '$price4')");
+            }
+            if ($format5 != '' && $price5 != '') {
+                mysqli_query($con, "INSERT INTO product_format (`product_id`, `format`, `price`) VALUES ('$product_id', '$format5', '$price5')");
             }
         }
 
@@ -233,20 +286,20 @@ if (isset($_REQUEST['submit'])) {
                     </script>
 
                     <div class="form-group">
-                        <label for="categories" class="form-control-label">Product name</label>
+                        <label for="product" class="form-control-label">Product name</label>
                         <input type="text" name="name" placeholder="Enter Product name" class="form-control" required
                             value="<?= $name ?>">
                     </div>
 
                     <div class="form-row">
                         <div class="form-group col-6">
-                            <label for="categories" class="form-control-label">Format</label>
+                            <label for="format" class="form-control-label">Format</label>
                             <input type="text" name="format" placeholder="Enter Product Format" class="form-control"
                                 required value="<?= $format ?>">
                         </div>
 
                         <div class="form-group col-6">
-                            <label for="categories" class="form-control-label">Price</label>
+                            <label for="price" class="form-control-label">Price</label>
                             <input type="text" name="price" placeholder="Enter Product price" class="form-control"
                                 required value="<?= $price ?>">
                         </div>
@@ -254,15 +307,57 @@ if (isset($_REQUEST['submit'])) {
 
                     <div class="form-row">
                         <div class="form-group col-6">
-                            <label for="categories" class="form-control-label">Format 2</label>
-                            <input type="text" name="format2" placeholder="Enter Product Format 2" class="form-control"
+                            <label for="format2" class="form-control-label">Format</label>
+                            <input type="text" name="format2" placeholder="Enter Product Format" class="form-control"
                                 value="<?= $format2 ?>">
                         </div>
 
                         <div class="form-group col-6">
-                            <label for="categories" class="form-control-label">Price</label>
-                            <input type="text" name="price2" placeholder="Enter Product Price 2" class="form-control"
+                            <label for="price2" class="form-control-label">Price</label>
+                            <input type="text" name="price2" placeholder="Enter Product Price" class="form-control"
                                 value="<?= $price2 ?>">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-6">
+                            <label for="format3" class="form-control-label">Format</label>
+                            <input type="text" name="format3" placeholder="Enter Product Format" class="form-control"
+                                value="<?= $format3 ?>">
+                        </div>
+
+                        <div class="form-group col-6">
+                            <label for="price3" class="form-control-label">Price</label>
+                            <input type="text" name="price3" placeholder="Enter Product Price" class="form-control"
+                                value="<?= $price3 ?>">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-6">
+                            <label for="format4" class="form-control-label">Format</label>
+                            <input type="text" name="format4" placeholder="Enter Product Format" class="form-control"
+                                value="<?= $format4 ?>">
+                        </div>
+
+                        <div class="form-group col-6">
+                            <label for="price4" class="form-control-label">Price</label>
+                            <input type="text" name="price4" placeholder="Enter Product Price" class="form-control"
+                                value="<?= $price4 ?>">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-6">
+                            <label for="format5" class="form-control-label">Format</label>
+                            <input type="text" name="format5" placeholder="Enter Product Format" class="form-control"
+                                value="<?= $format5 ?>">
+                        </div>
+
+                        <div class="form-group col-6">
+                            <label for="price5" class="form-control-label">Price</label>
+                            <input type="text" name="price5" placeholder="Enter Product Price" class="form-control"
+                                value="<?= $price5 ?>">
                         </div>
                     </div>
 
@@ -417,29 +512,34 @@ if (isset($_REQUEST['submit'])) {
                     </div>
 
                     <div class="form-group">
-                        <label for="categories" class="form-control-label">Qty</label>
+                        <label for="qty" class="form-control-label">Qty</label>
                         <input type="text" name="qty" placeholder="Enter Qty" class="form-control" required
                             value="<?= $qty ?>">
                     </div>
 
                     <div class="form-group">
-                        <label for="categories" class="form-control-label">Image</label>
+                        <label for="image" class="form-control-label">Image</label>
                         <input type="file" name="image" class="form-control" <?= $image_required ?>>
                     </div>
 
                     <div class="form-group">
-                        <label for="categories" class="form-control-label">Image 2</label>
+                        <label for="image2" class="form-control-label">Image 2</label>
                         <input type="file" name="image2" class="form-control">
                     </div>
 
                     <div class="form-group">
-                        <label for="categories" class="form-control-label">Brief</label>
+                        <label for="image3" class="form-control-label">Image 3</label>
+                        <input type="file" name="image3" class="form-control">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="brief" class="form-control-label">Brief</label>
                         <textarea name="breif" placeholder="Enter Product Brief"
                             class="form-control"><?= $breif ?></textarea>
                     </div>
 
                     <div class="form-group">
-                        <label for="categories" class="form-control-label">Description</label>
+                        <label for="description" class="form-control-label">Description</label>
                         <textarea name="description" placeholder="Enter Product Description"
                             class="form-control"><?= $description ?></textarea>
                     </div>

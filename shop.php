@@ -106,18 +106,20 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
     class="w-full py-3 flex flex-wrap justify-around md:justify-end px-2 md:px-10 border-b-2 border-slate-200 sticky md:static top-0 z-10 bg-white">
     <p class="md:hidden cursor-pointer" id="filter-btn"><span class="mr-2"><i
                 class="fa-solid fa-sliders"></i></span>Filter</p>
-                <div>
-    <label for=""><span class="mr-2"><i class="fa-solid fa-arrow-down-wide-short"></i></span>Sort By: </label>
-    <select class="w-auto pr-2" onchange="window.location.href='<?= $current_url ?>&sort=' + this.value">
-        <option value="">Select</option>
-        <option value="a_to_z">A to Z</option>
-        <option value="z_to_a">Z to A</option>
-        <option value="price_low_high">Price:Low to High</option>
-        <option value="price_high_low">Price:High to Low</option>
-        <option value="newest">Newest</option>
-    </select>
-</div>
+    <div>
+        <label for=""><span class="mr-2"><i class="fa-solid fa-arrow-down-wide-short"></i></span>Sort By: </label>
+        <select id="sort-dropdown" onchange="applySort(this.value)">
+            <option value="" <?= ($sort == '') ? 'selected' : '' ?>>Select</option>
+            <option value="a_to_z" <?= ($sort == 'a_to_z') ? 'selected' : '' ?>>A to Z</option>
+            <option value="z_to_a" <?= ($sort == 'z_to_a') ? 'selected' : '' ?>>Z to A</option>
+            <option value="price_low_high" <?= ($sort == 'price_low_high') ? 'selected' : '' ?>>Price: Low to High
+            </option>
+            <option value="price_high_low" <?= ($sort == 'price_high_low') ? 'selected' : '' ?>>Price: High to Low
+            </option>
+            <option value="newest" <?= ($sort == 'newest') ? 'selected' : '' ?>>Newest</option>
+        </select>
 
+    </div>
 </div>
 
 <!-- Main section with filter and products -->

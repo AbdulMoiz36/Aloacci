@@ -31,7 +31,7 @@ function user_register() {
     }
     else {
         // Check phone format using regular expressions
-        var mobileRegex03 = /^03[1-4]\d{8}$/;
+        var mobileRegex03 = /^03[0-7]\d{8}$/;
         var mobileRegex021 = /^021\d{8}$/;
 
         if (!mobile.match(mobileRegex03) && !mobile.match(mobileRegex021)) {
