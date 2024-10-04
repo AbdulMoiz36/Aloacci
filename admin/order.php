@@ -17,11 +17,11 @@ $res = mysqli_query($con,$select);
                       <table class="table table-striped" id="table-1">
                       <thead>
                                     <tr>
-                                       <th>Tracking Id</th>
-                                       <th>User Id</th>
-                                       <th>Order Date</th>
-                                       <th>Address</th>
-                                       <th>Order Status</th>
+                                      <th>User Id</th>
+                                      <th>Order Date</th>
+                                      <th>Address</th>
+                                      <th>Order Status</th>
+                                      <th>View</th>
                                     </tr>
                                  </thead>
                                  <tbody>
@@ -30,38 +30,39 @@ $res = mysqli_query($con,$select);
                                     while($row=mysqli_fetch_assoc($res)){
                                     ?>
                                     <tr class=" pb-0">
-                                       <td> <a href="orders_detail.php?id=<?= $row['id'] ?>"><?= $row['tracking_id'] ?></a> </td>
-                                       <td> <?= $row['user_id'] ?> </td>
-                                       <td> <?= $row['date'] ?> </td>
-                                       <td style="text-transform: none">
-                                       <?= $row['address'] ?>
-                                       </td>
-                                       <td>
-                                       <?php
-                                          if($row['order_status']=='1'){
-                                        ?>
-                                            <span class='badge badge-warning'> <?= $row['order_status_str'] ?> </sapn>
+                                      <td> <?= $row['user_id'] ?> </td>
+                                      <td> <?= $row['date'] ?> </td>
+                                      <td style="text-transform: none">
+                                        <?= $row['address'] ?>
+                                      </td>
+                                      <td>
                                         <?php
+                                          if($row['order_status']=='1'){
+                                            ?>
+                                            <span class='badge badge-warning'> <?= $row['order_status_str'] ?> </sapn>
+                                            <?php
                                           }
                                           elseif($row['order_status']=='2'){
-                                        ?>
+                                            ?>
                                         <span class='badge badge-info'> <?= $row['order_status_str'] ?> </sapn>
                                         <?php
                                           }elseif($row['order_status']=='3'){
-                                        ?>
+                                            ?>
                                           <span class='badge badge-secondary'> <?= $row['order_status_str'] ?> </sapn>
-                                        <?php
+                                          <?php
                                           }elseif($row['order_status']=='4'){
-                                        ?>
+                                            ?>
                                           <span class='badge badge-danger'> <?= $row['order_status_str'] ?> </sapn>
-                                        <?php
+                                          <?php
                                           }else{
-                                        ?>
+                                            ?>
                                           <span class='badge badge-success'> <?= $row['order_status_str'] ?> </sapn>
-                                        <?php
+                                          <?php
                                           }
-                                        ?>
+                                          ?>
                                         </td>
+                                        <td> <a class="btn btn-icon btn-primary"data-toggle="tooltip"
+                                        title="View" href="orders_detail.php?id=<?= $row['id'] ?>"><i class="fas fa-eye"></i></a> </td>
                                     </tr>
                                     <?php
                                     }

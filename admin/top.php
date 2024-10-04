@@ -102,8 +102,8 @@ $row = mysqli_fetch_array($res);
             <li class="dropdown <?= $active=="contact_us.php"? 'active':''; ?>">
               <a href="contact_us.php" class="nav-link"><i data-feather="monitor"></i><span>Contact Us</span></a>
             </li>
-            <li class="dropdown <?= $active=="feedback.php"? 'active':''; ?>">
-              <a href="feedback.php" class="nav-link"><i data-feather="monitor"></i><span>Feedback</span></a>
+            <li class="dropdown <?= $active=="review.php"? 'active':''; ?>">
+              <a href="review.php" class="nav-link"><i data-feather="monitor"></i><span>Review</span></a>
             </li>
             <li class="menu-header">Admin Users</li>
             <li class="dropdown <?= $active=="panel_users.php"? 'active':''; ?>">
