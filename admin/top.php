@@ -29,6 +29,7 @@ $row = mysqli_fetch_array($res);
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
   <title>Aloacci - Admin Dashboard</title>
+  <link rel='shortcut icon' type='image/x-icon' href='../img/logo-cropped-bottom.png' />
   <!-- General CSS Files -->
   <link rel="stylesheet" href="assets/css/app.min.css">
   <link rel="stylesheet" href="assets/bundles/datatables/datatables.min.css">
@@ -38,7 +39,6 @@ $row = mysqli_fetch_array($res);
   <link rel="stylesheet" href="assets/css/components.css">
   <!-- Custom style CSS -->
   <link rel="stylesheet" href="assets/css/custom.css">
-  <link rel='shortcut icon' type='image/x-icon' href='../img/logo-cropped-bottom.png' />
 </head>
 
 <body>

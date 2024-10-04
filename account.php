@@ -93,7 +93,17 @@ $osql = mysqli_query($con, "SELECT o.total_price, o.id, o.date, os.name as order
                 <p class="mb-2"><?= $user['name'] ?></p>
                 <p class="mb-2"><?= $user['email'] ?></p>
                 <p class="mb-2"><?= $user['mobile'] ?></p>
-                <p class="text-gray-700 mb-2"><?= $user['address'] ?>, <?= $user['city'] ?></p>
+                <?php if (!empty($user['address']) && !empty($user['city'])): ?>
+                    <p class="text-gray-700 mb-2"><?= htmlspecialchars($user['address']) ?>, <?= htmlspecialchars($user['city']) ?></p>
+                <?php elseif (!empty($user['address'])): ?>
+                    <p class="text-gray-700 mb-2"><?= htmlspecialchars($user['address']) ?></p>
+                <?php elseif (!empty($user['city'])): ?>
+                    <p class="text-gray-700 mb-2"><?= htmlspecialchars($user['city']) ?></p>
+                <?php else: ?>
+                    <p class="text-gray-400 mb-2">No address</p>
+                <?php endif; ?>
+
+
                 <a href="edit_address.php"><button class="p-2 rounded-md text-white font-semibold bg-amber-500 mt-4">Edit Address</button></a>
             </div>
         </div>

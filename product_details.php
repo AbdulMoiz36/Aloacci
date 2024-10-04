@@ -13,8 +13,11 @@ $product_image = htmlspecialchars($get_product[0]['image']);
 $product_image2 = htmlspecialchars($get_product[0]['image2']);
 $product_name = htmlspecialchars($get_product[0]['name']);
 $product_price = htmlspecialchars($get_product[0]['price']);
+$brief = htmlspecialchars($get_product[0]['breif']);
 $product_formats = array_map('htmlspecialchars', array_column($get_product, 'format'));
 $product_prices = array_map('htmlspecialchars', array_column($get_product, 'price'));
+$reviewsql = mysqli_query($con,"SELECT COUNT(*) AS total_reviews FROM reviews WHERE product_id = '$product_id';");
+$total_reviews = mysqli_fetch_array($reviewsql);
 ?>
 
 <section class="w-full">
@@ -44,7 +47,7 @@ $product_prices = array_map('htmlspecialchars', array_column($get_product, 'pric
         <div class="w-full md:w-1/2 flex flex-col justify-center md:justify-start p-10 gap-6">
             <div>
                 <h1 class="font-bold text-3xl"><?= $product_name ?></h1>
-                <p>12 Reviews</p>
+                <p><?= $total_reviews['total_reviews'] ?> Reviews</p>
             </div>
 
             <?php
@@ -57,11 +60,11 @@ $product_prices = array_map('htmlspecialchars', array_column($get_product, 'pric
             <!-- Product Formats and Prices -->
             <div class="mt-4">
                 <p class="font-semibold">Select Format:</p>
-                <div id="format-container" class="flex flex-col">
+                <div id="format-container" class="flex gap-3 flex-wrap">
                     <?php foreach ($product_formats as $index => $format): ?>
                         <div class="format-option border-2 border-black p-2 cursor-pointer my-2 <?= $index === 0 ? 'bg-gray-200' : '' ?> w-fit"
                             data-price="<?= $product_prices[$index] ?>">
-                            <?= $format ?>ml - Rs. <?= $product_prices[$index] ?>
+                            <?= $format ?> - Rs. <?= $product_prices[$index] ?>
                         </div>
                     <?php endforeach; ?>
                 </div>
@@ -127,7 +130,9 @@ $product_prices = array_map('htmlspecialchars', array_column($get_product, 'pric
             <!-- Add to Cart Button -->
             <?php if (!isset($_SESSION['USER_LOGIN'])): ?>
                 <div>
-                    <a href="login.php" class="border-2 border-black text-lg font-semibold rounded-full mb-2 p-3">Add To Cart</a>
+                    <a href="login.php">
+                        <div class="border-2 border-black text-lg font-semibold rounded-full text-center mb-2 p-3 w-full">Add To Cart</div>
+                    </a>
                 </div>
             <?php else: ?>
                 <button id="addToCartBtn" class="border-2 border-black text-lg font-semibold rounded-full mb-2 p-3"
@@ -147,34 +152,98 @@ $product_prices = array_map('htmlspecialchars', array_column($get_product, 'pric
                         manage_cart(productId, 'add', quantity, format, price); // Pass the quantity and format
                     }
                 }
+
+                function buyNow(productId) {
+                    const selectedFormat = document.querySelector('#format-container .bg-gray-200'); // Get the selected format
+                    const quantity = document.getElementById('qty').value; // Get the quantity
+                    if (selectedFormat) {
+                        const format = selectedFormat.innerText.split(' - ')[0]; // Get the format text (remove price)
+                        const price = selectedFormat.dataset.price; // Get the price of the selected format
+
+                        // Call manage_cart and then immediately redirect
+                        manage_cart(productId, 'add', quantity, format, price);
+
+                        // Redirect to checkout
+                        window.location.href = "checkout.php";
+                    }
+                }
             </script>
 
             <!-- Buy It Now Button -->
-            <div>
-                <button class="w-full p-3 border-2 hover:cursor-pointer bg-gradient-to-bl from-yellow-500 via-yellow-500 to-amber-600 shadow-sm hover:shadow-xl transition-shadow ease-in-out duration-300 font-semibold rounded-full text-white">Buy It Now</button>
-            </div>
+            <?php if (!isset($_SESSION['USER_LOGIN'])): ?>
+                <div>
+                    <a href="login.php">
+                        <div class="w-full p-3 border-2 hover:cursor-pointer bg-gradient-to-bl text-center from-yellow-500 via-yellow-500 to-amber-600 shadow-sm hover:shadow-xl transition-shadow ease-in-out duration-300 font-semibold rounded-full text-white">Buy It Now</div>
+                    </a>
+                </div>
+            <?php else: ?>
+                <div onclick="buyNow('<?= $get_product[0]['id'] ?>')" class="w-full p-3 text-center border-2 hover:cursor-pointer bg-gradient-to-bl from-yellow-500 via-yellow-500 to-amber-600 shadow-sm hover:shadow-xl transition-shadow ease-in-out duration-300 font-semibold rounded-full text-white">Buy It Now</div>
+            <?php endif; ?>
+
 
             <!-- Tabs -->
             <div>
-                <div class="flex justify-evenly flex-wrap lg:flex-nowrap align-middle">
-                    <?php
-                    $tabs = ['Brief', 'Description', 'Performance', 'Shipping', 'Unboxing Video'];
-                    foreach ($tabs as $index => $tab) {
-                        $activeClass = $index === 0 ? 'bg-slate-900' : 'bg-slate-900';
-                        echo "<button class='tab-button font-bold text-white $activeClass p-3 w-full hover:bg-slate-200 hover:text-black' onclick='showTab(\"tab" . ($index + 1) . "\")'>$tab</button>";
-                    }
-                    ?>
+                <!-- Tab Buttons -->
+                <div class="flex justify-evenly flex-wrap lg:flex-nowrap items-center">
+                    <button class="tab-button font-bold text-white bg-slate-900 p-3 w-full hover:bg-slate-200 hover:text-black" onclick="showTab(1)">Description</button>
+                    <!-- <button class="tab-button font-bold text-white bg-slate-900 p-3 w-full hover:bg-slate-200 hover:text-black" onclick="showTab(2)">Description</button> -->
+                    <button class="tab-button font-bold text-white bg-slate-900 p-3 w-full hover:bg-slate-200 hover:text-black" onclick="showTab(3)">Performance</button>
+                    <button class="tab-button font-bold text-white bg-slate-900 p-3 w-full hover:bg-slate-200 hover:text-black" onclick="showTab(4)">Shipping</button>
                 </div>
 
+                <!-- Tab Contents -->
                 <div class="bg-white p-6 rounded-b-lg shadow-lg">
-                    <?php foreach ($tabs as $index => $tab): ?>
-                        <div id="tab<?= $index + 1 ?>" class="tab-content <?= $index === 0 ? 'active' : '' ?>">
-                            <h2 class="text-xl font-semibold">Tab <?= $index + 1 ?> Content</h2>
-                            <p>This is the content for Tab <?= $index + 1 ?>.</p>
-                        </div>
-                    <?php endforeach; ?>
+                    <div id="tab1" class="tab-content block">
+                        <p><?=$brief?></p>
+                    </div>
+
+                    <!-- <div id="tab2" class="tab-content hidden">
+                        <h2 class="text-xl font-semibold">Description Content</h2>
+                        <p>This is the content for the Description tab.</p>
+                    </div> -->
+
+                    <div id="tab3" class="tab-content hidden">
+                        <h2 class="text-xl font-semibold">Performance Content</h2>
+                        <p>This is the content for the Performance tab.</p>
+                    </div>
+
+                    <div id="tab4" class="tab-content hidden">
+                        <h2 class="text-xl font-semibold">Shipping Content</h2>
+                        <p>This is the content for the Shipping tab.</p>
+                    </div>
                 </div>
             </div>
+
+            <script>
+                function showTab(tabIndex) {
+                    // Hide all tab contents
+                    const tabContents = document.querySelectorAll('.tab-content');
+                    tabContents.forEach(tabContent => {
+                        tabContent.classList.add('hidden'); // Add hidden class to hide content
+                        tabContent.classList.remove('block'); // Remove block class to prevent display
+                    });
+
+                    // Show the selected tab content
+                    const selectedTab = document.getElementById('tab' + tabIndex);
+                    selectedTab.classList.remove('hidden'); // Remove hidden class to show content
+                    selectedTab.classList.add('block'); // Add block class to ensure content is displayed
+
+                    // Remove active class from all buttons
+                    const tabButtons = document.querySelectorAll('.tab-button');
+                    tabButtons.forEach(tabButton => {
+                        tabButton.classList.remove('bg-slate-200', 'text-black');
+                        tabButton.classList.add('bg-slate-900', 'text-white');
+                    });
+
+                    // Set active class to clicked button
+                    tabButtons[tabIndex - 1].classList.remove('bg-slate-900', 'text-white');
+                    tabButtons[tabIndex - 1].classList.add('bg-slate-200', 'text-black');
+                }
+
+                // Show the first tab by default on page load
+                document.addEventListener('DOMContentLoaded', () => showTab(1));
+            </script>
+
         </div>
 
         <!-- Reviews Section -->
@@ -189,6 +258,7 @@ $product_prices = array_map('htmlspecialchars', array_column($get_product, 'pric
                 if (mysqli_num_rows($rsql) > 0) {
                     // Loop through each review
                     while ($review = mysqli_fetch_assoc($rsql)) {
+                       
                 ?>
                         <div class="border-y border-slate-300 py-5">
                             <div class="flex flex-col md:flex-row justify-between gap-4">

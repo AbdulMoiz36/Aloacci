@@ -108,7 +108,7 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
                 class="fa-solid fa-sliders"></i></span>Filter</p>
                 <div>
     <label for=""><span class="mr-2"><i class="fa-solid fa-arrow-down-wide-short"></i></span>Sort By: </label>
-    <select class="w-auto border" onchange="window.location.href='<?= $current_url ?>&sort=' + this.value">
+    <select class="w-auto pr-2" onchange="window.location.href='<?= $current_url ?>&sort=' + this.value">
         <option value="">Select</option>
         <option value="a_to_z">A to Z</option>
         <option value="z_to_a">Z to A</option>
@@ -239,7 +239,7 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
                     <label class="flex items-center hover:bg-gray-200 p-2 cursor-pointer">
                         <input type="checkbox" value="<?= htmlspecialchars($lasting['id']) ?>"
                             class="lasting-checkbox custom-checkbox mr-2" onclick="filterProducts()">
-                        <?= htmlspecialchars($lasting['lasting']) ?>
+                        <?= htmlspecialchars($lasting['lasting']) ?> hrs
                     </label>
                     <?php endforeach; ?>
                 </div>
@@ -497,7 +497,7 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
             productFormats.forEach((formatObj, index) => {
                 const formatDiv = document.createElement('div');
                 formatDiv.className = 'border-2 border-black p-2 cursor-pointer w-fit my-2';
-                formatDiv.innerText = `${formatObj.format}ml`;
+                formatDiv.innerText = `${formatObj.format}`;
                 formatDiv.dataset.price = formatObj.price;
                 // Select the first format by default
                 if (index === 0) {
