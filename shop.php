@@ -30,7 +30,7 @@ $current_url = build_url($base_url, $params);
 
 // Fetch products based on filters and sorting
 if ($search_str) {
-    $get_product = get_product($con, '', '', '', $search_str, $sort); // Pass sort to the function
+    $get_product = get_product($con, '', '', '', $search_str, false, '', '', $sort); // Pass sort to the function
 } elseif ($price_filter == 'less_1500') {
     $get_product = get_product($con, '', $category_id, '', '', false, $sub_category_id, 1500, $sort); // Pass sort to the function
 } elseif ($sub_category_id) {
