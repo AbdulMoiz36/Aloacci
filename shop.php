@@ -137,7 +137,7 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
         <!-- Gender filter section -->
         <div class="mt-4">
             <div class="relative">
-                <p class="font-semibold cursor-pointer text-xl" id="dropdown-gender-btn">
+                <p class="font-semibold cursor-pointer text-xl" id="dropdown-gender-btn" data-icon="dropdown-gender-icon" >
                     Genders
                     <span class="ml-2"><i class="fa-solid fa-angle-down" id="dropdown-gender-icon"></i></span>
                 </p>
@@ -145,7 +145,7 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
                     <?php foreach ($genders as $gender): ?>
                     <label class="flex items-center hover:bg-gray-200 p-2 cursor-pointer">
                         <input type="checkbox" value="<?= htmlspecialchars($gender['id']) ?>"
-                            class="gender-checkbox custom-checkbox mr-2" onclick="filterProducts()">
+                            class="gender-checkbox custom-checkbox mr-2" data-name="<?=$gender['gender']?>" onclick="filterProducts()">
                         <?= htmlspecialchars($gender['gender']) ?>
                     </label>
                     <?php endforeach; ?>
@@ -164,7 +164,7 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
                     <?php foreach ($genres as $genre): ?>
                     <label class="flex items-center hover:bg-gray-200 p-2 cursor-pointer">
                         <input type="checkbox" value="<?= htmlspecialchars($genre['id']) ?>"
-                            class="genre-checkbox custom-checkbox mr-2" onclick="filterProducts()">
+                            class="genre-checkbox custom-checkbox mr-2" data-name="<?=$genre['genre']?>" onclick="filterProducts()">
                         <?= htmlspecialchars($genre['genre']) ?>
                     </label>
                     <?php endforeach; ?>

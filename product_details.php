@@ -17,7 +17,7 @@ $product_formats = array_map('htmlspecialchars', array_column($get_product, 'for
 $product_prices = array_map('htmlspecialchars', array_column($get_product, 'price'));
 ?>
 
-<section class="container">
+<section class="w-full">
     <div class="flex flex-wrap p-2 md:p-10">
         <div class="w-100 md:w-1/2 flex gap-2">
             <!-- Sidebar Thumbnails (only displayed if there is more than one image) -->
@@ -127,33 +127,32 @@ $product_prices = array_map('htmlspecialchars', array_column($get_product, 'pric
             <!-- Add to Cart Button -->
             <?php if (!isset($_SESSION['USER_LOGIN'])): ?>
                 <div>
-                    <a href="login.php" class="border-2 border-black text-lg font-semibold rounded-full mb-2 p-3"
-                        >Add To Cart</a>
+                    <a href="login.php" class="border-2 border-black text-lg font-semibold rounded-full mb-2 p-3">Add To Cart</a>
                 </div>
             <?php else: ?>
                 <button id="addToCartBtn" class="border-2 border-black text-lg font-semibold rounded-full mb-2 p-3"
-                     onclick="addToCart('<?= $get_product[0]['id'] ?>')">Add To Cart</button>
+                    onclick="addToCart('<?= $get_product[0]['id'] ?>')">Add To Cart</button>
             <?php endif; ?>
 
             </form>
 
             <script>
-    function addToCart(productId) {
-        const selectedFormat = document.querySelector('#format-container .bg-gray-200'); // Get the selected format
-        const quantity = document.getElementById('qty').value; // Get the quantity
-        if (selectedFormat) {
-            const format = selectedFormat.innerText.split(' - ')[0]; // Get the format text (remove price)
-            const price = selectedFormat.dataset.price; // Get the price of the selected format
-            // Call manage_cart with the current product ID, selected format, and quantity
-            manage_cart(productId, 'add', quantity, format, price); // Pass the quantity and format
-        }
-    }
-</script>
+                function addToCart(productId) {
+                    const selectedFormat = document.querySelector('#format-container .bg-gray-200'); // Get the selected format
+                    const quantity = document.getElementById('qty').value; // Get the quantity
+                    if (selectedFormat) {
+                        const format = selectedFormat.innerText.split(' - ')[0]; // Get the format text (remove price)
+                        const price = selectedFormat.dataset.price; // Get the price of the selected format
+                        // Call manage_cart with the current product ID, selected format, and quantity
+                        manage_cart(productId, 'add', quantity, format, price); // Pass the quantity and format
+                    }
+                }
+            </script>
 
             <!-- Buy It Now Button -->
             <div>
-            <button class="w-full p-3 border-2 hover:cursor-pointer bg-gradient-to-bl from-yellow-500 via-yellow-500 to-amber-600 shadow-sm hover:shadow-xl transition-shadow ease-in-out duration-300 font-semibold rounded-full text-white">Buy It Now</button>
-            </div>  
+                <button class="w-full p-3 border-2 hover:cursor-pointer bg-gradient-to-bl from-yellow-500 via-yellow-500 to-amber-600 shadow-sm hover:shadow-xl transition-shadow ease-in-out duration-300 font-semibold rounded-full text-white">Buy It Now</button>
+            </div>
 
             <!-- Tabs -->
             <div>
@@ -181,28 +180,77 @@ $product_prices = array_map('htmlspecialchars', array_column($get_product, 'pric
         <!-- Reviews Section -->
         <div class="w-full mt-20">
             <h2 class="text-center text-4xl mb-4 font-bold">Reviews</h2>
-            <div class="flex flex-col">
-                <div class="border-y border-slate-300 py-5">
-                    <div class="flex flex-col gap-4">
-                        <div class="flex gap-2">
-                            <p class="font-semibold text-xl">User Name</p>
-                            <p class="text-gray-500">1 Year Ago</p>
+            <div class="flex flex-col w-full">
+                <?php
+                // Query to fetch reviews for the given product_id
+                $rsql = mysqli_query($con, "SELECT r.*,u.name FROM `reviews` as r JOIN `orders` as o ON r.order_id = o.id JOIN `users` as u ON o.user_id = u.id WHERE `product_id` = '$product_id'");
+
+                // Check if there are reviews for the product
+                if (mysqli_num_rows($rsql) > 0) {
+                    // Loop through each review
+                    while ($review = mysqli_fetch_assoc($rsql)) {
+                ?>
+                        <div class="border-y border-slate-300 py-5">
+                            <div class="flex flex-col md:flex-row justify-between gap-4">
+                                <div class="flex flex-col gap-4 justify-center">
+                                    <div class="flex justify-center md:justify-start gap-2">
+                                        <p class="font-semibold text-xl"><?= htmlspecialchars($review['name']) ?></p>
+                                        <p class="text-gray-500 mt-1 border-l pl-3"><?= htmlspecialchars($review['date']) ?></p> <!-- Assuming created_at holds the time info -->
+                                    </div>
+                                    <div class="flex justify-center md:justify-start">
+                                        <?php
+                                        // Assuming 'rating' is a numeric value (e.g., 4 means 4 stars)
+                                        for ($i = 0; $i < 5; $i++) {
+                                            if ($i < $review['rating']) {
+                                                echo '<i class="fa-solid fa-star text-yellow-500"></i>'; // filled star
+                                            } else {
+                                                echo '<i class="fa-solid fa-star text-gray-300"></i>'; // empty star
+                                            }
+                                        }
+                                        ?>
+                                    </div>
+                                    <div class="flex justify-center md:justify-start">
+                                        <p><?= htmlspecialchars($review['comment']) ?></p>
+                                    </div>
+                                </div>
+                                <?php if (!empty($review['image'])) { // Check if review has an image 
+                                ?>
+                                    <div class="flex justify-center md:justify-start">
+                                        <img src="./<?= htmlspecialchars($review['image']) ?>" alt="Review Image" width="150px" class="cursor-pointer" onclick="openModal('<?= htmlspecialchars($review['image']) ?>')">
+                                    </div>
+                                <?php } ?>
+                            </div>
                         </div>
-                        <div>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
+                        <!-- Modal for Image Zoom -->
+                        <div id="imageModal" class="fixed inset-0 bg-black bg-opacity-75  items-center justify-center hidden">
+                            <span class="absolute top-5 right-5 text-white text-3xl cursor-pointer" onclick="closeModal()">&times;</span>
+                            <img id="modalImage" src="" alt="Zoomed Image" class="max-w-full max-h-full">
                         </div>
-                        <div>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus consequuntur facilis
-                                nemo? Iure, dolorum molestias. Aperiam iusto nam necessitatibus, dolorum voluptas sed
-                                vel consectetur possimus nulla! Unde odit nobis omnis.</p>
-                        </div>
-                    </div>
-                </div>
+                        <script>
+                            // Function to open the modal and display the clicked image
+                            function openModal(imageSrc) {
+                                const modal = document.getElementById('imageModal');
+                                const modalImage = document.getElementById('modalImage');
+                                modalImage.src = './' + imageSrc; // Set the modal image source
+                                modal.classList.remove('hidden'); // Show the modal
+                                modal.classList.add('flex'); // Show the modal
+                            }
+
+                            // Function to close the modal
+                            function closeModal() {
+                                const modal = document.getElementById('imageModal');
+                                modal.classList.add('hidden'); // Hide the modal
+                            }
+                        </script>
+                <?php
+                    }
+                } else {
+                    // Message if no reviews are found
+                    echo '<div><p class="text-center border-t py-10">No reviews found for this product.</p></div>';
+                }
+                ?>
             </div>
+
         </div>
     </div>
 </section>
