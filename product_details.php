@@ -191,9 +191,9 @@ $total_reviews = mysqli_fetch_array($reviewsql);
                 <!-- Tab Buttons -->
                 <div class="flex justify-evenly flex-wrap lg:flex-nowrap items-center">
                     <button class="tab-button font-bold text-white bg-slate-900 p-3 w-full hover:bg-slate-200 hover:text-black" onclick="showTab(1)">Description</button>
+                    <button class="tab-button font-bold text-white bg-slate-900 p-3 w-full hover:bg-slate-200 hover:text-black" onclick="showTab(2)">Performance</button>
+                    <button class="tab-button font-bold text-white bg-slate-900 p-3 w-full hover:bg-slate-200 hover:text-black" onclick="showTab(3)">Shipping</button>
                     <!-- <button class="tab-button font-bold text-white bg-slate-900 p-3 w-full hover:bg-slate-200 hover:text-black" onclick="showTab(2)">Description</button> -->
-                    <button class="tab-button font-bold text-white bg-slate-900 p-3 w-full hover:bg-slate-200 hover:text-black" onclick="showTab(3)">Performance</button>
-                    <button class="tab-button font-bold text-white bg-slate-900 p-3 w-full hover:bg-slate-200 hover:text-black" onclick="showTab(4)">Shipping</button>
                 </div>
 
                 <!-- Tab Contents -->
@@ -207,12 +207,12 @@ $total_reviews = mysqli_fetch_array($reviewsql);
                         <p>This is the content for the Description tab.</p>
                     </div> -->
 
-                    <div id="tab3" class="tab-content hidden">
+                    <div id="tab2" class="tab-content hidden">
                         <h2 class="text-xl font-semibold">Performance Content</h2>
                         <p>This is the content for the Performance tab.</p>
                     </div>
 
-                    <div id="tab4" class="tab-content hidden">
+                    <div id="tab3" class="tab-content hidden">
                         <h2 class="text-xl font-semibold">Shipping Content</h2>
                         <p>This is the content for the Shipping tab.</p>
                     </div>
