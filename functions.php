@@ -44,16 +44,18 @@ function get_product($con, $limit = '', $cat_id = '', $product_id = '', $search_
     }
 
     // Add sorting logic based on the sort parameter
-    if ($sort == 'price_high_low') {
-        $sql .= " ORDER BY price DESC";
-    } elseif ($sort == 'price_low_high') {
-        $sql .= " ORDER BY price ASC";
-    } elseif ($sort == 'a_to_z') {
-        $sql .= " ORDER BY name ASC";
-    } elseif ($sort == 'z_to_a') {
-        $sql .= " ORDER BY name DESC";
-    } elseif ($sort == 'newest') {
-        $sql .= " ORDER BY id DESC";
+    if ($sort === 'price_low_high') {
+        $sql .= " ORDER BY min_price ASC"; // Sort by lowest price
+    } elseif ($sort === 'price_high_low') {
+        $sql .= " ORDER BY min_price DESC"; // Sort by highest price
+    } elseif ($sort === 'newest') {
+        $sql .= " ORDER BY product.id DESC"; // Sort by newest
+    } elseif ($sort === 'a_to_z') {
+        $sql .= " ORDER BY product.name ASC"; // Sort alphabetically A to Z
+    } elseif ($sort === 'z_to_a') {
+        $sql .= " ORDER BY product.name DESC"; // Sort alphabetically Z to A
+    } else {
+        $sql .= " ORDER BY product.id DESC"; // Default sorting by product ID
     }
 
     // Apply limit if set
