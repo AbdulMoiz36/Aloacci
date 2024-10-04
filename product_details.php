@@ -11,6 +11,7 @@ if ($product_id > 0) {
 // Escape product data for output
 $product_image = htmlspecialchars($get_product[0]['image']);
 $product_image2 = htmlspecialchars($get_product[0]['image2']);
+$product_image3 = htmlspecialchars($get_product[0]['image3']);
 $product_name = htmlspecialchars($get_product[0]['name']);
 $product_price = htmlspecialchars($get_product[0]['price']);
 $product_formats = array_map('htmlspecialchars', array_column($get_product, 'format'));
@@ -29,6 +30,10 @@ $product_prices = array_map('htmlspecialchars', array_column($get_product, 'pric
                     <?php endif; ?>
                     <?php if (!empty($product_image2)): ?>
                         <img src="./image/<?= $product_image2 ?>" alt="Thumbnail 2"
+                            class="cursor-pointer border-2 border-slate-200" onclick="changeImage(this.src)">
+                    <?php endif; ?>
+                    <?php if (!empty($product_image3)): ?>
+                        <img src="./image/<?= $product_image3 ?>" alt="Thumbnail 2"
                             class="cursor-pointer border-2 border-slate-200" onclick="changeImage(this.src)">
                     <?php endif; ?>
                 </div>
@@ -61,7 +66,7 @@ $product_prices = array_map('htmlspecialchars', array_column($get_product, 'pric
                     <?php foreach ($product_formats as $index => $format): ?>
                         <div class="format-option border-2 border-black p-2 cursor-pointer my-2 <?= $index === 0 ? 'bg-gray-200' : '' ?> w-fit"
                             data-price="<?= $product_prices[$index] ?>">
-                            <?= $format ?>ml - Rs. <?= $product_prices[$index] ?>
+                            <?= $format ?> - Rs. <?= $product_prices[$index] ?>
                         </div>
                     <?php endforeach; ?>
                 </div>

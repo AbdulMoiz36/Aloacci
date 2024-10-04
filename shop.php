@@ -499,7 +499,7 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
             productFormats.forEach((formatObj, index) => {
                 const formatDiv = document.createElement('div');
                 formatDiv.className = 'border-2 border-black p-2 cursor-pointer w-fit my-2';
-                formatDiv.innerText = `${formatObj.format}ml`;
+                formatDiv.innerText = `${formatObj.format}`;
                 formatDiv.dataset.price = formatObj.price;
                 // Select the first format by default
                 if (index === 0) {

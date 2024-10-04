@@ -19,12 +19,12 @@ $user = mysqli_fetch_assoc($sql);
             
             <label for="" class="flex flex-col text-lg font-semibold">
                 Address:
-                <input type="text" name="address" class="border border-slate-400 rounded-md w-96 p-2 mt-2 font-normal" value="<?= htmlspecialchars($user['address']) ?>" />
+                <input type="text" name="address" class="border border-slate-400 rounded-md w-96 p-2 mt-2 font-normal" value="<?= htmlspecialchars($user['address']) ?>" required/>
             </label>
 
             <label for="" class="flex flex-col text-lg font-semibold">
                 City:
-                <input type="text" name="city" class="border border-slate-400 rounded-md w-96 p-2 mt-2 font-normal" value="<?= htmlspecialchars($user['city']) ?>" />
+                <input type="text" name="city" class="border border-slate-400 rounded-md w-96 p-2 mt-2 font-normal" value="<?= htmlspecialchars($user['city']) ?>" required/>
             </label>
 
             <!-- Change button type to 'submit' to trigger form submission -->
