@@ -103,26 +103,27 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
 
 <!-- Sticky filter and sort section -->
 <div
-    class="w-full py-3 flex justify-around md:justify-end px-2 md:px-10 border-b-2 border-slate-200 sticky md:static top-0 z-10 bg-white">
+    class="w-full py-3 flex flex-wrap justify-around md:justify-end px-2 md:px-10 border-b-2 border-slate-200 sticky md:static top-0 z-10 bg-white">
     <p class="md:hidden cursor-pointer" id="filter-btn"><span class="mr-2"><i
                 class="fa-solid fa-sliders"></i></span>Filter</p>
-    <div>
-        <label for=""><span class="mr-2"><i class="fa-solid fa-arrow-down-wide-short"></i></span>Sort By: </label>
-        <select onchange="window.location.href='<?= $current_url ?>&sort=' + this.value">
-            <option value="">Select</option>
-            <option value="a_to_z">A to Z</option>
-            <option value="z_to_a">Z to A</option>
-            <option value="price_low_high">Price: Low to High</option>
-            <option value="price_high_low">Price: High to Low</option>
-            <option value="newest">Newest</option>
-        </select>
-    </div>
+                <div>
+    <label for=""><span class="mr-2"><i class="fa-solid fa-arrow-down-wide-short"></i></span>Sort By: </label>
+    <select class="w-auto border" onchange="window.location.href='<?= $current_url ?>&sort=' + this.value">
+        <option value="">Select</option>
+        <option value="a_to_z">A to Z</option>
+        <option value="z_to_a">Z to A</option>
+        <option value="price_low_high">Price:Low to High</option>
+        <option value="price_high_low">Price:High to Low</option>
+        <option value="newest">Newest</option>
+    </select>
+</div>
+
 </div>
 
 <!-- Main section with filter and products -->
 <section class="flex">
     <!-- Filters div -->
-    <div class="w-3/4 md:w-1/5 fixed md:relative border-r-2 border-slate-200 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out bg-white h-screen top-0 z-20 p-5"
+    <div class="w-3/4 md:w-1/5 fixed md:relative border-r-2 border-slate-200 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out bg-white h-screen md:h-fit overflow-y-auto overflow-hidden  top-0 z-20 p-5"
         id="filters">
         <button id="close-filter" class="md:hidden cursor-pointer mb-5 border-b-2 border-slate-400">
             <span class="mr-2"><i class="fa-solid fa-xmark"></i></span>Close
