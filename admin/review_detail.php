@@ -33,7 +33,7 @@ $user_id = 0;
 
 if ($row = mysqli_fetch_assoc($result)) {
   $user_id = $row['User_id'];
-  echo "User ID: " . $user_id;
+  // echo "User ID: " . $user_id;
 } else {
   echo "No user found for the given review ID.";
 }
@@ -82,7 +82,7 @@ if ($row = mysqli_fetch_assoc($result)) {
                       <span class="star active">★</span>
                     <?php } ?>
                   </td>
-                  <td>  </td>
+                  <td> <img src="../image/<?= $review['image'] ?>" height="50" width="50" alt=""> </td>
                 </tr>
               <?php
               } else {

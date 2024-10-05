@@ -26,6 +26,7 @@ if(isset($_GET['type']) && $_GET['type']!=''){
 $select = "select * from admin_user where role!='admin' order by id desc";
 $res = mysqli_query($con,$select);
 
+$serial_no = 1;
 ?>
 <div class="row">
               <div class="col-12">
@@ -39,7 +40,7 @@ $res = mysqli_query($con,$select);
                       <table class="table table-striped" id="table-1">
                       <thead>
                                     <tr>
-                                       <th>ID</th>
+                                       <th>Serial No.</th>
                                        <th>Image</th>
                                        <th>User_Name</th>
                                        <th>Password</th>
@@ -57,7 +58,7 @@ $res = mysqli_query($con,$select);
                                     while($row = mysqli_fetch_array($res)){
                                     ?>
                                     <tr>
-                                       <td> <?= $row['id'] ?></td>
+                                       <td> <?= $serial_no++; ?></td>
                                        <td><img class="rounded-circle" src="./admin_users_images/<?= $row['image'] ?>" height="50" width="50" alt=""></td>
                                        <td> <?= $row['name'] ?> </td>
                                        <td> <?= $row['password'] ?> </td>

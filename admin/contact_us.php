@@ -9,6 +9,7 @@ isAdmin();
 $select = "select * from contact_us order by id desc";
 $res = mysqli_query($con,$select);
 
+$serial_no = 1;
 ?>
 
 <div class="row">
@@ -22,7 +23,7 @@ $res = mysqli_query($con,$select);
                       <table class="table table-striped" id="table-1">
                       <thead>
                                     <tr>
-                                       <th>ID</th>
+                                       <th>Serial No.</th>
                                        <th>Name</th>
                                        <th>Email</th>
                                        <th>Subject</th>
@@ -39,7 +40,7 @@ $res = mysqli_query($con,$select);
                                     while($row = mysqli_fetch_array($res)){
                                     ?>
                                     <tr class=" pb-0">
-                                       <td> <?= $row['id'] ?> </td>
+                                       <td> <?= $serial_no++; ?> </td>
                                        <td> <?= $row['name'] ?> </td>
                                        <td style="text-transform: none"> <?= $row['email'] ?> </td>
                                        <td> <?= $row['subject'] ?> </td>

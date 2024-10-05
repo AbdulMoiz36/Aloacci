@@ -5,6 +5,7 @@ include "top.php";
 $select = "select * from users order by id desc";
 $res = mysqli_query($con,$select);
 
+$serial_no = 1;
 ?>
 <div class="row">
               <div class="col-12">
@@ -17,7 +18,7 @@ $res = mysqli_query($con,$select);
                       <table class="table table-striped" id="table-1">
                       <thead>
                                     <tr>
-                                      <th>User Id</th>
+                                      <th>Serial No.</th>
                                       <th>Order Date</th>
                                       <th>Address</th>
                                       <th>Order Status</th>
@@ -30,7 +31,7 @@ $res = mysqli_query($con,$select);
                                     while($row=mysqli_fetch_assoc($res)){
                                     ?>
                                     <tr class=" pb-0">
-                                      <td> <?= $row['user_id'] ?> </td>
+                                    <td> <?= $serial_no++; ?> </td>
                                       <td> <?= $row['date'] ?> </td>
                                       <td style="text-transform: none">
                                         <?= $row['address'] ?>

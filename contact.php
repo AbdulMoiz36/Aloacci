@@ -20,10 +20,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Get form data from POST request
     $name = mysqli_real_escape_string($con, $_POST['name']);
     $email = mysqli_real_escape_string($con, $_POST['email']);
+    $subject = mysqli_real_escape_string($con, $_POST['subject']);
     $message = mysqli_real_escape_string($con, $_POST['message']);
     
     // Insert data into 'contact_us' table
-    $sql = "INSERT INTO `contact_us` (`name`, `email`, `message`, `date`) VALUES ('$name', '$email', '$message', NOW())";
+    $sql = "INSERT INTO `contact_us` (`subject`,`name`, `email`, `message`, `date`) VALUES ('$subject','$name', '$email', '$message', NOW())";
     
     if (mysqli_query($con, $sql)) {
         // Success message using SweetAlert
@@ -64,6 +65,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <input type="email" name="email" value="<?=$email?>" class="p-1 rounded-lg border" required>
                     </div>
                 </div>
+                    <div class="flex flex-col">
+                        <label for="subject" class="text-xl">Subject:</label>
+                        <input type="text" name="subject" class="p-1 rounded-lg border" required>
+                    </div>
                 <div class="flex flex-col">
                     <label for="message" class="text-xl">Message:</label>
                     <textarea name="message" id="message" class="p-1 rounded-lg border" rows="8" required></textarea>

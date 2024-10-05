@@ -27,7 +27,7 @@ $select = "
     ORDER BY p.id DESC";
 $res = mysqli_query($con, $select);
 
-
+$serial_no = 1;
 ?>
 <div class="row">
    <div class="col-12">
@@ -41,7 +41,7 @@ $res = mysqli_query($con, $select);
                <table class="table table-striped" id="table-1">
                   <thead>
                      <tr>
-                        <th>ID</th>
+                        <th>Serial No.</th>
                         <th>Categories</th>
                         <th>P_Name</th>
                         <th>Image</th>
@@ -56,7 +56,7 @@ $res = mysqli_query($con, $select);
                   <tbody>
                      <?php while($row = mysqli_fetch_array($res)){ ?>
                      <tr>
-                        <td> <?= $row['id'] ?></td>
+                        <td> <?= $serial_no++; ?></td>
                         <td> <?= $row['categories'] ?> </td>
                         <td> <?= $row['name'] ?> </td>
                         <td><img src="../image/<?= $row['image'] ?>" height="50" width="50" alt=""></td>
