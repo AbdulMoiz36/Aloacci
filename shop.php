@@ -137,7 +137,8 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
         <!-- Gender filter section -->
         <div class="mt-4">
             <div class="relative">
-                <p class="font-semibold cursor-pointer text-xl" id="dropdown-gender-btn" data-icon="dropdown-gender-icon" >
+                <p class="font-semibold cursor-pointer text-xl" id="dropdown-gender-btn"
+                    data-icon="dropdown-gender-icon">
                     Genders
                     <span class="ml-2"><i class="fa-solid fa-angle-down" id="dropdown-gender-icon"></i></span>
                 </p>
@@ -145,7 +146,8 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
                     <?php foreach ($genders as $gender): ?>
                     <label class="flex items-center hover:bg-gray-200 p-2 cursor-pointer">
                         <input type="checkbox" value="<?= htmlspecialchars($gender['id']) ?>"
-                            class="gender-checkbox custom-checkbox mr-2" data-name="<?=$gender['gender']?>" onclick="filterProducts()">
+                            class="gender-checkbox custom-checkbox mr-2" data-name="<?=$gender['gender']?>"
+                            onclick="filterProducts()">
                         <?= htmlspecialchars($gender['gender']) ?>
                     </label>
                     <?php endforeach; ?>
@@ -164,7 +166,8 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
                     <?php foreach ($genres as $genre): ?>
                     <label class="flex items-center hover:bg-gray-200 p-2 cursor-pointer">
                         <input type="checkbox" value="<?= htmlspecialchars($genre['id']) ?>"
-                            class="genre-checkbox custom-checkbox mr-2" data-name="<?=$genre['genre']?>" onclick="filterProducts()">
+                            class="genre-checkbox custom-checkbox mr-2" data-name="<?=$genre['genre']?>"
+                            onclick="filterProducts()">
                         <?= htmlspecialchars($genre['genre']) ?>
                     </label>
                     <?php endforeach; ?>
@@ -481,12 +484,19 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
 
 <!-- Script for Modal Functionality -->
 <script>
+    // Script for Modal Functionality
     const openModalBtns = document.querySelectorAll('.openModalBtn');
     const closeModalBtn = document.getElementById('closeModalBtn');
     const modal = document.getElementById('modal');
     const modalOverlay = document.getElementById('modalOverlay');
     const modalProductPrice = document.getElementById('modal-product-price');
     let currentProductId = null; // Variable to store the current product ID
+    // Function to close the modal
+    function closeModal() {
+        modal.classList.add('hidden');
+        modalOverlay.classList.add('hidden');
+    }
+    // Event listener to open modal
     openModalBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             const productName = btn.getAttribute('data-product-name');
@@ -527,13 +537,15 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
             modalOverlay.classList.remove('hidden');
         });
     });
-    closeModalBtn.addEventListener('click', () => {
-        modal.classList.add('hidden');
-        modalOverlay.classList.add('hidden');
-    });
-    modalOverlay.addEventListener('click', () => {
-        modal.classList.add('hidden');
-        modalOverlay.classList.add('hidden');
+    // Event listener to close modal on button click
+    closeModalBtn.addEventListener('click', closeModal);
+    // Event listener to close modal when clicking outside the modal
+    modalOverlay.addEventListener('click', closeModal);
+    // Event listener to close modal with the 'Esc' key
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+            closeModal();
+        }
     });
     // Add to Cart button event listener
     document.getElementById('addToCartBtn').addEventListener('click', () => {
@@ -544,13 +556,6 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
             const price = selectedFormat.dataset.price; // Get the selected format price
             // Call manage_cart with the current product ID, selected format, and quantity
             manage_cart(currentProductId, 'add', quantity, format, price); // Pass the quantity and format
-        }
-    });
-    // modal close with escape key
-    document.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape') {
-            modal.classList.add('hidden');
-            modalOverlay.classList.add('hidden');
         }
     });
 </script>
