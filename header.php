@@ -53,7 +53,7 @@ $totalProduct = $obj->totalProduct();
         <script>
           function validateSearch() {
             var searchInput = document.getElementById('search').value
-          .trim(); // Get the search input and trim whitespace
+              .trim(); // Get the search input and trim whitespace
             if (searchInput === '') {
               return false; // Prevent form submission if the input is empty
             }
@@ -74,13 +74,13 @@ $totalProduct = $obj->totalProduct();
         <?php
         if (isset($_SESSION['USER_LOGIN'])) {
         ?>
-        <i class="fas fa-user"></i>
-        <a href="account.php">Account</a>
+          <i class="fas fa-user"></i>
+          <a href="account.php">Account</a>
         <?php
         } else {
         ?>
-        <i class="fas fa-user"></i>
-        <a href="login.php">Login</a>
+          <i class="fas fa-user"></i>
+          <a href="login.php">Login</a>
         <?php
         }
         ?>
@@ -90,28 +90,55 @@ $totalProduct = $obj->totalProduct();
         <?php
         if (!isset($_SESSION['USER_LOGIN'])) {
         ?>
-        <a href="login.php">
-          <i class="fa-sharp fa-solid fa-bag-shopping"></i>
-          <span>Cart</span>
-        </a>
+          <a href="login.php">
+            <i class="fa-sharp fa-solid fa-bag-shopping"></i>
+            <span>Cart</span>
+          </a>
         <?php
         } else {
         ?>
-        <a href="cart.php" class=" flex items-center">
-          <!-- Cart Icon -->
-          <div class=" relative">
-            <i class="fa-sharp fa-solid fa-bag-shopping text-xl"></i>
-            <!-- Badge showing total products -->
-            <span
-              class="cart-quantity absolute top-0 -right-2 transform translate-x-2 -translate-y-2 bg-amber-600 text-white rounded-full px-2 py-0.5 text-xs font-bold">
-              <?php echo $totalProduct ?>
-            </span>
-          </div>
+          <a href="cart.php" class="flex items-center cart-link">
+            <!-- Cart Icon -->
+            <div class="relative">
+              <i class="fa-sharp fa-solid fa-bag-shopping text-xl"></i>
+              <!-- Badge showing total products -->
+              <span
+                class="cart-quantity absolute top-0 -right-2 transform translate-x-2 -translate-y-2 bg-amber-600 text-white rounded-full px-2 py-0.5 text-xs font-bold">
+                <?php echo $totalProduct ?>
+              </span>
+            </div>
 
-          <!-- Cart Text -->
-          <span class="ml-2">Cart</span>
+            <!-- Cart Text -->
+            <span class="ml-2">Cart</span>
+          </a>
+          <script>
+            document.addEventListener('DOMContentLoaded', function() {
+              const cartLink = document.querySelector('.cart-link');
 
-        </a>
+              // PHP variable for checking cart condition
+              const isCartNotEmpty = <?php echo isset($_SESSION['cart']) && count($_SESSION['cart']) > 0 ? 'true' : 'false'; ?>;
+
+              // Prevent default action if the cart is empty
+              cartLink.addEventListener('click', function(event) {
+                if (!isCartNotEmpty) {
+                  event.preventDefault();
+
+                  // Show SweetAlert if the cart is empty
+                  Swal.fire({
+                    icon: 'warning',
+                    title: 'Cart is Empty',
+                    text: 'Please add some products to your cart before proceeding!',
+                    confirmButtonText: 'OK',
+                    customClass: {
+                      confirmButton: 'bg-amber-400 text-white font-bold py-2 px-4 rounded hover:bg-amber-500 focus:ring focus:ring-amber-300'
+                    }
+                  });
+
+                }
+              });
+            });
+          </script>
+
         <?php
         }
         ?>
@@ -134,25 +161,25 @@ $totalProduct = $obj->totalProduct();
           class="hidden w-full absolute bg-white text-black shadow-xl grid-cols-2 sm:grid-cols-4 gap-10 z-50 top-12 left-0 p-10"
           id="menu">
           <?php
-            // Fetch categories
-            $categoriesQuery = mysqli_query($con, "SELECT * FROM categories");
-            while ($category = mysqli_fetch_assoc($categoriesQuery)) {
-                echo '<li class="text-start font-semibold"> 
+          // Fetch categories
+          $categoriesQuery = mysqli_query($con, "SELECT * FROM categories");
+          while ($category = mysqli_fetch_assoc($categoriesQuery)) {
+            echo '<li class="text-start font-semibold"> 
                         <a href="shop.php?category_id=' . $category['id'] . '" class="font-semibold">';
-                echo htmlspecialchars($category['categories']);
-                echo '</a><ul class="mt-2 font-thin flex flex-col gap-1">';
+            echo htmlspecialchars($category['categories']);
+            echo '</a><ul class="mt-2 font-thin flex flex-col gap-1">';
 
-                // Fetch sub-categories for this category
-                $subCategoriesQuery = mysqli_query($con, "SELECT * FROM sub_categories WHERE category_id = '" . $category['id'] . "' AND `status` = 1");
-                while ($subCategory = mysqli_fetch_assoc($subCategoriesQuery)) {
-                    echo '<a href="shop.php?sub_category_id=' . $subCategory['id'] . '"><li class="hover:underline hover:cursor-pointer">';
-                    echo htmlspecialchars($subCategory['sub_categories']);
-                    echo '</li></a>';
-                }
-
-                echo '</ul>';
-                echo '</li>';
+            // Fetch sub-categories for this category
+            $subCategoriesQuery = mysqli_query($con, "SELECT * FROM sub_categories WHERE category_id = '" . $category['id'] . "' AND `status` = 1");
+            while ($subCategory = mysqli_fetch_assoc($subCategoriesQuery)) {
+              echo '<a href="shop.php?sub_category_id=' . $subCategory['id'] . '"><li class="hover:underline hover:cursor-pointer">';
+              echo htmlspecialchars($subCategory['sub_categories']);
+              echo '</li></a>';
             }
+
+            echo '</ul>';
+            echo '</li>';
+          }
           ?>
 
         </ul>

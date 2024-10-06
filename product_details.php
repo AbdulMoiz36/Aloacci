@@ -17,7 +17,7 @@ $product_price = htmlspecialchars($get_product[0]['price']);
 $brief = htmlspecialchars($get_product[0]['breif']);
 $product_formats = array_map('htmlspecialchars', array_column($get_product, 'format'));
 $product_prices = array_map('htmlspecialchars', array_column($get_product, 'price'));
-$reviewsql = mysqli_query($con,"SELECT COUNT(*) AS total_reviews FROM reviews WHERE product_id = '$product_id';");
+$reviewsql = mysqli_query($con, "SELECT COUNT(*) AS total_reviews FROM reviews WHERE product_id = '$product_id';");
 $total_reviews = mysqli_fetch_array($reviewsql);
 ?>
 
@@ -199,7 +199,7 @@ $total_reviews = mysqli_fetch_array($reviewsql);
                 <!-- Tab Contents -->
                 <div class="bg-white p-6 rounded-b-lg shadow-lg">
                     <div id="tab1" class="tab-content block">
-                        <p><?=$brief?></p>
+                        <p><?= $brief ?></p>
                     </div>
 
                     <!-- <div id="tab2" class="tab-content hidden">
@@ -251,83 +251,227 @@ $total_reviews = mysqli_fetch_array($reviewsql);
 
         </div>
 
-        <!-- Reviews Section -->
-        <div class="w-full mt-20">
-            <h2 class="text-center text-4xl mb-4 font-bold">Reviews</h2>
-            <div class="flex flex-col w-full">
-                <?php
-                // Query to fetch reviews for the given product_id
-                $rsql = mysqli_query($con, "SELECT r.*,u.name FROM `reviews` as r JOIN `orders` as o ON r.order_id = o.id JOIN `users` as u ON o.user_id = u.id WHERE `product_id` = '$product_id'");
+        <!-- Review Section -->
+<div class="w-full mt-20">
+    <h2 class="text-center text-4xl mb-4 font-bold">Reviews</h2>
+    <div class="flex flex-col w-full">
+        <?php
+        // Query to fetch reviews for the given product_id
+        $rsql = mysqli_query($con, "SELECT r.*, u.name FROM `reviews` as r 
+                    JOIN `orders` as o ON r.order_id = o.id 
+                    JOIN `users` as u ON o.user_id = u.id 
+                    WHERE `product_id` = '$product_id'");
+        
+        // Store all reviews in an array
+        $reviews = [];
+        while ($review = mysqli_fetch_assoc($rsql)) {
+            $reviews[] = $review; // Store reviews in an array
+        }
 
-                // Check if there are reviews for the product
-                if (mysqli_num_rows($rsql) > 0) {
-                    // Loop through each review
-                    while ($review = mysqli_fetch_assoc($rsql)) {
-                       
-                ?>
-                        <div class="border-y border-slate-300 py-5">
-                            <div class="flex flex-col md:flex-row justify-between gap-4">
-                                <div class="flex flex-col gap-4 justify-center">
-                                    <div class="flex justify-center md:justify-start gap-2">
-                                        <p class="font-semibold text-xl"><?= htmlspecialchars($review['name']) ?></p>
-                                        <p class="text-gray-500 mt-1 border-l pl-3"><?= htmlspecialchars($review['date']) ?></p> <!-- Assuming created_at holds the time info -->
-                                    </div>
-                                    <div class="flex justify-center md:justify-start">
-                                        <?php
-                                        // Assuming 'rating' is a numeric value (e.g., 4 means 4 stars)
-                                        for ($i = 0; $i < 5; $i++) {
-                                            if ($i < $review['rating']) {
-                                                echo '<i class="fa-solid fa-star text-yellow-500"></i>'; // filled star
-                                            } else {
-                                                echo '<i class="fa-solid fa-star text-gray-300"></i>'; // empty star
-                                            }
+        // Set how many reviews to show at first
+        $reviewsPerPage = 5;
+        $totalReviews = count($reviews);
+        $currentReviews = array_slice($reviews, 0, $reviewsPerPage); // Get the first set of reviews
+        $showMoreButton = $totalReviews > $reviewsPerPage; // Check if more reviews exist
+        ?>
+
+        <!-- Display reviews -->
+        <div id="reviewsContainer">
+            <?php if ($totalReviews > 0): ?>
+                <?php foreach ($currentReviews as $review): ?>
+                    <?php
+                    // Split the image string by comma to get multiple image paths
+                    $images = explode(',', $review['image']);
+                    $imageCount = count($images); // Get number of images
+                    ?>
+                    <div class="border-y border-slate-300 py-5">
+                        <div class="flex flex-col md:flex-row justify-between gap-4">
+                            <div class="flex flex-col gap-4 justify-center">
+                                <div class="flex justify-center md:justify-start gap-2">
+                                    <p class="font-semibold text-xl"><?= htmlspecialchars($review['name']) ?></p>
+                                    <p class="text-gray-500 mt-1 border-l pl-3"><?= htmlspecialchars($review['date']) ?></p>
+                                </div>
+                                <div class="flex justify-center md:justify-start">
+                                    <?php
+                                    // Display star rating
+                                    for ($i = 0; $i < 5; $i++) {
+                                        if ($i < $review['rating']) {
+                                            echo '<i class="fa-solid fa-star text-yellow-500"></i>';
+                                        } else {
+                                            echo '<i class="fa-solid fa-star text-gray-300"></i>';
                                         }
-                                        ?>
-                                    </div>
-                                    <div class="flex justify-center md:justify-start">
-                                        <p><?= htmlspecialchars($review['comment']) ?></p>
+                                    }
+                                    ?>
+                                </div>
+                                <div class="flex justify-center md:justify-start">
+                                    <p><?= htmlspecialchars($review['comment']) ?></p>
+                                </div>
+                            </div>
+
+                            <?php if (!empty($review['image'])): ?>
+                                <!-- Image Slider -->
+                                <div class="flex flex-col justify-center md:justify-start w-full md:w-[400px]">
+                                    <div class="relative">
+                                        <!-- Use data-slider-id instead of id -->
+                                        <div class="slider flex gap-2 overflow-x-scroll hide-scrollbar <?= $imageCount <= 2 ? 'justify-start md:justify-end' : 'justify-start'; ?>" data-slider-id="slider<?= $review['order_id'] ?>">
+                                            <?php foreach ($images as $image): ?>
+                                                <div class="flex-shrink-0 z-0">
+                                                    <img src="./image/<?= htmlspecialchars(trim($image)) ?>" alt="Review Image" class="cursor-pointer w-48 h-48 object-cover" onclick="openModal('<?= htmlspecialchars(trim($image)) ?>')">
+                                                </div>
+                                            <?php endforeach; ?>
+                                        </div>
+
+                                        <?php if ($imageCount > 1): ?>
+                                            <!-- Show navigation buttons only if there are multiple images -->
+                                            <button class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-black text-white p-2" onclick="scrollLeftBtn(this)">‹</button>
+                                            <button class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-black text-white p-2" onclick="scrollRight(this)">›</button>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
-                                <?php if (!empty($review['image'])) { // Check if review has an image 
-                                ?>
-                                    <div class="flex justify-center md:justify-start">
-                                        <img src="./<?= htmlspecialchars($review['image']) ?>" alt="Review Image" width="150px" class="cursor-pointer" onclick="openModal('<?= htmlspecialchars($review['image']) ?>')">
-                                    </div>
-                                <?php } ?>
-                            </div>
+                            <?php endif; ?>
                         </div>
-                        <!-- Modal for Image Zoom -->
-                        <div id="imageModal" class="fixed inset-0 bg-black bg-opacity-75  items-center justify-center hidden">
-                            <span class="absolute top-5 right-5 text-white text-3xl cursor-pointer" onclick="closeModal()">&times;</span>
-                            <img id="modalImage" src="" alt="Zoomed Image" class="max-w-full max-h-full">
-                        </div>
-                        <script>
-                            // Function to open the modal and display the clicked image
-                            function openModal(imageSrc) {
-                                const modal = document.getElementById('imageModal');
-                                const modalImage = document.getElementById('modalImage');
-                                modalImage.src = './' + imageSrc; // Set the modal image source
-                                modal.classList.remove('hidden'); // Show the modal
-                                modal.classList.add('flex'); // Show the modal
-                            }
+                    </div>
+                <?php endforeach; ?>
 
-                            // Function to close the modal
-                            function closeModal() {
-                                const modal = document.getElementById('imageModal');
-                                modal.classList.add('hidden'); // Hide the modal
-                            }
-                        </script>
-                <?php
-                    }
-                } else {
-                    // Message if no reviews are found
-                    echo '<div><p class="text-center border-t py-10">No reviews found for this product.</p></div>';
-                }
-                ?>
             </div>
+            <!-- Show More button -->
+            <?php if ($showMoreButton): ?>
+                <div class="text-center py-5" id="showMoreBtndiv">
+                    <button id="showMoreBtn" class="bg-amber-500 text-white px-4 py-2 rounded" onclick="loadMoreReviews()">Show More</button>
+                </div>
+            <?php endif; ?>
+        <?php else: ?>
+            <div><p class="text-center border-t py-10">No reviews found for this product.</p></div>
+        <?php endif; ?>
+    </div>
+</div>
 
-        </div>
+<!-- Modal for Image Zoom -->
+<div id="imageModal" class="fixed inset-0 bg-black bg-opacity-75 items-center justify-center hidden z-50">
+    <span class="absolute top-5 right-5 text-white text-3xl cursor-pointer" onclick="closeModal()">&times;</span>
+    <img id="modalImage" src="" alt="Zoomed Image" class="w-auto max-h-full">
+</div>
+<script>
+    // Function to open the modal and display the clicked image
+    function openModal(imageSrc) {
+        const modal = document.getElementById('imageModal');
+        const modalImage = document.getElementById('modalImage');
+        modalImage.src = './image/' + imageSrc; // Set the modal image source
+        modal.classList.remove('hidden'); // Show the modal
+        modal.classList.add('flex'); // Show the modal
+    }
+
+    // Function to close the modal
+    function closeModal() {
+        const modal = document.getElementById('imageModal');
+        modal.classList.add('hidden'); // Hide the modal
+    }
+
+    // Function to scroll slider left
+    function scrollLeftBtn(btn) {
+        // Find the slider container inside the same div as the button
+        const slider = btn.closest('.relative').querySelector('[data-slider-id]');
+        slider.scrollBy({
+            left: -300,
+            behavior: 'smooth'
+        });
+    }
+
+    // Function to scroll slider right
+    function scrollRight(btn) {
+        // Find the slider container inside the same div as the button
+        const slider = btn.closest('.relative').querySelector('[data-slider-id]');
+        slider.scrollBy({
+            left: 300,
+            behavior: 'smooth'
+        });
+    }
+
+    let currentReviewIndex = 5; // Start loading from the 6th review
+let currentDiv = 1; // Initialize outside to persist across multiple clicks
+
+function loadMoreReviews() {
+    const reviewsContainer = document.getElementById('reviewsContainer');
+    const allReviews = <?= json_encode($reviews) ?>; // Encode the reviews array in PHP to JavaScript
+
+    // Get the next set of reviews
+    const nextReviews = allReviews.slice(currentReviewIndex, currentReviewIndex + 5);
+    currentReviewIndex += 5; // Update the index for the next load
+
+    // Create a temporary HTML string for new reviews
+    let newReviewsHtml = '';
+    nextReviews.forEach(review => {
+        currentDiv++; // Increment for each new review block
+        newReviewsHtml += `
+            <div class="border-y border-slate-300 py-5" id="reviews${currentDiv}">
+                <div class="flex flex-col md:flex-row justify-between gap-4">
+                    <div class="flex flex-col gap-4 justify-center">
+                        <div class="flex justify-center md:justify-start gap-2">
+                            <p class="font-semibold text-xl">${review.name}</p>
+                            <p class="text-gray-500 mt-1 border-l pl-3">${review.date}</p>
+                        </div>
+                        <div class="flex justify-center md:justify-start">
+                            ${'<i class="fa-solid fa-star text-yellow-500"></i>'.repeat(review.rating) + '<i class="fa-solid fa-star text-gray-300"></i>'.repeat(5 - review.rating)}
+                        </div>
+                        <div class="flex justify-center md:justify-start">
+                            <p>${review.comment}</p>
+                        </div>
+                    </div>
+                    ${review.image ? `
+                        <div class="flex flex-col justify-center md:justify-start w-full md:w-[400px]">
+                            <div class="relative">
+                                <div class="slider flex gap-2 overflow-x-scroll hide-scrollbar ${review.image.split(',').length <= 2 ? 'justify-end' : 'justify-start'}">
+                                    ${review.image.split(',').map(image => `
+                                        <div class="flex-shrink-0 z-0">
+                                            <img src="./image/${image.trim()}" alt="Review Image" class="cursor-pointer w-48 h-48 object-cover " onclick="openModal('${image.trim()}')">
+                                        </div>
+                                    `).join('')}
+                                </div>
+                                <button class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-black text-white p-2" onclick="scrollLeftBtn(this)">‹</button>
+                                <button class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-black text-white p-2" onclick="scrollRight(this)">›</button>
+                            </div>
+                        </div>` : ''}
+                </div>
+            </div>
+        `;
+    });
+
+    // Insert the new reviews at the top of the container
+    reviewsContainer.insertAdjacentHTML('beforeend', newReviewsHtml);
+
+    // Scroll to the top of the newly added reviews
+    const newReviewDiv = document.getElementById(`reviews${currentDiv}`);
+    newReviewDiv.scrollIntoView({ behavior: 'smooth' });
+
+    // Hide the button if no more reviews are left to load
+    if (currentReviewIndex >= allReviews.length) {
+        document.getElementById('showMoreBtndiv').style.display = 'none';
+    }
+}
+
+</script>
+
+
+
     </div>
 </section>
+<style>
+    .hide-scrollbar::-webkit-scrollbar {
+        display: none;
+        /* Hide scrollbar in webkit browsers */
+    }
+
+    .hide-scrollbar {
+        -ms-overflow-style: none;
+        /* IE and Edge */
+        scrollbar-width: none;
+        /* Firefox */
+    }
+
+    .single-image {
+        overflow: hidden;
+        /* Hide scroll for single-image sliders */
+    }
+</style>
 
 <?php include 'footer.php'; ?>

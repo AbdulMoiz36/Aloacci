@@ -13,7 +13,9 @@ $data = mysqli_fetch_assoc($sql);
 
 // Initialize cart total
 $cart_total = 0;
-if (isset($_SESSION['cart'])) {
+$cart_empty = true;
+if (isset($_SESSION['cart']) && count($_SESSION['cart']) > 0) {
+    $cart_empty = false;
     foreach ($_SESSION['cart'] as $key => $val) {
         $productArr = get_product($con, '', '', $key);
         $price = $val['price'];
@@ -25,32 +27,36 @@ if (isset($_SESSION['cart'])) {
 }
 
 if (isset($_POST['submit'])) {
-    $address = get_safe_value($con, $_POST['address']);
-    $email = get_safe_value($con, $_POST['email']);
-    $mobile = get_safe_value($con, $_POST['mobile']);
-    $city = get_safe_value($con, $_POST['city']);
-    $total_price = $cart_total; // Use the calculated total price
-    $order_status = '1';
-    $date = date('y-m-d h:m:s');
+    if ($cart_empty) {
+        echo "<script>alert('Your cart is empty. Add items to place an order.');</script>";
+    } else {
+        $address = get_safe_value($con, $_POST['address']);
+        $email = get_safe_value($con, $_POST['email']);
+        $mobile = get_safe_value($con, $_POST['mobile']);
+        $city = get_safe_value($con, $_POST['city']);
+        $payment_method = get_safe_value($con, $_POST['payment_method']);
+        $total_price = $cart_total; // Use the calculated total price
+        $order_status = '1';
+        $date = date('y-m-d h:m:s');
 
-    mysqli_query($con, "INSERT INTO orders (user_id, email, mobile, address, city, total_price, order_status, date) VALUES ('$user_id', '$email', '$mobile', '$address', '$city', '$total_price', '$order_status', '$date')");
+        mysqli_query($con, "INSERT INTO orders (user_id, email, mobile, address, city, total_price, payment_method, order_status, date) VALUES ('$user_id', '$email', '$mobile', '$address', '$city', '$total_price', '$payment_method', '$order_status', '$date')");
 
-    $order_id = mysqli_insert_id($con);
+        $order_id = mysqli_insert_id($con);
 
-    foreach ($_SESSION['cart'] as $key => $val) {
-        $productArr = get_product($con, '', '', $key);
-        $price = $val['price'];;
-        $qty = $val['qty'];
-        $selected_format = $val['format'];
+        foreach ($_SESSION['cart'] as $key => $val) {
+            $productArr = get_product($con, '', '', $key);
+            $price = $val['price'];
+            $qty = $val['qty'];
+            $selected_format = $val['format'];
 
-        mysqli_query($con, "INSERT INTO orders_detail (order_id, product_id, format, qty, price) VALUES ('$order_id', '$key', '$selected_format', '$qty', '$price')");
+            mysqli_query($con, "INSERT INTO orders_detail (order_id, product_id, format, qty, price) VALUES ('$order_id', '$key', '$selected_format', '$qty', '$price')");
+        }
+
+        unset($_SESSION['cart']);
+        echo "<script>window.location.href='thankyou.php'</script>";
     }
-
-    unset($_SESSION['cart']);
-    echo "<script>window.location.href='thankyou.php'</script>";
 }
 ?>
-
 
 <section class="flex justify-center py-10">
     <div class="w-full md:w-11/12 p-5 shadow-lg flex flex-col md:flex-row">
@@ -59,7 +65,7 @@ if (isset($_POST['submit'])) {
             <form method="POST" class="mt-5 flex flex-col gap-8">
                 <div class="flex flex-col">
                     <label for="">Email:</label>
-                    <input type="text" name="email" value="<?= $data['email'] ?>" class="border placeholder:text-sm border-gray-300 rounded-md outline-none p-2">
+                    <input type="text" name="email" value="<?= $data['email'] ?>" class="border placeholder:text-sm border-gray-300 rounded-md outline-none p-2" required>
                 </div>
                 <div class="flex flex-col">
                     <label for="">City:</label>
@@ -71,9 +77,20 @@ if (isset($_POST['submit'])) {
                 </div>
                 <div class="flex flex-col">
                     <label for="">Phone Number:</label>
-                    <input type="text" name="mobile" value="<?= $data['mobile'] ?>" class="border placeholder:text-sm border-gray-300 rounded-md outline-none p-2">
+                    <input type="text" name="mobile" value="<?= $data['mobile'] ?>" class="border placeholder:text-sm border-gray-300 rounded-md outline-none p-2" required>
                 </div>
-                <input type="submit" name="submit" value="Place Order" class="bg-black hover:bg-slate-900 text-white p-5 rounded-md font-bold"></input>
+                
+                <!-- Payment Options -->
+                <div class="flex flex-col">
+                    <label for="payment_method">Payment Method:</label>
+                    <select name="payment_method" class="border border-gray-300 rounded-md outline-none p-2" required>
+                        <option value="Credit Card">Credit Card</option>
+                        <option value="PayPal">PayPal</option>
+                        <option value="Cash on Delivery">Cash on Delivery</option>
+                    </select>
+                </div>
+
+                <input type="submit" name="submit" value="Place Order" class="bg-black hover:bg-slate-900 text-white p-5 rounded-md font-bold">
             </form>
         </div>
 
@@ -81,7 +98,7 @@ if (isset($_POST['submit'])) {
             <!-- Products -->
             <div class="w-full">
                 <?php
-                if (isset($_SESSION['cart'])) {
+                if (isset($_SESSION['cart']) && count($_SESSION['cart']) > 0) {
                     $cart_total = 0;
                     foreach ($_SESSION['cart'] as $key => $val) {
                         $productArr = get_product($con, '', '', $key);
