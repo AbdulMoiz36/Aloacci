@@ -35,6 +35,8 @@ $totalProduct = $obj->totalProduct();
 <body>
 
   <button hidden id="registration_success"></button>
+  <button hidden id="message_send"></button>
+
 
   <!-- Header Start -->
   <header
@@ -74,13 +76,11 @@ $totalProduct = $obj->totalProduct();
         <?php
         if (isset($_SESSION['USER_LOGIN'])) {
         ?>
-        <i class="fas fa-user"></i>
-        <a href="account.php">Account</a>
+        <a href="account.php"><i class="fas fa-user"></i> Account</a>
         <?php
         } else {
         ?>
-        <i class="fas fa-user"></i>
-        <a href="login.php">Login</a>
+        <a href="login.php"><i class="fas fa-user"></i> Login</a>
         <?php
         }
         ?>
