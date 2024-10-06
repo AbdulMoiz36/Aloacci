@@ -33,60 +33,65 @@ if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
                 <!-- Display cart items -->
                 <?php
                 foreach ($_SESSION['cart'] as $key => $val) {
-                    $productArr = get_product($con, '', '', $key);
+                    // Extract product ID and format from the key
+                    list($pid, $format) = explode('_', $key);
+                    
+                    $productArr = get_product($con, '', '', $pid); // Fetch product by ID
                     $image = $productArr[0]['image'];
                     $pname = $productArr[0]['name'];
                     $qty = $val['qty'];
-                    $price = $val['price'];
-                    $selected_format = $val['format'];
+                    $price = $val['price']; 
+                    $selected_format = $val['format']; 
+                
+                    $cart_total += $price * $qty;
                 ?>
-                <div class="flex gap-5 border-b border-slate-200 pb-3 p-10">
-                    <div class="w-1/6"><img src="./image/<?= $image ?>" class="rounded-md" alt=""></div>
-                    <div class="w-5/6 flex flex-col justify-evenly">
-                        <p class="font-bold text-lg"><?= $pname ?></p>
-                        <p><span class="font-semibold">Format:</span> <?= $selected_format ?></p>
-                        <div style="margin-bottom:20px">
-                            <p class="font-semibold">Quantity:</p>
-                            <div class="flex items-center space-x-2">
-                                <span class="qty-minus" onclick="changeQty('<?= $key ?>', -1)">
-                                    <i class="fa fa-minus" aria-hidden="true"></i>
-                                </span>
-                                <input id="qty_<?= $key ?>" name="quantity" type="number" min="1" value="<?= $qty ?>"
-                                    class="w-16 text-center border border-gray-300 rounded-md py-1"
-                                    onchange="updateCartTotal('<?= $key ?>')" />
-                                <span class="qty-plus" onclick="changeQty('<?= $key ?>', 1)">
-                                    <i class="fa fa-plus" aria-hidden="true"></i>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="flex justify-between">
-                            <a href="javascript:void(0)" onclick="manage_cart('<?php echo $key ?>', 'remove')"
-                                class="font-semibold underline cursor-pointer">Remove</a>
-                            <p class="font-semibold text-lg">Rs. <?= $price ?></p>
+            <div class="flex gap-5 border-b border-slate-200 pb-3 p-10">
+                <div class="w-1/6"><img src="./image/<?= $image ?>" class="rounded-md" alt=""></div>
+                <div class="w-5/6 flex flex-col justify-evenly">
+                    <p class="font-bold text-lg"><?= $pname ?></p>
+                    <p><span class="font-semibold">Format:</span> <?= $selected_format ?></p>
+                    <!-- Quantity Selector -->
+                    <div style="margin-bottom:20px">
+                        <p class="font-semibold">Quantity:</p>
+                        <div class="flex items-center space-x-2">
+                            <span class="qty-minus" onclick="changeQty('<?= $key ?>', -1)"><i class="fa fa-minus"
+                                    aria-hidden="true"></i></span>
+                            <input id="qty_<?= $key ?>" name="quantity" type="number" min="1" value="<?= $qty ?>"
+                                class="w-16 text-center border border-gray-300 rounded-md py-1"
+                                onchange="updateCartTotal('<?= $key ?>')" />
+                            <span class="qty-plus" onclick="changeQty('<?= $key ?>', 1)"><i class="fa fa-plus"
+                                    aria-hidden="true"></i></span>
                         </div>
                     </div>
+                    <div class="flex justify-between">
+                        <a href="javascript:void(0)"
+                            onclick="manage_cart('<?php echo $pid ?>', 'remove', 1, '<?php echo $selected_format ?>', '<?php echo $price ?>')"
+                            class="font-semibold underline cursor-pointer">Remove</a>
+
+                        <p class="font-semibold text-lg">Rs. <?= $price ?></p>
+                    </div>
                 </div>
-                <?php } ?>
-            <?php } ?>
+            </div>
+            <?php
+                }
+                
+            }
+            ?>
         </div>
 
         <div class="w-full md:w-2/6">
             <div class="bg-gray-100 p-10">
-                <?php if (!$cart_empty) { ?>
-                    <div class="flex justify-around text-wrap">
-                        <p class="font-semibold text-xl">Subtotal:</p>
-                        <p id="cart-total" class="font-semibold text-xl">Rs. <?= $cart_total ?></p>
-                    </div>
-                    <div class="mt-7">
-                        <a href="checkout.php">
-                            <button class="w-full p-2 border-2 hover:cursor-pointer bg-gradient-to-bl from-yellow-500 via-yellow-500 to-amber-600 shadow-sm hover:shadow-lg transition-shadow ease-in-out duration-300 font-semibold rounded-full text-white">
-                                Checkout
-                            </button>
-                        </a>
-                    </div>
-                <?php } else { ?>
-                    <p class="text-center text-sm">Add some products to your cart before proceeding to checkout.</p>
-                <?php } ?>
+                <div class="flex justify-around text-wrap">
+                    <p class="font-semibold text-xl">Subtotal:</p>
+                    <p id="cart-total" class="font-semibold text-xl">Rs. <?= $cart_total ?></p>
+                </div>
+                <div class="mt-7">
+                    <a href="checkout.php"><button
+                            class="w-full p-2 border-2 hover:cursor-pointer bg-gradient-to-bl from-yellow-500 via-yellow-500 to-amber-600 shadow-sm hover:shadow-lg transition-shadow ease-in-out duration-300 font-semibold rounded-full text-white">Checkout</button></a>
+                </div>
+                <div class="mt-7">
+                    <p class="text-center text-sm">Taxes and Shipping calculated at checkout.</p>
+                </div>
             </div>
         </div>
     </div>

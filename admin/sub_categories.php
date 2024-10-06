@@ -24,7 +24,7 @@ if (isset($_GET['type']) && $_GET['type'] != '') {
 
 $select = "select sub_categories.*,categories.categories from sub_categories,categories where sub_categories.category_id=categories.id order by sub_categories.id desc";
 $res = mysqli_query($con, $select);
-
+$serial_no = 1;
 ?>
 <div class="row">
    <div class="col-12">
@@ -38,7 +38,7 @@ $res = mysqli_query($con, $select);
                <table class="table table-striped" id="table-1">
                   <thead>
                      <tr>
-                        <th>ID</th>
+                        <th>Serial No.</th>
                         <th>Categories</th>
                         <th>Sub Categories</th>
                         <th>Status</th>
@@ -53,7 +53,7 @@ $res = mysqli_query($con, $select);
                         while ($row = mysqli_fetch_array($res)) {
                         ?>
                            <tr>
-                              <td> <?= $row['id'] ?></td>
+                              <td> <?= $serial_no++; ?></td>
                               <td> <?= $row['categories'] ?> </td>
                               <td> <?= $row['sub_categories'] ?> </td>
                               <td>

@@ -5,7 +5,7 @@ include "top.php";
 /* Restrict employee to access this page */
 isAdmin();
 
-$select = "select * from categories";
+$select = "select * from type";
 $res = mysqli_query($con,$select);
 $serial_no = 1;
 ?>
@@ -13,8 +13,8 @@ $serial_no = 1;
   <div class="col-12">
     <div class="card">
       <div class="card-header">
-        <h4>Categories</h4>
-        <a href="manage_categories.php">Add Category</a>
+        <h4>Types</h4>
+        <a href="manage_type.php">Add Product Type</a>
       </div>
       <div class="card-body">
         <div class="table-responsive">
@@ -22,7 +22,7 @@ $serial_no = 1;
             <thead>
               <tr>
                 <th>Serial No.</th>
-                <th>Categories</th>
+                <th>Types</th>
                 <th>Action</th>
                 <th></th>
               </tr>
@@ -36,14 +36,14 @@ $serial_no = 1;
               ?>
               <tr class=" pb-0">
                 <td> <?= $serial_no++; ?> </td>
-                <td> <?= $row['categories'] ?> </td>
+                <td> <?= $row['type'] ?> </td>
                 <td>
 
-                  <a href="manage_categories.php?id=<?= $row['id'] ?>" class="btn btn-primary btn-action mr-1"
+                  <a href="manage_type.php?id=<?= $row['id'] ?>" class="btn btn-primary btn-action mr-1"
                     data-toggle="tooltip" title="Edit">
                     <i class="fas fa-pencil-alt"></i>
                   </a>
-                  <a href="cat_delete.php?id=<?= $row['id'] ?>" class="btn btn-danger btn-action" data-toggle="tooltip"
+                  <a href="type_delete.php?id=<?= $row['id'] ?>" class="btn btn-danger btn-action" data-toggle="tooltip"
                     title="Delete" data-confirm="Are You Sure?|This action can not be undone. Do you want to continue?"
                     data-confirm-yes="alert('Deleted')">
                     <i class="fas fa-trash-alt"></i>

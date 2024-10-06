@@ -108,7 +108,7 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
                 class="fa-solid fa-sliders"></i></span>Filter</p>
     <div>
         <label for=""><span class="mr-2"><i class="fa-solid fa-arrow-down-wide-short"></i></span>Sort By: </label>
-        <select id="sort-dropdown" onchange="applySort(this.value)">
+        <select class="w-auto pr-2" id="sort-dropdown" onchange="applySort(this.value)">
             <option value="" <?= ($sort == '') ? 'selected' : '' ?>>Select</option>
             <option value="a_to_z" <?= ($sort == 'a_to_z') ? 'selected' : '' ?>>A to Z</option>
             <option value="z_to_a" <?= ($sort == 'z_to_a') ? 'selected' : '' ?>>Z to A</option>
