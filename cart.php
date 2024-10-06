@@ -17,15 +17,18 @@ $cart_total = 0;
             if (isset($_SESSION['cart'])) {
                 $cart_total = 0;
                 foreach ($_SESSION['cart'] as $key => $val) {
-                    $productArr = get_product($con, '', '', $key);
+                    // Extract product ID and format from the key
+                    list($pid, $format) = explode('_', $key);
+                    
+                    $productArr = get_product($con, '', '', $pid); // Fetch product by ID
                     $image = $productArr[0]['image'];
                     $pname = $productArr[0]['name'];
                     $qty = $val['qty'];
-                    $price = $val['price']; // Get the price from the session
-                    $selected_format = $val['format']; // Get the selected format
-
+                    $price = $val['price']; 
+                    $selected_format = $val['format']; 
+                
                     $cart_total += $price * $qty;
-            ?>
+                ?>
             <div class="flex gap-5 border-b border-slate-200 pb-3 p-10">
                 <div class="w-1/6"><img src="./image/<?= $image ?>" class="rounded-md" alt=""></div>
                 <div class="w-5/6 flex flex-col justify-evenly">
@@ -44,16 +47,18 @@ $cart_total = 0;
                                     aria-hidden="true"></i></span>
                         </div>
                     </div>
-
                     <div class="flex justify-between">
-                        <a href="javascript:void(0)" onclick="manage_cart('<?php echo $key ?>', 'remove')"
+                        <a href="javascript:void(0)"
+                            onclick="manage_cart('<?php echo $pid ?>', 'remove', 1, '<?php echo $selected_format ?>', '<?php echo $price ?>')"
                             class="font-semibold underline cursor-pointer">Remove</a>
+
                         <p class="font-semibold text-lg">Rs. <?= $price ?></p>
                     </div>
                 </div>
             </div>
             <?php
                 }
+                
             }
             ?>
         </div>
@@ -65,7 +70,7 @@ $cart_total = 0;
                 </div>
                 <div class="mt-7">
                     <a href="checkout.php"><button
-                    class="w-full p-2 border-2 hover:cursor-pointer bg-gradient-to-bl from-yellow-500 via-yellow-500 to-amber-600 shadow-sm hover:shadow-lg transition-shadow ease-in-out duration-300 font-semibold rounded-full text-white">Checkout</button></a>
+                            class="w-full p-2 border-2 hover:cursor-pointer bg-gradient-to-bl from-yellow-500 via-yellow-500 to-amber-600 shadow-sm hover:shadow-lg transition-shadow ease-in-out duration-300 font-semibold rounded-full text-white">Checkout</button></a>
                 </div>
                 <div class="mt-7">
                     <p class="text-center text-sm">Taxes and Shipping calculated at checkout.</p>

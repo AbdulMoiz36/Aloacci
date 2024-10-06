@@ -27,7 +27,10 @@ $serial_no = 1;
                                  </thead>
                                  <tbody>
                                     <?php
-                                    $res=mysqli_query($con,"select orders.*,order_status.Name as order_status_str from orders,order_status where order_status.id=orders.order_status order by orders.date desc");
+                                    $res = mysqli_query($con,"SELECT orders.*, order_status.Name as order_status_str 
+                                    FROM orders 
+                                    JOIN order_status ON order_status.id = orders.order_status 
+                                    ORDER BY orders.date DESC, orders.id DESC");          
                                     while($row=mysqli_fetch_assoc($res)){
                                     ?>
                                     <tr class=" pb-0">
