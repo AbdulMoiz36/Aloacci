@@ -7,10 +7,11 @@ if (!isset($_SESSION['USER_LOGIN']) || $_SESSION['USER_LOGIN'] == '') {
     die();
 }
 
-// Ensure Cart has products
-if (!isset($_SESSION['cart']) && empty($_SESSION['cart'])) {
+if (!isset($_SERVER['HTTP_REFERER'])) {
+    // echo("Access Denied");
     echo "<script>window.location.href='shop.php'</script>";
-}
+    exit;
+  }
 
 $user_id = $_SESSION['USER_ID'];
 $sql = mysqli_query($con, "SELECT `name`, `email`, `mobile`, `address`, `city` FROM `users` WHERE `id` = '$user_id'");

@@ -6,6 +6,13 @@ if (isset($_SESSION['USER_LOGIN']) && $_SESSION['USER_LOGIN'] != '') {
     echo "<script>window.location.href='index.php'</script>";
     die();
 }
+
+if (!isset($_SERVER['HTTP_REFERER'])) {
+    // echo("Access Denied");
+    echo "<script>window.location.href='shop.php'</script>";
+    exit;
+  }
+
 $cart_total = 0;
 ?>
 
