@@ -118,7 +118,7 @@ if (isset($_POST['submit'])) {
 
 
                 <input type="submit" name="submit" value="Place Order"
-                    class="bg-black hover:bg-slate-900 text-white p-5 rounded-md font-bold"></input>
+                    class="bg-black hover:bg-slate-900 text-white p-5 rounded-md font-bold hover:cursor-pointer"></input>
             </form>
         </div>
 
