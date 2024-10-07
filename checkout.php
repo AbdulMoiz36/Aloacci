@@ -68,7 +68,7 @@ if (isset($_POST['submit'])) {
 
 <section class="flex justify-center py-10">
     <div class="w-full md:w-11/12 p-5 shadow-lg flex flex-col md:flex-row">
-        <div class="w-full md:w-7/12 py-10 px-40">
+        <div class="w-full md:w-7/12 py-10 px-0 sm:px-10 lg:px-40">
             <h2 class="text-3xl font-bold">Delivery:</h2>
             <form method="POST" class="mt-5 flex flex-col gap-8">
                 <div class="flex flex-col">
@@ -96,7 +96,7 @@ if (isset($_POST['submit'])) {
                     <div class="flex flex-col gap-4 mt-2">
 
                         <?php
-                        $formats = ['Cash On Delivery (COD)', 'Credit/Debit Card'];
+                        $formats = ['Cash On Delivery (COD)', 'Credit/Debit Card', 'Bank Deposit'];
                         foreach ($formats as $format) {
                         ?>
                             <div class="flex items-center gap-2">
@@ -142,7 +142,7 @@ if (isset($_POST['submit'])) {
                         $cart_total += $price * $qty;
                 ?>
                         <!-- Card -->
-                        <div class="flex justify-between p-2 w-full border-b">
+                        <div class="flex justify-between p-2 w-full border-b flex-wrap">
                             <div class="flex">
                                 <div class="relative px-2 w-[70px] h-[70px]">
                                     <img src="./image/<?= $image ?>" class="w-[70px] h-[70px]" alt="Product Image">
@@ -167,7 +167,7 @@ if (isset($_POST['submit'])) {
 
             <!-- Total Area -->
             <div class="w-full mt-5">
-                <div class="flex justify-between text-sm">
+                <div class="flex justify-between text-sm flex-wrap">
                     <p>Subtotal:</p>
                     <p>Rs.<?= number_format($cart_total, 2) ?></p>
                 </div>
@@ -175,7 +175,7 @@ if (isset($_POST['submit'])) {
                     <p>Shipping:</p>
                     <p>FREE</p>
                 </div>
-                <div class="flex justify-between mt-4 border-t p-5 text-lg ">
+                <div class="flex justify-center md:justify-between mt-4 border-t p-5 text-lg ">
                     <p class="font-bold">Total:</p>
                     <p class="font-bold">Rs.<?= number_format($cart_total, 2) ?></p>
                 </div>
