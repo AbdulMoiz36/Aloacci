@@ -7,16 +7,21 @@ if (!isset($_SESSION['USER_LOGIN']) || $_SESSION['USER_LOGIN'] == '') {
     die();
 }
 
+// Initialize cart total
 $cart_total = 0;
-$cart_empty = true; // Flag to track if cart is empty
-
-if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
+$cart_empty = true;
+if (isset($_SESSION['cart']) && count($_SESSION['cart']) > 0) {
     $cart_empty = false;
     foreach ($_SESSION['cart'] as $key => $val) {
-        $productArr = get_product($con, '', '', $key);
+        // Split the $key into $pid and $format
+        list($pid, $selected_format) = explode('_', $key);
+
+        // Fetch product details using only $pid
+        $productArr = get_product($con, '', '', $pid);
+        $price = $val['price'];
         $qty = $val['qty'];
-        $price = $val['price']; // Get the price from the session
-        $cart_total += $price * $qty;
+        $total_price = $price * $qty;
+        $cart_total += $total_price; // Calculate total
     }
 }else{
     echo "<script>window.location.href='shop.php'</script>";
