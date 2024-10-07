@@ -1,21 +1,37 @@
 <?php
 include 'header.php';
-// User must login first to access this page.//
-if (isset($_SESSION['USER_LOGIN']) && $_SESSION['USER_LOGIN'] != '') {
-} else {
+
+// User must login first to access this page.
+if (!isset($_SESSION['USER_LOGIN']) || $_SESSION['USER_LOGIN'] == '') {
     echo "<script>window.location.href='index.php'</script>";
     die();
 }
+
 $cart_total = 0;
+$cart_empty = true; // Flag to track if cart is empty
+
+if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
+    $cart_empty = false;
+    foreach ($_SESSION['cart'] as $key => $val) {
+        $productArr = get_product($con, '', '', $key);
+        $qty = $val['qty'];
+        $price = $val['price']; // Get the price from the session
+        $cart_total += $price * $qty;
+    }
+}
 ?>
 
 <section class="px-2 py-5 md:px-32 md:py-10 w-full">
     <h1 class="text-4xl font-bold text-center">Cart</h1>
     <div class="flex flex-col md:flex-row mt-10 gap-2">
         <div class="w-full md:w-4/6">
-            <?php
-            if (isset($_SESSION['cart'])) {
-                $cart_total = 0;
+            <?php if ($cart_empty) { ?>
+                <div class="text-center p-5">
+                    <p class="text-xl font-semibold">Your cart is empty</p>
+                </div>
+            <?php } else { ?>
+                <!-- Display cart items -->
+                <?php
                 foreach ($_SESSION['cart'] as $key => $val) {
                     // Extract product ID and format from the key
                     list($pid, $format) = explode('_', $key);
@@ -62,6 +78,7 @@ $cart_total = 0;
             }
             ?>
         </div>
+
         <div class="w-full md:w-2/6">
             <div class="bg-gray-100 p-10">
                 <div class="flex justify-around text-wrap">
@@ -84,36 +101,28 @@ $cart_total = 0;
     function changeQty(productId, change) {
         var qtyInput = document.getElementById('qty_' + productId);
         var newValue = parseInt(qtyInput.value) + change;
-        qtyInput.value = newValue > 0 ? newValue : 1; // Prevent negative or zero quantities
-        updateCartTotal(productId); // Update cart total when quantity changes
+        qtyInput.value = newValue > 0 ? newValue : 1;
+        updateCartTotal(productId);
     }
 
     function updateCartTotal(productId) {
-    var qtyInput = document.getElementById('qty_' + productId);
-    var quantity = parseInt(qtyInput.value);
-    var price = <?= json_encode(array_column($_SESSION['cart'], 'price')) ?>; // Get prices from session data
-    var pricePerUnit = price[productId]; // Get price of current product
-    var subtotalElement = document.getElementById('cart-total');
+        var qtyInput = document.getElementById('qty_' + productId);
+        var quantity = parseInt(qtyInput.value);
+        var price = <?= json_encode(array_column($_SESSION['cart'], 'price')) ?>;
+        var pricePerUnit = price[productId];
+        var subtotalElement = document.getElementById('cart-total');
+        var newTotal = 0;
 
-    // Calculate new total
-    var newTotal = 0;
-    <?php foreach ($_SESSION['cart'] as $key => $val): ?>
-        newTotal += (parseInt(document.getElementById('qty_<?= $key ?>').value) * <?= $val['price'] ?>);
-    <?php endforeach; ?>
-    subtotalElement.innerText = 'Rs. ' + newTotal; // Update total display
+        <?php foreach ($_SESSION['cart'] as $key => $val): ?>
+            newTotal += (parseInt(document.getElementById('qty_<?= $key ?>').value) * <?= $val['price'] ?>);
+        <?php endforeach; ?>
 
-    // Update the session on the server
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", "update_cart.php", true);
-    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            console.log(xhr.responseText); // Optional: check response for debugging
-        }
-    };
-    xhr.send("productId=" + productId + "&quantity=" + quantity);
-}
-
+        subtotalElement.innerText = 'Rs. ' + newTotal;
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "update_cart.php", true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.send("productId=" + productId + "&quantity=" + quantity);
+    }
 </script>
 
 <?php

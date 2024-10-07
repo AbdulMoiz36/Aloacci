@@ -30,54 +30,78 @@ $product = mysqli_fetch_array($psql);
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-   
     $message = mysqli_real_escape_string($con, $_POST['message']);
     $rating = $_POST['rating']; 
 
-    // Handle image upload
-    if (isset($_FILES['image']) && $_FILES['image']['error'] == UPLOAD_ERR_OK) {
-        $image_tmp_name = $_FILES['image']['tmp_name'];
-        $image_name = $_FILES['image']['name'];
-        $image_path = 'image/' . basename($image_name);
+    // Handle multiple image uploads
+    $image_filenames = []; // Array to store filenames of uploaded images
+    $max_images = 5; // Limit the number of images to 5
 
-        // Move the uploaded file to the desired directory
-        if (move_uploaded_file($image_tmp_name, $image_path)) {
-            $sql = "INSERT INTO `reviews` (`order_id`, `product_id`, `comment`, `rating`, `image`, `date`) VALUES ('$oid', '$pid', '$message', '$rating', '$image_path', NOW())";
+    if (isset($_FILES['images'])) {
+        $total_images = count($_FILES['images']['name']);
 
-            if (mysqli_query($con, $sql)) {
-                // Success message using SweetAlert
-                echo '<script>
-                        Swal.fire({
-                            icon: "success",
-                            title: "Message Sent!",
-                            text: "Your message has been sent successfully!",
-                            confirmButtonText: "OK"
-                        });
-                      </script>';
-            } else {
-                // Error handling using SweetAlert
-                echo '<script>
-                        Swal.fire({
-                            icon: "error",
-                            title: "Error!",
-                            text: "There was an error sending your message. Please try again later.",
-                            confirmButtonText: "OK"
-                        });
-                      </script>';
-            }
-        } else {
-            // Error handling for image upload
+        if ($total_images > $max_images) {
             echo '<script>
                     Swal.fire({
                         icon: "error",
-                        title: "Error!",
-                        text: "There was an error uploading your image. Please try again later.",
+                        title: "Too many files!",
+                        text: "You can upload a maximum of 5 images.",
                         confirmButtonText: "OK"
                     });
                   </script>';
+        } else {
+            for ($i = 0; $i < $total_images; $i++) {
+                if ($_FILES['images']['error'][$i] == UPLOAD_ERR_OK) {
+                    $image_tmp_name = $_FILES['images']['tmp_name'][$i];
+                    $image_name = $_FILES['images']['name'][$i];
+                    $image_path = './image/' . basename($image_name);
+
+                    // Move the uploaded file to the desired directory
+                    if (move_uploaded_file($image_tmp_name, $image_path)) {
+                        $image_filenames[] = $image_name; // Store only the image filename
+                    } else {
+                        echo '<script>
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Error!",
+                                    text: "There was an error uploading one or more images.",
+                                    confirmButtonText: "OK"
+                                });
+                              </script>';
+                    }
+                }
+            }
+
+            // Insert review data into the database with image filenames
+            if (!empty($image_filenames)) {
+                $image_filenames_str = implode(',', $image_filenames); // Convert array to a string
+                $sql = "INSERT INTO `reviews` (`order_id`, `product_id`, `comment`, `rating`, `image`, `date`) 
+                        VALUES ('$oid', '$pid', '$message', '$rating', '$image_filenames_str', NOW())";
+
+                if (mysqli_query($con, $sql)) {
+                    echo '<script>
+                            Swal.fire({
+                                icon: "success",
+                                title: "Message Sent!",
+                                text: "Your message has been sent successfully!",
+                                confirmButtonText: "OK"
+                            });
+                          </script>';
+                } else {
+                    echo '<script>
+                            Swal.fire({
+                                icon: "error",
+                                title: "Error!",
+                                text: "There was an error saving your review. Please try again later.",
+                                confirmButtonText: "OK"
+                            });
+                          </script>';
+                }
+            }
         }
     }
 }
+
 ?>
 
 <section class="py-10 w-full flex justify-center align-middle">
@@ -112,7 +136,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <!-- Image Upload -->
                 <div class="flex flex-col">
                     <label for="image" class="text-xl">Upload Image:</label>
-                    <input type="file" name="image" id="image" accept="image/*" class="p-1 rounded-lg border" />
+                    <p class="text-sm text-amber-600">(Max: 5 images)</p>
+                    <input type="file" name="images[]" id="image" accept="image/*" class="p-1 rounded-lg border" multiple />
                 </div>
 
                 <div class="flex flex-col">

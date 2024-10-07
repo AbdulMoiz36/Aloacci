@@ -13,13 +13,15 @@ $data = mysqli_fetch_assoc($sql);
 
 // Initialize cart total
 $cart_total = 0;
-if (isset($_SESSION['cart'])) {
+$cart_empty = true;
+if (isset($_SESSION['cart']) && count($_SESSION['cart']) > 0) {
+    $cart_empty = false;
     foreach ($_SESSION['cart'] as $key => $val) {
         // Split the $key into $pid and $format
         list($pid, $selected_format) = explode('_', $key);
-        
+
         // Fetch product details using only $pid
-        $productArr = get_product($con, '', '', $pid);  
+        $productArr = get_product($con, '', '', $pid);
         $price = $val['price'];
         $qty = $val['qty'];
         $total_price = $price * $qty;
@@ -84,6 +86,32 @@ if (isset($_POST['submit'])) {
                     <input type="text" name="mobile" value="<?= $data['mobile'] ?>"
                         class="border placeholder:text-sm border-gray-300 rounded-md outline-none p-2">
                 </div>
+                <div class="flex flex-col mt-4 border-y py-5">
+                    <label class="text-lg font-semibold">Select Payment Method:</label>
+                    <div class="flex flex-col gap-4 mt-2">
+                        
+                        <?php
+                        $formats = ['Cash On Delivery (COD)', 'Credit/Debit Card'];
+                        foreach ($formats as $format) {
+                        ?>
+                            <div class="flex items-center gap-2">
+                                <input type="radio" name="format" id="<?= $format ?>" value="<?= $format ?>" class="hidden" required>
+                                <label for="<?= $format ?>" class="cursor-pointer p-2 w-full rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-200">
+                                    <?= $format ?>
+                                </label>
+                            </div>
+                        <?php } ?>
+                    </div>
+                </div>
+                <style>
+input[type="radio"]:checked + label {
+    background-color: #F59E0B; /* Change color when selected */
+    color: white; /* Change text color when selected */
+    border-color: #F59E0B; /* Border color for the selected radio */
+}
+</style>
+
+
                 <input type="submit" name="submit" value="Place Order"
                     class="bg-black hover:bg-slate-900 text-white p-5 rounded-md font-bold"></input>
             </form>
@@ -93,39 +121,39 @@ if (isset($_POST['submit'])) {
             <!-- Products -->
             <div class="w-full">
                 <?php
-            if (isset($_SESSION['cart'])) {
-                $cart_total = 0;
-                foreach ($_SESSION['cart'] as $key => $val) {
-                    // Extract product ID and format from the key
-                    list($pid, $format) = explode('_', $key);
-                    
-                    $productArr = get_product($con, '', '', $pid); // Fetch product by ID
-                    $image = $productArr[0]['image'];
-                    $pname = $productArr[0]['name'];
-                    $qty = $val['qty'];
-                    $price = $val['price']; 
-                    $selected_format = $val['format']; 
-                
-                    $cart_total += $price * $qty;
+                if (isset($_SESSION['cart'])) {
+                    $cart_total = 0;
+                    foreach ($_SESSION['cart'] as $key => $val) {
+                        // Extract product ID and format from the key
+                        list($pid, $format) = explode('_', $key);
+
+                        $productArr = get_product($con, '', '', $pid); // Fetch product by ID
+                        $image = $productArr[0]['image'];
+                        $pname = $productArr[0]['name'];
+                        $qty = $val['qty'];
+                        $price = $val['price'];
+                        $selected_format = $val['format'];
+
+                        $cart_total += $price * $qty;
                 ?>
-                <!-- Card -->
-                <div class="flex justify-between p-2 w-full border-b">
-                    <div class="flex">
-                        <div class="relative px-2 w-[70px] h-[70px]">
-                            <img src="./image/<?= $image ?>" class="w-[70px] h-[70px]" alt="Product Image">
-                            <p class="rounded-full bg-red-700 absolute -top-2 -right-2 text-sm px-2 py-1 text-white font-bold">
-                                <?= $qty ?></p>
+                        <!-- Card -->
+                        <div class="flex justify-between p-2 w-full border-b">
+                            <div class="flex">
+                                <div class="relative px-2 w-[70px] h-[70px]">
+                                    <img src="./image/<?= $image ?>" class="w-[70px] h-[70px]" alt="Product Image">
+                                    <p class="rounded-full bg-red-700 absolute -top-2 -right-2 text-sm px-2 py-1 text-white font-bold">
+                                        <?= $qty ?></p>
+                                </div>
+                                <div class="self-center ml-2">
+                                    <p class="self-center text-wrap"><?= $pname ?></p>
+                                    <p class="self-center text-sm text-slate-600">Format: <?= $selected_format ?></p>
+                                </div>
+                            </div>
+                            <div class="self-center text-wrap">
+                                <p>Rs.<?= number_format($price * $qty, 2) ?></p>
+                            </div>
                         </div>
-                        <div class="self-center ml-2">
-                            <p class="self-center text-wrap"><?= $pname ?></p>
-                            <p class="self-center text-sm text-slate-600">Format: <?= $selected_format ?></p>
-                        </div>
-                    </div>
-                    <div class="self-center text-wrap">
-                        <p>Rs.<?= number_format($price * $qty, 2) ?></p>
-                    </div>
-                </div>
-                <!-- Card End -->
+                        <!-- Card End -->
                 <?php
                     }
                 }
