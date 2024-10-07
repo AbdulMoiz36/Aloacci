@@ -7,6 +7,11 @@ if (!isset($_SESSION['USER_LOGIN']) || $_SESSION['USER_LOGIN'] == '') {
     die();
 }
 
+// Ensure Cart has products
+if (!isset($_SESSION['cart']) && empty($_SESSION['cart'])) {
+    echo "<script>window.location.href='shop.php'</script>";
+}
+
 $user_id = $_SESSION['USER_ID'];
 $sql = mysqli_query($con, "SELECT `name`, `email`, `mobile`, `address`, `city` FROM `users` WHERE `id` = '$user_id'");
 $data = mysqli_fetch_assoc($sql);
@@ -89,7 +94,7 @@ if (isset($_POST['submit'])) {
                 <div class="flex flex-col mt-4 border-y py-5">
                     <label class="text-lg font-semibold">Select Payment Method:</label>
                     <div class="flex flex-col gap-4 mt-2">
-                        
+
                         <?php
                         $formats = ['Cash On Delivery (COD)', 'Credit/Debit Card'];
                         foreach ($formats as $format) {
@@ -104,12 +109,12 @@ if (isset($_POST['submit'])) {
                     </div>
                 </div>
                 <style>
-input[type="radio"]:checked + label {
-    background-color: #F59E0B; /* Change color when selected */
-    color: white; /* Change text color when selected */
-    border-color: #F59E0B; /* Border color for the selected radio */
-}
-</style>
+                    input[type="radio"]:checked+label {
+                        background-color: #F59E0B;
+                        color: white;
+                        border-color: #F59E0B;
+                    }
+                </style>
 
 
                 <input type="submit" name="submit" value="Place Order"

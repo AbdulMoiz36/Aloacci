@@ -18,6 +18,8 @@ if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
         $price = $val['price']; // Get the price from the session
         $cart_total += $price * $qty;
     }
+}else{
+    echo "<script>window.location.href='shop.php'</script>";
 }
 ?>
 
