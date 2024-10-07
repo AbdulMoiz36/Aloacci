@@ -266,7 +266,8 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
                 if ($p['id'] == $list['id']) {
                     $product_formats[] = [
                         'format' => $p['format'],
-                        'price' => $p['price']
+                        'price' => $p['price'],
+                        'qty' => $p['qty']
                     ];
                 }
             }
@@ -483,82 +484,117 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
 </div>
 
 <!-- Script for Modal Functionality -->
+<!-- Script for Modal Functionality -->
 <script>
-    // Script for Modal Functionality
     const openModalBtns = document.querySelectorAll('.openModalBtn');
     const closeModalBtn = document.getElementById('closeModalBtn');
     const modal = document.getElementById('modal');
     const modalOverlay = document.getElementById('modalOverlay');
     const modalProductPrice = document.getElementById('modal-product-price');
     let currentProductId = null; // Variable to store the current product ID
+
     // Function to close the modal
     function closeModal() {
         modal.classList.add('hidden');
         modalOverlay.classList.add('hidden');
     }
+
     // Event listener to open modal
     openModalBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             const productName = btn.getAttribute('data-product-name');
             const productFormats = JSON.parse(btn.getAttribute('data-product-formats'));
+
             // Populate modal
             document.getElementById('modal-product-name').innerText = productName;
+
             // Clear previous formats
             const formatContainer = document.getElementById('format-container');
             formatContainer.innerHTML = ''; // Clear previous formats
+
+            let firstAvailableFormatFound = false;
+
             productFormats.forEach((formatObj, index) => {
                 const formatDiv = document.createElement('div');
                 formatDiv.className = 'border-2 border-black p-2 cursor-pointer w-fit my-2';
                 formatDiv.innerText = `${formatObj.format}`;
                 formatDiv.dataset.price = formatObj.price;
-                // Select the first format by default
-                if (index === 0) {
-                    formatDiv.classList.add('bg-gray-200');
-                    modalProductPrice.innerText = `Rs. ${formatObj.price}`;
-                }
-                // Add click event listener for selecting a format
-                formatDiv.addEventListener('click', () => {
-                    // Remove 'selected' class from all formats
-                    document.querySelectorAll('#format-container div').forEach(div => {
-                        div.classList.remove('bg-gray-200');
+                formatDiv.dataset.qty = formatObj.qty; // Include quantity data
+                
+                // Check if the format is in stock
+                if (formatObj.qty > 0) {
+                    // If it's the first available format, select it by default
+                    if (!firstAvailableFormatFound) {
+                        formatDiv.classList.add('bg-gray-200');
+                        modalProductPrice.innerText = `Rs. ${formatObj.price}`;
+                        firstAvailableFormatFound = true;
+                    }
+                    
+                    // Add click event listener for selecting a format
+                    formatDiv.addEventListener('click', () => {
+                        // Remove 'selected' class from all formats
+                        document.querySelectorAll('#format-container div').forEach(div => {
+                            div.classList.remove('bg-gray-200');
+                        });
+                        // Add 'selected' class to the clicked format
+                        formatDiv.classList.add('bg-gray-200');
+                        // Update price in modal
+                        modalProductPrice.innerText = `Rs. ${formatDiv.dataset.price}`;
                     });
-                    // Add 'selected' class to the clicked format
-                    formatDiv.classList.add('bg-gray-200');
-                    // Update price in modal
-                    modalProductPrice.innerText = `Rs. ${formatDiv.dataset.price}`;
-                });
+                } else {
+                    // If out of stock, disable this format
+                    formatDiv.classList.add('opacity-50', 'cursor-not-allowed');
+                }
+
                 formatContainer.appendChild(formatDiv);
             });
+
+            // If no available format found, show a warning or disable the "Add to Cart" button
+            if (!firstAvailableFormatFound) {
+                modalProductPrice.innerText = 'Out of Stock';
+                document.getElementById('addToCartBtn').classList.add('opacity-50', 'cursor-not-allowed');
+            } else {
+                document.getElementById('addToCartBtn').classList.remove('opacity-50', 'cursor-not-allowed');
+            }
+
             // Set the current product ID
             currentProductId = btn.getAttribute('data-product-id');
+            
             // Show modal
             modal.classList.remove('hidden');
             modal.classList.add('flex');
             modalOverlay.classList.remove('hidden');
         });
     });
+
     // Event listener to close modal on button click
     closeModalBtn.addEventListener('click', closeModal);
+    
     // Event listener to close modal when clicking outside the modal
     modalOverlay.addEventListener('click', closeModal);
+    
     // Event listener to close modal with the 'Esc' key
     document.addEventListener('keydown', (event) => {
         if (event.key === 'Escape') {
             closeModal();
         }
     });
+
     // Add to Cart button event listener
     document.getElementById('addToCartBtn').addEventListener('click', () => {
         const selectedFormat = document.querySelector('#format-container .bg-gray-200');
         const quantity = document.getElementById('qty').value; // Get the quantity from the input
-        if (selectedFormat) {
+        if (selectedFormat && !selectedFormat.classList.contains('cursor-not-allowed')) {
             const format = selectedFormat.innerText; // Get the selected format text
             const price = selectedFormat.dataset.price; // Get the selected format price
             // Call manage_cart with the current product ID, selected format, and quantity
             manage_cart(currentProductId, 'add', quantity, format, price); // Pass the quantity and format
+        } else {
+            alert("Please select an available format.");
         }
     });
 </script>
+
 
 <?php
 include 'footer.php';

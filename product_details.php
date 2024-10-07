@@ -13,10 +13,10 @@ $product_image = htmlspecialchars($get_product[0]['image']);
 $product_image2 = htmlspecialchars($get_product[0]['image2']);
 $product_image3 = htmlspecialchars($get_product[0]['image3']);
 $product_name = htmlspecialchars($get_product[0]['name']);
-$product_price = htmlspecialchars($get_product[0]['price']);
 $brief = htmlspecialchars($get_product[0]['breif']);
 $product_formats = array_map('htmlspecialchars', array_column($get_product, 'format'));
 $product_prices = array_map('htmlspecialchars', array_column($get_product, 'price'));
+$product_quantities = array_column($get_product, 'qty'); // Fetch the quantity of each format
 $reviewsql = mysqli_query($con, "SELECT COUNT(*) AS total_reviews FROM reviews WHERE product_id = '$product_id';");
 $total_reviews = mysqli_fetch_array($reviewsql);
 ?>
@@ -55,23 +55,27 @@ $total_reviews = mysqli_fetch_array($reviewsql);
                 <p><?= $total_reviews['total_reviews'] ?> Reviews</p>
             </div>
 
-            <?php
-            $productSoldQtyByProductId = productSoldQtyByProductId($con, $get_product[0]['id']);
-            $cart_show = 'yes';
-            $stock = ($get_product[0]['qty'] > $productSoldQtyByProductId) ? 'In Stock' : 'Not in Stock';
-            if ($stock === 'Not in Stock') $cart_show = '';
-            ?>
-
             <!-- Product Formats and Prices -->
             <div class="mt-4">
                 <p class="font-semibold">Select Format:</p>
                 <div id="format-container" class="flex gap-3 flex-wrap">
-                    <?php foreach ($product_formats as $index => $format): ?>
-                        <div class="format-option border-2 border-black p-2 cursor-pointer my-2 <?= $index === 0 ? 'bg-gray-200' : '' ?> w-fit"
-                            data-price="<?= $product_prices[$index] ?>">
+                    <?php 
+                    $defaultSelected = false; // Flag to track if a default format is selected
+                    foreach ($product_formats as $index => $format): 
+                        $isAvailable = $product_quantities[$index] > 0;
+                    ?>
+                        <div class="format-option border-2 p-2 cursor-pointer my-2 <?= !$defaultSelected && $isAvailable ? 'bg-gray-200' : '' ?> w-fit
+                            <?= $isAvailable ? 'border-black' : 'border-gray-400 text-gray-400 cursor-not-allowed' ?>"
+                            data-price="<?= $product_prices[$index] ?>" data-qty="<?= $product_quantities[$index] ?>"
+                            <?= $isAvailable ? '' : 'data-disabled="true"' ?>>
                             <?= $format ?> - Rs. <?= $product_prices[$index] ?>
                         </div>
-                    <?php endforeach; ?>
+                    <?php 
+                        if ($isAvailable && !$defaultSelected) {
+                            $defaultSelected = true; // Mark the first available format as selected
+                        }
+                    endforeach; 
+                    ?>
                 </div>
                 <p id="product-price" class="font-semibold text-lg mt-2">Price: Rs. <?= $product_prices[0] ?></p>
             </div>
@@ -79,7 +83,7 @@ $total_reviews = mysqli_fetch_array($reviewsql);
             <div class="products--meta">
                 <p>
                     <span>Availability:</span>
-                    <span class="<?= $cart_show ? '' : 'text-red-600' ?> mb-4"><?= $stock ?></span>
+                    <span id="availability" class="<?= $product_quantities[0] > 0 ? '' : 'text-red-600' ?> mb-4"><?= $product_quantities[0] > 0 ? 'In Stock' : 'Not in Stock' ?></span>
                 </p>
             </div>
 
@@ -106,28 +110,35 @@ $total_reviews = mysqli_fetch_array($reviewsql);
             </div>
 
             <script>
-                // Handle format selection and price update
+                // Handle format selection and price/availability update
                 document.querySelectorAll('.format-option').forEach(option => {
+                    if (option.dataset.disabled === 'true') {
+                        // Skip disabled formats
+                        return;
+                    }
+
                     option.addEventListener('click', function() {
-                        document.querySelectorAll('.format-option').forEach(opt => opt.classList.remove(
-                            'bg-gray-200'));
+                        // Reset background for all options
+                        document.querySelectorAll('.format-option').forEach(opt => opt.classList.remove('bg-gray-200'));
                         this.classList.add('bg-gray-200');
+
+                        // Update price
                         const price = this.dataset.price;
                         document.getElementById('product-price').innerText = `Price: Rs. ${price}`;
+
+                        // Update availability
+                        const qty = this.dataset.qty;
+                        const availability = document.getElementById('availability');
+                        availability.innerText = qty > 0 ? 'In Stock' : 'Not in Stock';
+                        availability.classList.toggle('text-red-600', qty <= 0); // Add red color if out of stock
                     });
                 });
 
-                function addToCart(productId) {
-                    const selectedFormat = document.querySelector(
-                        '#format-container .bg-gray-200'); // Get the selected format
-                    const quantity = document.getElementById('qty').value; // Get the quantity
-                    if (selectedFormat) {
-                        const format = selectedFormat.innerText.split(' - ')[0]; // Get the format text (remove price)
-                        const price = selectedFormat.dataset.price; // Get the price of the selected format
-                        // Call manage_cart with the current product ID, selected format, and quantity
-                        manage_cart(productId, 'add', quantity, format, price); // Pass the quantity and format
-                    } else {
-                        alert("Please select a format before adding to cart.");
+                // Automatically select the first available format on page load
+                window.onload = function() {
+                    const defaultOption = document.querySelector('.format-option.bg-gray-200');
+                    if (defaultOption) {
+                        defaultOption.click(); // Simulate a click on the default selected format
                     }
                 }
             </script>
@@ -146,34 +157,6 @@ $total_reviews = mysqli_fetch_array($reviewsql);
 
             </form>
 
-            <script>
-                function addToCart(productId) {
-                    const selectedFormat = document.querySelector('#format-container .bg-gray-200'); // Get the selected format
-                    const quantity = document.getElementById('qty').value; // Get the quantity
-                    if (selectedFormat) {
-                        const format = selectedFormat.innerText.split(' - ')[0]; // Get the format text (remove price)
-                        const price = selectedFormat.dataset.price; // Get the price of the selected format
-                        // Call manage_cart with the current product ID, selected format, and quantity
-                        manage_cart(productId, 'add', quantity, format, price); // Pass the quantity and format
-                    }
-                }
-
-                function buyNow(productId) {
-                    const selectedFormat = document.querySelector('#format-container .bg-gray-200'); // Get the selected format
-                    const quantity = document.getElementById('qty').value; // Get the quantity
-                    if (selectedFormat) {
-                        const format = selectedFormat.innerText.split(' - ')[0]; // Get the format text (remove price)
-                        const price = selectedFormat.dataset.price; // Get the price of the selected format
-
-                        // Call manage_cart and then immediately redirect
-                        manage_cart(productId, 'add', quantity, format, price);
-
-                        // Redirect to checkout
-                        window.location.href = "checkout.php";
-                    }
-                }
-            </script>
-
             <!-- Buy It Now Button -->
             <?php if (!isset($_SESSION['USER_LOGIN'])): ?>
                 <div>
@@ -182,8 +165,54 @@ $total_reviews = mysqli_fetch_array($reviewsql);
                     </a>
                 </div>
             <?php else: ?>
-                <div onclick="buyNow('<?= $get_product[0]['id'] ?>')" class="w-full p-3 text-center border-2 hover:cursor-pointer bg-gradient-to-bl from-yellow-500 via-yellow-500 to-amber-600 shadow-sm hover:shadow-xl transition-shadow ease-in-out duration-300 font-semibold rounded-full text-white">Buy It Now</div>
+                <div onclick="addToCartAndCheckout(<?=$product_id?>)" class="w-full p-3 text-center border-2 hover:cursor-pointer bg-gradient-to-bl from-yellow-500 via-yellow-500 to-amber-600 shadow-sm hover:shadow-xl transition-shadow ease-in-out duration-300 font-semibold rounded-full text-white">Buy It Now</div>
             <?php endif; ?>
+
+            <script>
+                function addToCart(productId) {
+                    const selectedFormat = document.querySelector('#format-container .bg-gray-200'); // Get the selected format
+                    const quantity = document.getElementById('qty').value; // Get the quantity
+                    if (selectedFormat) {
+                        const format = selectedFormat.innerText.split(' - ')[0]; // Get the format text (remove price)
+                        const price = selectedFormat.dataset.price; // Get the price of the selected format
+                        const qty = selectedFormat.dataset.qty; // Get the available quantity of the selected format
+
+                        if (parseInt(quantity) > parseInt(qty)) {
+                            alert("Selected quantity exceeds available stock.");
+                            return;
+                        }
+
+                        // Call manage_cart with the current product ID, selected format, and quantity
+                        manage_cart(productId, 'add', quantity, format, price); // Pass the quantity and format
+                    } else {
+                        alert("Please select a format before adding to cart.");
+                    }
+                }
+
+                function addToCartAndCheckout(productId) {
+                    const selectedFormat = document.querySelector('#format-container .bg-gray-200'); // Get the selected format
+                    const quantity = document.getElementById('qty').value; // Get the quantity
+
+                    if (selectedFormat) {
+                        const format = selectedFormat.innerText.split(' - ')[0]; // Get the format text (remove price)
+                        const price = selectedFormat.dataset.price; // Get the price of the selected format
+
+                        // Use AJAX to call manage_cart without reloading the page
+                        const xhr = new XMLHttpRequest();
+                        xhr.open('POST', 'manage_cart.php', true); // Adjust this URL if needed
+                        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                        xhr.onreadystatechange = function() {
+                            if (xhr.readyState === 4 && xhr.status === 200) {
+                                // Once the item is added to the cart, redirect to checkout.php
+                                window.location.href = 'checkout.php';
+                            }
+                        };
+
+                        // Send the cart data (adjust these parameters as needed)
+                        xhr.send(`pid=${productId}&type=add&qty=${quantity}&format=${format}&price=${price}`);
+                    }
+                }
+            </script>
 
 
             <!-- Tabs -->
