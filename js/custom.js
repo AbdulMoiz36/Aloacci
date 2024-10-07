@@ -122,9 +122,15 @@ function manage_cart(pid, type, qty, format, price) {
     console.log("Quantity: " + qty); // For debugging
     console.log("Selected Format: " + format); // For debugging
 
-    if (qty <= 0) {
-        alert('Quantity must be greater than zero.');
-        return;
+    // Set default values for 'remove' action if format or price are not provided
+    if (type === 'remove') {
+        qty = 1; // Quantity doesn't matter when removing, just set it to 1
+        if (!format) {
+            format = ''; // Set format to an empty string for safety
+        }
+        if (!price) {
+            price = 0; // Set price to 0 for remove action
+        }
     }
 
     jQuery.ajax({

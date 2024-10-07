@@ -14,6 +14,7 @@ if ($product_id > 0) {
 $select .= " order by id desc";
 
 $res = mysqli_query($con, $select);
+$serial_no = 1;
 ?>
 
 <style>
@@ -34,8 +35,7 @@ $res = mysqli_query($con, $select);
                       <table class="table table-striped" id="table-1">
                       <thead>
                                     <tr>
-                                       <th>ID</th>
-                                       <!-- <th>Order</th> -->
+                                       <th>Serial No.</th>
                                        <th>Ratings</th>
                                        <th>Comments</th>
                                        <th>Action</th>
@@ -49,10 +49,7 @@ $res = mysqli_query($con, $select);
                                     while($row = mysqli_fetch_array($res)){
                                     ?>
                                     <tr class=" pb-0">
-                                       <td> <?= $row['id'] ?> </td>
-                                        <!-- <td> 
-                                          <a href="orders_detail.php?id=<?= $row['order_id'] ?>"><?= $row['order_id'] ?></a>
-                                        </td> -->
+                                       <td> <?= $serial_no++; ?> </td>
                                        <td>
                                         <?php for ($i=0; $i < round($row['rating']); $i++) { ?>
                                           <span class="star active">★</span>
@@ -63,8 +60,6 @@ $res = mysqli_query($con, $select);
                                         <a href="review_detail.php?id=<?= $row['id'] ?>" class="btn btn-icon btn-primary"><i class="fas fa-eye"></i></a>
                                         
                                         <a href="orders_detail.php?id=<?= $row['order_id'] ?>" class="btn btn-icon btn-info text-white"><i class="fas fa-box"></i></a>
-
-                                        <!-- <a href="orders_detail.php?id=<?= $row['order_id'] ?>"><?= $row['order_id'] ?></a> -->
 
                                         <a href="review_delete.php?id=<?= $row['id'] ?>" class="btn btn-icon btn-danger text-white"><i class="fas fa-trash-alt"></i></a>
                                        </td>

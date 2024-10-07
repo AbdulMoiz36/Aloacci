@@ -59,6 +59,7 @@ function getStatusClass($status)
                     $product_name = $order_d['name'];
                     $quantity = $order_d['qty'];
                     $price = $order_d['price'];
+                    $format = $order_d['format'];
                 ?>
 
                     <!-- Order Detail Structure -->
@@ -76,7 +77,7 @@ function getStatusClass($status)
                                             <?= $order_d['gender'] ?></p>
                                         <div class="flex items-center">
                                             <p class="font-medium text-base leading-7 text-black pr-4 mr-4 border-r border-gray-200">
-                                                Size: <span class="text-gray-500">100 ml</span></p> <!-- Add size dynamically if needed -->
+                                                Size: <span class="text-gray-500"><?= $format ?></span></p> <!-- Add size dynamically if needed -->
                                             <p class="font-medium text-base leading-7 text-black">Qty: <span class="text-gray-500"><?= $quantity ?></span></p>
                                         </div>
                                     </div>
@@ -118,7 +119,7 @@ function getStatusClass($status)
             </div>
             <div class="w-full border-t border-gray-200 px-6 flex flex-col lg:flex-row items-center justify-between ">
 
-                <p class="font-semibold text-lg text-black py-6">Shipping: <span class="text-amber-600">Rs.<?= $order['total_price'] ?></span></p>
+                <p class="font-semibold text-lg text-black py-6">Shipping: <span class="text-amber-600">Rs.</span></p>
                 <p class="font-semibold text-lg text-black py-6">Address: <span class="text-amber-600"><?= $order['address'] ?>,<?= $order['city'] ?></span></p>
                 <p class="font-semibold text-lg text-black py-6">Total Price: <span class="text-amber-600">Rs.<?= $order['total_price'] ?></span></p>
             </div>
@@ -126,27 +127,6 @@ function getStatusClass($status)
         </div>
     </div>
 </section>
-
-
-<!-- <section class="px-2 py-5 md:px-32 md:py-10 w-full">
-    <h1 class="text-4xl font-bold text-center">Order Details</h1>
-    <div class="flex flex-col md:flex-row mt-10 gap-2">
-        <div class="w-full md:w-4/6">
-            
-        </div>
-        <div class="w-full md:w-2/6">
-            <div class="bg-gray-100 p-10">
-                <div class="flex justify-around text-wrap">
-                    <div class="bg-amber-600">
-                        <p class="font-semibold text-xl">TotalAmount:</p>
-                        <p id="cart-total" class="font-semibold text-xl">Rs. 1000</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section> -->
-
 
 <?php
 include 'footer.php';

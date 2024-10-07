@@ -90,6 +90,13 @@ $row = mysqli_fetch_array($res);
             <li class="dropdown <?= $active=="sub_categories.php"? 'active':''; ?>">
               <a href="sub_categories.php" class="nav-link"><i data-feather="monitor"></i><span>Sub Categories</span></a>
             </li>
+            <li class="dropdown <?= $active=="genre.php"? 'active':''; ?>">
+              <a href="genre.php" class="nav-link"><i data-feather="monitor"></i><span>Genre</span></a>
+            </li>
+            <li class="dropdown <?= $active=="type.php"? 'active':''; ?>">
+              <a href="type.php" class="nav-link"><i data-feather="monitor"></i><span>Product Types</span></a>
+            </li>
+            
             <li class="dropdown <?= $active=="product.php"? 'active':''; ?>">
               <a href="product.php" class="nav-link"><i data-feather="monitor"></i><span>Products</span></a>
             </li>

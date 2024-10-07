@@ -15,10 +15,13 @@ $data = mysqli_fetch_assoc($sql);
 $cart_total = 0;
 if (isset($_SESSION['cart'])) {
     foreach ($_SESSION['cart'] as $key => $val) {
-        $productArr = get_product($con, '', '', $key);
+        // Split the $key into $pid and $format
+        list($pid, $selected_format) = explode('_', $key);
+        
+        // Fetch product details using only $pid
+        $productArr = get_product($con, '', '', $pid);  
         $price = $val['price'];
         $qty = $val['qty'];
-        $selected_format = $val['format'];
         $total_price = $price * $qty;
         $cart_total += $total_price; // Calculate total
     }
@@ -31,26 +34,30 @@ if (isset($_POST['submit'])) {
     $city = get_safe_value($con, $_POST['city']);
     $total_price = $cart_total; // Use the calculated total price
     $order_status = '1';
-    $date = date('y-m-d h:m:s');
+    $date = date('Y-m-d H:i:s'); // Proper date format
 
-    mysqli_query($con, "INSERT INTO orders (user_id, email, mobile, address, city, total_price, order_status, date) VALUES ('$user_id', '$email', '$mobile', '$address', '$city', '$total_price', '$order_status', '$date')");
+    // Insert order details into the orders table
+    mysqli_query($con, "INSERT INTO orders (user_id, email, mobile, address, city, total_price, order_status, date) 
+                        VALUES ('$user_id', '$email', '$mobile', '$address', '$city', '$total_price', '$order_status', '$date')");
 
-    $order_id = mysqli_insert_id($con);
+    $order_id = mysqli_insert_id($con); // Get the order ID for the order
 
+    // Insert each product in the cart into orders_detail
     foreach ($_SESSION['cart'] as $key => $val) {
-        $productArr = get_product($con, '', '', $key);
-        $price = $val['price'];;
+        list($pid, $selected_format) = explode('_', $key); // Split product ID and format
+        $price = $val['price'];
         $qty = $val['qty'];
-        $selected_format = $val['format'];
 
-        mysqli_query($con, "INSERT INTO orders_detail (order_id, product_id, format, qty, price) VALUES ('$order_id', '$key', '$selected_format', '$qty', '$price')");
+        // Insert each product format into the orders_detail table
+        mysqli_query($con, "INSERT INTO orders_detail (order_id, product_id, format, qty, price) 
+                            VALUES ('$order_id', '$pid', '$selected_format', '$qty', '$price')");
     }
 
+    // Clear the cart after the order is placed
     unset($_SESSION['cart']);
     echo "<script>window.location.href='thankyou.php'</script>";
 }
 ?>
-
 
 <section class="flex justify-center py-10">
     <div class="w-full md:w-11/12 p-5 shadow-lg flex flex-col md:flex-row">
@@ -59,21 +66,26 @@ if (isset($_POST['submit'])) {
             <form method="POST" class="mt-5 flex flex-col gap-8">
                 <div class="flex flex-col">
                     <label for="">Email:</label>
-                    <input type="text" name="email" value="<?= $data['email'] ?>" class="border placeholder:text-sm border-gray-300 rounded-md outline-none p-2">
+                    <input type="text" name="email" value="<?= $data['email'] ?>"
+                        class="border placeholder:text-sm border-gray-300 rounded-md outline-none p-2">
                 </div>
                 <div class="flex flex-col">
                     <label for="">City:</label>
-                    <input type="text" name="city" value="<?= $data['city'] ?>" class="border placeholder:text-sm border-gray-300 rounded-md outline-none p-2" required>
+                    <input type="text" name="city" value="<?= $data['city'] ?>"
+                        class="border placeholder:text-sm border-gray-300 rounded-md outline-none p-2" required>
                 </div>
                 <div class="flex flex-col">
                     <label for="">Address:</label>
-                    <input type="text" name="address" value="<?= $data['address'] ?>" class="border placeholder:text-sm border-gray-300 rounded-md outline-none p-2" required>
+                    <input type="text" name="address" value="<?= $data['address'] ?>"
+                        class="border placeholder:text-sm border-gray-300 rounded-md outline-none p-2" required>
                 </div>
                 <div class="flex flex-col">
                     <label for="">Phone Number:</label>
-                    <input type="text" name="mobile" value="<?= $data['mobile'] ?>" class="border placeholder:text-sm border-gray-300 rounded-md outline-none p-2">
+                    <input type="text" name="mobile" value="<?= $data['mobile'] ?>"
+                        class="border placeholder:text-sm border-gray-300 rounded-md outline-none p-2">
                 </div>
-                <input type="submit" name="submit" value="Place Order" class="bg-black hover:bg-slate-900 text-white p-5 rounded-md font-bold"></input>
+                <input type="submit" name="submit" value="Place Order"
+                    class="bg-black hover:bg-slate-900 text-white p-5 rounded-md font-bold"></input>
             </form>
         </div>
 
@@ -81,26 +93,28 @@ if (isset($_POST['submit'])) {
             <!-- Products -->
             <div class="w-full">
                 <?php
-                if (isset($_SESSION['cart'])) {
-                    $cart_total = 0;
-                    foreach ($_SESSION['cart'] as $key => $val) {
-                        $productArr = get_product($con, '', '', $key);
-                        $image = $productArr[0]['image'];
-                        $pname = $productArr[0]['name'];
-                        $qty = $val['qty'];
-                        $price = $val['price']; // Get the price from the session
-                        $selected_format = $val['format']; // Get the selected format
-                        $total_price = $price * $qty;
-
-                        // Calculate cart total
-                        $cart_total += $total_price;
+            if (isset($_SESSION['cart'])) {
+                $cart_total = 0;
+                foreach ($_SESSION['cart'] as $key => $val) {
+                    // Extract product ID and format from the key
+                    list($pid, $format) = explode('_', $key);
+                    
+                    $productArr = get_product($con, '', '', $pid); // Fetch product by ID
+                    $image = $productArr[0]['image'];
+                    $pname = $productArr[0]['name'];
+                    $qty = $val['qty'];
+                    $price = $val['price']; 
+                    $selected_format = $val['format']; 
+                
+                    $cart_total += $price * $qty;
                 ?>
                 <!-- Card -->
                 <div class="flex justify-between p-2 w-full border-b">
                     <div class="flex">
                         <div class="relative px-2 w-[70px] h-[70px]">
                             <img src="./image/<?= $image ?>" class="w-[70px] h-[70px]" alt="Product Image">
-                            <p class="rounded-full bg-red-700 absolute -top-2 -right-2 text-sm px-2 py-1 text-white font-bold"><?= $qty ?></p>
+                            <p class="rounded-full bg-red-700 absolute -top-2 -right-2 text-sm px-2 py-1 text-white font-bold">
+                                <?= $qty ?></p>
                         </div>
                         <div class="self-center ml-2">
                             <p class="self-center text-wrap"><?= $pname ?></p>
@@ -108,7 +122,7 @@ if (isset($_POST['submit'])) {
                         </div>
                     </div>
                     <div class="self-center text-wrap">
-                        <p>Rs.<?= number_format($total_price, 2) ?></p>
+                        <p>Rs.<?= number_format($price * $qty, 2) ?></p>
                     </div>
                 </div>
                 <!-- Card End -->
