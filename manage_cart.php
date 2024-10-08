@@ -5,16 +5,17 @@ require "add_cart_func.php";
 
 try {
     $pid = get_safe_value($con, $_POST['pid']);
-    $qty = get_safe_value($con, $_POST['qty']);
     $type = get_safe_value($con, $_POST['type']);
     $format = isset($_POST['format']) ? get_safe_value($con, $_POST['format']) : ''; // Default to empty string
     $price = isset($_POST['price']) ? get_safe_value($con, $_POST['price']) : 0; // Default to 0
+    $qty = isset($_POST['qty']) ? get_safe_value($con, $_POST['qty']) : 0;
     
 
     // Check if quantity is available
-    $productSoldQtyByProductId = productSoldQtyByProductId($con, $pid);
-    $productQty = productQty($con, $pid);
+    $productSoldQtyByProductId = productSoldQtyByProductId($con, $pid, $format); // Include format
+    $productQty = productQty($con, $pid, $format); // Include format
     $pending_qty = $productQty - $productSoldQtyByProductId;
+    
 
     if ($qty > $pending_qty && $type !== 'remove') {
         echo "not_available";

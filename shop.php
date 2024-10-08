@@ -255,59 +255,68 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
     </div>
 
     <!-- Products section -->
-    <div id="products-container" class="w-full p-3 flex flex-wrap justify-center gap-5">
-        <?php
-        $unique_products = [];
-        foreach ($get_product as $list) {
-            if (in_array($list['id'], $unique_products)) continue;
-            $unique_products[] = $list['id'];
+<div id="products-container" class="w-full p-3 flex flex-wrap justify-center gap-5">
+    <?php
+    $unique_products = [];
+    foreach ($get_product as $list) {
+        if (in_array($list['id'], $unique_products)) continue;
+        $unique_products[] = $list['id'];
 
-            $product_formats = []; // Get product formats
-            foreach ($get_product as $p) {
-                if ($p['id'] == $list['id']) {
-                    $product_formats[] = [
-                        'format' => $p['format'],
-                        'price' => $p['price']
-                    ];
-                }
+        $product_formats = []; // Get product formats
+        foreach ($get_product as $p) {
+            if ($p['id'] == $list['id']) {
+                // Query to get the total ordered quantity for the current format
+                $order_qty_result = mysqli_query($con, "SELECT SUM(qty) AS total_ordered_qty FROM orders_detail WHERE product_id = '{$p['id']}' AND format = '{$p['format']}'");
+                $order_qty_row = mysqli_fetch_assoc($order_qty_result);
+                $total_ordered_qty = $order_qty_row['total_ordered_qty'] ?? 0; // If no orders, default to 0
+
+                // Subtract total ordered quantity from available stock in product_format
+                $available_qty = $p['qty'] - $total_ordered_qty;
+                $available_qty = max(0, $available_qty); // Ensure we don't have negative quantities
+                
+                $product_formats[] = [
+                    'format' => $p['format'],
+                    'price' => $p['price'],
+                    'qty' => $available_qty // Store available quantity
+                ];
             }
-        ?>
-            <div class="product-card w-96 md:w-72 h-[40rem] md:h-[30rem] flex gap-2 flex-col relative group shadow"
-                data-gender-id="<?= $list['gender_id'] ?>" data-genre-id="<?= $list['genre_id'] ?>"
-                data-type-id="<?= $list['type_id'] ?>" data-season-id="<?= $list['season_id'] ?>"
-                data-sillage-id="<?= $list['sillage_id'] ?>" data-lasting-id="<?= $list['lasting_id'] ?>">
-                <div class="openModalBtn z-10 absolute -top-2 -right-2 bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full p-3 flex items-center justify-center text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out cursor-pointer"
-                    data-product-id="<?= $list['id'] ?>" data-product-name="<?= $list['name'] ?>"
-                    data-product-formats="<?= htmlspecialchars(json_encode($product_formats)) ?>">
-                    <i class="fas fa-plus text-white pl-0.5 font-semibold"></i>
-                </div>
+        }
+    ?>
+    <div class="product-card w-96 md:w-72 h-[40rem] md:h-[30rem] flex gap-2 flex-col relative group shadow"
+        data-gender-id="<?= $list['gender_id'] ?>" data-genre-id="<?= $list['genre_id'] ?>">
+        <div class="openModalBtn z-10 absolute -top-2 -right-2 bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full p-3 flex items-center justify-center text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out cursor-pointer"
+            data-product-id="<?= $list['id'] ?>" data-product-name="<?= $list['name'] ?>"
+            data-product-formats="<?= htmlspecialchars(json_encode($product_formats)) ?>">
+            <i class="fas fa-plus text-white pl-0.5 font-semibold"></i>
+        </div>
 
-                <!-- Product image wrapper -->
-                <div class="relative h-[70%] w-full">
-                    <a href="product_details.php?id=<?= $list['id'] ?>" class="product-link w-full">
-                        <img src="./image/<?= $list['image'] ?>" alt="<?= $list['name'] ?>"
-                            class="h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0">
-                        <?php if ($list['image2'] != ''): ?>
-                            <img src="./image/<?= $list['image2'] ?>" alt="<?= $list['name'] ?> Hover"
-                                class="absolute top-0 left-0 h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100">
-                        <?php else: ?>
-                            <img src="./image/<?= $list['image'] ?>" alt="<?= $list['name'] ?> Hover"
-                                class="absolute top-0 left-0 h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100">
-                        <?php endif; ?>
-                    </a>
-                </div>
+        <!-- Product image wrapper -->
+        <div class="relative h-[70%] w-full">
+            <a href="product_details.php?id=<?= $list['id'] ?>" class="product-link w-full">
+                <img src="./image/<?= $list['image'] ?>" alt="<?= $list['name'] ?>"
+                    class="h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0">
+                <?php if ($list['image2'] != ''): ?>
+                <img src="./image/<?= $list['image2'] ?>" alt="<?= $list['name'] ?> Hover"
+                    class="absolute top-0 left-0 h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100">
+                <?php else: ?>
+                <img src="./image/<?= $list['image'] ?>" alt="<?= $list['name'] ?> Hover"
+                    class="absolute top-0 left-0 h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100">
+                <?php endif; ?>
+            </a>
+        </div>
 
-                <!-- Product details -->
-                <div class="px-4 py-2 h-full flex flex-col justify-evenly">
-                    <a href="product_details.php?id=<?= $list['id'] ?>"
-                        class="text-lg font-bold hover:underline"><?= htmlspecialchars($list['name']) ?></a>
-                    <p class="text-gray-600 overflow-hidden text-ellipsis line-clamp-2">
-                        <?= htmlspecialchars($list['description']) ?></p>
-                    <p class="text-lg font-bold text-red-500">Rs. <?= htmlspecialchars($list['price']) ?></p>
-                </div>
-            </div>
-        <?php } ?>
+        <!-- Product details -->
+        <div class="px-4 py-2 h-full flex flex-col justify-evenly">
+            <a href="product_details.php?id=<?= $list['id'] ?>"
+                class="text-lg font-bold hover:underline"><?= htmlspecialchars($list['name']) ?></a>
+            <p class="text-gray-600 overflow-hidden text-ellipsis line-clamp-2">
+                <?= htmlspecialchars($list['description']) ?></p>
+            <p class="text-lg font-bold text-red-500">Rs. <?= htmlspecialchars($list['price']) ?></p>
+        </div>
     </div>
+    <?php } ?>
+</div>
+
 </section>
 
 <script>
@@ -506,24 +515,24 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
 
 <!-- Script for Modal Functionality -->
 <script>
-    // Script for Modal Functionality
     const openModalBtns = document.querySelectorAll('.openModalBtn');
     const closeModalBtn = document.getElementById('closeModalBtn');
     const modal = document.getElementById('modal');
     const modalOverlay = document.getElementById('modalOverlay');
     const modalProductPrice = document.getElementById('modal-product-price');
     let currentProductId = null; // Variable to store the current product ID
+
     // Function to close the modal
     function closeModal() {
         modal.classList.add('hidden');
         modalOverlay.classList.add('hidden');
     }
+
     // Event listener to open modal
     openModalBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             const productName = btn.getAttribute('data-product-name');
             const productFormats = JSON.parse(btn.getAttribute('data-product-formats'));
-            const productId = btn.getAttribute('data-product-id'); // Get the product ID
 
             // Populate modal
             document.getElementById('modal-product-name').innerText = productName;
@@ -532,39 +541,54 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
             const formatContainer = document.getElementById('format-container');
             formatContainer.innerHTML = ''; // Clear previous formats
 
+            let firstAvailableFormatFound = false;
+
             productFormats.forEach((formatObj, index) => {
                 const formatDiv = document.createElement('div');
                 formatDiv.className = 'border-2 border-black p-2 cursor-pointer w-fit my-2';
                 formatDiv.innerText = `${formatObj.format}`;
                 formatDiv.dataset.price = formatObj.price;
-
-                // Select the first format by default
-                if (index === 0) {
-                    formatDiv.classList.add('bg-gray-200');
-                    modalProductPrice.innerText = `Rs. ${formatObj.price}`;
-                }
-
-                // Add click event listener for selecting a format
-                formatDiv.addEventListener('click', () => {
-                    // Remove 'selected' class from all formats
-                    document.querySelectorAll('#format-container div').forEach(div => {
-                        div.classList.remove('bg-gray-200');
+                formatDiv.dataset.qty = formatObj.qty; // Include quantity data
+                
+                // Check if the format is in stock
+                if (formatObj.qty > 0) {
+                    // If it's the first available format, select it by default
+                    if (!firstAvailableFormatFound) {
+                        formatDiv.classList.add('bg-gray-200');
+                        modalProductPrice.innerText = `Rs. ${formatObj.price}`;
+                        firstAvailableFormatFound = true;
+                    }
+                    
+                    // Add click event listener for selecting a format
+                    formatDiv.addEventListener('click', () => {
+                        // Remove 'selected' class from all formats
+                        document.querySelectorAll('#format-container div').forEach(div => {
+                            div.classList.remove('bg-gray-200');
+                        });
+                        // Add 'selected' class to the clicked format
+                        formatDiv.classList.add('bg-gray-200');
+                        // Update price in modal
+                        modalProductPrice.innerText = `Rs. ${formatDiv.dataset.price}`;
                     });
-
-                    // Add 'selected' class to the clicked format
-                    formatDiv.classList.add('bg-gray-200');
-
-                    // Update price in modal
-                    modalProductPrice.innerText = `Rs. ${formatDiv.dataset.price}`;
-                });
+                } else {
+                    // If out of stock, disable this format
+                    formatDiv.classList.add('opacity-50', 'cursor-not-allowed');
+                }
 
                 formatContainer.appendChild(formatDiv);
             });
 
-            // Set the current product ID and assign it to the "Buy It Now" button
-            const buyNowBtn = document.getElementById('buyNowBtn'); // Adjust selector to your Buy It Now button
-            buyNowBtn.setAttribute('onclick', `addToCartAndCheckout(${productId})`); // Set the correct product ID
+            // If no available format found, show a warning or disable the "Add to Cart" button
+            if (!firstAvailableFormatFound) {
+                modalProductPrice.innerText = 'Out of Stock';
+                document.getElementById('addToCartBtn').classList.add('opacity-50', 'cursor-not-allowed');
+            } else {
+                document.getElementById('addToCartBtn').classList.remove('opacity-50', 'cursor-not-allowed');
+            }
 
+            // Set the current product ID
+            currentProductId = btn.getAttribute('data-product-id');
+            
             // Show modal
             modal.classList.remove('hidden');
             modal.classList.add('flex');
@@ -573,26 +597,32 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
 
     // Event listener to close modal on button click
     closeModalBtn.addEventListener('click', closeModal);
+    
     // Event listener to close modal when clicking outside the modal
     modalOverlay.addEventListener('click', closeModal);
+    
     // Event listener to close modal with the 'Esc' key
     document.addEventListener('keydown', (event) => {
         if (event.key === 'Escape') {
             closeModal();
         }
     });
+
     // Add to Cart button event listener
     document.getElementById('addToCartBtn').addEventListener('click', () => {
         const selectedFormat = document.querySelector('#format-container .bg-gray-200');
         const quantity = document.getElementById('qty').value; // Get the quantity from the input
-        if (selectedFormat) {
+        if (selectedFormat && !selectedFormat.classList.contains('cursor-not-allowed')) {
             const format = selectedFormat.innerText; // Get the selected format text
             const price = selectedFormat.dataset.price; // Get the selected format price
             // Call manage_cart with the current product ID, selected format, and quantity
             manage_cart(currentProductId, 'add', quantity, format, price); // Pass the quantity and format
+        } else {
+            alert("Please select an available format.");
         }
     });
 </script>
+
 
 <?php
 include 'footer.php';

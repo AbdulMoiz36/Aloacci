@@ -7,8 +7,13 @@ function get_safe_value($con,$str){
 }
 
 function get_product($con, $limit = '', $cat_id = '', $product_id = '', $search_str = '', $getQuery = false, $sub_cat_id = '', $max_price = '', $sort = '') {
-    $sql = "SELECT product.*, categories.categories, sub_categories.sub_categories, product_format.format, product_format.price,
-            (SELECT MIN(product_format.price) FROM product_format WHERE product_format.product_id = product.id) AS min_price 
+    $sql = "SELECT product.*, 
+                   categories.categories, 
+                   sub_categories.sub_categories, 
+                   product_format.format, 
+                   product_format.price, 
+                   product_format.qty,  -- Added qty from product_format
+                   (SELECT MIN(product_format.price) FROM product_format WHERE product_format.product_id = product.id) AS min_price 
             FROM product 
             JOIN categories ON product.category_id = categories.id 
             LEFT JOIN sub_categories ON product.sub_category_id = sub_categories.id 
@@ -78,16 +83,22 @@ function get_product($con, $limit = '', $cat_id = '', $product_id = '', $search_
 }
 
 
-function productSoldQtyByProductId($con,$pid){
-	$sql="select sum(orders_detail.Qty) as qty from orders_detail,orders where orders.id=orders_detail.order_id and orders_detail.product_id=$pid and orders.order_status!=4";
-	$res=mysqli_query($con,$sql);
-	$row=mysqli_fetch_assoc($res);
-	return $row['qty'];
+function productSoldQtyByProductId($con, $pid, $format) {
+    $sql = "SELECT SUM(orders_detail.qty) AS qty 
+            FROM orders_detail, orders 
+            WHERE orders.id = orders_detail.order_id 
+              AND orders_detail.product_id = $pid 
+              AND orders_detail.format = '$format' 
+              AND orders.order_status != 4";
+    $res = mysqli_query($con, $sql);
+    $row = mysqli_fetch_assoc($res);
+    return $row['qty'];
 }
 
-function productQty($con,$pid){
-	$sql="select qty from product where id='$pid'";
-	$res=mysqli_query($con,$sql);
-	$row=mysqli_fetch_assoc($res);
-	return $row['qty'];
+
+function productQty($con, $pid, $format) {
+    $sql = "SELECT qty FROM product_format WHERE product_id = '$pid' AND format = '$format'";
+    $res = mysqli_query($con, $sql);
+    $row = mysqli_fetch_assoc($res);
+    return $row['qty'];
 }
