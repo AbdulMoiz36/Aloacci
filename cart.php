@@ -41,6 +41,12 @@ function get_available_stock($con, $pid, $format) {
     <div class="flex flex-col md:flex-row mt-10 gap-2">
         <div class="w-full md:w-4/6">
             <?php
+            // Check if the cart is empty
+            // if (empty($_SESSION['cart'])) {
+            //     echo "<script>window.location.href='shop.php'</script>";
+            //     exit;
+            // }
+
             if (isset($_SESSION['cart'])) {
                 $cart_total = 0;
                 foreach ($_SESSION['cart'] as $key => $val) {
@@ -66,13 +72,19 @@ function get_available_stock($con, $pid, $format) {
                     <div style="margin-bottom:20px">
                         <p class="font-semibold">Quantity:</p>
                         <div class="flex items-center space-x-2">
-                            <span class="qty-minus" onclick="changeQty('<?= $key ?>', -1, <?= $available_stock ?>)"><i class="fa fa-minus" aria-hidden="true"></i></span>
-                            <input id="qty_<?= $key ?>" name="quantity" type="number" min="1" value="<?= $qty ?>" class="w-16 text-center border border-gray-300 rounded-md" onchange="updateCartTotal('<?= $key ?>', <?= $available_stock ?>)" />
-                            <span class="qty-plus" onclick="changeQty('<?= $key ?>', 1, <?= $available_stock ?>)"><i class="fa fa-plus" aria-hidden="true"></i></span>
+                            <span class="qty-minus" onclick="changeQty('<?= $key ?>', -1, <?= $available_stock ?>)"><i
+                                    class="fa fa-minus" aria-hidden="true"></i></span>
+                            <input id="qty_<?= $key ?>" name="quantity" type="number" min="1" value="<?= $qty ?>"
+                                class="w-16 text-center border border-gray-300 rounded-md"
+                                onchange="updateCartTotal('<?= $key ?>', <?= $available_stock ?>)" />
+                            <span class="qty-plus" onclick="changeQty('<?= $key ?>', 1, <?= $available_stock ?>)"><i
+                                    class="fa fa-plus" aria-hidden="true"></i></span>
                         </div>
                     </div>
                     <div class="flex justify-between">
-                        <a href="javascript:void(0)" onclick="manage_cart('<?php echo $pid ?>', 'remove', 1, '<?php echo $selected_format ?>', '<?php echo $price ?>')" class="font-semibold underline cursor-pointer">Remove</a>
+                        <a href="javascript:void(0)"
+                            onclick="manage_cart('<?php echo $pid ?>', 'remove', 1, '<?php echo $selected_format ?>', '<?php echo $price ?>')"
+                            class="font-semibold underline cursor-pointer">Remove</a>
                         <p class="font-semibold text-lg">Rs. <?= $price ?></p>
                     </div>
                 </div>
@@ -90,7 +102,19 @@ function get_available_stock($con, $pid, $format) {
                     <p id="cart-total" class="font-semibold text-xl">Rs. <?= $cart_total ?></p>
                 </div>
                 <div class="mt-7">
-                    <a href="checkout.php"><button class="w-full p-2 border-2 hover:cursor-pointer bg-gradient-to-bl from-yellow-500 via-yellow-500 to-amber-600 shadow-sm hover:shadow-lg transition-shadow ease-in-out duration-300 font-semibold rounded-full text-white">Checkout</button></a>
+                    <?php if (empty($_SESSION['cart'])): ?>
+                    <button class="w-full p-2 border-2 bg-gray-300 text-gray-600 cursor-not-allowed rounded-full"
+                        disabled>
+                        Checkout
+                    </button>
+                    <?php else: ?>
+                    <a href="checkout.php">
+                        <button
+                            class="w-full p-2 border-2 hover:cursor-pointer bg-gradient-to-bl from-yellow-500 via-yellow-500 to-amber-600 shadow-sm hover:shadow-lg transition-shadow ease-in-out duration-300 font-semibold rounded-full text-white">
+                            Checkout
+                        </button>
+                    </a>
+                    <?php endif; ?>
                 </div>
                 <div class="mt-7">
                     <p class="text-center text-sm">Taxes and Shipping calculated at checkout.</p>

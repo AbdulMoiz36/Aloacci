@@ -77,7 +77,7 @@ $res = mysqli_query($con, $select);
                                  $remainingQty = $totalQty - $soldQty;
                                  $price = isset($pricesByFormat[$key]) ? $pricesByFormat[$key] : 'N/A'; // Handle price
 
-                                 echo ($remainingQty > 0) ? "<span class='badge badge-primary'>$remainingQty</span>" : "Out of Stock, ";
+                                 echo ($remainingQty > 0) ? "$remainingQty, " : "Out of Stock, ";
 
                               }
                            ?>

@@ -254,8 +254,8 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
     </div>
 
     <!-- Products section -->
-<div id="products-container" class="w-full p-3 flex flex-wrap justify-center gap-5">
-    <?php
+    <div id="products-container" class="w-full p-3 flex flex-wrap justify-center gap-5">
+        <?php
     $unique_products = [];
     foreach ($get_product as $list) {
         if (in_array($list['id'], $unique_products)) continue;
@@ -281,40 +281,40 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
             }
         }
     ?>
-    <div class="product-card w-96 md:w-72 h-[40rem] md:h-[30rem] flex gap-2 flex-col relative group shadow"
-        data-gender-id="<?= $list['gender_id'] ?>" data-genre-id="<?= $list['genre_id'] ?>">
-        <div class="openModalBtn z-10 absolute -top-2 -right-2 bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full p-3 flex items-center justify-center text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out cursor-pointer"
-            data-product-id="<?= $list['id'] ?>" data-product-name="<?= $list['name'] ?>"
-            data-product-formats="<?= htmlspecialchars(json_encode($product_formats)) ?>">
-            <i class="fas fa-plus text-white pl-0.5 font-semibold"></i>
-        </div>
+        <div class="product-card w-96 md:w-72 h-[40rem] md:h-[30rem] flex gap-2 flex-col relative group shadow"
+            data-gender-id="<?= $list['gender_id'] ?>" data-genre-id="<?= $list['genre_id'] ?>">
+            <div class="openModalBtn z-10 absolute -top-2 -right-2 bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full p-3 flex items-center justify-center text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out cursor-pointer"
+                data-product-id="<?= $list['id'] ?>" data-product-name="<?= $list['name'] ?>"
+                data-product-formats="<?= htmlspecialchars(json_encode($product_formats)) ?>">
+                <i class="fas fa-plus text-white pl-0.5 font-semibold"></i>
+            </div>
 
-        <!-- Product image wrapper -->
-        <div class="relative h-[70%] w-full">
-            <a href="product_details.php?id=<?= $list['id'] ?>" class="product-link w-full">
-                <img src="./image/<?= $list['image'] ?>" alt="<?= $list['name'] ?>"
-                    class="h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0">
-                <?php if ($list['image2'] != ''): ?>
-                <img src="./image/<?= $list['image2'] ?>" alt="<?= $list['name'] ?> Hover"
-                    class="absolute top-0 left-0 h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100">
-                <?php else: ?>
-                <img src="./image/<?= $list['image'] ?>" alt="<?= $list['name'] ?> Hover"
-                    class="absolute top-0 left-0 h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100">
-                <?php endif; ?>
-            </a>
-        </div>
+            <!-- Product image wrapper -->
+            <div class="relative h-[70%] w-full">
+                <a href="product_details.php?id=<?= $list['id'] ?>" class="product-link w-full">
+                    <img src="./image/<?= $list['image'] ?>" alt="<?= $list['name'] ?>"
+                        class="h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0">
+                    <?php if ($list['image2'] != ''): ?>
+                    <img src="./image/<?= $list['image2'] ?>" alt="<?= $list['name'] ?> Hover"
+                        class="absolute top-0 left-0 h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100">
+                    <?php else: ?>
+                    <img src="./image/<?= $list['image'] ?>" alt="<?= $list['name'] ?> Hover"
+                        class="absolute top-0 left-0 h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100">
+                    <?php endif; ?>
+                </a>
+            </div>
 
-        <!-- Product details -->
-        <div class="px-4 py-2 h-full flex flex-col justify-evenly">
-            <a href="product_details.php?id=<?= $list['id'] ?>"
-                class="text-lg font-bold hover:underline"><?= htmlspecialchars($list['name']) ?></a>
-            <p class="text-gray-600 overflow-hidden text-ellipsis line-clamp-2">
-                <?= htmlspecialchars($list['description']) ?></p>
-            <p class="text-lg font-bold text-red-500">Rs. <?= htmlspecialchars($list['price']) ?></p>
+            <!-- Product details -->
+            <div class="px-4 py-2 h-full flex flex-col justify-evenly">
+                <a href="product_details.php?id=<?= $list['id'] ?>"
+                    class="text-lg font-bold hover:underline"><?= htmlspecialchars($list['name']) ?></a>
+                <p class="text-gray-600 overflow-hidden text-ellipsis line-clamp-2">
+                    <?= htmlspecialchars($list['description']) ?></p>
+                <p class="text-lg font-bold text-red-500">Rs. <?= htmlspecialchars($list['price']) ?></p>
+            </div>
         </div>
+        <?php } ?>
     </div>
-    <?php } ?>
-</div>
 
 </section>
 
@@ -458,7 +458,16 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
                 <script>
                     function changeQty(change) {
                         var qtyInput = document.getElementById('qty');
-                        var newValue = parseInt(qtyInput.value) + change;
+                        var currentQty = parseInt(qtyInput.value);
+                        var newValue = currentQty + change;
+                        // Get the currently selected format
+                        var selectedFormat = document.querySelector('#format-container .bg-gray-200');
+                        var availableQty = selectedFormat ? parseInt(selectedFormat.dataset.qty) : 0;
+                        if (newValue > availableQty) {
+                            alert(`You cannot select more than the available stock. Available stock: ${availableQty}`);
+                            qtyInput.value = availableQty; // Set input field to available quantity
+                            return;
+                        }
                         qtyInput.value = newValue > 0 ? newValue : 1; // Prevent negative or zero quantities
                     }
                 </script>
@@ -469,6 +478,11 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
             <div class="w-full p-3 border-2 text-center border-black text-lg font-semibold rounded-full text-black">Add
                 To
                 Cart</div>
+                <a href="login.php">
+            <div style="margin-top: 20px;"
+                class="w-full p-3 border-2 hover:cursor-pointer bg-gradient-to-bl from-yellow-500 via-yellow-500 to-amber-600 shadow-sm hover:shadow-lg transition-shadow ease-in-out duration-300 font-semibold rounded-full text-white text-center">
+                Buy It
+                Now</div>
         </a>
         <?php else: ?>
         <a href="javascript:void(0)">
@@ -477,13 +491,13 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
                 To
                 Cart</div>
         </a>
-        <?php endif; ?>
-        <a href="product_details.php?id=">
+        <a href="">
             <div style="margin-top: 20px;"
                 class="w-full p-3 border-2 hover:cursor-pointer bg-gradient-to-bl from-yellow-500 via-yellow-500 to-amber-600 shadow-sm hover:shadow-lg transition-shadow ease-in-out duration-300 font-semibold rounded-full text-white text-center">
                 Buy It
                 Now</div>
         </a>
+        <?php endif; ?>
         <div id="closeModalBtn"
             class="absolute -top-2 -right-2 hover:cursor-pointer shadow-md hover:shadow-xl font-bold bg-gradient-to-bl from-yellow-500 via-yellow-500 to-amber-600 text-white px-4 py-2 rounded-full hover:bg-red-600 focus:outline-none">
             <i class="fa-solid fa-xmark"></i>
