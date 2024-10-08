@@ -254,60 +254,68 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
     </div>
 
     <!-- Products section -->
-    <div id="products-container" class="w-full p-3 flex flex-wrap justify-center gap-5">
-        <?php
-        $unique_products = [];
-        foreach ($get_product as $list) {
-            if (in_array($list['id'], $unique_products)) continue;
-            $unique_products[] = $list['id'];
+<div id="products-container" class="w-full p-3 flex flex-wrap justify-center gap-5">
+    <?php
+    $unique_products = [];
+    foreach ($get_product as $list) {
+        if (in_array($list['id'], $unique_products)) continue;
+        $unique_products[] = $list['id'];
 
-            $product_formats = []; // Get product formats
-            foreach ($get_product as $p) {
-                if ($p['id'] == $list['id']) {
-                    $product_formats[] = [
-                        'format' => $p['format'],
-                        'price' => $p['price'],
-                        'qty' => $p['qty']
-                    ];
-                }
+        $product_formats = []; // Get product formats
+        foreach ($get_product as $p) {
+            if ($p['id'] == $list['id']) {
+                // Query to get the total ordered quantity for the current format
+                $order_qty_result = mysqli_query($con, "SELECT SUM(qty) AS total_ordered_qty FROM orders_detail WHERE product_id = '{$p['id']}' AND format = '{$p['format']}'");
+                $order_qty_row = mysqli_fetch_assoc($order_qty_result);
+                $total_ordered_qty = $order_qty_row['total_ordered_qty'] ?? 0; // If no orders, default to 0
+
+                // Subtract total ordered quantity from available stock in product_format
+                $available_qty = $p['qty'] - $total_ordered_qty;
+                $available_qty = max(0, $available_qty); // Ensure we don't have negative quantities
+                
+                $product_formats[] = [
+                    'format' => $p['format'],
+                    'price' => $p['price'],
+                    'qty' => $available_qty // Store available quantity
+                ];
             }
-        ?>
-        <div class="product-card w-96 md:w-72 h-[40rem] md:h-[30rem] flex gap-2 flex-col relative group shadow"
-            data-gender-id="<?= $list['gender_id'] ?>" data-genre-id="<?= $list['genre_id'] ?>"
-            data-type-id="<?= $list['type_id'] ?>" data-season-id="<?= $list['season_id'] ?>"
-            data-sillage-id="<?= $list['sillage_id'] ?>" data-lasting-id="<?= $list['lasting_id'] ?>">
-            <div class="openModalBtn z-10 absolute -top-2 -right-2 bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full p-3 flex items-center justify-center text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out cursor-pointer"
-                data-product-id="<?= $list['id'] ?>" data-product-name="<?= $list['name'] ?>"
-                data-product-formats="<?= htmlspecialchars(json_encode($product_formats)) ?>">
-                <i class="fas fa-plus text-white pl-0.5 font-semibold"></i>
-            </div>
-
-            <!-- Product image wrapper -->
-            <div class="relative h-[70%] w-full">
-                <a href="product_details.php?id=<?= $list['id'] ?>" class="product-link w-full">
-                    <img src="./image/<?= $list['image'] ?>" alt="<?= $list['name'] ?>"
-                        class="h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0">
-                    <?php if ($list['image2'] != ''): ?>
-                    <img src="./image/<?= $list['image2'] ?>" alt="<?= $list['name'] ?> Hover"
-                        class="absolute top-0 left-0 h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100">
-                    <?php else: ?>
-                    <img src="./image/<?= $list['image'] ?>" alt="<?= $list['name'] ?> Hover"
-                        class="absolute top-0 left-0 h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100">
-                    <?php endif; ?>
-                </a>
-            </div>
-
-            <!-- Product details -->
-            <div class="px-4 py-2 h-full flex flex-col justify-evenly">
-                <a href="product_details.php?id=<?= $list['id'] ?>"
-                    class="text-lg font-bold hover:underline"><?= htmlspecialchars($list['name']) ?></a>
-                <p class="text-gray-600 overflow-hidden text-ellipsis line-clamp-2">
-                    <?= htmlspecialchars($list['description']) ?></p>
-                <p class="text-lg font-bold text-red-500">Rs. <?= htmlspecialchars($list['price']) ?></p>
-            </div>
+        }
+    ?>
+    <div class="product-card w-96 md:w-72 h-[40rem] md:h-[30rem] flex gap-2 flex-col relative group shadow"
+        data-gender-id="<?= $list['gender_id'] ?>" data-genre-id="<?= $list['genre_id'] ?>">
+        <div class="openModalBtn z-10 absolute -top-2 -right-2 bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full p-3 flex items-center justify-center text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out cursor-pointer"
+            data-product-id="<?= $list['id'] ?>" data-product-name="<?= $list['name'] ?>"
+            data-product-formats="<?= htmlspecialchars(json_encode($product_formats)) ?>">
+            <i class="fas fa-plus text-white pl-0.5 font-semibold"></i>
         </div>
-        <?php } ?>
+
+        <!-- Product image wrapper -->
+        <div class="relative h-[70%] w-full">
+            <a href="product_details.php?id=<?= $list['id'] ?>" class="product-link w-full">
+                <img src="./image/<?= $list['image'] ?>" alt="<?= $list['name'] ?>"
+                    class="h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0">
+                <?php if ($list['image2'] != ''): ?>
+                <img src="./image/<?= $list['image2'] ?>" alt="<?= $list['name'] ?> Hover"
+                    class="absolute top-0 left-0 h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100">
+                <?php else: ?>
+                <img src="./image/<?= $list['image'] ?>" alt="<?= $list['name'] ?> Hover"
+                    class="absolute top-0 left-0 h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100">
+                <?php endif; ?>
+            </a>
+        </div>
+
+        <!-- Product details -->
+        <div class="px-4 py-2 h-full flex flex-col justify-evenly">
+            <a href="product_details.php?id=<?= $list['id'] ?>"
+                class="text-lg font-bold hover:underline"><?= htmlspecialchars($list['name']) ?></a>
+            <p class="text-gray-600 overflow-hidden text-ellipsis line-clamp-2">
+                <?= htmlspecialchars($list['description']) ?></p>
+            <p class="text-lg font-bold text-red-500">Rs. <?= htmlspecialchars($list['price']) ?></p>
+        </div>
     </div>
+    <?php } ?>
+</div>
+
 </section>
 
 <script>
@@ -483,7 +491,6 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
     </div>
 </div>
 
-<!-- Script for Modal Functionality -->
 <!-- Script for Modal Functionality -->
 <script>
     const openModalBtns = document.querySelectorAll('.openModalBtn');
