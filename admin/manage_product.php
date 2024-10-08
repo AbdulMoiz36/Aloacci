@@ -344,7 +344,7 @@ if (isset($_REQUEST['submit'])) {
 
                         <div class="form-group col-4">
                             <label for="qty2" class="form-control-label">Qty</label>
-                            <input type="text" name="qty2" placeholder="Enter Qty" class="form-control" required
+                            <input type="text" name="qty2" placeholder="Enter Qty" class="form-control"
                                 value="<?= $qty2 ?>">
                         </div>
                     </div>
@@ -364,7 +364,7 @@ if (isset($_REQUEST['submit'])) {
 
                         <div class="form-group col-4">
                             <label for="qty3" class="form-control-label">Qty</label>
-                            <input type="text" name="qty3" placeholder="Enter Qty" class="form-control" required
+                            <input type="text" name="qty3" placeholder="Enter Qty" class="form-control"
                                 value="<?= $qty3 ?>">
                         </div>
                     </div>
@@ -384,7 +384,7 @@ if (isset($_REQUEST['submit'])) {
 
                         <div class="form-group col-4">
                             <label for="qty4" class="form-control-label">Qty</label>
-                            <input type="text" name="qty4" placeholder="Enter Qty" class="form-control" required
+                            <input type="text" name="qty4" placeholder="Enter Qty" class="form-control"
                                 value="<?= $qty4 ?>">
                         </div>
                     </div>
@@ -404,7 +404,7 @@ if (isset($_REQUEST['submit'])) {
 
                         <div class="form-group col-4">
                             <label for="qty5" class="form-control-label">Qty</label>
-                            <input type="text" name="qty5" placeholder="Enter Qty" class="form-control" required
+                            <input type="text" name="qty5" placeholder="Enter Qty" class="form-control"
                                 value="<?= $qty5 ?>">
                         </div>
                     </div>

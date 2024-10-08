@@ -19,6 +19,21 @@ $product_prices = array_map('htmlspecialchars', array_column($get_product, 'pric
 $product_quantities = array_column($get_product, 'qty'); // Fetch the quantity of each format
 $reviewsql = mysqli_query($con, "SELECT COUNT(*) AS total_reviews FROM reviews WHERE product_id = '$product_id';");
 $total_reviews = mysqli_fetch_array($reviewsql);
+
+// Fetch the quantity for each format from product_format and subtract the sold quantity
+$product_quantities = [];
+foreach ($get_product as $product) {
+    $format = $product['format']; // Assuming format exists in the product data
+    
+    // Query to get the total ordered quantity from order_details for the current format
+    $order_qty_result = mysqli_query($con, "SELECT SUM(qty) AS total_ordered_qty FROM orders_detail WHERE product_id = '$product_id' AND format = '$format'");
+    $order_qty_row = mysqli_fetch_assoc($order_qty_result);
+    $total_ordered_qty = $order_qty_row['total_ordered_qty'] ?? 0; // If no orders, default to 0
+    
+    // Subtract total ordered quantity from available stock in product_format
+    $available_qty = $product['qty'] - $total_ordered_qty;
+    $product_quantities[] = max(0, $available_qty); // Ensure we don't have negative quantities
+}
 ?>
 
 <section class="w-full">
