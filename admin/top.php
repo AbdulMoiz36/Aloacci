@@ -84,6 +84,9 @@ $row = mysqli_fetch_array($res);
             <?php
             if($_SESSION['ADMIN_ROLE']=='admin'){
             ?>
+            <li class="dropdown <?= $active=="create_order.php"? 'active':''; ?>">
+              <a href="create_order.php" class="nav-link"><i data-feather="monitor"></i><span>Create Order</span></a>
+            </li>
             <li class="dropdown <?= $active=="categories.php"? 'active':''; ?>">
               <a href="categories.php" class="nav-link"><i data-feather="monitor"></i><span>Categories</span></a>
             </li>
