@@ -19,9 +19,9 @@ if(isset($_GET['type']) && $_GET['type']!=''){
 /* Modify query to use GROUP_CONCAT for format, price, and qty */
 $select = "
     SELECT p.*, c.categories, 
-           GROUP_CONCAT(pf.format ORDER BY pf.format ASC SEPARATOR ', ') as formats,
-           GROUP_CONCAT(pf.price ORDER BY pf.format ASC SEPARATOR ', ') as prices,
-           GROUP_CONCAT(pf.qty ORDER BY pf.format ASC SEPARATOR ', ') as qtys
+           GROUP_CONCAT(pf.format ORDER BY pf.id ASC SEPARATOR ', ') as formats,
+           GROUP_CONCAT(pf.price ORDER BY pf.id ASC SEPARATOR ', ') as prices,
+           GROUP_CONCAT(pf.qty ORDER BY pf.id ASC SEPARATOR ', ') as qtys
     FROM product p
     INNER JOIN categories c ON p.Category_Id = c.id
     LEFT JOIN product_format pf ON p.id = pf.product_id
@@ -49,7 +49,7 @@ $res = mysqli_query($con, $select);
                         <th>Image</th>
                         <th>Formats</th>
                         <th>Prices</th>
-                        <th>Quantities</th>
+                        <th>Stocks</th>
                         <th>Status</th>
                         <th>Action</th>
                      </tr>
@@ -77,7 +77,8 @@ $res = mysqli_query($con, $select);
                                  $remainingQty = $totalQty - $soldQty;
                                  $price = isset($pricesByFormat[$key]) ? $pricesByFormat[$key] : 'N/A'; // Handle price
 
-                                 echo "$remainingQty, ";
+                                 echo ($remainingQty > 0) ? "<span class='badge badge-primary'>$remainingQty</span>" : "Out of Stock, ";
+
                               }
                            ?>
                         </td>

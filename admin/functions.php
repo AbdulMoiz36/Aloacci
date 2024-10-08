@@ -19,11 +19,11 @@ function isAdmin(){
 function productSoldQtyByProductId($con, $pid) {
     // Query to fetch the sold quantities based on product ID and format
     $sql = "
-        SELECT pf.format, SUM(od.qty) as sold_qty 
-        FROM orders_detail od
-        INNER JOIN orders o ON od.order_id = o.id
-        INNER JOIN product_format pf ON od.product_id = pf.product_id
-        WHERE od.product_id = $pid AND o.order_status != 4
+        SELECT pf.format, COALESCE(SUM(od.qty), 0) as sold_qty 
+        FROM product_format pf
+        LEFT JOIN orders_detail od ON pf.product_id = od.product_id AND pf.format = od.format 
+        LEFT JOIN orders o ON od.order_id = o.id
+        WHERE pf.product_id = $pid AND (o.order_status != 4 OR o.order_status IS NULL)
         GROUP BY pf.format
     ";
     $res = mysqli_query($con, $sql);
@@ -33,7 +33,7 @@ function productSoldQtyByProductId($con, $pid) {
     
     // Fetch all sold quantities format-wise and store them in the array
     while ($row = mysqli_fetch_assoc($res)) {
-        $soldQtyByFormat[$row['format']] = $row['sold_qty'];
+        $soldQtyByFormat[$row['format']] = (int)$row['sold_qty'];
     }
     
     return $soldQtyByFormat;
