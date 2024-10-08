@@ -129,22 +129,22 @@ include "header.php";
 <section class="my-10">
     <div class="flex justify-evenly gap-4 overflow-x-auto py-2">
     <div class="flex flex-col items-center">
-            <div class="relative rounded-full  cursor-pointer overflow-hidden w-40 h-40 md:w-80 md:h-80 mb-4 transition-transform duration-300 ease-in-out hover:translate-y-[-10px]">
+            <div class="relative rounded-full  cursor-pointer overflow-hidden w-36 h-36 md:w-60 md:h-60 mb-4 transition-transform duration-300 ease-in-out hover:translate-y-[-10px]">
                 <img src="./img/product-1.jpg" alt="" class="object-cover w-full h-full">
             </div>
             <p class="text-black font-semibold text-center hover:underline cursor-pointer">Men</p>
         </div> <div class="flex flex-col items-center">
-            <div class="relative rounded-full  cursor-pointer overflow-hidden w-40 h-40 md:w-80 md:h-80 mb-4 transition-transform duration-300 ease-in-out hover:translate-y-[-10px]">
+            <div class="relative rounded-full  cursor-pointer overflow-hidden w-36 h-36 md:w-60 md:h-60 mb-4 transition-transform duration-300 ease-in-out hover:translate-y-[-10px]">
                 <img src="./img/product-1.jpg" alt="" class="object-cover w-full h-full">
             </div>
             <p class="text-black font-semibold text-center hover:underline cursor-pointer">Men</p>
         </div> <div class="flex flex-col items-center">
-            <div class="relative rounded-full  cursor-pointer overflow-hidden w-40 h-40 md:w-80 md:h-80 mb-4 transition-transform duration-300 ease-in-out hover:translate-y-[-10px]">
+            <div class="relative rounded-full  cursor-pointer overflow-hidden w-36 h-36 md:w-60 md:h-60 mb-4 transition-transform duration-300 ease-in-out hover:translate-y-[-10px]">
                 <img src="./img/product-1.jpg" alt="" class="object-cover w-full h-full">
             </div>
             <p class="text-black font-semibold text-center hover:underline cursor-pointer">Men</p>
         </div> <div class="flex flex-col items-center">
-            <div class="relative rounded-full  cursor-pointer overflow-hidden w-40 h-40 md:w-80 md:h-80 mb-4 transition-transform duration-300 ease-in-out hover:translate-y-[-10px]">
+            <div class="relative rounded-full  cursor-pointer overflow-hidden w-36 h-36 md:w-60 md:h-60 mb-4 transition-transform duration-300 ease-in-out hover:translate-y-[-10px]">
                 <img src="./img/product-1.jpg" alt="" class="object-cover w-full h-full">
             </div>
             <p class="text-black font-semibold text-center hover:underline cursor-pointer">Men</p>

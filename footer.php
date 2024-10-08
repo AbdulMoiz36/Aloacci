@@ -1,5 +1,5 @@
 <footer class="bg-black text-white py-10">
-  <div class="container mx-auto px-5 lg:px-20">
+  <div class=" mx-auto px-5 lg:px-20">
 
     <!-- Grid Layout for Footer -->
     <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
@@ -54,11 +54,11 @@
 <!-- Sweet Alert -->
 <!-- Custom -->
     <!-- scripts -->
-    <script src="./js/script.js" ></script>
-    <script src="./js/shop.js"></script>
-    <script src="./js/custom.js"></script>
+    <script src="./js/script.js" defer ></script>
+    <script src="./js/shop.js" defer></script>
+    <script src="./js/custom.js" defer></script>
     <!-- toaster -->
-     <script src="./admin/assets/bundles/izitoast/js/iziToast.min.js"></script>
-     <script src="./admin/assets/js/page/toastr.js"></script>
+     <script src="./admin/assets/bundles/izitoast/js/iziToast.min.js" defer></script>
+     <script src="./admin/assets/js/page/toastr.js" defer></script>
 </body>
 </html>
