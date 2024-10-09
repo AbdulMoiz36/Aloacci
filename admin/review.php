@@ -7,13 +7,16 @@ isAdmin();
 
 $product_id = isset($_GET['product_id']) ? intval($_GET['product_id']) : 0;
 
-$select = "select * from reviews";
+$select = "SELECT reviews.*, product.image AS product_image 
+           FROM reviews 
+           JOIN product ON reviews.product_id = product.id";
 if ($product_id > 0) {
-  $select .= " where product_id = $product_id";
+  $select .= " WHERE product_id = $product_id";
 }
-$select .= " order by id desc";
+$select .= " ORDER BY reviews.id DESC";
 
 $res = mysqli_query($con, $select);
+
 $serial_no = 1;
 ?>
 
@@ -36,6 +39,7 @@ $serial_no = 1;
                       <thead>
                                     <tr>
                                        <th>Serial No.</th>
+                                       <th>Product</th>
                                        <th>Ratings</th>
                                        <th>Comments</th>
                                        <th>Action</th>
@@ -50,6 +54,7 @@ $serial_no = 1;
                                     ?>
                                     <tr class=" pb-0">
                                        <td> <?= $serial_no++; ?> </td>
+                                       <td> <img src="../image/<?= $row['product_image'] ?>" height="50" width="50" alt="Product Image"> </td>
                                        <td>
                                         <?php for ($i=0; $i < round($row['rating']); $i++) { ?>
                                           <span class="star active">★</span>

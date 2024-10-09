@@ -18,7 +18,7 @@ if ($review) {
 
 
 // get the User_id from the orders table
-$query = "SELECT orders.User_id
+$query = "SELECT orders.user_id
   FROM reviews
   JOIN orders ON reviews.order_id = orders.id
   WHERE reviews.id = ?
@@ -32,7 +32,7 @@ $result = mysqli_stmt_get_result($stmt);
 $user_id = 0;
 
 if ($row = mysqli_fetch_assoc($result)) {
-  $user_id = $row['User_id'];
+  $user_id = $row['user_id'];
   // echo "User ID: " . $user_id;
 } else {
   echo "No user found for the given review ID.";
@@ -53,10 +53,11 @@ if ($row = mysqli_fetch_assoc($result)) {
       </div>
       <div class="card-body">
         <div class="table-responsive">
-          <table class="table table-striped" id="table-1">
+          <table class="table table-striped">
             <thead>
               <tr>
                 <th>Product</th>
+                <th>Format</th>
                 <th>Rating</th>
                 <th>Images</th>
               </tr>
@@ -75,15 +76,27 @@ if ($row = mysqli_fetch_assoc($result)) {
               $city=$userInfo['city'];
               if ($row = mysqli_fetch_assoc($res)) {
               ?>
-                <tr class="pb-0">
-                  <td> <img src="../image/<?= $row['image'] ?>" height="50" width="50" alt=""> <?= $row['name'] ?> </td>
-                  <td> 
-                    <?php for ($i=0; $i < round($review['rating']); $i++) { ?>
-                      <span class="star active">★</span>
-                    <?php } ?>
-                  </td>
-                  <td> <img src="../image/<?= $review['image'] ?>" height="50" width="50" alt=""> </td>
-                </tr>
+              <tr class="pb-0">
+                <td> <img src="../image/<?= $row['image'] ?>" height="50" width="50" alt=""> <?= $row['name'] ?> </td>
+                <td><?= $review['format'] ?></td>
+                <td>
+                  <?php for ($i=0; $i < round($review['rating']); $i++) { ?>
+                  <span class="star active">★</span>
+                  <?php } ?>
+                </td>
+                <td>
+                  <?php 
+                    // Assuming the images are stored as comma-separated values in the 'image' column
+                    $images = explode(',', $review['image']); // Split images into an array
+                    foreach ($images as $img) { 
+                    // Display each image
+                  ?>
+                    <img src="../image/<?= trim($img) ?>" height="50" width="50" alt="">
+                  <?php 
+                    } 
+                  ?>
+                </td>
+              </tr>
               <?php
               } else {
                 // Handle case where no product is found
@@ -114,7 +127,8 @@ if ($row = mysqli_fetch_assoc($result)) {
             <?= $review['comment'] ?>
           </div>
           <div class="card-footer">
-            <a href="orders_detail.php?id=<?= $review['order_id'] ?>" class="btn btn-icon btn-info text-white"><i class="fas fa-box"></i> Order</a>
+            <a href="orders_detail.php?id=<?= $review['order_id'] ?>" class="btn btn-icon btn-info text-white"><i
+                class="fas fa-box"></i> Order</a>
           </div>
         </div>
       </div>

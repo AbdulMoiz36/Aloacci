@@ -1,7 +1,7 @@
 <?php
 include 'header.php';
 
-// User must login first to access this page.//
+// User must login first to access this page.
 if (isset($_SESSION['USER_LOGIN']) && $_SESSION['USER_LOGIN'] != '') {
 } else {
     echo "<script>window.location.href='index.php'</script>";
@@ -22,8 +22,10 @@ if (isset($_SESSION['USER_ID'])) {
     $user = mysqli_fetch_array($sql);
     $email = $user['email'];
 }
+
 $pid = $_GET['pid'];
 $oid = $_GET['oid'];
+$format = $_GET['format']; // Capture the format from the URL
 
 $psql = mysqli_query($con, "SELECT `name` FROM `product` WHERE `id` = '$pid'");
 $product = mysqli_fetch_array($psql);
@@ -72,11 +74,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 }
             }
 
-            // Insert review data into the database with image filenames
+            // Insert review data into the database with image filenames and format
             if (!empty($image_filenames)) {
                 $image_filenames_str = implode(',', $image_filenames); // Convert array to a string
-                $sql = "INSERT INTO `reviews` (`order_id`, `product_id`, `comment`, `rating`, `image`, `date`) 
-                        VALUES ('$oid', '$pid', '$message', '$rating', '$image_filenames_str', NOW())";
+                $sql = "INSERT INTO `reviews` (`order_id`, `product_id`, `format`, `comment`, `rating`, `image`, `date`) 
+                        VALUES ('$oid', '$pid', '$format', '$message', '$rating', '$image_filenames_str', NOW())";
 
                 if (mysqli_query($con, $sql)) {
                     echo '<script>
@@ -101,7 +103,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 }
-
 ?>
 
 <section class="py-10 w-full flex justify-center align-middle">
