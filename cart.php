@@ -43,8 +43,8 @@ function get_available_stock($con, $pid, $format) {
 <section class="px-2 py-5 md:px-32 md:py-10 w-full">
     <h1 class="text-4xl font-bold text-center">Cart</h1>
     <div class="flex flex-col md:flex-row mt-10 gap-2">
-        <div class="w-full md:w-4/6">
-            <p><?=$msg?></p>
+        <div class="w-full md:w-4/6 ">
+            <p class="text-center my-10"><?=$msg?></p>
 
             <?php
 
