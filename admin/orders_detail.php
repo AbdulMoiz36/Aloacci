@@ -52,7 +52,7 @@ if(isset($_POST['update_order_status'])){
                                     }
                                     ?>
                                     <tr>
-                                        <td style="text-align: center"; colspan="3"><b>Total</b></td>
+                                        <td style="text-align: center"; colspan="4"><b>Total</b></td>
                                         <td><b><?= $total_price ?></b></td>
                                     </tr>
                                  </tbody>

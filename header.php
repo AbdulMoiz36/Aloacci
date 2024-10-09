@@ -125,9 +125,9 @@ $totalProduct = $obj->totalProduct();
     class="bg-black border-t-2 relative border-slate-900 h-auto hidden sm:flex justify-center items-center px-14">
     <!-- List Of All Main Pags -->
     <ul class="flex flex-col sm:flex-row gap-4 sm:gap-10 text-white text-center py-3">
-      <!-- Shop -->
+      <a href="shop.php">Shop</a>
       <li class="hover:cursor-pointer" id="shop" onclick="toggleShop()">
-        Shop
+        Categories
         <i class="fa-solid fa-angle-down ml-1 align-middle text-sm"></i>
         <!-- Menu For Shop -->
         <ul
@@ -157,7 +157,6 @@ $totalProduct = $obj->totalProduct();
 
         </ul>
       </li>
-      <a href="shop.php">All Products</a>
       <a href="shop.php?price_filter=less_1500">Less than 1500</a>
       <a href="about.php">
         <li class="hover:underline hover:cursor-pointer">About</li>
