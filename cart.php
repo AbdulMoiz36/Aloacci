@@ -11,8 +11,6 @@ $msg='';
 
 // Check if the cart is empty
 if (empty($_SESSION['cart'])) {
-    // echo "<script>window.location.href='shop.php'</script>";
-    // exit;
     $msg = "Your Cart is empty. Please add some products to your cart";
 }
 

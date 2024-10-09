@@ -21,23 +21,20 @@
       <div class="mb-6 md:mb-0">
         <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
         <ul class="space-y-2 text-sm">
-          <li><a href="#" class="hover:text-amber-500">Home</a></li>
-          <li><a href="#" class="hover:text-amber-500">Shop</a></li>
-          <li><a href="#" class="hover:text-amber-500">About Us</a></li>
-          <li><a href="#" class="hover:text-amber-500">Contact</a></li>
-          <li><a href="#" class="hover:text-amber-500">FAQ</a></li>
+          <li><a href="index.php" class="hover:text-amber-500">Home</a></li>
+          <li><a href="shop.php" class="hover:text-amber-500">Shop</a></li>
+          <li><a href="about.php" class="hover:text-amber-500">About Us</a></li>
+          <li><a href="contact.php" class="hover:text-amber-500">Contact</a></li>
         </ul>
       </div>
 
       <!-- Column 4: Social Links -->
       <div class="mb-6 md:mb-0">
         <h3 class="text-lg font-semibold mb-4">Follow Us</h3>
-        <div class="flex space-x-4">
-          <a href="#" class="text-white hover:text-amber-500"><i class="fab fa-facebook-f"></i></a>
-          <a href="#" class="text-white hover:text-amber-500"><i class="fab fa-twitter"></i></a>
-          <a href="#" class="text-white hover:text-amber-500"><i class="fab fa-instagram"></i></a>
-          <a href="#" class="text-white hover:text-amber-500"><i class="fab fa-linkedin-in"></i></a>
-          <a href="#" class="text-white hover:text-amber-500"><i class="fab fa-youtube"></i></a>
+        <div class="flex md:ml-5 space-x-4">
+          <a href="https://www.facebook.com/aloacci" class="text-white hover:text-amber-500"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://www.instagram.com/aloacci/" class="text-white hover:text-amber-500"><i class="fab fa-instagram"></i></a>
+          <!-- <a href="https://www.threads.net/@owaisgadit17" class="text-white hover:text-amber-500"><i class="fa-brands fa-threads"></i></a> -->
         </div>
       </div>
 
