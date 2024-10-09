@@ -52,7 +52,7 @@ $row = mysqli_fetch_array($res);
 									collapse-btn"> <i data-feather="align-justify"></i></a></li>
           </ul>
         </div>
-        <div class="dropdown-title">Hi!<?= $_SESSION['ADMIN_USERNAME']; ?></div>
+        <div class="dropdown-title" style="text-transform: capitalize;">Hi! <?= $_SESSION['ADMIN_USERNAME']; ?></div>
         <ul class="navbar-nav navbar-right">
           <li class="dropdown">
             <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
