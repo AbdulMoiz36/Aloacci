@@ -449,7 +449,7 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
 </script>
 
 <!-- Modal Overlay -->
-<div id="modalOverlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-40"></div>
+<div id="modalOverlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50"></div>
 
 <!-- Modal -->
 <div id="modal" class="fixed inset-0 items-center justify-center hidden z-50">
@@ -545,72 +545,73 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
         modalOverlay.classList.add('hidden');
     }
 
-    // Event listener to open modal
     openModalBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const productName = btn.getAttribute('data-product-name');
-            const productFormats = JSON.parse(btn.getAttribute('data-product-formats'));
+    btn.addEventListener('click', () => {
+        const productName = btn.getAttribute('data-product-name');
+        const productFormats = JSON.parse(btn.getAttribute('data-product-formats'));
 
-            // Populate modal
-            document.getElementById('modal-product-name').innerText = productName;
+        // Populate modal
+        document.getElementById('modal-product-name').innerText = productName;
 
-            // Clear previous formats
-            const formatContainer = document.getElementById('format-container');
-            formatContainer.innerHTML = ''; // Clear previous formats
+        // Clear previous formats
+        const formatContainer = document.getElementById('format-container');
+        formatContainer.innerHTML = ''; // Clear previous formats
 
-            let firstAvailableFormatFound = false;
+        let firstAvailableFormatFound = false;
 
-            productFormats.forEach((formatObj, index) => {
-                const formatDiv = document.createElement('div');
-                formatDiv.className = 'border-2 border-black p-2 cursor-pointer w-fit my-2';
-                formatDiv.innerText = `${formatObj.format}`;
-                formatDiv.dataset.price = formatObj.price;
-                formatDiv.dataset.qty = formatObj.qty; // Include quantity data
-                
-                // Check if the format is in stock
-                if (formatObj.qty > 0) {
-                    // If it's the first available format, select it by default
-                    if (!firstAvailableFormatFound) {
-                        formatDiv.classList.add('bg-gray-200');
-                        modalProductPrice.innerText = `Rs. ${formatObj.price}`;
-                        firstAvailableFormatFound = true;
-                    }
-                    
-                    // Add click event listener for selecting a format
-                    formatDiv.addEventListener('click', () => {
-                        // Remove 'selected' class from all formats
-                        document.querySelectorAll('#format-container div').forEach(div => {
-                            div.classList.remove('bg-gray-200');
-                        });
-                        // Add 'selected' class to the clicked format
-                        formatDiv.classList.add('bg-gray-200');
-                        // Update price in modal
-                        modalProductPrice.innerText = `Rs. ${formatDiv.dataset.price}`;
-                    });
-                } else {
-                    // If out of stock, disable this format
-                    formatDiv.classList.add('opacity-50', 'cursor-not-allowed');
+        productFormats.forEach((formatObj, index) => {
+            const formatDiv = document.createElement('div');
+            formatDiv.className = 'border-2 border-black p-2 cursor-pointer w-fit my-2';
+            formatDiv.innerText = `${formatObj.format}`;
+            formatDiv.dataset.price = formatObj.price;
+            formatDiv.dataset.qty = formatObj.qty; // Include quantity data
+            
+            // Check if the format is in stock
+            if (formatObj.qty > 0) {
+                // If it's the first available format, select it by default
+                if (!firstAvailableFormatFound) {
+                    formatDiv.classList.add('bg-gray-200');
+                    modalProductPrice.innerText = `Rs. ${formatObj.price}`;
+                    firstAvailableFormatFound = true;
                 }
-
-                formatContainer.appendChild(formatDiv);
-            });
-
-            // If no available format found, show a warning or disable the "Add to Cart" button
-            if (!firstAvailableFormatFound) {
-                modalProductPrice.innerText = 'Out of Stock';
-                document.getElementById('addToCartBtn').classList.add('opacity-50', 'cursor-not-allowed');
+                
+                // Add click event listener for selecting a format
+                formatDiv.addEventListener('click', () => {
+                    // Remove 'selected' class from all formats
+                    document.querySelectorAll('#format-container div').forEach(div => {
+                        div.classList.remove('bg-gray-200');
+                    });
+                    // Add 'selected' class to the clicked format
+                    formatDiv.classList.add('bg-gray-200');
+                    // Update price in modal
+                    modalProductPrice.innerText = `Rs. ${formatDiv.dataset.price}`;
+                });
             } else {
-                document.getElementById('addToCartBtn').classList.remove('opacity-50', 'cursor-not-allowed');
+                // If out of stock, disable this format
+                formatDiv.classList.add('opacity-50', 'cursor-not-allowed');
             }
 
-            // Set the current product ID
-            currentProductId = btn.getAttribute('data-product-id');
-            
-            // Show modal
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
+            formatContainer.appendChild(formatDiv);
         });
+
+        // If no available format found, show a warning or disable the "Add to Cart" button
+        if (!firstAvailableFormatFound) {
+            modalProductPrice.innerText = 'Out of Stock';
+            document.getElementById('addToCartBtn').classList.add('opacity-50', 'cursor-not-allowed');
+        } else {
+            document.getElementById('addToCartBtn').classList.remove('opacity-50', 'cursor-not-allowed');
+        }
+
+        // Set the current product ID
+        currentProductId = btn.getAttribute('data-product-id');
+        
+        // Show modal and overlay
+        modal.classList.remove('hidden');
+        modalOverlay.classList.remove('hidden');
+        modal.classList.add('flex');
+        modalOverlay.classList.add('flex'); // Show the overlay
     });
+});
 
     // Event listener to close modal on button click
     closeModalBtn.addEventListener('click', closeModal);
