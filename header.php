@@ -125,6 +125,7 @@ $totalProduct = $obj->totalProduct();
     class="bg-black border-t-2 relative border-slate-900 h-auto hidden sm:flex justify-center items-center px-14">
     <!-- List Of All Main Pags -->
     <ul class="flex flex-col sm:flex-row gap-4 sm:gap-10 text-white text-center py-3">
+      <a href="index.php">Home</a>
       <a href="shop.php">Shop</a>
       <li class="hover:cursor-pointer" id="shop" onclick="toggleShop()">
         Categories
