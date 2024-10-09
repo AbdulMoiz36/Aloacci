@@ -7,20 +7,47 @@ if (isset($_SESSION['USER_LOGIN']) && $_SESSION['USER_LOGIN'] != '') {
     die();
 }
 
-if (!isset($_SERVER['HTTP_REFERER'])) {
-    // echo("Access Denied");
-    echo "<script>window.location.href='shop.php'</script>";
-    exit;
-  }
+$msg='';
+
+// Check if the cart is empty
+if (empty($_SESSION['cart'])) {
+    // echo "<script>window.location.href='shop.php'</script>";
+    // exit;
+    $msg = "Your Cart is empty. Please add some products to your cart";
+}
 
 $cart_total = 0;
+
+// Function to get available stock for a product format
+function get_available_stock($con, $pid, $format) {
+    // Query to fetch the available quantity from product_format
+    $stockQuery = "SELECT qty FROM product_format WHERE product_id = ? AND format = ?";
+    $stmt = $con->prepare($stockQuery);
+    $stmt->bind_param('is', $pid, $format);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $stock = $result->fetch_assoc()['qty'];
+
+    // Query to fetch the ordered quantity from order_details
+    $orderQuery = "SELECT SUM(qty) AS ordered_qty FROM orders_detail WHERE product_id = ? AND format = ?";
+    $stmt = $con->prepare($orderQuery);
+    $stmt->bind_param('is', $pid, $format);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $ordered_qty = $result->fetch_assoc()['ordered_qty'] ?? 0;
+
+    return $stock - $ordered_qty; // Available stock after deducting ordered quantity
+}
 ?>
 
 <section class="px-2 py-5 md:px-32 md:py-10 w-full">
     <h1 class="text-4xl font-bold text-center">Cart</h1>
     <div class="flex flex-col md:flex-row mt-10 gap-2">
         <div class="w-full md:w-4/6">
+            <p><?=$msg?></p>
+
             <?php
+
             if (isset($_SESSION['cart'])) {
                 $cart_total = 0;
                 foreach ($_SESSION['cart'] as $key => $val) {
@@ -32,8 +59,9 @@ $cart_total = 0;
                     $pname = $productArr[0]['name'];
                     $qty = $val['qty'];
                     $price = $val['price']; 
-                    $selected_format = $val['format']; 
-                
+                    $selected_format = $val['format'];
+                    $available_stock = get_available_stock($con, $pid, $selected_format); // Check available stock
+
                     $cart_total += $price * $qty;
                 ?>
             <div class="flex gap-5 border-b border-slate-200 pb-3 p-10">
@@ -45,20 +73,19 @@ $cart_total = 0;
                     <div style="margin-bottom:20px">
                         <p class="font-semibold">Quantity:</p>
                         <div class="flex items-center space-x-2">
-                            <span class="qty-minus" onclick="changeQty('<?= $key ?>', -1)"><i class="fa fa-minus"
-                                    aria-hidden="true"></i></span>
+                            <span class="qty-minus" onclick="changeQty('<?= $key ?>', -1, <?= $available_stock ?>)"><i
+                                    class="fa fa-minus" aria-hidden="true"></i></span>
                             <input id="qty_<?= $key ?>" name="quantity" type="number" min="1" value="<?= $qty ?>"
-                                class="w-16 text-center border border-gray-300 rounded-md py-1"
-                                onchange="updateCartTotal('<?= $key ?>')" />
-                            <span class="qty-plus" onclick="changeQty('<?= $key ?>', 1)"><i class="fa fa-plus"
-                                    aria-hidden="true"></i></span>
+                                class="w-16 text-center border border-gray-300 rounded-md"
+                                onchange="updateCartTotal('<?= $key ?>', <?= $available_stock ?>)" />
+                            <span class="qty-plus" onclick="changeQty('<?= $key ?>', 1, <?= $available_stock ?>)"><i
+                                    class="fa fa-plus" aria-hidden="true"></i></span>
                         </div>
                     </div>
                     <div class="flex justify-between">
                         <a href="javascript:void(0)"
                             onclick="manage_cart('<?php echo $pid ?>', 'remove', 1, '<?php echo $selected_format ?>', '<?php echo $price ?>')"
                             class="font-semibold underline cursor-pointer">Remove</a>
-
                         <p class="font-semibold text-lg">Rs. <?= $price ?></p>
                     </div>
                 </div>
@@ -76,8 +103,19 @@ $cart_total = 0;
                     <p id="cart-total" class="font-semibold text-xl">Rs. <?= $cart_total ?></p>
                 </div>
                 <div class="mt-7">
-                    <a href="checkout.php"><button
-                            class="w-full p-2 border-2 hover:cursor-pointer bg-gradient-to-bl from-yellow-500 via-yellow-500 to-amber-600 shadow-sm hover:shadow-lg transition-shadow ease-in-out duration-300 font-semibold rounded-full text-white">Checkout</button></a>
+                    <?php if (empty($_SESSION['cart'])): ?>
+                    <button class="w-full p-2 border-2 bg-gray-300 text-gray-600 cursor-not-allowed rounded-full"
+                        disabled>
+                        Checkout
+                    </button>
+                    <?php else: ?>
+                    <a href="checkout.php">
+                        <button
+                            class="w-full p-2 border-2 hover:cursor-pointer bg-gradient-to-bl from-yellow-500 via-yellow-500 to-amber-600 shadow-sm hover:shadow-lg transition-shadow ease-in-out duration-300 font-semibold rounded-full text-white">
+                            Checkout
+                        </button>
+                    </a>
+                    <?php endif; ?>
                 </div>
                 <div class="mt-7">
                     <p class="text-center text-sm">Taxes and Shipping calculated at checkout.</p>
@@ -88,39 +126,43 @@ $cart_total = 0;
 </section>
 
 <script>
-    function changeQty(productId, change) {
+    function changeQty(productId, change, availableStock) {
         var qtyInput = document.getElementById('qty_' + productId);
         var newValue = parseInt(qtyInput.value) + change;
+
+        if (newValue > availableStock) {
+            alert('Selected quantity exceeds available stock. Available stock: ' + availableStock);
+            return; // Prevent further action if exceeding stock
+        }
         qtyInput.value = newValue > 0 ? newValue : 1; // Prevent negative or zero quantities
-        updateCartTotal(productId); // Update cart total when quantity changes
+        updateCartTotal(productId, availableStock); // Update cart total when quantity changes
     }
 
-    function updateCartTotal(productId) {
-    var qtyInput = document.getElementById('qty_' + productId);
-    var quantity = parseInt(qtyInput.value);
-    var price = <?= json_encode(array_column($_SESSION['cart'], 'price')) ?>; // Get prices from session data
-    var pricePerUnit = price[productId]; // Get price of current product
-    var subtotalElement = document.getElementById('cart-total');
+    function updateCartTotal(productId, availableStock) {
+        var qtyInput = document.getElementById('qty_' + productId);
+        var quantity = parseInt(qtyInput.value);
+        var price = <?= json_encode(array_column($_SESSION['cart'], 'price')) ?>; // Get prices from session data
+        var pricePerUnit = price[productId]; // Get price of current product
+        var subtotalElement = document.getElementById('cart-total');
 
-    // Calculate new total
-    var newTotal = 0;
-    <?php foreach ($_SESSION['cart'] as $key => $val): ?>
-        newTotal += (parseInt(document.getElementById('qty_<?= $key ?>').value) * <?= $val['price'] ?>);
-    <?php endforeach; ?>
-    subtotalElement.innerText = 'Rs. ' + newTotal; // Update total display
+        // Calculate new total
+        var newTotal = 0;
+        <?php foreach ($_SESSION['cart'] as $key => $val): ?>
+            newTotal += (parseInt(document.getElementById('qty_<?= $key ?>').value) * <?= $val['price'] ?>);
+        <?php endforeach; ?>
+        subtotalElement.innerText = 'Rs. ' + newTotal; // Update total display
 
-    // Update the session on the server
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", "update_cart.php", true);
-    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            console.log(xhr.responseText); // Optional: check response for debugging
-        }
-    };
-    xhr.send("productId=" + productId + "&quantity=" + quantity);
-}
-
+        // Update the session on the server
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "update_cart.php", true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                console.log(xhr.responseText); // Optional: check response for debugging
+            }
+        };
+        xhr.send("productId=" + productId + "&quantity=" + quantity);
+    }
 </script>
 
 <?php

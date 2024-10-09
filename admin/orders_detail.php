@@ -20,6 +20,7 @@ if(isset($_POST['update_order_status'])){
                       <thead>
                                     <tr>
                                         <th>Product</th>
+                                        <th>Format</th>
                                         <th>Qty</th>
                                         <th>Price</th>
                                         <th>Total Price</th>
@@ -42,6 +43,7 @@ if(isset($_POST['update_order_status'])){
                                     ?>
                                     <tr class=" pb-0">
                                        <td> <img src="../image/<?= $row['image'] ?>" height="50" width="50" alt=""> <?= $row['name'] ?> </td>
+                                       <td><?= $row['format'] ?></td>
                                        <td> <?= $row['qty'] ?> </td>
                                        <td> <?= $row['price'] ?> </td>
                                        <td> <?= $row['qty']*$row['price'] ?> </td>
@@ -50,7 +52,7 @@ if(isset($_POST['update_order_status'])){
                                     }
                                     ?>
                                     <tr>
-                                        <td style="text-align: center"; colspan="3"><b>Total</b></td>
+                                        <td style="text-align: center"; colspan="4"><b>Total</b></td>
                                         <td><b><?= $total_price ?></b></td>
                                     </tr>
                                  </tbody>

@@ -111,33 +111,6 @@ $totalProduct = $obj->totalProduct();
             <!-- Cart Text -->
             <span class="ml-2">Cart</span>
           </a>
-          <script>
-            document.addEventListener('DOMContentLoaded', function() {
-              const cartLink = document.querySelector('.cart-link');
-
-              // PHP variable for checking cart condition
-              const isCartNotEmpty = <?php echo isset($_SESSION['cart']) && count($_SESSION['cart']) > 0 ? 'true' : 'false'; ?>;
-
-              // Prevent default action if the cart is empty
-              cartLink.addEventListener('click', function(event) {
-                if (!isCartNotEmpty) {
-                  event.preventDefault();
-
-                  // Show SweetAlert if the cart is empty
-                  Swal.fire({
-                    icon: 'warning',
-                    title: 'Cart is Empty',
-                    text: 'Please add some products to your cart before proceeding!',
-                    confirmButtonText: 'OK',
-                    customClass: {
-                      confirmButton: 'bg-amber-400 text-white font-bold py-2 px-4 rounded hover:bg-amber-500 focus:ring focus:ring-amber-300'
-                    }
-                  });
-
-                }
-              });
-            });
-          </script>
 
         <?php
         }
@@ -152,9 +125,9 @@ $totalProduct = $obj->totalProduct();
     class="bg-black border-t-2 relative border-slate-900 h-auto hidden sm:flex justify-center items-center px-14">
     <!-- List Of All Main Pags -->
     <ul class="flex flex-col sm:flex-row gap-4 sm:gap-10 text-white text-center py-3">
-      <!-- Shop -->
+      <a href="shop.php">Shop</a>
       <li class="hover:cursor-pointer" id="shop" onclick="toggleShop()">
-        Shop
+        Categories
         <i class="fa-solid fa-angle-down ml-1 align-middle text-sm"></i>
         <!-- Menu For Shop -->
         <ul
@@ -184,7 +157,6 @@ $totalProduct = $obj->totalProduct();
 
         </ul>
       </li>
-      <a href="shop.php">All Products</a>
       <a href="shop.php?price_filter=less_1500">Less than 1500</a>
       <a href="about.php">
         <li class="hover:underline hover:cursor-pointer">About</li>

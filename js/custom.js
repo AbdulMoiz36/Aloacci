@@ -140,7 +140,7 @@ function manage_cart(pid, type, qty, format, price) {
         success: function(result) {
             console.log("AJAX success response: " + result);  // For debugging
             if (result === 'not_available') {
-                alert('Quantity Not Available');
+                alert('You cannot select more than the available stock');
             } else {
                 const cartQuantity = parseInt(result, 10);
                 if (!isNaN(cartQuantity)) {

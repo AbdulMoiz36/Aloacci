@@ -102,61 +102,87 @@ foreach ($get_product as $product) {
                 </p>
             </div>
 
-            <!-- Quantity Selector -->
             <div>
-                <p class="font-semibold">Quantity:</p>
-                <form method="post">
-                    <div class="flex items-center space-x-2">
-                        <span class="qty-minus hover:cursor-pointer" onclick="changeQty(-1)"><i class="fa fa-minus"
-                                aria-hidden="true"></i></span>
-                        <input id="qty" name="quantity" type="number" min="1" value="1"
-                            class="w-16 text-center border border-gray-300 rounded-md py-1" />
-                        <span class="qty-plus hover:cursor-pointer " onclick="changeQty(1)"><i class="fa fa-plus"
-                                aria-hidden="true"></i></span>
-                    </div>
+    <p class="font-semibold">Quantity:</p>
+    <form method="post">
+        <div class="flex items-center space-x-2">
+            <span class="qty-minus hover:cursor-pointer" onclick="changeQty(-1)"><i class="fa fa-minus"
+                    aria-hidden="true"></i></span>
+            <input id="qty" name="quantity" type="number" min="1" value="1"
+                class="w-16 text-center border border-gray-300 rounded-md py-1" />
+            <span class="qty-plus hover:cursor-pointer " onclick="changeQty(1)"><i class="fa fa-plus"
+                    aria-hidden="true"></i></span>
+        </div>
+    </form>
 
-                    <script>
-                        function changeQty(change) {
-                            var qtyInput = document.getElementById('qty');
-                            var newValue = parseInt(qtyInput.value) + change;
-                            qtyInput.value = newValue > 0 ? newValue : 1; // Prevent negative or zero quantities
-                        }
-                    </script>
-            </div>
+    <script>
+        function changeQty(change) {
+            var qtyInput = document.getElementById('qty');
+            var selectedFormat = document.querySelector('#format-container .bg-gray-200');
+            var availableQty = selectedFormat ? parseInt(selectedFormat.dataset.qty) : 1;
+            var newValue = parseInt(qtyInput.value) + change;
 
-            <script>
-                // Handle format selection and price/availability update
-                document.querySelectorAll('.format-option').forEach(option => {
-                    if (option.dataset.disabled === 'true') {
-                        // Skip disabled formats
-                        return;
-                    }
+            // Check if the new value exceeds available stock
+            if (newValue > availableQty) {
+                alert("You cannot select more than the available stock. Available stock: " + availableQty);
+                qtyInput.value = availableQty; // Set to max available quantity
+            } else {
+                qtyInput.value = Math.max(1, newValue); // Prevent negative or zero quantities
+            }
+        }
 
-                    option.addEventListener('click', function() {
-                        // Reset background for all options
-                        document.querySelectorAll('.format-option').forEach(opt => opt.classList.remove('bg-gray-200'));
-                        this.classList.add('bg-gray-200');
+        // Ensure that manual changes in the quantity field also respect the stock limit
+        document.getElementById('qty').addEventListener('input', function () {
+            var selectedFormat = document.querySelector('#format-container .bg-gray-200');
+            var availableQty = selectedFormat ? parseInt(selectedFormat.dataset.qty) : 1;
 
-                        // Update price
-                        const price = this.dataset.price;
-                        document.getElementById('product-price').innerText = `Price: Rs. ${price}`;
+            // Check if the manually entered value exceeds available stock
+            if (parseInt(this.value) > availableQty) {
+                alert("You cannot select more than the available stock. Available stock: " + availableQty);
+                this.value = availableQty; // Set to max available quantity
+            } else if (this.value < 1 || isNaN(this.value)) {
+                this.value = 1; // Prevent less than 1 or invalid input
+            }
+        });
 
-                        // Update availability
-                        const qty = this.dataset.qty;
-                        const availability = document.getElementById('availability');
-                        availability.innerText = qty > 0 ? 'In Stock' : 'Not in Stock';
-                        availability.classList.toggle('text-red-600', qty <= 0); // Add red color if out of stock
-                    });
-                });
+        // Handle format selection and price/availability update
+        document.querySelectorAll('.format-option').forEach(option => {
+            if (option.dataset.disabled === 'true') {
+                // Skip disabled formats
+                return;
+            }
 
-                // Automatically select the first available format on page load
-                window.onload = function() {
-                    const defaultOption = document.querySelector('.format-option.bg-gray-200');
-                    if (defaultOption) {
-                        defaultOption.click(); // Simulate a click on the default selected format
-                    }
-                }
-            </script>
+            option.addEventListener('click', function () {
+                // Reset background for all options
+                document.querySelectorAll('.format-option').forEach(opt => opt.classList.remove('bg-gray-200'));
+                this.classList.add('bg-gray-200');
+
+                // Update price
+                const price = this.dataset.price;
+                document.getElementById('product-price').innerText = `Price: Rs. ${price}`;
+
+                // Update availability
+                const qty = this.dataset.qty;
+                const availability = document.getElementById('availability');
+                availability.innerText = qty > 0 ? 'In Stock' : 'Not in Stock';
+                availability.classList.toggle('text-red-600', qty <= 0); // Add red color if out of stock
+
+                // Update quantity field max based on selected format's available quantity
+                var qtyInput = document.getElementById('qty');
+                qtyInput.value = Math.min(qtyInput.value, qty); // Ensure current quantity doesn't exceed available
+            });
+        });
+
+        // Automatically select the first available format on page load
+        window.onload = function () {
+            const defaultOption = document.querySelector('.format-option.bg-gray-200');
+            if (defaultOption) {
+                defaultOption.click(); // Simulate a click on the default selected format
+            }
+        };
+    </script>
+</div>
+
 
             <!-- Add to Cart Button -->
             <?php if (!isset($_SESSION['USER_LOGIN'])): ?>
