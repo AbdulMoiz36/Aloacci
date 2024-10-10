@@ -500,7 +500,7 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
         <!-- Inside the Modal -->
         <?php if (!isset($_SESSION['USER_LOGIN'])): ?>
         <a href="login.php">
-            <div class="w-full p-3 border-2 text-center border-black text-lg font-semibold rounded-full text-black">Add
+            <div id="addToCartBtn" class="w-full p-3 border-2 text-center border-black text-lg font-semibold rounded-full text-black">Add
                 To
                 Cart</div>
                 <a href="login.php">
@@ -511,7 +511,7 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
         </a>
         <?php else: ?>
         <a href="javascript:void(0)">
-            <div id="addToCartBtn"
+            <div
                 class="w-full p-3 border-2 text-center border-black text-lg font-semibold rounded-full text-black">Add
                 To
                 Cart</div>
