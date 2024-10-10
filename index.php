@@ -1,10 +1,18 @@
 <?php
 include "header.php";
-?>
-<!-- Hero Section Start-->
+$select = "SELECT * FROM banner LIMIT 1";
+$res = mysqli_query($con, $select);
+
+// Hero Section Start
+if(mysqli_num_rows($res) > 0){
+    $row = mysqli_fetch_assoc($res); // Fetch a single row
+    ?>
 <div class="Hero bg-slate-400 h-[20vh] md:h-[70vh]">
-    <img src="./img//DemoBanner.jpg" alt="Banner" class="object-cover w-full h-full">
+    <img src="./image/<?= $row['image'] ?>" alt="Banner" class="object-cover w-full h-full">
 </div>
+<?php
+}
+?>
 <!-- Hero Section End-->
 
 <!-- Products Showcase -->
@@ -180,36 +188,39 @@ include "header.php";
     </div>
 </section>
 
-
 <!-- Few Categories -->
 <section class="my-10">
     <div class="flex justify-evenly gap-4 overflow-x-auto py-2">
-    <div class="flex flex-col items-center">
-            <div class="relative rounded-full  cursor-pointer overflow-hidden w-36 h-36 md:w-60 md:h-60 mb-4 transition-transform duration-300 ease-in-out hover:translate-y-[-10px]">
+        <div class="flex flex-col items-center">
+            <div
+                class="relative rounded-full  cursor-pointer overflow-hidden w-36 h-36 md:w-60 md:h-60 mb-4 transition-transform duration-300 ease-in-out hover:translate-y-[-10px]">
                 <img src="./img/product-1.jpg" alt="" class="object-cover w-full h-full">
             </div>
             <p class="text-black font-semibold text-center hover:underline cursor-pointer">Men</p>
-        </div> <div class="flex flex-col items-center">
-            <div class="relative rounded-full  cursor-pointer overflow-hidden w-36 h-36 md:w-60 md:h-60 mb-4 transition-transform duration-300 ease-in-out hover:translate-y-[-10px]">
+        </div>
+        <div class="flex flex-col items-center">
+            <div
+                class="relative rounded-full  cursor-pointer overflow-hidden w-36 h-36 md:w-60 md:h-60 mb-4 transition-transform duration-300 ease-in-out hover:translate-y-[-10px]">
                 <img src="./img/product-1.jpg" alt="" class="object-cover w-full h-full">
             </div>
             <p class="text-black font-semibold text-center hover:underline cursor-pointer">Men</p>
-        </div> <div class="flex flex-col items-center">
-            <div class="relative rounded-full  cursor-pointer overflow-hidden w-36 h-36 md:w-60 md:h-60 mb-4 transition-transform duration-300 ease-in-out hover:translate-y-[-10px]">
+        </div>
+        <div class="flex flex-col items-center">
+            <div
+                class="relative rounded-full  cursor-pointer overflow-hidden w-36 h-36 md:w-60 md:h-60 mb-4 transition-transform duration-300 ease-in-out hover:translate-y-[-10px]">
                 <img src="./img/product-1.jpg" alt="" class="object-cover w-full h-full">
             </div>
             <p class="text-black font-semibold text-center hover:underline cursor-pointer">Men</p>
-        </div> <div class="flex flex-col items-center">
-            <div class="relative rounded-full  cursor-pointer overflow-hidden w-36 h-36 md:w-60 md:h-60 mb-4 transition-transform duration-300 ease-in-out hover:translate-y-[-10px]">
+        </div>
+        <div class="flex flex-col items-center">
+            <div
+                class="relative rounded-full  cursor-pointer overflow-hidden w-36 h-36 md:w-60 md:h-60 mb-4 transition-transform duration-300 ease-in-out hover:translate-y-[-10px]">
                 <img src="./img/product-1.jpg" alt="" class="object-cover w-full h-full">
             </div>
             <p class="text-black font-semibold text-center hover:underline cursor-pointer">Men</p>
         </div>
     </div>
 </section>
-
-
-
 
 <!-- Best Sellers -->
 <section>
@@ -384,14 +395,10 @@ include "header.php";
     </div>
 </section>
 
-
 <!-- Few Categories -->
 <section class="my-10">
     
 </section>
-
-
-
 
 <!-- New Arrival -->
 <section>
