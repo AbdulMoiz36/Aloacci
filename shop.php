@@ -458,7 +458,7 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
         <!-- Options -->
         <div id="modal-formats" class="mt-2">
             <p class="font-semibold">Formats:</p>
-            <div id="format-container" class="flex gap-2">
+            <div id="format-container" class="flex flex-wrap text-xs sm:text-sm gap-2">
                 <!-- Formats will be inserted here dynamically -->
             </div>
         </div>
