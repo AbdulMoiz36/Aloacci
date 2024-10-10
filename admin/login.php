@@ -21,7 +21,7 @@ if(isset($_POST['login'])){
         $_SESSION['ADMIN_IMAGE']=$row['image'];
         $_SESSION['ADMIN_ID']=$row['id'];
         $_SESSION['ADMIN_USERNAME']=$admin;
-        $_SESSION['ADMIN_ROLE']=$row['role'];
+        $_SESSION['ADMIN_ROLE']=$row['role_id'];
       header('Location: categories.php');
       die();
       }

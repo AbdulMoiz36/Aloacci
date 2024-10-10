@@ -23,7 +23,7 @@ if(isset($_GET['type']) && $_GET['type']!=''){
    }
 }
 
-$select = "select * from admin_user where role!='admin' order by id desc";
+$select = "select * from admin_user where role_id!='1' order by id desc";
 $res = mysqli_query($con,$select);
 
 $serial_no = 1;

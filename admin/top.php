@@ -82,7 +82,7 @@ $row = mysqli_fetch_array($res);
           <ul class="sidebar-menu">
             <li class="menu-header">Ecommerce</li>
             <?php
-            if($_SESSION['ADMIN_ROLE']=='admin'){
+            if($_SESSION['ADMIN_ROLE']=='1'){
             ?>
             <li class="dropdown <?= $active=="create_order.php"? 'active':''; ?>">
               <a href="create_order.php" class="nav-link"><i data-feather="monitor"></i><span>Create Order</span></a>
