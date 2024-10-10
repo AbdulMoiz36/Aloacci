@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 10, 2024 at 10:54 AM
+-- Generation Time: Oct 10, 2024 at 04:10 PM
 -- Server version: 10.4.25-MariaDB
 -- PHP Version: 8.1.10
 
@@ -66,7 +66,25 @@ INSERT INTO `admin_user` (`id`, `image`, `name`, `password`, `role_id`, `email`,
 (12, '20190814_184724.jpg', 'Sahil', 'sahil', 2, 'sahil@gmail.com', '03242477248', 1),
 (18, 'istockphoto-947269088-612x612.jpg', 'Sameer', 'sameer', 2, 'sameer@gmail.com', '03352350927', 1),
 (19, 'download (1).png', 'Moiz', 'moiz', 1, 'moiz@gmail.com', '03245633589', 1),
-(20, 'download (1).png', 'Ahmer', 'ahmer', 2, 'ahmer@gmail.com', '03452488598', 0);
+(20, '0I9A5680.jpg', 'Ahmer', 'ahmer', 2, 'ahmer@gmail.com', '03452488598', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `banner`
+--
+
+CREATE TABLE `banner` (
+  `id` int(11) NOT NULL,
+  `image` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `banner`
+--
+
+INSERT INTO `banner` (`id`, `image`) VALUES
+(1, 'lostsymbol_40_11zon.jpeg');
 
 -- --------------------------------------------------------
 
@@ -78,6 +96,20 @@ CREATE TABLE `categories` (
   `id` int(11) NOT NULL,
   `categories` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `categories`
+--
+
+INSERT INTO `categories` (`id`, `categories`) VALUES
+(1, 'Best Sellers'),
+(2, 'Range'),
+(3, 'Weekly Deals'),
+(4, 'Perfume Wax'),
+(5, 'Body Mist'),
+(6, 'Sample Set'),
+(7, 'Air Freshners'),
+(8, 'Elite Fragrances');
 
 -- --------------------------------------------------------
 
@@ -174,6 +206,13 @@ CREATE TABLE `orders` (
   `date` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `orders`
+--
+
+INSERT INTO `orders` (`id`, `user_id`, `name`, `email`, `mobile`, `address`, `city`, `shipping`, `total_price`, `order_from`, `order_status`, `date`) VALUES
+(1, 1, '', 'sajjadsaleem341@gmail.com', '03176122252', 'H#194, St#01, Scheme 33', 'Karachi', 0, 6570, 0, 5, '2024-10-10');
+
 -- --------------------------------------------------------
 
 --
@@ -184,10 +223,18 @@ CREATE TABLE `orders_detail` (
   `id` int(11) NOT NULL,
   `order_id` int(11) NOT NULL,
   `product_id` int(11) NOT NULL,
-  `format` varchar(10) NOT NULL,
+  `format` varchar(50) NOT NULL,
   `qty` int(11) NOT NULL,
   `price` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `orders_detail`
+--
+
+INSERT INTO `orders_detail` (`id`, `order_id`, `product_id`, `format`, `qty`, `price`) VALUES
+(1, 1, 1, 'Perfume Spray (50ml)', 2, 1790),
+(2, 1, 1, 'Perfume Spray (100ml)', 1, 2990);
 
 -- --------------------------------------------------------
 
@@ -236,6 +283,13 @@ CREATE TABLE `product` (
   `status` tinyint(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `product`
+--
+
+INSERT INTO `product` (`id`, `category_id`, `sub_category_id`, `image`, `image2`, `image3`, `name`, `gender_id`, `genre_id`, `type_id`, `season_id`, `sillage_id`, `lasting_id`, `description`, `breif`, `status`) VALUES
+(1, 1, 1, 'lostsymbol_40_11zon.jpeg', 'florse_25_11zon.jpeg', '', 'Catch 22', 1, 1, 1, 1, 1, 1, 'Perfume Spray: Our 50ml spray bottle is sturdy, sober and easy to use. It is made with EDP concentration so that it lasts longer.', 'Catch 22 is a chypre fruity fragrance for men. The top notes of this perfume are Bergamot, Pineapple, Apple and Black Currant, while the middle notes are Patchouli, Moroccan Jasmine, Birch and Rose. The base notes include Musk, Ambergris, Oak moss and Vanille. Catch 22 is one of our best-selling fragrances and it is sure to get you lots of compliments.', 1);
+
 -- --------------------------------------------------------
 
 --
@@ -249,6 +303,14 @@ CREATE TABLE `product_format` (
   `price` int(11) NOT NULL,
   `qty` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `product_format`
+--
+
+INSERT INTO `product_format` (`id`, `product_id`, `format`, `price`, `qty`) VALUES
+(9, 1, 'Perfume Spray (50ml)', 1790, 30),
+(10, 1, 'Perfume Spray (100ml)', 2990, 20);
 
 -- --------------------------------------------------------
 
@@ -321,6 +383,46 @@ CREATE TABLE `sub_categories` (
   `status` tinyint(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `sub_categories`
+--
+
+INSERT INTO `sub_categories` (`id`, `category_id`, `sub_categories`, `status`) VALUES
+(1, 1, 'Men', 1),
+(2, 1, 'Women', 1),
+(3, 1, 'New Arrival', 1),
+(4, 2, 'Explorer', 1),
+(5, 2, 'Executive', 1),
+(6, 2, 'Elite', 1),
+(7, 3, 'Inferno', 1),
+(8, 3, 'Lady Eve', 1),
+(9, 3, 'Dauntless', 1),
+(10, 3, 'Saiful Malook', 1),
+(11, 3, 'Rain On Me', 1),
+(12, 4, 'Catch 22 Perfume Wax', 1),
+(13, 4, 'Merry Me Perfume Wax', 1),
+(14, 4, 'Saiful Malook Perfume Wax', 1),
+(15, 4, 'Heavenly Vibes Perfume Wax', 1),
+(16, 4, 'Oud War Perfume Wax', 1),
+(17, 4, 'Velvet Smooth Perfume Wax', 1),
+(18, 5, 'Living Floral Body Mist', 1),
+(19, 5, 'Lost Light Body Mist', 1),
+(20, 5, 'Heavenly Vibes Body Mist', 1),
+(21, 6, '5 Samples of Your Choice', 1),
+(22, 6, 'Mr. Ayaz Samoo\'s Choice', 1),
+(23, 6, 'Mr & Mrs Faizan Sheikh\'s Choice', 1),
+(24, 6, 'Top 5 Samples', 1),
+(25, 6, 'Top Rated New Arrival Samples', 1),
+(26, 7, 'Air Freshener', 1),
+(27, 7, 'Car Diffuser', 1),
+(28, 7, 'Reed Diffuser', 1),
+(29, 7, 'Candles', 1),
+(30, 8, 'Catch 22 Gold Edition - For Men', 1),
+(31, 8, 'Farat - For Men', 1),
+(32, 8, 'Qarar - For Men', 1),
+(33, 8, 'Zarf - Unisex', 1),
+(34, 8, 'Rabt - For Men', 1);
+
 -- --------------------------------------------------------
 
 --
@@ -338,7 +440,11 @@ CREATE TABLE `type` (
 
 INSERT INTO `type` (`id`, `type`) VALUES
 (1, 'Citrus'),
-(2, 'Floral');
+(2, 'Floral'),
+(3, 'Woody'),
+(4, 'Oriental'),
+(5, 'Sweet'),
+(6, 'Fruity');
 
 -- --------------------------------------------------------
 
@@ -378,6 +484,12 @@ ALTER TABLE `admin_role`
 -- Indexes for table `admin_user`
 --
 ALTER TABLE `admin_user`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `banner`
+--
+ALTER TABLE `banner`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -500,10 +612,16 @@ ALTER TABLE `admin_user`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
+-- AUTO_INCREMENT for table `banner`
+--
+ALTER TABLE `banner`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `contact_us`
@@ -533,13 +651,13 @@ ALTER TABLE `lasting`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `orders_detail`
 --
 ALTER TABLE `orders_detail`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `order_status`
@@ -551,13 +669,13 @@ ALTER TABLE `order_status`
 -- AUTO_INCREMENT for table `product`
 --
 ALTER TABLE `product`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `product_format`
 --
 ALTER TABLE `product_format`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `reviews`
@@ -581,13 +699,13 @@ ALTER TABLE `sillage`
 -- AUTO_INCREMENT for table `sub_categories`
 --
 ALTER TABLE `sub_categories`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT for table `type`
 --
 ALTER TABLE `type`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `users`
