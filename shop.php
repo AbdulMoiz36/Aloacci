@@ -511,7 +511,7 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
         </a>
         <?php else: ?>
         <a href="javascript:void(0)">
-            <div
+            <div id="addToCartBtn"
                 class="w-full p-3 border-2 text-center border-black text-lg font-semibold rounded-full text-black">Add
                 To
                 Cart</div>
