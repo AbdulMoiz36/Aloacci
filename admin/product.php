@@ -62,8 +62,8 @@ $res = mysqli_query($con, $select);
                         <td> <?= $row['categories'] ?> </td>
                         <td> <?= $row['name'] ?> </td>
                         <td><img src="../image/<?= $row['image'] ?>" height="50" width="50" alt=""></td>
-                        <td> <?= $row['formats'] ?> </td>
-                        <td> <?= $row['prices'] ?> </td>
+                        <td> <?= str_replace(", ", "<br>", $row['formats']) ?> </td>
+                        <td> <?= str_replace(", ", "<br>", $row['prices']) ?> </td>
                         <td>
                            <?php
                               $soldQtyByFormat = productSoldQtyByProductId($con, $row['id']);
@@ -77,7 +77,7 @@ $res = mysqli_query($con, $select);
                                  $remainingQty = $totalQty - $soldQty;
                                  $price = isset($pricesByFormat[$key]) ? $pricesByFormat[$key] : 'N/A'; // Handle price
 
-                                 echo ($remainingQty > 0) ? "$remainingQty, " : "Out of Stock, ";
+                                 echo ($remainingQty > 0) ? "$remainingQty<br> " : "<span style='color: red;'>Out of Stock</span><br> ";
 
                               }
                            ?>

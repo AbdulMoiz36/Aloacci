@@ -243,8 +243,8 @@ if (isset($_REQUEST['submit'])) {
 
                         <div class="form-group col-6">
                             <label for="categories" class="form-control-label">Categories</label>
-                            <select class="form-control" name="categories_id" id="category">
-                                <option selected disabled>Select Category</option>
+                            <select class="form-control" name="categories_id" id="category" required>
+                                <option value="" selected disabled>Select Category</option>
                                 <?php
                                     $categories = mysqli_query($con, "SELECT * FROM categories");
                                     while ($row = mysqli_fetch_array($categories)) {
@@ -257,8 +257,8 @@ if (isset($_REQUEST['submit'])) {
 
                         <div class="form-group col-6">
                             <label for="sub_categories" class="form-control-label">Sub Categories</label>
-                            <select class="form-control" name="sub_categories_id" id="sub_category">
-                                <option selected disabled>Select Sub Category</option>
+                            <select class="form-control" name="sub_categories_id" id="sub_category" required>
+                                <option value="" selected disabled>Select Sub Category</option>
                                 <!-- Subcategories will be loaded by AJAX based on the selected category -->
                             </select>
                         </div>
@@ -575,15 +575,15 @@ if (isset($_REQUEST['submit'])) {
                     </div>
 
                     <div class="form-group">
-                        <label for="brief" class="form-control-label">Brief</label>
-                        <textarea name="breif" placeholder="Enter Product Brief"
-                            class="form-control"><?= $breif ?></textarea>
+                        <label for="description" class="form-control-label">Description</label>
+                        <textarea name="description" placeholder="Enter Product Description"
+                            class="form-control" required><?= $description ?></textarea>
                     </div>
 
                     <div class="form-group">
-                        <label for="description" class="form-control-label">Description</label>
-                        <textarea name="description" placeholder="Enter Product Description"
-                            class="form-control"><?= $description ?></textarea>
+                        <label for="brief" class="form-control-label">Brief</label>
+                        <textarea name="breif" placeholder="Enter Product Brief"
+                            class="form-control"><?= $breif ?></textarea>
                     </div>
 
                     <button id="payment-button" name="submit" type="submit" class="btn btn-lg btn-primary btn-block">

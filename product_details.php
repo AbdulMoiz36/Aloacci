@@ -83,7 +83,7 @@ foreach ($get_product as $product) {
                             <?= $isAvailable ? 'border-black' : 'border-gray-400 text-gray-400 cursor-not-allowed' ?>"
                             data-price="<?= $product_prices[$index] ?>" data-qty="<?= $product_quantities[$index] ?>"
                             <?= $isAvailable ? '' : 'data-disabled="true"' ?>>
-                            <?= $format ?> - Rs. <?= $product_prices[$index] ?>
+                            <?= $format ?>
                         </div>
                     <?php 
                         if ($isAvailable && !$defaultSelected) {
