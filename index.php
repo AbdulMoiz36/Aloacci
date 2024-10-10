@@ -15,19 +15,16 @@ if(mysqli_num_rows($res) > 0){
 ?>
 <!-- Hero Section End-->
 
-<!-- Best Sellers -->
+<!-- Products Showcase -->
 <section>
     <!-- Heading and View All -->
-    <div class="p-5 lg:p-16  flex justify-between">
-        <h2 class="font-bold text-3xl">Our Best Sellers</h2>
+    <div class="p-5 lg:p-16 flex justify-between">
+        <h2 class="font-bold text-3xl">Best Sellers</h2>
     </div>
 
-    <!-- Product Cards Container -->
-    <div class=" mx-auto px-6 lg:px-10 ">
-        <div class="space-x-3">
-            <!-- Product Cards Grid -->
-            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4">
-            <?php
+    <!-- Products section -->
+    <div id="products-container" class="w-full p-3 flex justify-start gap-5 overflow-hidden overflow-x-auto">
+        <?php
                 // Fetch all products
                 $get_product = get_product($con);
 
@@ -50,31 +47,33 @@ if(mysqli_num_rows($res) > 0){
 
                     // Display the product card
                     ?>
-                    <!-- Product Card Start-->
-                    <div class="relative bg-white shadow-md rounded-lg overflow-visible group">
-                        <div class="relative">
-                            <!-- Default Image -->
-                            <img src="./image/<?= $list['image'] ?>" alt="<?= $list['name'] ?>" class="w-full h-3/4 object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0">
-                            <!-- Image to show on hover -->
-                            <img src="./image/<?= $list['image2'] ?>" alt="<?= $list['name'] ?>" class="w-full h-3/4 object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100 absolute top-0 left-0">
-                        </div>
-                        <!-- Add to cart -->
-                        <a href="#">
-                            <div class="absolute -top-2 -right-2 bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full p-3 flex items-center justify-center text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out cursor-pointer">
-                                <i class="fas fa-plus text-white pl-0.5 font-semibold"></i>
-                            </div>
-                        </a>
-                        <div class="p-4">
-                            <h2 class="font-bold text-lg"><?php echo $list['name']; ?></h2>
-                            <p class="text-gray-600"><?php echo $list['description']; ?></p>
-                            <!-- Price Section -->
-                            <div class="flex items-center space-x-2">
-                                <span class="text-red-500 font-semibold">Rs.<?php echo $list['price']; ?></span>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Product Card End-->
-                    <?php
+
+        <div class="product-card w-96 md:w-72 h-[25rem] lg:h-[30rem] flex gap-2 flex-col relative group shadow">
+            <div
+                class="openModalBtn z-10 absolute -top-2 -right-2 bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full p-3 flex items-center justify-center text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out cursor-pointer">
+                <i class="fas fa-plus text-white pl-0.5 font-semibold"></i>
+            </div>
+
+            <!-- Product image wrapper -->
+            <div class="relative h-[70%] w-full">
+                <a href="product_details.php?id=" class="product-link w-full">
+                    <img src="./image/<?= $list['image'] ?>" alt="<?= $list['name'] ?>" alt=""
+                        class="h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0">
+                    <img src="./image/<?= $list['image2'] ?>" alt="<?= $list['name'] ?>" alt=" Hover"
+                        class="absolute top-0 left-0 h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100">
+                </a>
+            </div>
+
+            <!-- Product details -->
+            <div class="px-4 py-2 h-full flex flex-col justify-evenly">
+                <a href="product_details.php?id=" class="text-lg font-bold hover:underline"><?= $list['name'] ?></a>
+                <p class="text-gray-600 overflow-hidden text-ellipsis line-clamp-2">
+                    <?= $list['description'] ?> </p>
+                <p class="text-lg font-bold text-red-500">Rs. <?= $list['price'] ?></p>
+            </div>
+        </div>
+
+        <?php
 
                     // Increment the displayed products counter
                     $displayed_products++;
@@ -85,59 +84,22 @@ if(mysqli_num_rows($res) > 0){
                     }
                 }
                 ?>
-            </div>
-            <!-- Prouct Cards Grid End -->
-        </div>
     </div>
 </section>
 
-<!-- Few Categories -->
-<section class="my-10">
-    <div class="flex justify-evenly gap-4 overflow-x-auto py-2">
-        <div class="flex flex-col items-center">
-            <div
-                class="relative rounded-full  cursor-pointer overflow-hidden w-36 h-36 md:w-60 md:h-60 mb-4 transition-transform duration-300 ease-in-out hover:translate-y-[-10px]">
-                <img src="../image/Florse.jpeg" alt="" class="object-cover w-full h-full">
-            </div>
-            <p class="text-black font-semibold text-center hover:underline cursor-pointer">Men</p>
-        </div>
-        <div class="flex flex-col items-center">
-            <div
-                class="relative rounded-full  cursor-pointer overflow-hidden w-36 h-36 md:w-60 md:h-60 mb-4 transition-transform duration-300 ease-in-out hover:translate-y-[-10px]">
-                <img src="./image/Florse.jpeg" alt="" class="object-cover w-full h-full">
-            </div>
-            <p class="text-black font-semibold text-center hover:underline cursor-pointer">Men</p>
-        </div>
-        <div class="flex flex-col items-center">
-            <div
-                class="relative rounded-full  cursor-pointer overflow-hidden w-36 h-36 md:w-60 md:h-60 mb-4 transition-transform duration-300 ease-in-out hover:translate-y-[-10px]">
-                <img src="./image/Florse.jpeg" alt="" class="object-cover w-full h-full">
-            </div>
-            <p class="text-black font-semibold text-center hover:underline cursor-pointer">Men</p>
-        </div>
-        <div class="flex flex-col items-center">
-            <div
-                class="relative rounded-full  cursor-pointer overflow-hidden w-36 h-36 md:w-60 md:h-60 mb-4 transition-transform duration-300 ease-in-out hover:translate-y-[-10px]">
-                <img src="./image/Florse.jpeg" alt="" class="object-cover w-full h-full">
-            </div>
-            <p class="text-black font-semibold text-center hover:underline cursor-pointer">Men</p>
-        </div>
-    </div>
-</section>
-
-<!-- Products Showcase -->
+<!-- New Arrival -->
 <section>
     <!-- Heading and View All -->
     <div class="p-5 lg:p-16 flex justify-between">
         <h2 class="font-bold text-3xl">New Arrival</h2>
+        <!-- <a href="#">
+            <p class="underline cursor-pointer font-semibold">View all</p>
+        </a> -->
     </div>
 
-    <!-- Product Cards Container -->
-    <div class="mx-auto px-6 lg:px-10">
-        <div class="space-x-3">
-            <!-- Product Cards Grid -->
-            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4">
-                <?php
+    <!-- Products section -->
+    <div id="products-container" class="w-full p-3 flex justify-start gap-5 overflow-hidden overflow-x-auto">
+        <?php
                 // Fetch all products
                 $get_product = get_product($con);
 
@@ -155,31 +117,33 @@ if(mysqli_num_rows($res) > 0){
 
                     // Display the product card
                     ?>
-                    <!-- Product Card Start-->
-                    <div class="relative bg-white shadow-md rounded-lg overflow-visible group">
-                        <div class="relative">
-                            <!-- Default Image -->
-                            <img src="./image/<?= $list['image'] ?>" alt="<?= $list['name'] ?>" class="w-full h-3/4 object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0">
-                            <!-- Image to show on hover -->
-                            <img src="./image/<?= $list['image2'] ?>" alt="<?= $list['name'] ?>" class="w-full h-3/4 object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100 absolute top-0 left-0">
-                        </div>
-                        <!-- Add to cart -->
-                        <a href="#">
-                            <div class="absolute -top-2 -right-2 bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full p-3 flex items-center justify-center text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out cursor-pointer">
-                                <i class="fas fa-plus text-white pl-0.5 font-semibold"></i>
-                            </div>
-                        </a>
-                        <div class="p-4">
-                            <h2 class="font-bold text-lg"><?php echo $list['name']; ?></h2>
-                            <p class="text-gray-600"><?php echo $list['description']; ?></p>
-                            <!-- Price Section -->
-                            <div class="flex items-center space-x-2">
-                                <span class="text-red-500 font-semibold">Rs.<?php echo $list['price']; ?></span>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Product Card End-->
-                    <?php
+
+        <div class="product-card w-96 md:w-72 h-[25rem] lg:h-[30rem] flex gap-2 flex-col relative group shadow">
+            <div
+                class="openModalBtn z-10 absolute -top-2 -right-2 bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full p-3 flex items-center justify-center text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out cursor-pointer">
+                <i class="fas fa-plus text-white pl-0.5 font-semibold"></i>
+            </div>
+
+            <!-- Product image wrapper -->
+            <div class="relative h-[70%] w-full">
+                <a href="product_details.php?id=" class="product-link w-full">
+                    <img src="./image/<?= $list['image'] ?>" alt="<?= $list['name'] ?>" alt=""
+                        class="h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0">
+                    <img src="./image/<?= $list['image2'] ?>" alt="<?= $list['name'] ?>"
+                        class="absolute top-0 left-0 h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100">
+                </a>
+            </div>
+
+            <!-- Product details -->
+            <div class="px-4 py-2 h-full flex flex-col justify-evenly">
+                <a href="product_details.php?id=" class="text-lg font-bold hover:underline"><?= $list['name'] ?></a>
+                <p class="text-gray-600 overflow-hidden text-ellipsis line-clamp-2">
+                    <?= $list['description'] ?> </p>
+                <p class="text-lg font-bold text-red-500">Rs. <?= $list['price'] ?></p>
+            </div>
+        </div>
+
+        <?php
 
                     // Increment the displayed products counter
                     $displayed_products++;
@@ -190,10 +154,12 @@ if(mysqli_num_rows($res) > 0){
                     }
                 }
                 ?>
-            </div>
-            <!-- Product Cards Grid End -->
-        </div>
     </div>
+</section>
+
+<!-- Few Categories -->
+<section class="my-10">
+
 </section>
 
 <?php

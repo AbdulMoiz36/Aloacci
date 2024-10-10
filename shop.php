@@ -517,7 +517,7 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
                 Cart</div>
         </a>
         <a href="">
-            <div style="margin-top: 20px;"
+            <div style="margin-top: 20px;" onclick="addToCartAndCheckout(currentProductId)"
                 class="w-full p-3 border-2 hover:cursor-pointer bg-gradient-to-bl from-yellow-500 via-yellow-500 to-amber-600 shadow-sm hover:shadow-lg transition-shadow ease-in-out duration-300 font-semibold rounded-full text-white text-center">
                 Buy It
                 Now</div>

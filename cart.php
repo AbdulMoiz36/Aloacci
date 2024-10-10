@@ -7,13 +7,6 @@ if (isset($_SESSION['USER_LOGIN']) && $_SESSION['USER_LOGIN'] != '') {
     die();
 }
 
-$msg='';
-
-// Check if the cart is empty
-if (empty($_SESSION['cart'])) {
-    $msg = "Your Cart is empty. Please add some products to your cart";
-}
-
 $cart_total = 0;
 
 // Function to get available stock for a product format
@@ -41,11 +34,8 @@ function get_available_stock($con, $pid, $format) {
 <section class="px-2 py-5 md:px-32 md:py-10 w-full">
     <h1 class="text-4xl font-bold text-center">Cart</h1>
     <div class="flex flex-col md:flex-row mt-10 gap-2">
-        <div class="w-full md:w-4/6 ">
-            <p class="text-center my-10"><?=$msg?></p>
-
+        <div class="w-full md:w-4/6">
             <?php
-
             if (isset($_SESSION['cart'])) {
                 $cart_total = 0;
                 foreach ($_SESSION['cart'] as $key => $val) {
@@ -67,6 +57,7 @@ function get_available_stock($con, $pid, $format) {
                 <div class="w-5/6 flex flex-col justify-evenly">
                     <p class="font-bold text-lg"><?= $pname ?></p>
                     <p><span class="font-semibold">Format:</span> <?= $selected_format ?></p>
+                    <!-- Display available stock -->
                     <!-- Quantity Selector -->
                     <div style="margin-bottom:20px">
                         <p class="font-semibold">Quantity:</p>
@@ -75,7 +66,7 @@ function get_available_stock($con, $pid, $format) {
                                     class="fa fa-minus" aria-hidden="true"></i></span>
                             <input id="qty_<?= $key ?>" name="quantity" type="number" min="1" value="<?= $qty ?>"
                                 class="w-16 text-center border border-gray-300 rounded-md"
-                                onchange="updateCartTotal('<?= $key ?>', <?= $available_stock ?>)" />
+                                onchange="validateQty('<?= $key ?>', <?= $available_stock ?>)" />
                             <span class="qty-plus" onclick="changeQty('<?= $key ?>', 1, <?= $available_stock ?>)"><i
                                     class="fa fa-plus" aria-hidden="true"></i></span>
                         </div>
@@ -134,6 +125,19 @@ function get_available_stock($con, $pid, $format) {
         }
         qtyInput.value = newValue > 0 ? newValue : 1; // Prevent negative or zero quantities
         updateCartTotal(productId, availableStock); // Update cart total when quantity changes
+    }
+
+    function validateQty(productId, availableStock) {
+        var qtyInput = document.getElementById('qty_' + productId);
+        var quantity = parseInt(qtyInput.value);
+
+        if (quantity > availableStock) {
+            alert('Selected quantity exceeds available stock. Available stock: ' + availableStock);
+            qtyInput.value = availableStock; // Reset to maximum available stock
+        } else if (quantity < 1) {
+            qtyInput.value = 1; // Reset to minimum of 1
+        }
+        updateCartTotal(productId, availableStock); // Update total after validation
     }
 
     function updateCartTotal(productId, availableStock) {
