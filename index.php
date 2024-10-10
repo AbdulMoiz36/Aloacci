@@ -78,8 +78,8 @@ if(mysqli_num_rows($res) > 0){
                     // Increment the displayed products counter
                     $displayed_products++;
 
-                    // Stop displaying more products if the limit of 4 is reached
-                    if ($displayed_products >= 4) {
+                    // Stop displaying more products if the limit of 5 is reached
+                    if ($displayed_products >= 5) {
                         break;
                     }
                 }
@@ -148,8 +148,8 @@ if(mysqli_num_rows($res) > 0){
                     // Increment the displayed products counter
                     $displayed_products++;
 
-                    // Stop displaying more products if the limit of 4 is reached
-                    if ($displayed_products >= 4) {
+                    // Stop displaying more products if the limit of 5 is reached
+                    if ($displayed_products >= 5) {
                         break;
                     }
                 }
