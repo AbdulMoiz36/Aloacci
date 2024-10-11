@@ -1,5 +1,8 @@
 <?php
 include "config.php";
+include "functions.php";
+/* Restrict employee to access this page */
+isAdmin();
 
 // Get user information from POST request
 $mobile = $_POST['mobile'];

@@ -7,6 +7,20 @@ include "top.php";
 isAdmin();
 ?>
 
+<style>
+    /* For Chrome, Safari, Edge, and Opera */
+    input[type=number]::-webkit-outer-spin-button,
+    input[type=number]::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    /* For Firefox */
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
+</style>
+
 <div class="row">
     <div class="col-12">
         <div class="card">
@@ -17,12 +31,12 @@ isAdmin();
                 <div class="form-row">
 
                     <div class="form-group col-6">
-                        <label for="name" class="form-control-label">Name <span>(optional)</span></label>
+                        <label for="name" class="form-control-label">Name</label>
                         <input type="text" name="name" placeholder="Enter Name" class="form-control">
                     </div>
 
                     <div class="form-group col-6">
-                        <label for="mobile" class="form-control-label">Phone Number*</label>
+                        <label for="mobile" class="form-control-label">Phone Number</label>
                         <input type="text" name="mobile" placeholder="Enter Phone Number" class="form-control">
                     </div>
 
@@ -31,12 +45,12 @@ isAdmin();
                 <div class="form-row">
 
                     <div class="form-group col-6">
-                        <label for="city" class="form-control-label">City*</label>
+                        <label for="city" class="form-control-label">City</label>
                         <input type="text" name="city" placeholder="Enter City" class="form-control">
                     </div>
 
                     <div class="form-group col-6">
-                        <label for="address" class="form-control-label">Address*</label>
+                        <label for="address" class="form-control-label">Address</label>
                         <input type="text" name="address" placeholder="Enter Address" class="form-control">
                     </div>
 
@@ -77,7 +91,7 @@ isAdmin();
 
                     <div class="form-group col-3">
                         <label for="qty" class="form-control-label">Qty</label>
-                        <input type="text" name="qty" id="qty" placeholder="Enter Qty" class="form-control" required>
+                        <input type="number" name="qty" id="qty" placeholder="Enter Qty" class="form-control" required>
                     </div>
 
                     <div class="form-group col-3">
@@ -114,7 +128,6 @@ isAdmin();
                             var price = $('#format option:selected').data('price');
                             $('#price').val(price); // Set price in price field
                         });
-                        // Add product to the table
                         $('#payment-button').click(function(e) {
                             e.preventDefault();
                             var product_id = $('#product').val();
@@ -125,40 +138,66 @@ isAdmin();
                             var price = $('#format option:selected').data(
                                 'price'); // Get price from the selected format
                             var total_price = qty * price;
+                            // Validate if quantity is greater than 0
+                            if (qty <= 0) {
+                                alert("Quantity must be greater than zero.");
+                                return;
+                            }
                             if (product_id && format_id && qty) {
-                                var product = {
-                                    product_id: product_id,
-                                    format_id: format_id,
-                                    qty: qty,
-                                    price: price,
-                                    total_price: total_price
-                                };
-                                products.push(product);
-                                // Show the order table if not already visible
-                                if (products.length > 0) {
-                                    $('#order-table').show();
-                                }
-                                // Create a new row
-                                var row = `<tr>
-            <td>${product_name}</td>
-            <td>${format_name}</td>
-            <td>${qty}</td>
-            <td>${price}</td>
-            <td>${total_price}</td>
-            <td>
-                <button class="btn btn-danger btn-sm delete-product"><i class="fas fa-trash-alt"></i></button>
-            </td>
-        </tr>`;
-                                $('tbody').append(row);
-                                // Update total amount
-                                totalAmount += total_price;
-                                $('#total-amount').text(totalAmount.toFixed(
-                                    2)); // Update the total in the table
-                                // Clear the input fields
-                                $('#qty').val('');
-                                $('#price').val(''); // Clear the price field
-                                $('#format').prop('selectedIndex',
-                                    0); // Reset format dropdown to the first option (default)
+                                // Check stock availability
+                                $.ajax({
+                                    url: 'check_stock.php',
+                                    type: 'POST',
+                                    data: {
+                                        product_id: product_id,
+                                        format_name: format_name
+                                    },
+                                    success: function(response) {
+                                        var data = JSON.parse(response);
+                                        var available_stock = data.available_stock;
+                                        // Check if requested quantity exceeds available stock
+                                        if (qty > available_stock) {
+                                            alert("Requested quantity exceeds available stock. Available: " +
+                                                available_stock);
+                                            return; // Stop the execution
+                                        }
+                                        // Proceed to add the product to the order
+                                        var product = {
+                                            product_id: product_id,
+                                            format_id: format_id,
+                                            qty: qty,
+                                            price: price,
+                                            total_price: total_price
+                                        };
+                                        products.push(product);
+                                        // Show the order table if not already visible
+                                        if (products.length > 0) {
+                                            $('#order-table').show();
+                                        }
+                                        // Create a new row
+                                        var row = `<tr>
+                    <td>${product_name}</td>
+                    <td>${format_name}</td>
+                    <td>${qty}</td>
+                    <td>${price}</td>
+                    <td>${total_price}</td>
+                    <td>
+                        <button class="btn btn-danger btn-sm delete-product"><i class="fas fa-trash-alt"></i></button>
+                    </td>
+                </tr>`;
+                                        $('tbody').append(row);
+                                        // Update total amount
+                                        totalAmount += parseFloat(total_price);
+                                        $('#total-amount').text(totalAmount.toFixed(
+                                            2)); // Update the total in the table
+                                        // Clear the input fields
+                                        $('#qty').val('');
+                                        $('#price').val(''); // Clear the price field
+                                        $('#format').prop('selectedIndex',
+                                            0
+                                            ); // Reset format dropdown to the first option (default)
+                                    }
+                                });
                             } else {
                                 alert("Please select a product, variant, and quantity.");
                             }
@@ -206,17 +245,28 @@ isAdmin();
                                 },
                                 success: function(response) {
                                     alert(response);
-                                    // Optionally hide the order table and reset the form after successful order
-                                    products = [];
-                                    totalAmount = 0;
-                                    $('tbody').empty();
-                                    $('#total-amount').text(totalAmount.toFixed(2));
-                                    $('#order-table').hide(); // Hide the table after order confirmation
-                                    // Clear the user information fields
+                                    // Clear input fields
                                     $('input[name="name"]').val('');
                                     $('input[name="mobile"]').val('');
                                     $('input[name="city"]').val('');
                                     $('input[name="address"]').val('');
+                                    $('#qty').val(''); // Clear quantity field
+                                    $('#price').val(''); // Clear price field
+                                    $('#format').prop('selectedIndex',
+                                    0); // Reset format dropdown to the first option (default)
+                                    $('#product').prop('selectedIndex',
+                                    0); // Reset product dropdown to the first option (default)
+                                    // Clear the order table and reset total amount
+                                    products = [];
+                                    totalAmount = 0;
+                                    $('tbody').empty();
+                                    $('#total-amount').text(totalAmount.toFixed(
+                                    2)); // Reset total amount display
+                                    $('#order-table')
+                                .hide(); // Hide the table after order confirmation
+                                },
+                                error: function(xhr, status, error) {
+                                    alert("An error occurred: " + xhr.responseText);
                                 }
                             });
                         });

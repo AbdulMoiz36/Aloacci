@@ -1,6 +1,10 @@
 <?php
 include "config.php";
 include "top.php";
+
+/* Restrict employee to access this page */
+isAdmin();
+
 $review_id = get_safe_value($con, $_GET['id']);
 
 $select = "SELECT * FROM reviews WHERE id = $review_id LIMIT 1";
