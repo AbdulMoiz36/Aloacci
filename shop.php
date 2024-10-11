@@ -283,7 +283,7 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
         }
     ?>
         <div class="product-card w-96 md:w-72 h-[40rem] md:h-[30rem] flex gap-2 flex-col relative group shadow"
-            data-gender-id="<?= $list['gender_id'] ?>" data-genre-id="<?= $list['genre_id'] ?>">
+            data-gender-id="<?= $list['gender_id'] ?>"data-genre-id="<?= $list['genre_id'] ?>"data-type-id="<?= $list['type_id'] ?>"data-season-id="<?= $list['season_id'] ?>"data-sillage-id="<?= $list['sillage_id'] ?>" data-lasting-id="<?= $list['lasting_id'] ?>">
             <div class="openModalBtn z-10 absolute -top-2 -right-2 bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full p-3 flex items-center justify-center text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out cursor-pointer"
                 data-product-id="<?= $list['id'] ?>" data-product-name="<?= $list['name'] ?>"
                 data-product-formats="<?= htmlspecialchars(json_encode($product_formats)) ?>">
