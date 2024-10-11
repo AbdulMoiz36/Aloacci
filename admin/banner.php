@@ -23,7 +23,7 @@ $res = mysqli_query($con,$select);
                                   $row = mysqli_fetch_assoc($res); // Fetch a single row
                                  ?>
                 <div class="portfolio-thumb in">
-                  <img class="img-responsive img-center" src="../image/<?= $row['image'] ?>" alt="">
+                  <img class="img-responsive img-center" height="400px" src="../image/<?= $row['image'] ?>" alt="">
                   <span class="project-title">Banner</span>
                   <span class="overlay-mask"></span>
                   <a class="link centered" href="manage_banner.php?id=<?= $row['id'] ?>"><i

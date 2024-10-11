@@ -4,12 +4,12 @@ $select = "SELECT * FROM banner LIMIT 1";
 $res = mysqli_query($con, $select);
 
 // Hero Section Start
-if(mysqli_num_rows($res) > 0){
+if (mysqli_num_rows($res) > 0) {
     $row = mysqli_fetch_assoc($res); // Fetch a single row
-    ?>
-<div class="Hero bg-slate-400 h-[20vh] md:h-[70vh]">
-    <img src="./image/<?= $row['image'] ?>" alt="Banner" class="object-cover w-full h-full">
-</div>
+?>
+    <div class="Hero bg-slate-400 h-[20vh] md:h-[70vh]">
+        <img src="./image/<?= $row['image'] ?>" alt="Banner" class="object-cover w-full h-full">
+    </div>
 <?php
 }
 ?>
@@ -25,67 +25,105 @@ if(mysqli_num_rows($res) > 0){
     <!-- Products section -->
     <div id="products-container" class="w-full p-3 flex justify-start gap-5 overflow-hidden overflow-x-auto">
         <?php
-                // Fetch all products
-                $get_product = get_product($con);
+        // Fetch all products
+        $get_product = get_product($con);
 
-                $unique_products = []; // Array to track unique products
-                $displayed_products = 0; // Counter for displayed products
+        $unique_products = []; // Array to track unique products
+        $displayed_products = 0; // Counter for displayed products
 
-                foreach ($get_product as $list) {
-                    // Check if the product belongs to the "Best Sellers" category
-                    if ($list['categories'] !== 'Best Sellers') {
-                        continue; // Skip products that are not in the "Best Sellers" category
-                    }
+        foreach ($get_product as $list) {
+            // Check if the product belongs to the "Best Sellers" category
+            if ($list['categories'] !== 'Best Sellers') {
+                continue; // Skip products that are not in the "Best Sellers" category
+            }
 
-                    // Skip the product if it's already been displayed
-                    if (in_array($list['id'], $unique_products)) {
-                        continue;
-                    }
+            // Skip the product if it's already been displayed
+            if (in_array($list['id'], $unique_products)) {
+                continue;
+            }
 
-                    // Add the product ID to the unique products array
-                    $unique_products[] = $list['id'];
+            // Add the product ID to the unique products array
+            $unique_products[] = $list['id'];
 
-                    // Display the product card
-                    ?>
+            // Display the product card
+        ?>
 
-        <div class="product-card w-96 md:w-72 h-[25rem] lg:h-[30rem] flex gap-2 flex-col relative group shadow">
-            <div
-                class="openModalBtn z-10 absolute -top-2 -right-2 bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full p-3 flex items-center justify-center text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out cursor-pointer">
-                <i class="fas fa-plus text-white pl-0.5 font-semibold"></i>
+            <div class="product-card w-96 md:w-72 h-[25rem] lg:h-[30rem] flex gap-2 flex-col relative group shadow">
+
+                <!-- Product image wrapper -->
+                <div class="relative h-[70%] w-full">
+                    <a href="product_details.php?id=<?= $list['id'] ?>" class="product-link w-full">
+                        <img src="./image/<?= $list['image'] ?>" alt="<?= $list['name'] ?>" alt=""
+                            class="h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0">
+                        <img src="./image/<?= $list['image2'] ?>" alt="<?= $list['name'] ?>" alt=" Hover"
+                            class="absolute top-0 left-0 h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100">
+                    </a>
+                </div>
+
+                <!-- Product details -->
+                <div class="px-4 py-2 h-full flex flex-col justify-evenly">
+                    <a href="product_details.php?id=" class="text-lg font-bold hover:underline"><?= $list['name'] ?></a>
+                    <p class="text-gray-600 overflow-hidden text-ellipsis line-clamp-2">
+                        <?= $list['description'] ?> </p>
+                    <p class="text-lg font-bold text-red-500">Rs. <?= $list['price'] ?></p>
+                </div>
             </div>
-
-            <!-- Product image wrapper -->
-            <div class="relative h-[70%] w-full">
-                <a href="product_details.php?id=" class="product-link w-full">
-                    <img src="./image/<?= $list['image'] ?>" alt="<?= $list['name'] ?>" alt=""
-                        class="h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0">
-                    <img src="./image/<?= $list['image2'] ?>" alt="<?= $list['name'] ?>" alt=" Hover"
-                        class="absolute top-0 left-0 h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100">
-                </a>
-            </div>
-
-            <!-- Product details -->
-            <div class="px-4 py-2 h-full flex flex-col justify-evenly">
-                <a href="product_details.php?id=" class="text-lg font-bold hover:underline"><?= $list['name'] ?></a>
-                <p class="text-gray-600 overflow-hidden text-ellipsis line-clamp-2">
-                    <?= $list['description'] ?> </p>
-                <p class="text-lg font-bold text-red-500">Rs. <?= $list['price'] ?></p>
-            </div>
-        </div>
 
         <?php
 
-                    // Increment the displayed products counter
-                    $displayed_products++;
+            // Increment the displayed products counter
+            $displayed_products++;
 
-                    // Stop displaying more products if the limit of 5 is reached
-                    if ($displayed_products >= 5) {
-                        break;
-                    }
-                }
-                ?>
+            // Stop displaying more products if the limit of 5 is reached
+            if ($displayed_products >= 5) {
+                break;
+            }
+        }
+        ?>
     </div>
 </section>
+
+<section class="py-24 relative">
+    <div class="w-full max-w-7xl px-4 md:px-5 lg:px-5 mx-auto">
+        <div class="w-full justify-start items-center gap-12 grid lg:grid-cols-2 grid-cols-1">
+            <div
+                class="w-full justify-center items-start gap-6 grid sm:grid-cols-2 grid-cols-1 lg:order-first order-last">
+                <div class="pt-24 lg:justify-center sm:justify-end justify-start items-start gap-2.5 flex">
+                    <img class=" rounded-xl object-cover" src="./image/umeed_77_11zon.jpeg" alt="about Us image" />
+                </div>
+                <img class="sm:ml-0 ml-auto rounded-xl object-cover" src="./image/umeed.jpeg"
+                    alt="about Us image" />
+            </div>
+            <div class="w-full flex-col justify-center lg:items-start items-center gap-10 inline-flex">
+                <div class="w-full flex-col justify-center items-start gap-8 flex">
+                    <div class="w-full flex-col justify-start lg:items-start items-center gap-3 flex">
+                        <h2
+                            class="text-gray-900 text-4xl font-bold font-manrope leading-normal lg:text-start text-center">
+                            Lorem ipsum dolor sit amet.</h2>
+                        <p class="text-gray-500 text-base font-normal leading-relaxed lg:text-start text-center">
+                            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quaerat delectus beatae harum culpa reprehenderit perspiciatis dignissimos suscipit id repellendus repellat exercitationem debitis explicabo, ipsam pariatur ipsum eos doloremque soluta illum.</p>
+                    </div>
+                    <div class="w-full lg:justify-start justify-center items-center sm:gap-10 gap-5 inline-flex">
+                        <div class="flex-col justify-start items-start inline-flex">
+                            <h3 class="text-gray-900 text-4xl font-bold font-manrope leading-normal">33+</h3>
+                            <h6 class="text-gray-500 text-base font-normal leading-relaxed">Years of Experience</h6>
+                        </div>
+                        <div class="flex-col justify-start items-start inline-flex">
+                            <h4 class="text-gray-900 text-4xl font-bold font-manrope leading-normal">125+</h4>
+                            <h6 class="text-gray-500 text-base font-normal leading-relaxed">Successful Products</h6>
+                        </div>
+                        <div class="flex-col justify-start items-start inline-flex">
+                            <h4 class="text-gray-900 text-4xl font-bold font-manrope leading-normal">52+</h4>
+                            <h6 class="text-gray-500 text-base font-normal leading-relaxed">Happy Clients</h6>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
 
 <!-- New Arrival -->
 <section>
@@ -100,68 +138,90 @@ if(mysqli_num_rows($res) > 0){
     <!-- Products section -->
     <div id="products-container" class="w-full p-3 flex justify-start gap-5 overflow-hidden overflow-x-auto">
         <?php
-                // Fetch all products
-                $get_product = get_product($con);
+        // Fetch all products
+        $get_product = get_product($con);
 
-                $unique_products = []; // Array to track unique products
-                $displayed_products = 0; // Counter for displayed products
+        $unique_products = []; // Array to track unique products
+        $displayed_products = 0; // Counter for displayed products
 
-                foreach ($get_product as $list) {
-                    // Skip the product if it's already been displayed
-                    if (in_array($list['id'], $unique_products)) {
-                        continue;
-                    }
+        foreach ($get_product as $list) {
+            // Skip the product if it's already been displayed
+            if (in_array($list['id'], $unique_products)) {
+                continue;
+            }
 
-                    // Add the product ID to the unique products array
-                    $unique_products[] = $list['id'];
+            // Add the product ID to the unique products array
+            $unique_products[] = $list['id'];
 
-                    // Display the product card
-                    ?>
+            // Display the product card
+        ?>
 
-        <div class="product-card w-96 md:w-72 h-[25rem] lg:h-[30rem] flex gap-2 flex-col relative group shadow">
-            <div
-                class="openModalBtn z-10 absolute -top-2 -right-2 bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full p-3 flex items-center justify-center text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out cursor-pointer">
-                <i class="fas fa-plus text-white pl-0.5 font-semibold"></i>
+            <div class="product-card w-96 md:w-72 h-[25rem] lg:h-[30rem] flex gap-2 flex-col relative group shadow">
+
+
+                <!-- Product image wrapper -->
+                <div class="relative h-[70%] w-full">
+                    <a href="product_details.php?id=<?= $list['id'] ?>" class="product-link w-full">
+                        <img src="./image/<?= $list['image'] ?>" alt="<?= $list['name'] ?>" alt=""
+                            class="h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0">
+                        <img src="./image/<?= $list['image2'] ?>" alt="<?= $list['name'] ?>"
+                            class="absolute top-0 left-0 h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100">
+                    </a>
+                </div>
+
+                <!-- Product details -->
+                <div class="px-4 py-2 h-full flex flex-col justify-evenly">
+                    <a href="product_details.php?id=" class="text-lg font-bold hover:underline"><?= $list['name'] ?></a>
+                    <p class="text-gray-600 overflow-hidden text-ellipsis line-clamp-2">
+                        <?= $list['description'] ?> </p>
+                    <p class="text-lg font-bold text-red-500">Rs. <?= $list['price'] ?></p>
+                </div>
             </div>
-
-            <!-- Product image wrapper -->
-            <div class="relative h-[70%] w-full">
-                <a href="product_details.php?id=" class="product-link w-full">
-                    <img src="./image/<?= $list['image'] ?>" alt="<?= $list['name'] ?>" alt=""
-                        class="h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0">
-                    <img src="./image/<?= $list['image2'] ?>" alt="<?= $list['name'] ?>"
-                        class="absolute top-0 left-0 h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100">
-                </a>
-            </div>
-
-            <!-- Product details -->
-            <div class="px-4 py-2 h-full flex flex-col justify-evenly">
-                <a href="product_details.php?id=" class="text-lg font-bold hover:underline"><?= $list['name'] ?></a>
-                <p class="text-gray-600 overflow-hidden text-ellipsis line-clamp-2">
-                    <?= $list['description'] ?> </p>
-                <p class="text-lg font-bold text-red-500">Rs. <?= $list['price'] ?></p>
-            </div>
-        </div>
 
         <?php
 
-                    // Increment the displayed products counter
-                    $displayed_products++;
+            // Increment the displayed products counter
+            $displayed_products++;
 
-                    // Stop displaying more products if the limit of 5 is reached
-                    if ($displayed_products >= 5) {
-                        break;
-                    }
-                }
-                ?>
+            // Stop displaying more products if the limit of 5 is reached
+            if ($displayed_products >= 5) {
+                break;
+            }
+        }
+        ?>
     </div>
 </section>
 
-<!-- Few Categories -->
-<section class="my-10">
+<div id="about" class="relative bg-white overflow-hidden p-5 md:p-0 ">
+    <div class="max-w-7xl mx-auto">
+        <div class="relative z-10 pb-8 bg-white sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32">
+            <svg class="hidden lg:block absolute right-0 inset-y-0 h-full w-48 text-white transform translate-x-1/2"
+                fill="currentColor" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                <polygon points="50,0 100,0 50,100 0,100"></polygon>
+            </svg>
 
-</section>
+            <div class="pt-1"></div>
 
+            <main class="mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28">
+                <div class="sm:text-center lg:text-left">
+
+
+                    <p>
+                        Donec porttitor, enim ut dapibus lobortis, lectus sem tincidunt dui, eget ornare lectus ex non
+                        libero. Nam rhoncus diam ultrices porttitor laoreet. Ut mollis fermentum ex, vel viverra lorem
+                        volutpat sodales. In ornare porttitor odio sit amet laoreet. Sed laoreet, nulla a posuere
+                        ultrices, purus nulla tristique turpis, hendrerit rutrum augue quam ut est. Fusce malesuada
+                        posuere libero, vitae dapibus eros facilisis euismod. Sed sed lobortis justo, ut tincidunt
+                        velit. Mauris in maximus eros.
+                    </p>
+                </div>
+            </main>
+        </div>
+    </div>
+    <div class="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2">
+        <img class="h-56 w-full object-cover object-center sm:h-72 md:h-96 lg:w-full lg:h-full" src="./image/umeed.jpeg" alt="">
+    </div>
+</div>
 <?php
 include "footer.php";
 ?>
