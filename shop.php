@@ -512,6 +512,7 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
         <?php else: ?>
         <a href="javascript:void(0)">
             <div id="addToCartBtn"
+                onclick="addToCart()"
                 class="w-full p-3 border-2 text-center border-black text-lg font-semibold rounded-full text-black">Add
                 To
                 Cart</div>
@@ -626,8 +627,7 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
         }
     });
 
-    // Add to Cart button event listener
-    document.getElementById('addToCartBtn').addEventListener('click', () => {
+    function addToCart(){
         const selectedFormat = document.querySelector('#format-container .bg-gray-200');
         const quantity = document.getElementById('qty').value; // Get the quantity from the input
         if (selectedFormat && !selectedFormat.classList.contains('cursor-not-allowed')) {
@@ -638,7 +638,12 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
         } else {
             alert("Please select an available format.");
         }
-    });
+    }
+
+    // Add to Cart button event listener
+    // document.getElementById('addToCartBtn').addEventListener('click', () => {
+        
+    // });
 </script>
 
 
