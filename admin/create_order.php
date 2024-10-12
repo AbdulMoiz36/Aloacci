@@ -72,12 +72,12 @@ isAdmin();
                         <select class="form-control" name="product_id" id="product" onchange="fetchFormats(this.value)">
                             <option selected disabled>Select Product</option>
                             <?php
-                                    $product = mysqli_query($con, "SELECT * FROM product");
-                                    while ($row = mysqli_fetch_array($product)) {
-                                        $selected = ($row['id'] == $product_id) ? 'selected' : '';
-                                        echo "<option value='{$row['id']}' $selected>{$row['name']}</option>";
-                                    }
-                                ?>
+                            $product = mysqli_query($con, "SELECT * FROM product");
+                            while ($row = mysqli_fetch_array($product)) {
+                                $selected = ($row['id'] == $product_id) ? 'selected' : '';
+                                echo "<option value='{$row['id']}' $selected>{$row['name']}</option>";
+                            }
+                            ?>
                         </select>
                     </div>
 
@@ -195,7 +195,7 @@ isAdmin();
                                         $('#price').val(''); // Clear the price field
                                         $('#format').prop('selectedIndex',
                                             0
-                                            ); // Reset format dropdown to the first option (default)
+                                        ); // Reset format dropdown to the first option (default)
                                     }
                                 });
                             } else {
@@ -244,7 +244,14 @@ isAdmin();
                                     address: address
                                 },
                                 success: function(response) {
-                                    alert(response);
+                                    // Display SweetAlert notification
+                                    swal({
+                                        title: "Order Confirmed!",
+                                        text: "Your order has been successfully placed.",
+                                        icon: "success",
+                                        button: "OK",
+                                    });
+
                                     // Clear input fields
                                     $('input[name="name"]').val('');
                                     $('input[name="mobile"]').val('');
@@ -252,18 +259,15 @@ isAdmin();
                                     $('input[name="address"]').val('');
                                     $('#qty').val(''); // Clear quantity field
                                     $('#price').val(''); // Clear price field
-                                    $('#format').prop('selectedIndex',
-                                    0); // Reset format dropdown to the first option (default)
-                                    $('#product').prop('selectedIndex',
-                                    0); // Reset product dropdown to the first option (default)
+                                    $('#format').prop('selectedIndex', 0); // Reset format dropdown to the first option (default)
+                                    $('#product').prop('selectedIndex', 0); // Reset product dropdown to the first option (default)
+
                                     // Clear the order table and reset total amount
                                     products = [];
                                     totalAmount = 0;
                                     $('tbody').empty();
-                                    $('#total-amount').text(totalAmount.toFixed(
-                                    2)); // Reset total amount display
-                                    $('#order-table')
-                                .hide(); // Hide the table after order confirmation
+                                    $('#total-amount').text(totalAmount.toFixed(2)); // Reset total amount display
+                                    $('#order-table').hide(); // Hide the table after order confirmation
                                 },
                                 error: function(xhr, status, error) {
                                     alert("An error occurred: " + xhr.responseText);
@@ -320,5 +324,5 @@ isAdmin();
     </div>
 
     <?php
-include "footer.php";
-?>
+    include "footer.php";
+    ?>

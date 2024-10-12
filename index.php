@@ -53,10 +53,15 @@ if (mysqli_num_rows($res) > 0) {
                 <!-- Product image wrapper -->
                 <div class="relative h-[70%] w-full">
                     <a href="product_details.php?id=<?= $list['id'] ?>" class="product-link w-full">
-                        <img src="./image/<?= $list['image'] ?>" alt="<?= $list['name'] ?>" alt=""
+                        <img src="./image/<?= $list['image'] ?>" alt="<?= $list['name'] ?>"
                             class="h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0">
-                        <img src="./image/<?= $list['image2'] ?>" alt="<?= $list['name'] ?>" alt=" Hover"
-                            class="absolute top-0 left-0 h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100">
+                        <?php if ($list['image2'] != ''): ?>
+                            <img src="./image/<?= $list['image2'] ?>" alt="<?= $list['name'] ?> Hover"
+                                class="absolute top-0 left-0 h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100">
+                        <?php else: ?>
+                            <img src="./image/<?= $list['image'] ?>" alt="<?= $list['name'] ?> Hover"
+                                class="absolute top-0 left-0 h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100">
+                        <?php endif; ?>
                     </a>
                 </div>
 
@@ -162,10 +167,15 @@ if (mysqli_num_rows($res) > 0) {
                 <!-- Product image wrapper -->
                 <div class="relative h-[70%] w-full">
                     <a href="product_details.php?id=<?= $list['id'] ?>" class="product-link w-full">
-                        <img src="./image/<?= $list['image'] ?>" alt="<?= $list['name'] ?>" alt=""
+                        <img src="./image/<?= $list['image'] ?>" alt="<?= $list['name'] ?>"
                             class="h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0">
-                        <img src="./image/<?= $list['image2'] ?>" alt="<?= $list['name'] ?>"
-                            class="absolute top-0 left-0 h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100">
+                        <?php if ($list['image2'] != ''): ?>
+                            <img src="./image/<?= $list['image2'] ?>" alt="<?= $list['name'] ?> Hover"
+                                class="absolute top-0 left-0 h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100">
+                        <?php else: ?>
+                            <img src="./image/<?= $list['image'] ?>" alt="<?= $list['name'] ?> Hover"
+                                class="absolute top-0 left-0 h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100">
+                        <?php endif; ?>
                     </a>
                 </div>
 

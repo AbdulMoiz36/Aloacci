@@ -39,6 +39,7 @@ $row = mysqli_fetch_array($res);
   <link rel="stylesheet" href="assets/css/components.css">
   <!-- Custom style CSS -->
   <link rel="stylesheet" href="assets/css/custom.css">
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 </head>
 
 <body>
@@ -84,7 +85,7 @@ $row = mysqli_fetch_array($res);
             <?php
             if($_SESSION['ADMIN_ROLE']=='1'){
             ?>
-            <li class="dropdown <?= $active=="create_order.php"? 'active':''; ?>">
+            <li class="dropdown <?= $active=="create_index.php"? 'active':''; ?>">
               <a href="create_order.php" class="nav-link"><i data-feather="monitor"></i><span>Create Order</span></a>
             </li>
             <li class="dropdown <?= $active=="banner.php"? 'active':''; ?>">
@@ -106,8 +107,8 @@ $row = mysqli_fetch_array($res);
             <li class="dropdown <?= $active=="product.php"? 'active':''; ?>">
               <a href="product.php" class="nav-link"><i data-feather="monitor"></i><span>Products</span></a>
             </li>
-            <li class="dropdown <?= $active=="order.php"? 'active':''; ?>">
-              <a href="order.php" class="nav-link"><i data-feather="monitor"></i><span>Orders</span></a>
+            <li class="dropdown <?= $active=="index.php"? 'active':''; ?>">
+              <a href="index.php" class="nav-link"><i data-feather="monitor"></i><span>Orders</span></a>
             </li>
             <li class="dropdown <?= $active=="users.php"? 'active':''; ?>">
               <a href="users.php" class="nav-link"><i data-feather="monitor"></i><span>Users</span></a>
@@ -125,8 +126,8 @@ $row = mysqli_fetch_array($res);
             <?php
             }else{
             ?>
-            <li class="dropdown <?= $active=="order.php"? 'active':''; ?>">
-              <a href="order.php" class="nav-link"><i data-feather="monitor"></i><span>Orders</span></a>
+            <li class="dropdown <?= $active=="index.php"? 'active':''; ?>">
+              <a href="index.php" class="nav-link"><i data-feather="monitor"></i><span>Orders</span></a>
             </li>
             <?php
             }

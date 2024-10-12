@@ -12,7 +12,7 @@ function isAdmin(){
         echo "<script>window.location.href='login.php'</script>";
     }
     if($_SESSION['ADMIN_ROLE']!='1'){
-        echo "<script>window.location.href='order.php'</script>";
+        echo "<script>window.location.href='index.php'</script>";
     }
 }
 

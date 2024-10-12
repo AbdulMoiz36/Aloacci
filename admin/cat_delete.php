@@ -14,5 +14,3 @@ $delete = "delete from categories where id=$_id";
 $res = mysqli_query($con,$delete);
 
 header('Location: categories.php');
-
-?>
