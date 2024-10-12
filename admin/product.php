@@ -18,15 +18,17 @@ if(isset($_GET['type']) && $_GET['type']!=''){
 
 /* Modify query to use GROUP_CONCAT for format, price, and qty */
 $select = "
-    SELECT p.*, c.categories, 
+    SELECT p.*, 
+           IFNULL(c.categories, 'No Category') as categories, 
            GROUP_CONCAT(pf.format ORDER BY pf.id ASC SEPARATOR ', ') as formats,
            GROUP_CONCAT(pf.price ORDER BY pf.id ASC SEPARATOR ', ') as prices,
            GROUP_CONCAT(pf.qty ORDER BY pf.id ASC SEPARATOR ', ') as qtys
     FROM product p
-    INNER JOIN categories c ON p.Category_Id = c.id
+    LEFT JOIN categories c ON p.Category_Id = c.id
     LEFT JOIN product_format pf ON p.id = pf.product_id
     GROUP BY p.id
     ORDER BY p.id DESC";
+
 $res = mysqli_query($con, $select);
 
 

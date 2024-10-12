@@ -15,10 +15,11 @@ function get_product($con, $limit = '', $cat_id = '', $product_id = '', $search_
                    product_format.qty,  -- Added qty from product_format
                    (SELECT MIN(product_format.price) FROM product_format WHERE product_format.product_id = product.id) AS min_price 
             FROM product 
-            JOIN categories ON product.category_id = categories.id 
+            LEFT JOIN categories ON product.category_id = categories.id  -- Changed to LEFT JOIN
             LEFT JOIN sub_categories ON product.sub_category_id = sub_categories.id 
             LEFT JOIN product_format ON product.id = product_format.product_id 
             WHERE product.status = 1";
+
 
     // Apply category filter
     if ($cat_id !== "") {
