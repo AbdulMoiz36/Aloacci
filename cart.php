@@ -7,6 +7,13 @@ if (isset($_SESSION['USER_LOGIN']) && $_SESSION['USER_LOGIN'] != '') {
     die();
 }
 
+$msg='';
+
+// Check if the cart is empty
+if (empty($_SESSION['cart'])) {
+    $msg = "Your Cart is empty. Please add some products to your cart";
+}
+
 $cart_total = 0;
 
 // Function to get available stock for a product format
@@ -35,6 +42,7 @@ function get_available_stock($con, $pid, $format) {
     <h1 class="text-4xl font-bold text-center">Cart</h1>
     <div class="flex flex-col md:flex-row mt-10 gap-2">
         <div class="w-full md:w-4/6">
+        <p class="text-center my-10"><?=$msg?></p>
             <?php
             if (isset($_SESSION['cart'])) {
                 $cart_total = 0;
