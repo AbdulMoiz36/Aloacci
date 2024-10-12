@@ -473,11 +473,11 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
             <p class="font-semibold">Quantity:</p>
             <form method="post">
                 <div class="flex items-center space-x-2">
-                    <span class="qty-minus" onclick="changeQty(-1)"><i class="fa fa-minus"
+                    <span class="qty-minus hover:cursor-pointer" onclick="changeQty(-1)"><i class="fa fa-minus"
                             aria-hidden="true"></i></span>
                     <input id="qty" name="quantity" type="number" min="1" value="1"
                         class="w-16 text-center border border-gray-300 rounded-md py-1" />
-                    <span class="qty-plus" onclick="changeQty(1)"><i class="fa fa-plus" aria-hidden="true"></i></span>
+                    <span class="qty-plus hover:cursor-pointer" onclick="changeQty(1)"><i class="fa fa-plus" aria-hidden="true"></i></span>
                 </div>
 
                 <script>

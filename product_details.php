@@ -13,23 +13,31 @@ $product_image = htmlspecialchars($get_product[0]['image']);
 $product_image2 = htmlspecialchars($get_product[0]['image2']);
 $product_image3 = htmlspecialchars($get_product[0]['image3']);
 $product_name = htmlspecialchars($get_product[0]['name']);
+$product_gender_id = htmlspecialchars($get_product[0]['gender_id']);
+$product_genre_id = htmlspecialchars($get_product[0]['genre_id']);
+$product_type_id = htmlspecialchars($get_product[0]['type_id']);
+$product_season_id = htmlspecialchars($get_product[0]['season_id']);
+$product_sillage_id = htmlspecialchars($get_product[0]['sillage_id']);
+$product_lasting_id = htmlspecialchars($get_product[0]['lasting_id']);
 $brief = htmlspecialchars($get_product[0]['breif']);
 $product_formats = array_map('htmlspecialchars', array_column($get_product, 'format'));
 $product_prices = array_map('htmlspecialchars', array_column($get_product, 'price'));
 $product_quantities = array_column($get_product, 'qty'); // Fetch the quantity of each format
 $reviewsql = mysqli_query($con, "SELECT COUNT(*) AS total_reviews FROM reviews WHERE product_id = '$product_id';");
 $total_reviews = mysqli_fetch_array($reviewsql);
+$performance_sql = mysqli_query($con, "SELECT gen.gender,ge.genre,l.lasting,s.season,si.sillage,t.type FROM `product`as p JOIN gender as gen ON gen.id = p.gender_id JOIN genre as ge ON ge.id = p.genre_id JOIN lasting as l ON l.id = p.lasting_id JOIN season as s ON s.id = p.sillage_id JOIN sillage as si ON si.id = p.sillage_id JOIN `type` as t On t.id = p.type_id  WHERE p.id = '$product_id'");
+$performance = mysqli_fetch_array($performance_sql);
 
 // Fetch the quantity for each format from product_format and subtract the sold quantity
 $product_quantities = [];
 foreach ($get_product as $product) {
     $format = $product['format']; // Assuming format exists in the product data
-    
+
     // Query to get the total ordered quantity from order_details for the current format
     $order_qty_result = mysqli_query($con, "SELECT SUM(qty) AS total_ordered_qty FROM orders_detail WHERE product_id = '$product_id' AND format = '$format'");
     $order_qty_row = mysqli_fetch_assoc($order_qty_result);
     $total_ordered_qty = $order_qty_row['total_ordered_qty'] ?? 0; // If no orders, default to 0
-    
+
     // Subtract total ordered quantity from available stock in product_format
     $available_qty = $product['qty'] - $total_ordered_qty;
     $product_quantities[] = max(0, $available_qty); // Ensure we don't have negative quantities
@@ -64,7 +72,7 @@ foreach ($get_product as $product) {
             </div>
         </div>
 
-        <div class="w-full md:w-1/2 flex flex-col justify-center md:justify-start p-10 gap-6">
+        <div class="w-full md:w-1/2 flex flex-col justify-center md:justify-start p-2 md:p-10 gap-6">
             <div>
                 <h1 class="font-bold text-3xl"><?= $product_name ?></h1>
                 <p><?= $total_reviews['total_reviews'] ?> Reviews</p>
@@ -74,9 +82,9 @@ foreach ($get_product as $product) {
             <div class="mt-4">
                 <p class="font-semibold">Select Format:</p>
                 <div id="format-container" class="flex gap-3 flex-wrap">
-                    <?php 
+                    <?php
                     $defaultSelected = false; // Flag to track if a default format is selected
-                    foreach ($product_formats as $index => $format): 
+                    foreach ($product_formats as $index => $format):
                         $isAvailable = $product_quantities[$index] > 0;
                     ?>
                         <div class="format-option border-2 p-2 cursor-pointer my-2 <?= !$defaultSelected && $isAvailable ? 'bg-gray-200' : '' ?> w-fit
@@ -85,11 +93,11 @@ foreach ($get_product as $product) {
                             <?= $isAvailable ? '' : 'data-disabled="true"' ?>>
                             <?= $format ?>
                         </div>
-                    <?php 
+                    <?php
                         if ($isAvailable && !$defaultSelected) {
                             $defaultSelected = true; // Mark the first available format as selected
                         }
-                    endforeach; 
+                    endforeach;
                     ?>
                 </div>
                 <p id="product-price" class="font-semibold text-lg mt-2">Price: Rs. <?= $product_prices[0] ?></p>
@@ -103,85 +111,85 @@ foreach ($get_product as $product) {
             </div>
 
             <div>
-    <p class="font-semibold">Quantity:</p>
-    <form method="post">
-        <div class="flex items-center space-x-2">
-            <span class="qty-minus hover:cursor-pointer" onclick="changeQty(-1)"><i class="fa fa-minus"
-                    aria-hidden="true"></i></span>
-            <input id="qty" name="quantity" type="number" min="1" value="1"
-                class="w-16 text-center border border-gray-300 rounded-md py-1" />
-            <span class="qty-plus hover:cursor-pointer " onclick="changeQty(1)"><i class="fa fa-plus"
-                    aria-hidden="true"></i></span>
-        </div>
-    </form>
+                <p class="font-semibold">Quantity:</p>
+                <form method="post">
+                    <div class="flex items-center space-x-2">
+                        <span class="qty-minus hover:cursor-pointer" onclick="changeQty(-1)"><i class="fa fa-minus"
+                                aria-hidden="true"></i></span>
+                        <input id="qty" name="quantity" type="number" min="1" value="1"
+                            class="w-16 text-center border border-gray-300 rounded-md py-1" />
+                        <span class="qty-plus hover:cursor-pointer " onclick="changeQty(1)"><i class="fa fa-plus"
+                                aria-hidden="true"></i></span>
+                    </div>
+                </form>
 
-    <script>
-        function changeQty(change) {
-            var qtyInput = document.getElementById('qty');
-            var selectedFormat = document.querySelector('#format-container .bg-gray-200');
-            var availableQty = selectedFormat ? parseInt(selectedFormat.dataset.qty) : 1;
-            var newValue = parseInt(qtyInput.value) + change;
+                <script>
+                    function changeQty(change) {
+                        var qtyInput = document.getElementById('qty');
+                        var selectedFormat = document.querySelector('#format-container .bg-gray-200');
+                        var availableQty = selectedFormat ? parseInt(selectedFormat.dataset.qty) : 1;
+                        var newValue = parseInt(qtyInput.value) + change;
 
-            // Check if the new value exceeds available stock
-            if (newValue > availableQty) {
-                alert("You cannot select more than the available stock. Available stock: " + availableQty);
-                qtyInput.value = availableQty; // Set to max available quantity
-            } else {
-                qtyInput.value = Math.max(1, newValue); // Prevent negative or zero quantities
-            }
-        }
+                        // Check if the new value exceeds available stock
+                        if (newValue > availableQty) {
+                            alert("You cannot select more than the available stock. Available stock: " + availableQty);
+                            qtyInput.value = availableQty; // Set to max available quantity
+                        } else {
+                            qtyInput.value = Math.max(1, newValue); // Prevent negative or zero quantities
+                        }
+                    }
 
-        // Ensure that manual changes in the quantity field also respect the stock limit
-        document.getElementById('qty').addEventListener('input', function () {
-            var selectedFormat = document.querySelector('#format-container .bg-gray-200');
-            var availableQty = selectedFormat ? parseInt(selectedFormat.dataset.qty) : 1;
+                    // Ensure that manual changes in the quantity field also respect the stock limit
+                    document.getElementById('qty').addEventListener('input', function() {
+                        var selectedFormat = document.querySelector('#format-container .bg-gray-200');
+                        var availableQty = selectedFormat ? parseInt(selectedFormat.dataset.qty) : 1;
 
-            // Check if the manually entered value exceeds available stock
-            if (parseInt(this.value) > availableQty) {
-                alert("You cannot select more than the available stock. Available stock: " + availableQty);
-                this.value = availableQty; // Set to max available quantity
-            } else if (this.value < 1 || isNaN(this.value)) {
-                this.value = 1; // Prevent less than 1 or invalid input
-            }
-        });
+                        // Check if the manually entered value exceeds available stock
+                        if (parseInt(this.value) > availableQty) {
+                            alert("You cannot select more than the available stock. Available stock: " + availableQty);
+                            this.value = availableQty; // Set to max available quantity
+                        } else if (this.value < 1 || isNaN(this.value)) {
+                            this.value = 1; // Prevent less than 1 or invalid input
+                        }
+                    });
 
-        // Handle format selection and price/availability update
-        document.querySelectorAll('.format-option').forEach(option => {
-            if (option.dataset.disabled === 'true') {
-                // Skip disabled formats
-                return;
-            }
+                    // Handle format selection and price/availability update
+                    document.querySelectorAll('.format-option').forEach(option => {
+                        if (option.dataset.disabled === 'true') {
+                            // Skip disabled formats
+                            return;
+                        }
 
-            option.addEventListener('click', function () {
-                // Reset background for all options
-                document.querySelectorAll('.format-option').forEach(opt => opt.classList.remove('bg-gray-200'));
-                this.classList.add('bg-gray-200');
+                        option.addEventListener('click', function() {
+                            // Reset background for all options
+                            document.querySelectorAll('.format-option').forEach(opt => opt.classList.remove('bg-gray-200'));
+                            this.classList.add('bg-gray-200');
 
-                // Update price
-                const price = this.dataset.price;
-                document.getElementById('product-price').innerText = `Price: Rs. ${price}`;
+                            // Update price
+                            const price = this.dataset.price;
+                            document.getElementById('product-price').innerText = `Price: Rs. ${price}`;
 
-                // Update availability
-                const qty = this.dataset.qty;
-                const availability = document.getElementById('availability');
-                availability.innerText = qty > 0 ? 'In Stock' : 'Not in Stock';
-                availability.classList.toggle('text-red-600', qty <= 0); // Add red color if out of stock
+                            // Update availability
+                            const qty = this.dataset.qty;
+                            const availability = document.getElementById('availability');
+                            availability.innerText = qty > 0 ? 'In Stock' : 'Not in Stock';
+                            availability.classList.toggle('text-red-600', qty <= 0); // Add red color if out of stock
 
-                // Update quantity field max based on selected format's available quantity
-                var qtyInput = document.getElementById('qty');
-                qtyInput.value = Math.min(qtyInput.value, qty); // Ensure current quantity doesn't exceed available
-            });
-        });
+                            // Update quantity field max based on selected format's available quantity
+                            var qtyInput = document.getElementById('qty');
+                            qtyInput.value = Math.min(qtyInput.value, qty); // Ensure current quantity doesn't exceed available
+                        });
+                    });
 
-        // Automatically select the first available format on page load
-        window.onload = function () {
-            const defaultOption = document.querySelector('.format-option.bg-gray-200');
-            if (defaultOption) {
-                defaultOption.click(); // Simulate a click on the default selected format
-            }
-        };
-    </script>
-</div>
+                    // Automatically select the first available format on page load
+                    window.onload = function() {
+                        const defaultOption = document.querySelector('.format-option.bg-gray-200');
+                        if (defaultOption) {
+                            defaultOption.click(); // Simulate a click on the default selected format
+                        }
+                    };
+                </script>
+            </div>
 
 
             <!-- Add to Cart Button -->
@@ -206,7 +214,7 @@ foreach ($get_product as $product) {
                     </a>
                 </div>
             <?php else: ?>
-                <div onclick="addToCartAndCheckout(<?=$product_id?>)" class="w-full p-3 text-center border-2 hover:cursor-pointer bg-gradient-to-bl from-yellow-500 via-yellow-500 to-amber-600 shadow-sm hover:shadow-xl transition-shadow ease-in-out duration-300 font-semibold rounded-full text-white">Buy It Now</div>
+                <div onclick="addToCartAndCheckout(<?= $product_id ?>)" class="w-full p-3 text-center border-2 hover:cursor-pointer bg-gradient-to-bl from-yellow-500 via-yellow-500 to-amber-600 shadow-sm hover:shadow-xl transition-shadow ease-in-out duration-300 font-semibold rounded-full text-white">Buy It Now</div>
             <?php endif; ?>
 
             <script>
@@ -263,7 +271,6 @@ foreach ($get_product as $product) {
                     <button class="tab-button font-bold text-white bg-slate-900 p-3 w-full hover:bg-slate-200 hover:text-black" onclick="showTab(1)">Description</button>
                     <button class="tab-button font-bold text-white bg-slate-900 p-3 w-full hover:bg-slate-200 hover:text-black" onclick="showTab(2)">Performance</button>
                     <button class="tab-button font-bold text-white bg-slate-900 p-3 w-full hover:bg-slate-200 hover:text-black" onclick="showTab(3)">Shipping</button>
-                    <!-- <button class="tab-button font-bold text-white bg-slate-900 p-3 w-full hover:bg-slate-200 hover:text-black" onclick="showTab(2)">Description</button> -->
                 </div>
 
                 <!-- Tab Contents -->
@@ -272,14 +279,13 @@ foreach ($get_product as $product) {
                         <p><?= $brief ?></p>
                     </div>
 
-                    <!-- <div id="tab2" class="tab-content hidden">
-                        <h2 class="text-xl font-semibold">Description Content</h2>
-                        <p>This is the content for the Description tab.</p>
-                    </div> -->
-
-                    <div id="tab2" class="tab-content hidden">
-                        <h2 class="text-xl font-semibold">Performance Content</h2>
-                        <p>This is the content for the Performance tab.</p>
+                    <div id="tab2" class="tab-content hidden flex flex-col gap-4">
+                        <p class="font-semibold text-black"><span class="font-semibold text-amber-600">Sillage:</span> <?=$performance['sillage']?></p>
+                        <p class="font-semibold text-black"><span class="font-semibold text-amber-600">Lasting:</span> <?=$performance['lasting']?>hrs</p>
+                        <p class="font-semibold text-black"><span class="font-semibold text-amber-600">Gender:</span> <?=$performance['gender']?></p>
+                        <p class="font-semibold text-black"><span class="font-semibold text-amber-600">Genre:</span> <?=$performance['genre']?></p>
+                        <p class="font-semibold text-black"><span class="font-semibold text-amber-600">Type:</span> <?=$performance['type']?></p>
+                        <p class="font-semibold text-black"><span class="font-semibold text-amber-600">Season:</span> <?=$performance['season']?></p>
                     </div>
 
                     <div id="tab3" class="tab-content hidden">
