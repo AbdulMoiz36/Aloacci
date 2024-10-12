@@ -244,7 +244,7 @@ if (isset($_REQUEST['submit'])) {
                         <div class="form-group col-6">
                             <label for="categories" class="form-control-label">Categories</label>
                             <select class="form-control" name="categories_id" id="category">
-                                <option selected disabled>Select Category</option>
+                                <option>Select Category</option>
                                 <?php
                                     $categories = mysqli_query($con, "SELECT * FROM categories");
                                     while ($row = mysqli_fetch_array($categories)) {
@@ -258,7 +258,7 @@ if (isset($_REQUEST['submit'])) {
                         <div class="form-group col-6">
                             <label for="sub_categories" class="form-control-label">Sub Categories</label>
                             <select class="form-control" name="sub_categories_id" id="sub_category">
-                                <option selected disabled>Select Sub Category</option>
+                                <option>Select Sub Category</option>
                                 <!-- Subcategories will be loaded by AJAX based on the selected category -->
                             </select>
                         </div>
