@@ -105,10 +105,10 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
 <!-- Sticky filter and sort section -->
 <div
     class="w-full py-3 flex flex-wrap justify-around md:justify-end px-2 md:px-10 border-b-2 border-slate-200 sticky md:static top-0 z-10 bg-white">
-    <p class="md:hidden cursor-pointer" id="filter-btn"><span class="mr-2"><i
+    <p class="md:hidden cursor-pointer text-sm md:text-base" id="filter-btn"><span class="mr-2"><i
                 class="fa-solid fa-sliders"></i></span>Filter</p>
-    <div>
-        <label for=""><span class="mr-2"><i class="fa-solid fa-arrow-down-wide-short"></i></span>Sort By: </label>
+    <div class="text-sm md:text-base">
+        <label for=""><span class="mr-1 md:mr-2"><i class="fa-solid fa-arrow-down-wide-short"></i></span><span class="hidden md:inline">Sort By: </span><span class="md:hidden">Sort: </span></label>
         <select class="w-auto pr-2" id="sort-dropdown" onchange="applySort(this.value)">
             <option value="" <?= ($sort == '') ? 'selected' : '' ?>>Select</option>
             <option value="a_to_z" <?= ($sort == 'a_to_z') ? 'selected' : '' ?>>A to Z</option>
@@ -473,11 +473,11 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
             <p class="font-semibold">Quantity:</p>
             <form method="post">
                 <div class="flex items-center space-x-2">
-                    <span class="qty-minus hover:cursor-pointer" onclick="changeQty(-1)"><i class="fa fa-minus"
+                    <span class="qty-minus" onclick="changeQty(-1)"><i class="fa fa-minus"
                             aria-hidden="true"></i></span>
                     <input id="qty" name="quantity" type="number" min="1" value="1"
                         class="w-16 text-center border border-gray-300 rounded-md py-1" />
-                    <span class="qty-plus hover:cursor-pointer" onclick="changeQty(1)"><i class="fa fa-plus" aria-hidden="true"></i></span>
+                    <span class="qty-plus" onclick="changeQty(1)"><i class="fa fa-plus" aria-hidden="true"></i></span>
                 </div>
 
                 <script>
@@ -512,7 +512,6 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
         <?php else: ?>
         <a href="javascript:void(0)">
             <div id="addToCartBtn"
-                onclick="addToCart()"
                 class="w-full p-3 border-2 text-center border-black text-lg font-semibold rounded-full text-black">Add
                 To
                 Cart</div>
@@ -627,7 +626,8 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
         }
     });
 
-    function addToCart(){
+    // Add to Cart button event listener
+    document.getElementById('addToCartBtn').addEventListener('click', () => {
         const selectedFormat = document.querySelector('#format-container .bg-gray-200');
         const quantity = document.getElementById('qty').value; // Get the quantity from the input
         if (selectedFormat && !selectedFormat.classList.contains('cursor-not-allowed')) {
@@ -638,12 +638,7 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
         } else {
             alert("Please select an available format.");
         }
-    }
-
-    // Add to Cart button event listener
-    // document.getElementById('addToCartBtn').addEventListener('click', () => {
-        
-    // });
+    });
 </script>
 
 

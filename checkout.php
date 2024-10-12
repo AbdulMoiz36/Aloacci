@@ -68,7 +68,7 @@ if (isset($_POST['submit'])) {
 ?>
 
 <section class="flex justify-center py-10">
-    <div class="w-full md:w-11/12 p-5 shadow-lg flex flex-col md:flex-row">
+    <div class="w-full md:w-11/12 p-5 shadow-lg flex flex-col-reverse md:flex-row">
         <div class="w-full md:w-7/12 py-10 px-0 sm:px-10 lg:px-40">
             <h2 class="text-3xl font-bold">Delivery:</h2>
             <form method="POST" class="mt-5 flex flex-col gap-8">

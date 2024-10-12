@@ -19,11 +19,11 @@ if (mysqli_num_rows($res) > 0) {
 <section>
     <!-- Heading and View All -->
     <div class="p-5 lg:p-16 flex justify-between">
-        <h2 class="font-bold text-3xl">Best Sellers</h2>
+        <h2 class="font-bold text-2xl md:text-3xl">Best Sellers</h2>
     </div>
 
     <!-- Products section -->
-    <div id="products-container" class="w-full p-3 flex justify-start gap-5 overflow-hidden overflow-x-auto">
+    <div id="products-container" class="w-full px-3 flex justify-start gap-2 md:gap-5 overflow-hidden overflow-x-auto">
         <?php
         // Fetch all products
         $get_product = get_product($con);
@@ -48,10 +48,10 @@ if (mysqli_num_rows($res) > 0) {
             // Display the product card
         ?>
 
-            <div class="product-card w-96 md:w-72 h-[25rem] lg:h-[30rem] flex gap-2 flex-col relative group shadow">
+            <div class="product-card w-full md:w-72 h-[20rem] lg:h-[30rem] flex gap-2 flex-col relative group shadow">
 
                 <!-- Product image wrapper -->
-                <div class="relative h-[70%] w-full">
+                <div class="relative h-[65%] w-full">
                     <a href="product_details.php?id=<?= $list['id'] ?>" class="product-link w-full">
                         <img src="./image/<?= $list['image'] ?>" alt="<?= $list['name'] ?>"
                             class="h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0">
@@ -66,11 +66,11 @@ if (mysqli_num_rows($res) > 0) {
                 </div>
 
                 <!-- Product details -->
-                <div class="px-4 py-2 h-full flex flex-col justify-evenly">
-                    <a href="product_details.php?id=" class="text-lg font-bold hover:underline"><?= $list['name'] ?></a>
-                    <p class="text-gray-600 overflow-hidden text-ellipsis line-clamp-2">
+                <div class="px-4 py-2 h-[35%] flex flex-col justify-evenly">
+                    <a href="product_details.php?id=" class="text-sm md:text-lg font-bold hover:underline"><?= $list['name'] ?></a>
+                    <p class="text-gray-600 overflow-hidden text-ellipsis line-clamp-2 text-xs md:text-base">
                         <?= $list['description'] ?> </p>
-                    <p class="text-lg font-bold text-red-500">Rs. <?= $list['price'] ?></p>
+                    <p class="text-xs md:text-lg font-bold text-red-500">Rs. <?= $list['price'] ?></p>
                 </div>
             </div>
 
@@ -134,14 +134,14 @@ if (mysqli_num_rows($res) > 0) {
 <section>
     <!-- Heading and View All -->
     <div class="p-5 lg:p-16 flex justify-between">
-        <h2 class="font-bold text-3xl">New Arrival</h2>
+        <h2 class="font-bold text-2xl md:text-3xl">New Arrival</h2>
         <!-- <a href="#">
             <p class="underline cursor-pointer font-semibold">View all</p>
         </a> -->
     </div>
 
     <!-- Products section -->
-    <div id="products-container" class="w-full p-3 flex justify-start gap-5 overflow-hidden overflow-x-auto">
+    <div id="products-container" class="w-full p-3 flex justify-start gap-2 md:gap-5 overflow-hidden overflow-x-auto">
         <?php
         // Fetch all products
         $get_product = get_product($con);
@@ -161,11 +161,10 @@ if (mysqli_num_rows($res) > 0) {
             // Display the product card
         ?>
 
-            <div class="product-card w-96 md:w-72 h-[25rem] lg:h-[30rem] flex gap-2 flex-col relative group shadow">
-
+            <div class="product-card w-full md:w-72 h-[20rem] lg:h-[30rem] flex gap-2 flex-col relative group shadow">
 
                 <!-- Product image wrapper -->
-                <div class="relative h-[70%] w-full">
+                <div class="relative h-[65%] w-full">
                     <a href="product_details.php?id=<?= $list['id'] ?>" class="product-link w-full">
                         <img src="./image/<?= $list['image'] ?>" alt="<?= $list['name'] ?>"
                             class="h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0">
@@ -180,11 +179,11 @@ if (mysqli_num_rows($res) > 0) {
                 </div>
 
                 <!-- Product details -->
-                <div class="px-4 py-2 h-full flex flex-col justify-evenly">
-                    <a href="product_details.php?id=" class="text-lg font-bold hover:underline"><?= $list['name'] ?></a>
-                    <p class="text-gray-600 overflow-hidden text-ellipsis line-clamp-2">
+                <div class="px-4 py-2 h-[35%] flex flex-col justify-evenly">
+                    <a href="product_details.php?id=" class="text-sm md:text-lg font-bold hover:underline"><?= $list['name'] ?></a>
+                    <p class="text-gray-600 overflow-hidden text-ellipsis line-clamp-2 text-xs md:text-base">
                         <?= $list['description'] ?> </p>
-                    <p class="text-lg font-bold text-red-500">Rs. <?= $list['price'] ?></p>
+                    <p class="text-xs md:text-lg font-bold text-red-500">Rs. <?= $list['price'] ?></p>
                 </div>
             </div>
 

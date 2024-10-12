@@ -134,6 +134,8 @@ $totalProduct = $obj->totalProduct();
         <ul
           class="hidden w-full absolute bg-white text-black shadow-xl grid-cols-2 sm:grid-cols-4 gap-10 z-50 top-12 left-0 p-10"
           id="menu">
+          <div class="w-full hover:underline absolute top-0 flex justify-center align-middle left-0 font-bold border-b p-1 md:hidden" onclick="toggleShop()" >
+          <i class="fa-solid fa-xmark text-base cursor-pointer pr-2" onclick="toggleShop()"></i><p onclick="toggleShop()">Close</p></div>
           <?php
           // Fetch categories
           $categoriesQuery = mysqli_query($con, "SELECT * FROM categories");

@@ -15,8 +15,8 @@ $user = mysqli_fetch_assoc($sql);
 $osql = mysqli_query($con, "SELECT o.total_price, o.id, o.date, os.name as order_status FROM `orders` as o JOIN `order_status` as os on o.order_status = os.id WHERE `user_id` = '$user_id'");
 ?>
 
-<section class="md:p-10 flex justify-center align-middle">
-    <div class="shadow-xl p-5 md:p-10 md:w-11/12 w-full flex flex-col">
+<section class="md:px-10 md:py-10 flex justify-center align-middle px-0 py-8 ">
+    <div class="md:shadow-xl p-5 md:p-10 md:w-11/12 w-full flex flex-col">
         <div class="flex justify-between w-full md:mb-3">
             <h2 class="text-3xl font-bold">My Account</h2>
             <a href="./logout.php">
@@ -25,7 +25,7 @@ $osql = mysqli_query($con, "SELECT o.total_price, o.id, o.date, os.name as order
         </div>
         <div class="flex flex-col-reverse md:flex-row">
             <div class="w-full md:w-8/12 pt-5 md:pt-0 md:p-5">
-                <h1 class="text-2xl font-bold mb-5">Order History</h1>
+                <h1 class="text-2xl font-bold mb-5 underline">Order History</h1>
 
                 <?php if (mysqli_num_rows($osql) > 0) { ?>
                     <!-- Responsive table wrapper -->
@@ -88,7 +88,7 @@ $osql = mysqli_query($con, "SELECT o.total_price, o.id, o.date, os.name as order
                 <?php } ?>
             </div>
 
-            <div class="w-full md:w-4/12 pt-5 md:pt-0 md:p-5 border-l-2 border-slate-200">
+            <div class="w-full md:w-4/12 pt-5 md:pt-0 md:p-5 md:border-l-2 border-slate-200">
                 <h1 class="text-2xl font-bold underline mb-2">Account Details</h1>
                 <p class="mb-2"><?= $user['name'] ?></p>
                 <p class="mb-2"><?= $user['email'] ?></p>

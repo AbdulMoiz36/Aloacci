@@ -12,19 +12,19 @@ $sql = mysqli_query($con, "SELECT `address`, `city` FROM `users` WHERE `id` = '$
 $user = mysqli_fetch_assoc($sql);
 ?>
 
-<section class="md:p-10 flex justify-center align-middle">
-    <div class="shadow-xl p-5 md:p-10 md:w-4/6 w-full flex justify-center">
+<section class="md:px-10 md:py-10 py-10 flex justify-center align-middle">
+    <div class="p-5 md:p-10 md:w-4/6 w-full flex justify-center">
         <form method="post" class="flex flex-col justify-center gap-4">
             <h1 class="text-4xl font-bold mb-8 text-center underline">Edit Address</h1>
             
             <label for="" class="flex flex-col text-lg font-semibold">
                 Address:
-                <input type="text" name="address" class="border border-slate-400 rounded-md w-96 p-2 mt-2 font-normal" value="<?= htmlspecialchars($user['address']) ?>" required/>
+                <input type="text" name="address" class="border border-slate-400 rounded-md w-full p-2 mt-2 font-normal" value="<?= htmlspecialchars($user['address']) ?>" required/>
             </label>
 
             <label for="" class="flex flex-col text-lg font-semibold">
                 City:
-                <input type="text" name="city" class="border border-slate-400 rounded-md w-96 p-2 mt-2 font-normal" value="<?= htmlspecialchars($user['city']) ?>" required/>
+                <input type="text" name="city" class="border border-slate-400 rounded-md w-full p-2 mt-2 font-normal" value="<?= htmlspecialchars($user['city']) ?>" required/>
             </label>
 
             <!-- Change button type to 'submit' to trigger form submission -->
