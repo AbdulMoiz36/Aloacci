@@ -6,37 +6,39 @@ require "functions.php";
 $msg = "";
 
 /*------------------------------Multi User Login System------------------------------*/
-if(isset($_POST['login'])){
-   $admin = get_safe_value($con,$_POST['name']);
-   $password = get_safe_value($con,$_POST['password']);
-   $select = "select * from admin_user where name='$admin' and password='$password'";
-   $res = mysqli_query($con,$select);
-   $count=mysqli_num_rows($res);
-    if($count>0){
-      $row=mysqli_fetch_assoc($res);
-      if($row['status']==0){
-        $msg = "Your Account is Deactivated";
-      }else{
-        $_SESSION['ADMIN_LOGIN']='yes';
-        $_SESSION['ADMIN_IMAGE']=$row['image'];
-        $_SESSION['ADMIN_ID']=$row['id'];
-        $_SESSION['ADMIN_USERNAME']=$admin;
-        $_SESSION['ADMIN_ROLE']=$row['role_id'];
-      header('Location: index');
-      die();
-      }
-   }
-   else{
-      $msg = "Please enter correct login details";
-   }
-   }
-
-/*------------------------------Restrict to login if already login------------------------------*/
-
-if(isset($_SESSION['ADMIN_LOGIN']) && $_SESSION['ADMIN_LOGIN']=='yes'){
-  header('Location: index');
+if (isset($_POST['login'])) {
+    $admin = get_safe_value($con, $_POST['name']);
+    $password = get_safe_value($con, $_POST['password']);
+    
+    // Hash the input password using md5
+    $hashed_password = md5($password);
+    
+    $select = "SELECT * FROM admin_user WHERE name='$admin' AND password='$hashed_password'";
+    $res = mysqli_query($con, $select);
+    $count = mysqli_num_rows($res);
+    
+    if ($count > 0) {
+        $row = mysqli_fetch_assoc($res);
+        if ($row['status'] == 0) {
+            $msg = "Your Account is Deactivated";
+        } else {
+            $_SESSION['ADMIN_LOGIN'] = 'yes';
+            $_SESSION['ADMIN_IMAGE'] = $row['image'];
+            $_SESSION['ADMIN_ID'] = $row['id'];
+            $_SESSION['ADMIN_USERNAME'] = $admin;
+            $_SESSION['ADMIN_ROLE'] = $row['role_id'];
+            header('Location: index');
+            die();
+        }
+    } else {
+        $msg = "Please enter correct login details";
+    }
 }
 
+/*------------------------------Restrict to login if already login------------------------------*/
+if (isset($_SESSION['ADMIN_LOGIN']) && $_SESSION['ADMIN_LOGIN'] == 'yes') {
+    header('Location: index');
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">

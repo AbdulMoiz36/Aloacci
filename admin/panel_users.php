@@ -43,7 +43,6 @@ $serial_no = 1;
                                        <th>Serial No.</th>
                                        <th>Image</th>
                                        <th>User_Name</th>
-                                       <th>Password</th>
                                        <th>Email</th>
                                        <th>Mobile</th>
                                        <th>Status</th>
@@ -61,7 +60,6 @@ $serial_no = 1;
                                        <td> <?= $serial_no++; ?></td>
                                        <td><img class="rounded-circle" src="./admin_users_images/<?= $row['image'] ?>" height="50" width="50" alt=""></td>
                                        <td> <?= $row['name'] ?> </td>
-                                       <td> <?= $row['password'] ?> </td>
                                        <td> <?= $row['email'] ?> </td>
                                        <td> <?= $row['mobile'] ?> </td>
                                        <td>
