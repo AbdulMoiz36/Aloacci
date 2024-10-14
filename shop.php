@@ -516,12 +516,10 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
             class="w-full p-3 border-2 text-center border-black text-lg font-semibold rounded-full text-black">Add
             To
             Cart</div>
-        <a href="">
             <div style="margin-top: 20px;" onclick="addToCartAndCheckout(currentProductId)"
                 class="w-full p-3 border-2 hover:cursor-pointer bg-gradient-to-bl from-yellow-500 via-yellow-500 to-amber-600 shadow-sm hover:shadow-lg transition-shadow ease-in-out duration-300 font-semibold rounded-full text-white text-center">
                 Buy It
                 Now</div>
-        </a>
         <?php endif; ?>
         <div id="closeModalBtn"
             class="absolute -top-2 -right-2 hover:cursor-pointer shadow-md hover:shadow-xl font-bold bg-gradient-to-bl from-yellow-500 via-yellow-500 to-amber-600 text-white px-4 py-2 rounded-full hover:bg-red-600 focus:outline-none">
