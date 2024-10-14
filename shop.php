@@ -108,7 +108,8 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
     <p class="md:hidden cursor-pointer text-sm md:text-base" id="filter-btn"><span class="mr-2"><i
                 class="fa-solid fa-sliders"></i></span>Filter</p>
     <div class="text-sm md:text-base">
-        <label for=""><span class="mr-1 md:mr-2"><i class="fa-solid fa-arrow-down-wide-short"></i></span><span class="hidden md:inline">Sort By: </span><span class="md:hidden">Sort: </span></label>
+        <label for=""><span class="mr-1 md:mr-2"><i class="fa-solid fa-arrow-down-wide-short"></i></span><span
+                class="hidden md:inline">Sort By: </span><span class="md:hidden">Sort: </span></label>
         <select class="w-auto pr-2" id="sort-dropdown" onchange="applySort(this.value)">
             <option value="" <?= ($sort == '') ? 'selected' : '' ?>>Select</option>
             <option value="a_to_z" <?= ($sort == 'a_to_z') ? 'selected' : '' ?>>A to Z</option>
@@ -145,12 +146,12 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
                 </p>
                 <div id="dropdown-gender-content" class="mt-2 text-lg">
                     <?php foreach ($genders as $gender): ?>
-                        <label class="flex items-center hover:bg-gray-200 p-2 cursor-pointer">
-                            <input type="checkbox" value="<?= htmlspecialchars($gender['id']) ?>"
-                                class="gender-checkbox custom-checkbox mr-2" data-name="<?= $gender['gender'] ?>"
-                                onclick="filterProducts()">
-                            <?= htmlspecialchars($gender['gender']) ?>
-                        </label>
+                    <label class="flex items-center hover:bg-gray-200 p-2 cursor-pointer">
+                        <input type="checkbox" value="<?= htmlspecialchars($gender['id']) ?>"
+                            class="gender-checkbox custom-checkbox mr-2" data-name="<?= $gender['gender'] ?>"
+                            onclick="filterProducts()">
+                        <?= htmlspecialchars($gender['gender']) ?>
+                    </label>
                     <?php endforeach; ?>
                 </div>
             </div>
@@ -165,12 +166,12 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
                 </p>
                 <div id="dropdown-genre-content" class="mt-2 text-lg">
                     <?php foreach ($genres as $genre): ?>
-                        <label class="flex items-center hover:bg-gray-200 p-2 cursor-pointer">
-                            <input type="checkbox" value="<?= htmlspecialchars($genre['id']) ?>"
-                                class="genre-checkbox custom-checkbox mr-2" data-name="<?= $genre['genre'] ?>"
-                                onclick="filterProducts()">
-                            <?= htmlspecialchars($genre['genre']) ?>
-                        </label>
+                    <label class="flex items-center hover:bg-gray-200 p-2 cursor-pointer">
+                        <input type="checkbox" value="<?= htmlspecialchars($genre['id']) ?>"
+                            class="genre-checkbox custom-checkbox mr-2" data-name="<?= $genre['genre'] ?>"
+                            onclick="filterProducts()">
+                        <?= htmlspecialchars($genre['genre']) ?>
+                    </label>
                     <?php endforeach; ?>
                 </div>
             </div>
@@ -185,11 +186,11 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
                 </p>
                 <div id="dropdown-type-content" class="mt-2 text-lg">
                     <?php foreach ($types as $type): ?>
-                        <label class="flex items-center hover:bg-gray-200 p-2 cursor-pointer">
-                            <input type="checkbox" value="<?= htmlspecialchars($type['id']) ?>"
-                                class="type-checkbox custom-checkbox mr-2" onclick="filterProducts()">
-                            <?= htmlspecialchars($type['type']) ?>
-                        </label>
+                    <label class="flex items-center hover:bg-gray-200 p-2 cursor-pointer">
+                        <input type="checkbox" value="<?= htmlspecialchars($type['id']) ?>"
+                            class="type-checkbox custom-checkbox mr-2" onclick="filterProducts()">
+                        <?= htmlspecialchars($type['type']) ?>
+                    </label>
                     <?php endforeach; ?>
                 </div>
             </div>
@@ -204,11 +205,11 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
                 </p>
                 <div id="dropdown-season-content" class="mt-2 text-lg">
                     <?php foreach ($seasons as $season): ?>
-                        <label class="flex items-center hover:bg-gray-200 p-2 cursor-pointer">
-                            <input type="checkbox" value="<?= htmlspecialchars($season['id']) ?>"
-                                class="season-checkbox custom-checkbox mr-2" onclick="filterProducts()">
-                            <?= htmlspecialchars($season['season']) ?>
-                        </label>
+                    <label class="flex items-center hover:bg-gray-200 p-2 cursor-pointer">
+                        <input type="checkbox" value="<?= htmlspecialchars($season['id']) ?>"
+                            class="season-checkbox custom-checkbox mr-2" onclick="filterProducts()">
+                        <?= htmlspecialchars($season['season']) ?>
+                    </label>
                     <?php endforeach; ?>
                 </div>
             </div>
@@ -223,11 +224,11 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
                 </p>
                 <div id="dropdown-sillage-content" class="mt-2 text-lg">
                     <?php foreach ($sillages as $sillage): ?>
-                        <label class="flex items-center hover:bg-gray-200 p-2 cursor-pointer">
-                            <input type="checkbox" value="<?= htmlspecialchars($sillage['id']) ?>"
-                                class="sillage-checkbox custom-checkbox mr-2" onclick="filterProducts()">
-                            <?= htmlspecialchars($sillage['sillage']) ?>
-                        </label>
+                    <label class="flex items-center hover:bg-gray-200 p-2 cursor-pointer">
+                        <input type="checkbox" value="<?= htmlspecialchars($sillage['id']) ?>"
+                            class="sillage-checkbox custom-checkbox mr-2" onclick="filterProducts()">
+                        <?= htmlspecialchars($sillage['sillage']) ?>
+                    </label>
                     <?php endforeach; ?>
                 </div>
             </div>
@@ -242,11 +243,11 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
                 </p>
                 <div id="dropdown-lasting-content" class="mt-2 text-lg">
                     <?php foreach ($lastings as $lasting): ?>
-                        <label class="flex items-center hover:bg-gray-200 p-2 cursor-pointer">
-                            <input type="checkbox" value="<?= htmlspecialchars($lasting['id']) ?>"
-                                class="lasting-checkbox custom-checkbox mr-2" onclick="filterProducts()">
-                            <?= htmlspecialchars($lasting['lasting']) ?> hrs
-                        </label>
+                    <label class="flex items-center hover:bg-gray-200 p-2 cursor-pointer">
+                        <input type="checkbox" value="<?= htmlspecialchars($lasting['id']) ?>"
+                            class="lasting-checkbox custom-checkbox mr-2" onclick="filterProducts()">
+                        <?= htmlspecialchars($lasting['lasting']) ?> hrs
+                    </label>
                     <?php endforeach; ?>
                 </div>
             </div>
@@ -283,7 +284,9 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
         }
     ?>
         <div class="product-card w-96 md:w-72 h-[40rem] md:h-[30rem] flex gap-2 flex-col relative group shadow"
-            data-gender-id="<?= $list['gender_id'] ?>"data-genre-id="<?= $list['genre_id'] ?>"data-type-id="<?= $list['type_id'] ?>"data-season-id="<?= $list['season_id'] ?>"data-sillage-id="<?= $list['sillage_id'] ?>" data-lasting-id="<?= $list['lasting_id'] ?>">
+            data-gender-id="<?= $list['gender_id'] ?>" data-genre-id="<?= $list['genre_id'] ?>"
+            data-type-id="<?= $list['type_id'] ?>" data-season-id="<?= $list['season_id'] ?>"
+            data-sillage-id="<?= $list['sillage_id'] ?>" data-lasting-id="<?= $list['lasting_id'] ?>">
             <div class="openModalBtn z-10 absolute -top-2 -right-2 bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full p-3 flex items-center justify-center text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out cursor-pointer"
                 data-product-id="<?= $list['id'] ?>" data-product-name="<?= $list['name'] ?>"
                 data-product-formats="<?= htmlspecialchars(json_encode($product_formats)) ?>">
@@ -426,11 +429,9 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
     function addToCartAndCheckout(productId) {
         const selectedFormat = document.querySelector('#format-container .bg-gray-200'); // Get the selected format
         const quantity = document.getElementById('qty').value; // Get the quantity
-
         if (selectedFormat) {
             const format = selectedFormat.innerText.split(' - ')[0]; // Get the format text (remove price)
             const price = selectedFormat.dataset.price; // Get the price of the selected format
-
             // Use AJAX to call manage_cart without reloading the page
             const xhr = new XMLHttpRequest();
             xhr.open('POST', 'manage_cart.php', true); // Adjust this URL if needed
@@ -441,7 +442,6 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
                     window.location.href = 'checkout.php';
                 }
             };
-
             // Send the cart data (adjust these parameters as needed)
             xhr.send(`pid=${productId}&type=add&qty=${quantity}&format=${format}&price=${price}`);
         }
@@ -500,21 +500,22 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
         <!-- Inside the Modal -->
         <?php if (!isset($_SESSION['USER_LOGIN'])): ?>
         <a href="login.php">
-            <div id="addToCartBtn" class="w-full p-3 border-2 text-center border-black text-lg font-semibold rounded-full text-black">Add
+            <div id="addToCartBtn"
+                class="w-full p-3 border-2 text-center border-black text-lg font-semibold rounded-full text-black">Add
                 To
                 Cart</div>
-                <a href="login.php">
+        </a>
+        <a href="login.php">
             <div style="margin-top: 20px;"
                 class="w-full p-3 border-2 hover:cursor-pointer bg-gradient-to-bl from-yellow-500 via-yellow-500 to-amber-600 shadow-sm hover:shadow-lg transition-shadow ease-in-out duration-300 font-semibold rounded-full text-white text-center">
                 Buy It
                 Now</div>
         </a>
         <?php else: ?>
-            <div id="addToCartBtn"
-            onclick="AddToCartBtn()"
-                class="w-full p-3 border-2 text-center border-black text-lg font-semibold rounded-full text-black">Add
-                To
-                Cart</div>
+        <div id="addToCartBtn" onclick="AddToCartBtn()"
+            class="w-full p-3 border-2 text-center border-black text-lg font-semibold rounded-full text-black">Add
+            To
+            Cart</div>
         <a href="">
             <div style="margin-top: 20px;" onclick="addToCartAndCheckout(currentProductId)"
                 class="w-full p-3 border-2 hover:cursor-pointer bg-gradient-to-bl from-yellow-500 via-yellow-500 to-amber-600 shadow-sm hover:shadow-lg transition-shadow ease-in-out duration-300 font-semibold rounded-full text-white text-center">
@@ -537,96 +538,83 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
     const modalOverlay = document.getElementById('modalOverlay');
     const modalProductPrice = document.getElementById('modal-product-price');
     let currentProductId = null; // Variable to store the current product ID
-
     // Function to close the modal
     function closeModal() {
         modal.classList.add('hidden');
         modalOverlay.classList.add('hidden');
     }
-
     openModalBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-        const productName = btn.getAttribute('data-product-name');
-        const productFormats = JSON.parse(btn.getAttribute('data-product-formats'));
-
-        // Populate modal
-        document.getElementById('modal-product-name').innerText = productName;
-
-        // Clear previous formats
-        const formatContainer = document.getElementById('format-container');
-        formatContainer.innerHTML = ''; // Clear previous formats
-
-        let firstAvailableFormatFound = false;
-
-        productFormats.forEach((formatObj, index) => {
-            const formatDiv = document.createElement('div');
-            formatDiv.className = 'border-2 border-black p-2 cursor-pointer w-fit my-2';
-            formatDiv.innerText = `${formatObj.format}`;
-            formatDiv.dataset.price = formatObj.price;
-            formatDiv.dataset.qty = formatObj.qty; // Include quantity data
-            
-            // Check if the format is in stock
-            if (formatObj.qty > 0) {
-                // If it's the first available format, select it by default
-                if (!firstAvailableFormatFound) {
-                    formatDiv.classList.add('bg-gray-200');
-                    modalProductPrice.innerText = `Rs. ${formatObj.price}`;
-                    firstAvailableFormatFound = true;
-                }
-                
-                // Add click event listener for selecting a format
-                formatDiv.addEventListener('click', () => {
-                    // Remove 'selected' class from all formats
-                    document.querySelectorAll('#format-container div').forEach(div => {
-                        div.classList.remove('bg-gray-200');
+        btn.addEventListener('click', () => {
+            const productName = btn.getAttribute('data-product-name');
+            const productFormats = JSON.parse(btn.getAttribute('data-product-formats'));
+            // Populate modal
+            document.getElementById('modal-product-name').innerText = productName;
+            // Clear previous formats
+            const formatContainer = document.getElementById('format-container');
+            formatContainer.innerHTML = ''; // Clear previous formats
+            let firstAvailableFormatFound = false;
+            productFormats.forEach((formatObj, index) => {
+                const formatDiv = document.createElement('div');
+                formatDiv.className = 'border-2 border-black p-2 cursor-pointer w-fit my-2';
+                formatDiv.innerText = `${formatObj.format}`;
+                formatDiv.dataset.price = formatObj.price;
+                formatDiv.dataset.qty = formatObj.qty; // Include quantity data
+                // Check if the format is in stock
+                if (formatObj.qty > 0) {
+                    // If it's the first available format, select it by default
+                    if (!firstAvailableFormatFound) {
+                        formatDiv.classList.add('bg-gray-200');
+                        modalProductPrice.innerText = `Rs. ${formatObj.price}`;
+                        firstAvailableFormatFound = true;
+                    }
+                    // Add click event listener for selecting a format
+                    formatDiv.addEventListener('click', () => {
+                        // Remove 'selected' class from all formats
+                        document.querySelectorAll('#format-container div').forEach(
+                            div => {
+                                div.classList.remove('bg-gray-200');
+                            });
+                        // Add 'selected' class to the clicked format
+                        formatDiv.classList.add('bg-gray-200');
+                        // Update price in modal
+                        modalProductPrice.innerText = `Rs. ${formatDiv.dataset.price}`;
                     });
-                    // Add 'selected' class to the clicked format
-                    formatDiv.classList.add('bg-gray-200');
-                    // Update price in modal
-                    modalProductPrice.innerText = `Rs. ${formatDiv.dataset.price}`;
-                });
+                } else {
+                    // If out of stock, disable this format
+                    formatDiv.classList.add('opacity-50', 'cursor-not-allowed');
+                }
+                formatContainer.appendChild(formatDiv);
+            });
+            // If no available format found, show a warning or disable the "Add to Cart" button
+            if (!firstAvailableFormatFound) {
+                modalProductPrice.innerText = 'Out of Stock';
+                document.getElementById('addToCartBtn').classList.add('opacity-50',
+                    'cursor-not-allowed');
             } else {
-                // If out of stock, disable this format
-                formatDiv.classList.add('opacity-50', 'cursor-not-allowed');
+                document.getElementById('addToCartBtn').classList.remove('opacity-50',
+                    'cursor-not-allowed');
             }
-
-            formatContainer.appendChild(formatDiv);
+            // Set the current product ID
+            currentProductId = btn.getAttribute('data-product-id');
+            // Show modal and overlay
+            modal.classList.remove('hidden');
+            modalOverlay.classList.remove('hidden');
+            modal.classList.add('flex');
+            modalOverlay.classList.add('flex'); // Show the overlay
         });
-
-        // If no available format found, show a warning or disable the "Add to Cart" button
-        if (!firstAvailableFormatFound) {
-            modalProductPrice.innerText = 'Out of Stock';
-            document.getElementById('addToCartBtn').classList.add('opacity-50', 'cursor-not-allowed');
-        } else {
-            document.getElementById('addToCartBtn').classList.remove('opacity-50', 'cursor-not-allowed');
-        }
-
-        // Set the current product ID
-        currentProductId = btn.getAttribute('data-product-id');
-        
-        // Show modal and overlay
-        modal.classList.remove('hidden');
-        modalOverlay.classList.remove('hidden');
-        modal.classList.add('flex');
-        modalOverlay.classList.add('flex'); // Show the overlay
     });
-});
-
     // Event listener to close modal on button click
     closeModalBtn.addEventListener('click', closeModal);
-    
     // Event listener to close modal when clicking outside the modal
     modalOverlay.addEventListener('click', closeModal);
-    
     // Event listener to close modal with the 'Esc' key
     document.addEventListener('keydown', (event) => {
         if (event.key === 'Escape') {
             closeModal();
         }
     });
-
     // Add to Cart button event listener
-    function AddToCartBtn(){
+    function AddToCartBtn() {
         const selectedFormat = document.querySelector('#format-container .bg-gray-200');
         const quantity = document.getElementById('qty').value; // Get the quantity from the input
         if (selectedFormat && !selectedFormat.classList.contains('cursor-not-allowed')) {
@@ -638,12 +626,9 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
             alert("Please select an available format.");
         }
     }
-
     // document.getElementById('addToCartBtn').addEventListener('click', () => {
-        
     // });
 </script>
-
 
 <?php
 include 'footer.php';
