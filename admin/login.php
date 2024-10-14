@@ -13,7 +13,7 @@ if (isset($_POST['login'])) {
     // Hash the input password using md5
     $hashed_password = md5($password);
     
-    $select = "SELECT * FROM admin_user WHERE name='$admin' AND password='$hashed_password'";
+    $select = "SELECT * FROM admin_user WHERE BINARY name='$admin' AND password='$hashed_password'";
     $res = mysqli_query($con, $select);
     $count = mysqli_num_rows($res);
     
