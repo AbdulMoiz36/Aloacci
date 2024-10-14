@@ -510,12 +510,11 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
                 Now</div>
         </a>
         <?php else: ?>
-        <a href="javascript:void(0)">
             <div id="addToCartBtn"
+            onclick="AddToCartBtn()"
                 class="w-full p-3 border-2 text-center border-black text-lg font-semibold rounded-full text-black">Add
                 To
                 Cart</div>
-        </a>
         <a href="">
             <div style="margin-top: 20px;" onclick="addToCartAndCheckout(currentProductId)"
                 class="w-full p-3 border-2 hover:cursor-pointer bg-gradient-to-bl from-yellow-500 via-yellow-500 to-amber-600 shadow-sm hover:shadow-lg transition-shadow ease-in-out duration-300 font-semibold rounded-full text-white text-center">
@@ -627,7 +626,7 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
     });
 
     // Add to Cart button event listener
-    document.getElementById('addToCartBtn').addEventListener('click', () => {
+    function AddToCartBtn(){
         const selectedFormat = document.querySelector('#format-container .bg-gray-200');
         const quantity = document.getElementById('qty').value; // Get the quantity from the input
         if (selectedFormat && !selectedFormat.classList.contains('cursor-not-allowed')) {
@@ -638,7 +637,11 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
         } else {
             alert("Please select an available format.");
         }
-    });
+    }
+
+    // document.getElementById('addToCartBtn').addEventListener('click', () => {
+        
+    // });
 </script>
 
 
