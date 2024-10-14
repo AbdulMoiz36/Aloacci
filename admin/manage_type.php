@@ -21,7 +21,7 @@ if(isset($_GET['id']) && $_GET['id'] !=''){
       $type = $row['type'];
    }
    else{
-      header('Location: type.php');
+      header('Location: type');
       die();
    }
 
@@ -57,7 +57,7 @@ if(isset($_REQUEST['submit'])){
          mysqli_query($con,"insert into type (type) Value ('$type')");
        }
    
-       echo "<script>window.location.href='type.php'</script>";
+       echo "<script>window.location.href='type'</script>";
        die();
    }
     

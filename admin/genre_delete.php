@@ -13,4 +13,4 @@ $delete = "delete from genre where id=$_id";
 
 $res = mysqli_query($con,$delete);
 
-header('Location: genre.php');
+header('Location: genre');

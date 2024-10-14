@@ -38,7 +38,7 @@ $res = mysqli_query($con, $select);
       <div class="card">
          <div class="card-header">
             <h4>Products</h4>
-            <a href="manage_product.php">Add Product</a>
+            <a href="manage_product">Add Product</a>
          </div>
          <div class="card-body">
             <div class="table-responsive">
@@ -97,11 +97,11 @@ $res = mysqli_query($con, $select);
                            <?php } ?>
                         </td>
                         <td>
-                           <a href="manage_product.php?id=<?= $row['id'] ?>" class="btn btn-primary btn-action mr-1"
+                           <a href="manage_product?id=<?= $row['id'] ?>" class="btn btn-primary btn-action mr-1"
                               data-toggle="tooltip" title="Edit">
                               <i class="fas fa-pencil-alt"></i>
                            </a>
-                           <a href="p_delete.php?id=<?= $row['id'] ?>" class="btn btn-danger btn-action"
+                           <a href="p_delete?id=<?= $row['id'] ?>" class="btn btn-danger btn-action"
                               data-toggle="tooltip" title="Delete"
                               data-confirm="Are You Sure?|This action can not be undone. Do you want to continue?"
                               data-confirm-yes="alert('Deleted')">

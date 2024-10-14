@@ -3,7 +3,7 @@ include 'header.php';
 // User must login first to access this page.//
 if (isset($_SESSION['USER_LOGIN']) && $_SESSION['USER_LOGIN'] != '') {
 } else {
-    echo "<script>window.location.href='index.php'</script>";
+    echo "<script>window.location.href='index'</script>";
     die();
 }
 
@@ -106,7 +106,7 @@ function get_available_stock($con, $pid, $format) {
                         Checkout
                     </button>
                     <?php else: ?>
-                    <a href="checkout.php">
+                    <a href="checkout">
                         <button
                             class="w-full p-2 border-2 hover:cursor-pointer bg-gradient-to-bl from-yellow-500 via-yellow-500 to-amber-600 shadow-sm hover:shadow-lg transition-shadow ease-in-out duration-300 font-semibold rounded-full text-white">
                             Checkout
@@ -164,7 +164,7 @@ function get_available_stock($con, $pid, $format) {
 
         // Update the session on the server
         var xhr = new XMLHttpRequest();
-        xhr.open("POST", "update_cart.php", true);
+        xhr.open("POST", "update_cart", true);
         xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4 && xhr.status === 200) {

@@ -31,7 +31,7 @@ $serial_no = 1;
       <div class="card">
          <div class="card-header">
             <h4>Sub Categories</h4>
-            <a href="manage_sub_categories.php">Add Sub Category</a>
+            <a href="manage_sub_categories">Add Sub Category</a>
          </div>
          <div class="card-body">
             <div class="table-responsive">
@@ -66,10 +66,10 @@ $serial_no = 1;
                                  ?>
                               </td>
                               <td>
-                                 <a href="manage_sub_categories.php?id=<?= $row['id'] ?>" class="btn btn-primary btn-action mr-1" data-toggle="tooltip" title="Edit">
+                                 <a href="manage_sub_categories?id=<?= $row['id'] ?>" class="btn btn-primary btn-action mr-1" data-toggle="tooltip" title="Edit">
                                     <i class="fas fa-pencil-alt"></i>
                                  </a>
-                                 <a href="sub_categories_delete.php?id=<?= $row['id'] ?>" class="btn btn-danger btn-action" data-toggle="tooltip" title="Delete"
+                                 <a href="sub_categories_delete?id=<?= $row['id'] ?>" class="btn btn-danger btn-action" data-toggle="tooltip" title="Delete"
                                     data-confirm="Are You Sure?|This action can not be undone. Do you want to continue?"
                                     data-confirm-yes="alert('Deleted')">
                                     <i class="fas fa-trash-alt"></i>

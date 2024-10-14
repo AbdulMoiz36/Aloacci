@@ -56,7 +56,7 @@ function user_register() {
     }
     if (is_error == '') {
         jQuery.ajax({
-            url: 'register_submit.php',
+            url: 'register_submit',
             type: 'post',
             data: 'name=' + name + '&email=' + email + '&mobile=' + mobile + '&password=' + password,
             success: function (result) {
@@ -102,7 +102,7 @@ function user_login() {
     }
     if (is_error == '') {
         jQuery.ajax({
-            url: 'login_submit.php',
+            url: 'login_submit',
             type: 'post',
             data: 'email=' + l_email + '&password=' + l_password,
             success: function (result) {
@@ -110,7 +110,7 @@ function user_login() {
                     jQuery('.login_msg p').html('Please enter valid login details');
                 }
                 if (result == 'valid') {
-                    window.location.href = 'index.php';
+                    window.location.href = 'index';
                 }
             }
         });
@@ -134,7 +134,7 @@ function manage_cart(pid, type, qty, format, price) {
     }
 
     jQuery.ajax({
-        url: 'manage_cart.php',
+        url: 'manage_cart',
         type: 'post',
         data: { pid: pid, qty: qty, type: type, format: format, price: price }, // Send all necessary data
         success: function(result) {

@@ -46,7 +46,7 @@ $totalProduct = $obj->totalProduct();
       <i id="menu-icon" class="fa-solid fa-bars sm:hidden block text-lg text-white cursor-pointer"
         onclick="toggleNavbar()"></i>
       <div class="relative w-full">
-        <form method="GET" action="shop.php" onsubmit="return validateSearch()">
+        <form method="GET" action="shop" onsubmit="return validateSearch()">
           <input type="search" placeholder="Search" name="search" id="search"
             value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>"
             class="py-2 px-4 rounded-full w-full outline-none" />
@@ -67,7 +67,7 @@ $totalProduct = $obj->totalProduct();
     </div>
     <!-- Logo Start -->
     <div class="flex justify-center">
-      <a href="index.php"><img src="./img/logo-cropped-bottom.png" alt="Logo" width="100px" /></a>
+      <a href="index"><img src="./img/logo-cropped-bottom.png" alt="Logo" width="100px" /></a>
     </div>
     <!-- Acccount And Cart Start -->
     <div class="flex justify-center space-x-10 text-white items-center">
@@ -76,11 +76,11 @@ $totalProduct = $obj->totalProduct();
         <?php
         if (isset($_SESSION['USER_LOGIN'])) {
         ?>
-        <a href="account.php"><i class="fas fa-user"></i> Account</a>
+        <a href="account"><i class="fas fa-user"></i> Account</a>
         <?php
         } else {
         ?>
-        <a href="login.php"><i class="fas fa-user"></i> Login</a>
+        <a href="login"><i class="fas fa-user"></i> Login</a>
         <?php
         }
         ?>
@@ -90,14 +90,14 @@ $totalProduct = $obj->totalProduct();
         <?php
         if (!isset($_SESSION['USER_LOGIN'])) {
         ?>
-          <a href="login.php">
+          <a href="login">
             <i class="fa-sharp fa-solid fa-bag-shopping"></i>
             <span>Cart</span>
           </a>
         <?php
         } else {
         ?>
-          <a href="cart.php" class="flex items-center cart-link">
+          <a href="cart" class="flex items-center cart-link">
             <!-- Cart Icon -->
             <div class="relative">
               <i class="fa-sharp fa-solid fa-bag-shopping text-xl"></i>
@@ -125,8 +125,8 @@ $totalProduct = $obj->totalProduct();
     class="bg-black border-t-2 relative border-slate-900 h-auto hidden sm:flex justify-center items-center px-14">
     <!-- List Of All Main Pags -->
     <ul class="flex flex-col sm:flex-row gap-4 sm:gap-10 text-white text-center py-3">
-      <a href="index.php">Home</a>
-      <a href="shop.php">Shop</a>
+      <a href="index">Home</a>
+      <a href="shop">Shop</a>
       <li class="hover:cursor-pointer" id="shop" onclick="toggleShop()">
         Categories
         <i class="fa-solid fa-angle-down ml-1 align-middle text-sm"></i>
@@ -141,14 +141,14 @@ $totalProduct = $obj->totalProduct();
           $categoriesQuery = mysqli_query($con, "SELECT * FROM categories");
           while ($category = mysqli_fetch_assoc($categoriesQuery)) {
             echo '<li class="text-start font-semibold"> 
-                        <a href="shop.php?category_id=' . $category['id'] . '" class="font-semibold">';
+                        <a href="shop?category_id=' . $category['id'] . '" class="font-semibold">';
             echo htmlspecialchars($category['categories']);
             echo '</a><ul class="mt-2 font-thin flex flex-col gap-1">';
 
             // Fetch sub-categories for this category
             $subCategoriesQuery = mysqli_query($con, "SELECT * FROM sub_categories WHERE category_id = '" . $category['id'] . "' AND `status` = 1");
             while ($subCategory = mysqli_fetch_assoc($subCategoriesQuery)) {
-              echo '<a href="shop.php?sub_category_id=' . $subCategory['id'] . '"><li class="hover:underline hover:cursor-pointer">';
+              echo '<a href="shop?sub_category_id=' . $subCategory['id'] . '"><li class="hover:underline hover:cursor-pointer">';
               echo htmlspecialchars($subCategory['sub_categories']);
               echo '</li></a>';
             }
@@ -160,11 +160,11 @@ $totalProduct = $obj->totalProduct();
 
         </ul>
       </li>
-      <a href="shop.php?price_filter=less_1500">Less than 1500</a>
-      <a href="about.php">
+      <a href="shop?price_filter=less_1500">Less than 1500</a>
+      <a href="about">
         <li class="hover:underline hover:cursor-pointer">About</li>
       </a>
-      <a href="contact.php">
+      <a href="contact">
         <li class="hover:underline hover:cursor-pointer">Contact</li>
       </a>
     </ul>

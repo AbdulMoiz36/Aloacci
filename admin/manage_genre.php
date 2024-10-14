@@ -21,7 +21,7 @@ if(isset($_GET['id']) && $_GET['id'] !=''){
       $genre = $row['genre'];
    }
    else{
-      header('Location: genre.php');
+      header('Location: genre');
       die();
    }
 
@@ -57,7 +57,7 @@ if(isset($_REQUEST['submit'])){
          mysqli_query($con,"insert into genre (genre) Value ('$genre')");
        }
    
-       echo "<script>window.location.href='genre.php'</script>";
+       echo "<script>window.location.href='genre'</script>";
        die();
    }
     

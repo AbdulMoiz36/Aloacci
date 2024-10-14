@@ -6,7 +6,7 @@ require "functions.php";
 if(isset($_SESSION['USER_LOGIN']) && $_SESSION['USER_LOGIN']!=''){
 }
 else {
-    echo "<script>window.location.href='index.php'</script>";
+    echo "<script>window.location.href='index'</script>";
    die();
 }
 
@@ -26,4 +26,3 @@ if($check_user>0){
     echo "wrong_password";
   }
 }
-?>

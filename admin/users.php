@@ -46,7 +46,7 @@ $serial_no = 1;
                                        if(isset($_SESSION['ADMIN_LOGIN'])){
                                        ?>
                                        <td>
-                                       <a href="users_delete.php?id=<?= $row['id'] ?>" class="btn btn-icon btn-danger"><i class="fas fa-trash-alt"></i></a>
+                                       <a href="users_delete?id=<?= $row['id'] ?>" class="btn btn-icon btn-danger"><i class="fas fa-trash-alt"></i></a>
                                        </td>
                                        <?php
                                        }

@@ -3,7 +3,7 @@ include "header.php";
 // User must login first to access this page.
 if (isset($_SESSION['USER_LOGIN']) && $_SESSION['USER_LOGIN'] != '') {
 } else {
-    echo "<script>window.location.href='index.php'</script>";
+    echo "<script>window.location.href='index'</script>";
     die();
 }
 
@@ -19,7 +19,7 @@ $osql = mysqli_query($con, "SELECT o.total_price, o.id, o.date, os.name as order
     <div class="md:shadow-xl p-5 md:p-10 md:w-11/12 w-full flex flex-col">
         <div class="flex justify-between w-full md:mb-3">
             <h2 class="text-3xl font-bold">My Account</h2>
-            <a href="./logout.php">
+            <a href="./logout">
                 <p class="underline cursor-pointer font-semibold">Log out</p>
             </a>
         </div>
@@ -73,7 +73,7 @@ $osql = mysqli_query($con, "SELECT o.total_price, o.id, o.date, os.name as order
                                     echo "<td class='py-2 px-4 border text-center'>Rs.{$order['total_price']}</td>";
                                     echo "<td class='py-2 px-4 border text-center {$status_class}'>{$order['order_status']}</td>";
                                     echo "<td class='py-2 px-4 border text-center'>
-                                            <a href='order_details.php?id={$order['id']}' class='text-amber-600 hover:text-blue-800'>
+                                            <a href='order_details?id={$order['id']}' class='text-amber-600 hover:text-blue-800'>
                                                 <i class='fa-regular fa-eye'></i>
                                             </a>
                                           </td>";
@@ -104,7 +104,7 @@ $osql = mysqli_query($con, "SELECT o.total_price, o.id, o.date, os.name as order
                 <?php endif; ?>
 
 
-                <a href="edit_address.php"><button class="p-2 rounded-md text-white font-semibold bg-amber-500 mt-4">Edit Address</button></a>
+                <a href="edit_address"><button class="p-2 rounded-md text-white font-semibold bg-amber-500 mt-4">Edit Address</button></a>
             </div>
         </div>
     </div>

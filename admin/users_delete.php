@@ -13,6 +13,4 @@ $delete = "delete from users where id=$_id";
 
 $res = mysqli_query($con,$delete);
 
-header('Location: users.php');
-
-?>
+header('Location: users');

@@ -39,7 +39,7 @@ include "header.php";
     <!-- Create Account -->
     <p class="text-sm text-center text-gray-600">
       Don't have an account? <br>
-      <a href="register.php" class="text-amber-500 hover:underline"><b>Create Account</b></a>
+      <a href="register" class="text-amber-500 hover:underline"><b>Create Account</b></a>
     </p>
   </div>
 </div>

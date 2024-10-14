@@ -112,7 +112,7 @@ isAdmin();
                         $('#product').change(function() {
                             var product_id = $(this).val();
                             $.ajax({
-                                url: 'get_formats.php',
+                                url: 'get_formats',
                                 type: 'POST',
                                 data: {
                                     product_id: product_id
@@ -146,7 +146,7 @@ isAdmin();
                             if (product_id && format_id && qty) {
                                 // Check stock availability
                                 $.ajax({
-                                    url: 'check_stock.php',
+                                    url: 'check_stock',
                                     type: 'POST',
                                     data: {
                                         product_id: product_id,
@@ -234,7 +234,7 @@ isAdmin();
                                 return;
                             }
                             $.ajax({
-                                url: 'save_order.php',
+                                url: 'save_order',
                                 type: 'POST',
                                 data: {
                                     products: products,

@@ -131,7 +131,7 @@ if ($row = mysqli_fetch_assoc($result)) {
             <?= $review['comment'] ?>
           </div>
           <div class="card-footer">
-            <a href="orders_detail.php?id=<?= $review['order_id'] ?>" class="btn btn-icon btn-info text-white"><i
+            <a href="orders_detail?id=<?= $review['order_id'] ?>" class="btn btn-icon btn-info text-white"><i
                 class="fas fa-box"></i> Order</a>
           </div>
         </div>

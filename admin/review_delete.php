@@ -13,6 +13,6 @@ $delete = "delete from reviews where id=$_id";
 
 $res = mysqli_query($con,$delete);
 
-header('Location: review.php');
+header('Location: review');
 
 ?>

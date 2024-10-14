@@ -14,7 +14,7 @@ $serial_no = 1;
     <div class="card">
       <div class="card-header">
         <h4>Genres</h4>
-        <a href="manage_genre.php">Add Genre</a>
+        <a href="manage_genre">Add Genre</a>
       </div>
       <div class="card-body">
         <div class="table-responsive">
@@ -39,11 +39,11 @@ $serial_no = 1;
                 <td> <?= $row['genre'] ?> </td>
                 <td>
 
-                  <a href="manage_genre.php?id=<?= $row['id'] ?>" class="btn btn-primary btn-action mr-1"
+                  <a href="manage_genre?id=<?= $row['id'] ?>" class="btn btn-primary btn-action mr-1"
                     data-toggle="tooltip" title="Edit">
                     <i class="fas fa-pencil-alt"></i>
                   </a>
-                  <a href="genre_delete.php?id=<?= $row['id'] ?>" class="btn btn-danger btn-action" data-toggle="tooltip"
+                  <a href="genre_delete?id=<?= $row['id'] ?>" class="btn btn-danger btn-action" data-toggle="tooltip"
                     title="Delete" data-confirm="Are You Sure?|This action can not be undone. Do you want to continue?"
                     data-confirm-yes="alert('Deleted')">
                     <i class="fas fa-trash-alt"></i>

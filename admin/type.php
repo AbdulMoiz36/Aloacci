@@ -14,7 +14,7 @@ $serial_no = 1;
     <div class="card">
       <div class="card-header">
         <h4>Types</h4>
-        <a href="manage_type.php">Add Product Type</a>
+        <a href="manage_type">Add Product Type</a>
       </div>
       <div class="card-body">
         <div class="table-responsive">
@@ -39,11 +39,11 @@ $serial_no = 1;
                 <td> <?= $row['type'] ?> </td>
                 <td>
 
-                  <a href="manage_type.php?id=<?= $row['id'] ?>" class="btn btn-primary btn-action mr-1"
+                  <a href="manage_type?id=<?= $row['id'] ?>" class="btn btn-primary btn-action mr-1"
                     data-toggle="tooltip" title="Edit">
                     <i class="fas fa-pencil-alt"></i>
                   </a>
-                  <a href="type_delete.php?id=<?= $row['id'] ?>" class="btn btn-danger btn-action" data-toggle="tooltip"
+                  <a href="type_delete?id=<?= $row['id'] ?>" class="btn btn-danger btn-action" data-toggle="tooltip"
                     title="Delete" data-confirm="Are You Sure?|This action can not be undone. Do you want to continue?"
                     data-confirm-yes="alert('Deleted')">
                     <i class="fas fa-trash-alt"></i>

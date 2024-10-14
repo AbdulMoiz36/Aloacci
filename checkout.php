@@ -3,13 +3,13 @@ include 'header.php';
 
 // Ensure user is logged in
 if (!isset($_SESSION['USER_LOGIN']) || $_SESSION['USER_LOGIN'] == '') {
-    echo "<script>window.location.href='index.php'</script>";
+    echo "<script>window.location.href='index'</script>";
     die();
 }
 
 if (!isset($_SERVER['HTTP_REFERER'])) {
     // echo("Access Denied");
-    echo "<script>window.location.href='shop.php'</script>";
+    echo "<script>window.location.href='shop'</script>";
     exit;
   }
 
@@ -63,7 +63,7 @@ if (isset($_POST['submit'])) {
 
     // Clear the cart after the order is placed
     unset($_SESSION['cart']);
-    echo "<script>window.location.href='thankyou.php'</script>";
+    echo "<script>window.location.href='thankyou'</script>";
 }
 ?>
 

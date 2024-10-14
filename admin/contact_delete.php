@@ -13,6 +13,4 @@ $delete = "delete from contact_us where id=$_id";
 
 $res = mysqli_query($con,$delete);
 
-header('Location: contact_us.php');
-
-?>
+header('Location: contact_us');

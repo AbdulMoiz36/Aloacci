@@ -58,7 +58,7 @@ include "header.php";
     <!-- Login Link -->
     <p class="text-sm text-center text-gray-600">
       Already have an account?
-      <a href="login.php" class="text-amber-500 hover:underline"><b>Login</b></a>
+      <a href="login" class="text-amber-500 hover:underline"><b>Login</b></a>
     </p>
   </div>
 </div>

@@ -88,7 +88,7 @@ if (isset($_GET['id']) && $_GET['id'] != '') {
             $qty5 = isset($formats[4]) ? $formats[4]['qty'] : '';
         }
     } else {
-        header('Location: product.php');
+        header('Location: product');
         die();
     }
 }
@@ -224,7 +224,7 @@ if (isset($_REQUEST['submit'])) {
             }
         }
 
-        echo "<script>window.location.href='product.php'</script>";
+        echo "<script>window.location.href='product'</script>";
         die();
     }
 }
@@ -273,7 +273,7 @@ if (isset($_REQUEST['submit'])) {
                             // Load subcategories if a category is already selected
                             if (category_id) {
                                 $.ajax({
-                                    url: 'get_subcategories.php',
+                                    url: 'get_subcategories',
                                     type: 'POST',
                                     data: {
                                         category_id: category_id
@@ -289,7 +289,7 @@ if (isset($_REQUEST['submit'])) {
                             $('#category').change(function() {
                                 var category_id = $(this).val();
                                 $.ajax({
-                                    url: 'get_subcategories.php',
+                                    url: 'get_subcategories',
                                     type: 'POST',
                                     data: {
                                         category_id: category_id

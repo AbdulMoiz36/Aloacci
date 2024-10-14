@@ -9,10 +9,10 @@ function get_safe_value($con,$str){
 
 function isAdmin(){
     if(!isset($_SESSION['ADMIN_LOGIN'])){
-        echo "<script>window.location.href='login.php'</script>";
+        echo "<script>window.location.href='login'</script>";
     }
     if($_SESSION['ADMIN_ROLE']!='1'){
-        echo "<script>window.location.href='index.php'</script>";
+        echo "<script>window.location.href='index'</script>";
     }
 }
 

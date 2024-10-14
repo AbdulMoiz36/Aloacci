@@ -295,7 +295,7 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
 
             <!-- Product image wrapper -->
             <div class="relative h-[70%] w-full">
-                <a href="product_details.php?id=<?= $list['id'] ?>" class="product-link w-full">
+                <a href="product_details?id=<?= $list['id'] ?>" class="product-link w-full">
                     <img src="./image/<?= $list['image'] ?>" alt="<?= $list['name'] ?>"
                         class="h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0">
                     <?php if ($list['image2'] != ''): ?>
@@ -310,7 +310,7 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
 
             <!-- Product details -->
             <div class="px-4 py-2 h-full flex flex-col justify-evenly">
-                <a href="product_details.php?id=<?= $list['id'] ?>"
+                <a href="product_details?id=<?= $list['id'] ?>"
                     class="text-lg font-bold hover:underline"><?= htmlspecialchars($list['name']) ?></a>
                 <p class="text-gray-600 overflow-hidden text-ellipsis line-clamp-2">
                     <?= htmlspecialchars($list['description']) ?></p>
@@ -434,12 +434,12 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
             const price = selectedFormat.dataset.price; // Get the price of the selected format
             // Use AJAX to call manage_cart without reloading the page
             const xhr = new XMLHttpRequest();
-            xhr.open('POST', 'manage_cart.php', true); // Adjust this URL if needed
+            xhr.open('POST', 'manage_cart', true); // Adjust this URL if needed
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === 4 && xhr.status === 200) {
-                    // Once the item is added to the cart, redirect to checkout.php
-                    window.location.href = 'checkout.php';
+                    // Once the item is added to the cart, redirect to checkout
+                    window.location.href = 'checkout';
                 }
             };
             // Send the cart data (adjust these parameters as needed)
@@ -499,13 +499,13 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
         </div>
         <!-- Inside the Modal -->
         <?php if (!isset($_SESSION['USER_LOGIN'])): ?>
-        <a href="login.php">
+        <a href="login">
             <div id="addToCartBtn"
                 class="w-full p-3 border-2 text-center border-black text-lg font-semibold rounded-full text-black">Add
                 To
                 Cart</div>
         </a>
-        <a href="login.php">
+        <a href="login">
             <div style="margin-top: 20px;"
                 class="w-full p-3 border-2 hover:cursor-pointer bg-gradient-to-bl from-yellow-500 via-yellow-500 to-amber-600 shadow-sm hover:shadow-lg transition-shadow ease-in-out duration-300 font-semibold rounded-full text-white text-center">
                 Buy It

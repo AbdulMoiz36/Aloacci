@@ -22,7 +22,7 @@ if(isset($_POST['login'])){
         $_SESSION['ADMIN_ID']=$row['id'];
         $_SESSION['ADMIN_USERNAME']=$admin;
         $_SESSION['ADMIN_ROLE']=$row['role_id'];
-      header('Location: index.php');
+      header('Location: index');
       die();
       }
    }
@@ -31,10 +31,10 @@ if(isset($_POST['login'])){
    }
    }
 
-/*------------------------------Restrict to login.php if already login------------------------------*/
+/*------------------------------Restrict to login if already login------------------------------*/
 
 if(isset($_SESSION['ADMIN_LOGIN']) && $_SESSION['ADMIN_LOGIN']=='yes'){
-  header('Location: index.php');
+  header('Location: index');
 }
 
 ?>

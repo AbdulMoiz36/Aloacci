@@ -62,11 +62,11 @@ $serial_no = 1;
                                       </td>
                                        <td> <?= $row['comment'] ?> </td>
                                        <td>
-                                        <a href="review_detail.php?id=<?= $row['id'] ?>" class="btn btn-icon btn-primary"><i class="fas fa-eye"></i></a>
+                                        <a href="review_detail?id=<?= $row['id'] ?>" class="btn btn-icon btn-primary"><i class="fas fa-eye"></i></a>
                                         
-                                        <a href="orders_detail.php?id=<?= $row['order_id'] ?>" class="btn btn-icon btn-info text-white"><i class="fas fa-box"></i></a>
+                                        <a href="orders_detail?id=<?= $row['order_id'] ?>" class="btn btn-icon btn-info text-white"><i class="fas fa-box"></i></a>
 
-                                        <a href="review_delete.php?id=<?= $row['id'] ?>" class="btn btn-icon btn-danger text-white"><i class="fas fa-trash-alt"></i></a>
+                                        <a href="review_delete?id=<?= $row['id'] ?>" class="btn btn-icon btn-danger text-white"><i class="fas fa-trash-alt"></i></a>
                                        </td>
                                     </tr>
                                     <?php

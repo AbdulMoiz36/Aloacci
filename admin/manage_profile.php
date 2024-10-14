@@ -29,7 +29,7 @@ if($_SESSION['ADMIN_ROLE']=="1"){
       $role_id = $row['role_id'];
 	}
 	else{
-	   header('Location: profile.php');
+	   header('Location: profile');
 	   die();
 	}
  
@@ -95,7 +95,7 @@ if($_SESSION['ADMIN_ROLE']=="1"){
 		  mysqli_query($con,"insert into admin_user (name,password,email,mobile,status,role_id,image) Value ('$name','$password','$email','$mobile','1','$role_id','$image')");
 		}
 	
-		echo "<script>window.location.href='profile.php'</script>";
+		echo "<script>window.location.href='profile'</script>";
 		die();
 	}
 	 
@@ -114,7 +114,7 @@ else{
 	   $password = $row['password'];
 	}
 	else{
-	   header('Location: profile.php');
+	   header('Location: profile');
 	   die();
 	}
  
@@ -146,7 +146,7 @@ else{
 		  mysqli_query($con,$pp_update);
 		}
 	
-		echo "<script>window.location.href='profile.php'</script>";
+		echo "<script>window.location.href='profile'</script>";
 		die();
 	}
 	 

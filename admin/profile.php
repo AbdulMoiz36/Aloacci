@@ -13,7 +13,7 @@ $row = mysqli_fetch_array($res);
                 <div class="card author-box">
                 <div class="card-header">
                     <h4>Profile</h4>
-                    <a style="margin-left:auto;" href="manage_profile.php?id=<?= $row['id'] ?>">Edit Profile</a>
+                    <a style="margin-left:auto;" href="manage_profile?id=<?= $row['id'] ?>">Edit Profile</a>
                   </div>
                   <div class="card-body">
                     <div class="author-box-center">

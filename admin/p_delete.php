@@ -19,7 +19,7 @@ if(isset($_REQUEST['id']) && is_numeric($_REQUEST['id'])) {
 
     /* Check if the query executed successfully and redirect */
     if($resProduct) {
-        header('Location: product.php');
+        header('Location: product');
     } else {
         echo "Error deleting product.";
     }

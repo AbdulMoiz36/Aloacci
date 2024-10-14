@@ -52,7 +52,7 @@ if (mysqli_num_rows($res) > 0) {
 
                 <!-- Product image wrapper -->
                 <div class="relative h-[65%] w-full">
-                    <a href="product_details.php?id=<?= $list['id'] ?>" class="product-link w-full">
+                    <a href="product_details?id=<?= $list['id'] ?>" class="product-link w-full">
                         <img src="./image/<?= $list['image'] ?>" alt="<?= $list['name'] ?>"
                             class="h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0">
                         <?php if ($list['image2'] != ''): ?>
@@ -67,7 +67,7 @@ if (mysqli_num_rows($res) > 0) {
 
                 <!-- Product details -->
                 <div class="px-4 py-2 h-[35%] flex flex-col justify-evenly">
-                    <a href="product_details.php?id=" class="text-sm md:text-lg font-bold hover:underline"><?= $list['name'] ?></a>
+                    <a href="product_details?id=" class="text-sm md:text-lg font-bold hover:underline"><?= $list['name'] ?></a>
                     <p class="text-gray-600 overflow-hidden text-ellipsis line-clamp-2 text-xs md:text-base">
                         <?= $list['description'] ?> </p>
                     <p class="text-xs md:text-lg font-bold text-red-500">Rs. <?= $list['price'] ?></p>
@@ -165,7 +165,7 @@ if (mysqli_num_rows($res) > 0) {
 
                 <!-- Product image wrapper -->
                 <div class="relative h-[65%] w-full">
-                    <a href="product_details.php?id=<?= $list['id'] ?>" class="product-link w-full">
+                    <a href="product_details?id=<?= $list['id'] ?>" class="product-link w-full">
                         <img src="./image/<?= $list['image'] ?>" alt="<?= $list['name'] ?>"
                             class="h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0">
                         <?php if ($list['image2'] != ''): ?>
@@ -180,7 +180,7 @@ if (mysqli_num_rows($res) > 0) {
 
                 <!-- Product details -->
                 <div class="px-4 py-2 h-[35%] flex flex-col justify-evenly">
-                    <a href="product_details.php?id=" class="text-sm md:text-lg font-bold hover:underline"><?= $list['name'] ?></a>
+                    <a href="product_details?id=" class="text-sm md:text-lg font-bold hover:underline"><?= $list['name'] ?></a>
                     <p class="text-gray-600 overflow-hidden text-ellipsis line-clamp-2 text-xs md:text-base">
                         <?= $list['description'] ?> </p>
                     <p class="text-xs md:text-lg font-bold text-red-500">Rs. <?= $list['price'] ?></p>

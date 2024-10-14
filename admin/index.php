@@ -170,7 +170,7 @@ $totalUsers = mysqli_fetch_assoc($totalUsersResult)['total'];
                     ?>
                 </td>
                 <td> <a class="btn btn-icon btn-primary" data-toggle="tooltip" title="View"
-                    href="orders_detail.php?id=<?= $row['id'] ?>"><i class="fas fa-eye"></i></a> </td>
+                    href="orders_detail?id=<?= $row['id'] ?>"><i class="fas fa-eye"></i></a> </td>
               </tr>
               <?php
               }

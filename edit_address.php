@@ -4,7 +4,7 @@ include "header.php";
 if(isset($_SESSION['USER_LOGIN']) && $_SESSION['USER_LOGIN']!=''){
 }
 else {
-    echo "<script>window.location.href='index.php'</script>";
+    echo "<script>window.location.href='index'</script>";
    die();
 }
 $user_id = $_SESSION['USER_ID'];
@@ -44,7 +44,7 @@ if (isset($_POST['update'])) {
 
         if ($update) {
             // Corrected JavaScript for redirection
-            echo '<script>window.location.href = "account.php";</script>';
+            echo '<script>window.location.href = "account";</script>';
             exit(); 
         } 
     } 

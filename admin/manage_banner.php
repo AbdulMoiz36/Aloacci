@@ -29,7 +29,7 @@ if (isset($_REQUEST['submit'])) {
 
         }
 
-        echo "<script>window.location.href='banner.php'</script>";
+        echo "<script>window.location.href='banner'</script>";
         die();
     }
 }
@@ -48,7 +48,7 @@ if (isset($_REQUEST['submit'])) {
 
                         <div class="form-group col-12">
                             <label for="image" class="form-control-label">Image</label>
-                            <input type="file" name="image" class="form-control">
+                            <input type="file" name="image" class="form-control" required>
                         </div>
 
                         <button id="payment-button" name="submit" type="submit"

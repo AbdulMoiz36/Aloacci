@@ -21,7 +21,7 @@ if(isset($_GET['id']) && $_GET['id'] !=''){
       $cat = $row['categories'];
    }
    else{
-      header('Location: categories.php');
+      header('Location: categories');
       die();
    }
 
@@ -57,7 +57,7 @@ if(isset($_REQUEST['submit'])){
          mysqli_query($con,"insert into categories (categories) Value ('$cat')");
        }
    
-       echo "<script>window.location.href='categories.php'</script>";
+       echo "<script>window.location.href='categories'</script>";
        die();
    }
     

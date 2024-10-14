@@ -5,7 +5,7 @@ $order_id=get_safe_value($con,$_GET['id']);
 if(isset($_POST['update_order_status'])){
     $update_order_status=get_safe_value($con, $_POST['update_order_status']);
     mysqli_query($con,"update orders set order_status='$update_order_status' where id='$order_id'");
-    echo "<script>window.location.href='index.php'</script>";
+    echo "<script>window.location.href='index'</script>";
 }
 
 ?>

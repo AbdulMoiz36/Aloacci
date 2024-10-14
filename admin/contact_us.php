@@ -47,7 +47,7 @@ $serial_no = 1;
                                        <td> <?= $row['message'] ?> </td>
                                        <td> <?= $row['date'] ?> </td>
                                        <td>
-                                       <a href="contact_delete.php?id=<?= $row['id'] ?>" class="btn btn-icon btn-danger"><i class="fas fa-trash-alt"></i></a>
+                                       <a href="contact_delete?id=<?= $row['id'] ?>" class="btn btn-icon btn-danger"><i class="fas fa-trash-alt"></i></a>
                                        </td>
                                     </tr>
                                     <?php

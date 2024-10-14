@@ -5,7 +5,7 @@ $product_id = mysqli_real_escape_string($con, $_GET['id']);
 if ($product_id > 0) {
     $get_product = get_product($con, '', '', $product_id);
 } else {
-    echo "<script>window.location.href='index.php'</script>";
+    echo "<script>window.location.href='index'</script>";
 }
 
 // Escape product data for output
@@ -195,7 +195,7 @@ foreach ($get_product as $product) {
             <!-- Add to Cart Button -->
             <?php if (!isset($_SESSION['USER_LOGIN'])): ?>
                 <div>
-                    <a href="login.php">
+                    <a href="login">
                         <div class="border-2 border-black text-lg font-semibold rounded-full text-center mb-2 p-3 w-full">Add To Cart</div>
                     </a>
                 </div>
@@ -209,7 +209,7 @@ foreach ($get_product as $product) {
             <!-- Buy It Now Button -->
             <?php if (!isset($_SESSION['USER_LOGIN'])): ?>
                 <div>
-                    <a href="login.php">
+                    <a href="login">
                         <div class="w-full p-3 border-2 hover:cursor-pointer bg-gradient-to-bl text-center from-yellow-500 via-yellow-500 to-amber-600 shadow-sm hover:shadow-xl transition-shadow ease-in-out duration-300 font-semibold rounded-full text-white">Buy It Now</div>
                     </a>
                 </div>
@@ -248,12 +248,12 @@ foreach ($get_product as $product) {
 
                         // Use AJAX to call manage_cart without reloading the page
                         const xhr = new XMLHttpRequest();
-                        xhr.open('POST', 'manage_cart.php', true); // Adjust this URL if needed
+                        xhr.open('POST', 'manage_cart', true); // Adjust this URL if needed
                         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
                         xhr.onreadystatechange = function() {
                             if (xhr.readyState === 4 && xhr.status === 200) {
-                                // Once the item is added to the cart, redirect to checkout.php
-                                window.location.href = 'checkout.php';
+                                // Once the item is added to the cart, redirect to checkout
+                                window.location.href = 'checkout';
                             }
                         };
 

@@ -26,7 +26,7 @@ if (isset($_SESSION['USER_ID'])) {
         <!-- Left: Form Section (on bottom for small screens) -->
         <div class="flex flex-col justify-center p-8 order-2 md:order-none">
             <h1 class="text-4xl font-bold underline text-center mb-6">Contact Us</h1>
-            <form action="send_message.php" class="w-full">
+            <form action="send_message" class="w-full">
                 <div class="flex flex-col gap-6">
                     <!-- Name and Email -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -103,7 +103,7 @@ if (isset($_SESSION['USER_ID'])) {
         is_error = 'yes';
     } else {
         jQuery.ajax({
-            url: 'send_message.php',
+            url: 'send_message',
             type: 'post',
             data: 'name=' + c_name + '&email=' + c_email + '&subject=' + c_subject +
                 '&message=' + c_message,

@@ -13,6 +13,6 @@ $delete = "delete from admin_user where id=$_id";
 
 $res = mysqli_query($con,$delete);
 
-header('Location: panel_users.php');
+header('Location: panel_users');
 
 ?>

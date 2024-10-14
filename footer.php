@@ -21,10 +21,10 @@
       <div class="mb-6 md:mb-0">
         <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
         <ul class="space-y-2 text-sm">
-          <li><a href="index.php" class="hover:text-amber-500">Home</a></li>
-          <li><a href="shop.php" class="hover:text-amber-500">Shop</a></li>
-          <li><a href="about.php" class="hover:text-amber-500">About Us</a></li>
-          <li><a href="contact.php" class="hover:text-amber-500">Contact</a></li>
+          <li><a href="index" class="hover:text-amber-500">Home</a></li>
+          <li><a href="shop" class="hover:text-amber-500">Shop</a></li>
+          <li><a href="about" class="hover:text-amber-500">About Us</a></li>
+          <li><a href="contact" class="hover:text-amber-500">Contact</a></li>
         </ul>
       </div>
 

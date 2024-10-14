@@ -33,7 +33,7 @@ $serial_no = 1;
                 <div class="card">
                   <div class="card-header">
                     <h4>Staff</h4>
-                    <a href="manage_panel_users.php">Add Members</a>
+                    <a href="manage_panel_users">Add Members</a>
                   </div>
                   <div class="card-body">
                     <div class="table-responsive">
@@ -75,10 +75,10 @@ $serial_no = 1;
                                           ?>
                                        </td>
                                        <td>
-                                       <a href="manage_panel_users.php?id=<?= $row['id'] ?>" class="btn btn-primary btn-action mr-1" data-toggle="tooltip" title="Edit">
+                                       <a href="manage_panel_users?id=<?= $row['id'] ?>" class="btn btn-primary btn-action mr-1" data-toggle="tooltip" title="Edit">
                                           <i class="fas fa-pencil-alt"></i>
                                        </a>
-                                       <a href="panel_users_delete.php?id=<?= $row['id'] ?>" class="btn btn-danger btn-action" data-toggle="tooltip" title="Delete"
+                                       <a href="panel_users_delete?id=<?= $row['id'] ?>" class="btn btn-danger btn-action" data-toggle="tooltip" title="Delete"
                                           data-confirm="Are You Sure?|This action can not be undone. Do you want to continue?"
                                           data-confirm-yes="alert('Deleted')">
                                           <i class="fas fa-trash-alt"></i>

@@ -11,7 +11,7 @@ if(isset($_SESSION['ADMIN_LOGIN']) && $_SESSION['ADMIN_LOGIN']!=''){
 
 }
 else {
-   header('Location: login.php');
+   header('Location: login');
    die();
 }
 
@@ -62,11 +62,11 @@ $row = mysqli_fetch_array($res);
             </a>
             <div class="dropdown-menu dropdown-menu-right pullDown">
               <div class="dropdown-title"><?= $_SESSION['ADMIN_USERNAME']; ?></div>
-              <a href="profile.php" class="dropdown-item has-icon"> <i class="far
+              <a href="profile" class="dropdown-item has-icon"> <i class="far
 										fa-user"></i> Profile
               </a>
               <div class="dropdown-divider"></div>
-              <a href="logout.php" class="dropdown-item has-icon text-danger"> <i class="fas fa-sign-out-alt"></i>
+              <a href="logout" class="dropdown-item has-icon text-danger"> <i class="fas fa-sign-out-alt"></i>
                 Logout
               </a>
             </div>
@@ -76,7 +76,7 @@ $row = mysqli_fetch_array($res);
       <div class="main-sidebar sidebar-style-2">
         <aside id="sidebar-wrapper">
           <div class="sidebar-brand">
-            <a href="categories.php"> <img alt="image" src="../img/logo-cropped-bottom.png" class="header-logo" /> <span
+            <a href="categories"> <img alt="image" src="../img/logo-cropped-bottom.png" class="header-logo" /> <span
                 class="logo-name">Aloacci</span>
             </a>
           </div>
@@ -85,49 +85,49 @@ $row = mysqli_fetch_array($res);
             <?php
             if($_SESSION['ADMIN_ROLE']=='1'){
             ?>
-            <li class="dropdown <?= $active=="create_index.php"? 'active':''; ?>">
-              <a href="create_order.php" class="nav-link"><i data-feather="monitor"></i><span>Create Order</span></a>
+            <li class="dropdown <?= $active=="create_order.php"? 'active':''; ?>">
+              <a href="create_order" class="nav-link"><i data-feather="monitor"></i><span>Create Order</span></a>
             </li>
-            <li class="dropdown <?= $active=="banner.php"? 'active':''; ?>">
-              <a href="banner.php" class="nav-link"><i data-feather="monitor"></i><span>Banner</span></a>
+            <li class="dropdown <?= $active=="banner.php" || $active == "manage_banner.php"? 'active':''; ?>">
+              <a href="banner" class="nav-link"><i data-feather="monitor"></i><span>Banner</span></a>
             </li>
-            <li class="dropdown <?= $active=="categories.php"? 'active':''; ?>">
-              <a href="categories.php" class="nav-link"><i data-feather="monitor"></i><span>Categories</span></a>
+            <li class="dropdown <?= $active=="categories.php" || $active == "manage_categories.php"? 'active':''; ?>">
+              <a href="categories" class="nav-link"><i data-feather="monitor"></i><span>Categories</span></a>
             </li>
-            <li class="dropdown <?= $active=="sub_categories.php"? 'active':''; ?>">
-              <a href="sub_categories.php" class="nav-link"><i data-feather="monitor"></i><span>Sub Categories</span></a>
+            <li class="dropdown <?= $active=="sub_categories.php" || $active == "manage_sub_categories.php"? 'active':''; ?>">
+              <a href="sub_categories" class="nav-link"><i data-feather="monitor"></i><span>Sub Categories</span></a>
             </li>
-            <li class="dropdown <?= $active=="genre.php"? 'active':''; ?>">
-              <a href="genre.php" class="nav-link"><i data-feather="monitor"></i><span>Genre</span></a>
+            <li class="dropdown <?= $active=="genre.php" || $active == "manage_genre.php"? 'active':''; ?>">
+              <a href="genre" class="nav-link"><i data-feather="monitor"></i><span>Genre</span></a>
             </li>
-            <li class="dropdown <?= $active=="type.php"? 'active':''; ?>">
-              <a href="type.php" class="nav-link"><i data-feather="monitor"></i><span>Product Types</span></a>
+            <li class="dropdown <?= $active=="type.php" || $active == "manage_type.php"? 'active':''; ?>">
+              <a href="type" class="nav-link"><i data-feather="monitor"></i><span>Product Types</span></a>
             </li>
             
-            <li class="dropdown <?= $active=="product.php"? 'active':''; ?>">
-              <a href="product.php" class="nav-link"><i data-feather="monitor"></i><span>Products</span></a>
+            <li class="dropdown <?= $active=="product.php" || $active == "manage_product.php"? 'active':''; ?>">
+              <a href="product" class="nav-link"><i data-feather="monitor"></i><span>Products</span></a>
             </li>
-            <li class="dropdown <?= $active=="index.php"? 'active':''; ?>">
-              <a href="index.php" class="nav-link"><i data-feather="monitor"></i><span>Orders</span></a>
+            <li class="dropdown <?= $active=="index.php" || $active == "orders_detail.php"? 'active':''; ?>">
+              <a href="index" class="nav-link"><i data-feather="monitor"></i><span>Orders</span></a>
             </li>
             <li class="dropdown <?= $active=="users.php"? 'active':''; ?>">
-              <a href="users.php" class="nav-link"><i data-feather="monitor"></i><span>Users</span></a>
+              <a href="users" class="nav-link"><i data-feather="monitor"></i><span>Users</span></a>
             </li>
             <li class="dropdown <?= $active=="contact_us.php"? 'active':''; ?>">
-              <a href="contact_us.php" class="nav-link"><i data-feather="monitor"></i><span>Contact Us</span></a>
+              <a href="contact_us" class="nav-link"><i data-feather="monitor"></i><span>Contact Us</span></a>
             </li>
-            <li class="dropdown <?= $active=="review.php"? 'active':''; ?>">
-              <a href="review.php" class="nav-link"><i data-feather="monitor"></i><span>Review</span></a>
+            <li class="dropdown <?= $active=="review.php" || $active == "review_detail.php"? 'active':''; ?>">
+              <a href="review" class="nav-link"><i data-feather="monitor"></i><span>Review</span></a>
             </li>
             <li class="menu-header">Admin Users</li>
-            <li class="dropdown <?= $active=="panel_users.php"? 'active':''; ?>">
-              <a href="panel_users.php" class="nav-link"><i data-feather="monitor"></i><span>Staff</span></a>
+            <li class="dropdown <?= $active=="panel_users.php" || $active == "manage_panel_users.php"? 'active':''; ?>">
+              <a href="panel_users" class="nav-link"><i data-feather="monitor"></i><span>Staff</span></a>
             </li>
             <?php
             }else{
             ?>
             <li class="dropdown <?= $active=="index.php"? 'active':''; ?>">
-              <a href="index.php" class="nav-link"><i data-feather="monitor"></i><span>Orders</span></a>
+              <a href="index" class="nav-link"><i data-feather="monitor"></i><span>Orders</span></a>
             </li>
             <?php
             }
