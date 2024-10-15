@@ -9,7 +9,7 @@ isAdmin();
 $msg = '';
 
 if (isset($_REQUEST['submit'])) {
-    $maxFileSize = 2 * 1024 * 1024; // Maximum file size of 2MB
+    $maxFileSize = 5 * 1024 * 1024; // Maximum file size of 2MB
     $allowedFileTypes = ['image/png', 'image/jpg', 'image/jpeg'];
 
     // Check if an image is uploaded
@@ -21,7 +21,7 @@ if (isset($_REQUEST['submit'])) {
 
         // Validate file size
         if ($_FILES['image']['size'] > $maxFileSize) {
-            $msg = "File size exceeds 2MB limit.";
+            $msg = "File size exceeds 5MB limit.";
         }
 
         // Validate image dimensions
@@ -74,8 +74,8 @@ if (isset($_REQUEST['submit'])) {
 
                         <div class="form-group col-12">
                             <label for="image" class="form-control-label">Image</label>
-                            <input type="file" name="image" class="form-control" required>
                             <small class="form-text text-muted">Please upload an image with dimensions 1920x600 pixels.</small>
+                            <input type="file" name="image" class="form-control" required>
                         </div>
 
                         <button id="payment-button" name="submit" type="submit"
