@@ -22,10 +22,6 @@ $unique_products = array_values($unique_products);
 // Convert the unique products array to JSON
 $unique_products_json = json_encode($unique_products);
 
-// Print the unique products (full data)
-print_r($unique_products);
-
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
