@@ -6,6 +6,26 @@ require "add_cart_func.php";
 $obj = new add_to_cart();
 $totalProduct = $obj->totalProduct();
 
+$all_products = get_product($con);
+$unique_products = [];
+
+foreach ($all_products as $list) {
+    // Use the ID as the key to ensure uniqueness
+    if (!isset($unique_products[$list['id']])) {
+        $unique_products[$list['id']] = $list; // Store the entire product
+    }
+}
+
+// Reindex the unique products array
+$unique_products = array_values($unique_products);
+
+// Convert the unique products array to JSON
+$unique_products_json = json_encode($unique_products);
+
+// Print the unique products (full data)
+print_r($unique_products);
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -49,21 +69,80 @@ $totalProduct = $obj->totalProduct();
         <form method="GET" action="shop" onsubmit="return validateSearch()">
           <input type="search" placeholder="Search" name="search" id="search"
             value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>"
-            class="py-2 px-4 rounded-full w-full outline-none" />
+            class="py-2 px-4 rounded-full w-full outline-none" autocomplete="off" onkeyup="showDropdown(this.value)" />
+          <i class="fas fa-search absolute right-3 top-1/2 transform -translate-y-1/2 text-black text-lg sm:text-xl"></i>
         </form>
 
+        <!-- Dropdown container -->
+        <div id="dropdown" class="absolute bg-white border rounded-lg w-full hidden z-10"></div>
+
         <script>
-          function validateSearch() {
-            var searchInput = document.getElementById('search').value
-              .trim(); // Get the search input and trim whitespace
-            if (searchInput === '') {
-              return false; // Prevent form submission if the input is empty
+          // Function to show the dropdown with products
+          function showDropdown(query) {
+            var dropdown = document.getElementById('dropdown');
+
+            // If query is empty, hide the dropdown
+            if (query.trim() === '') {
+              dropdown.innerHTML = '';
+              dropdown.classList.add('hidden');
+              return;
             }
-            return true; // Allow form submission if the input has a value
+            
+            // Simulate fetching product data from backend (you can replace this with an actual fetch call)
+            var products = <?= $unique_products_json ?>;
+
+            // Filter products based on search query
+            var filteredProducts = products.filter(function(product) {
+              return product.name.toLowerCase().includes(query.toLowerCase());
+            });
+
+            // If no products match, hide the dropdown
+            if (filteredProducts.length === 0) {
+              dropdown.innerHTML = '<p class="px-4 py-2 text-gray-500">No results found</p>';
+              dropdown.classList.remove('hidden');
+              return;
+            }
+
+            // Build the dropdown content
+            var content = '';
+            filteredProducts.forEach(function(product) {
+              content += `
+          <a href="product_details?id=${product.id}" class="flex items-center px-4 py-2 hover:bg-gray-100">
+            <img src="./image/${product.image}" alt="${product.name}" class="w-12 h-12 rounded-full object-cover mr-4" />
+            <div>
+              <p class="font-semibold text-gray-800">${product.name}</p>
+              <p class="text-sm text-gray-500">${product.description}</p>
+              <p class="text-sm font-medium text-green-600">${product.price}</p>
+            </div>
+          </a>
+        `;
+            });
+
+            dropdown.innerHTML = content;
+            dropdown.classList.remove('hidden');
           }
+
+          // Function to validate search input before form submission
+          function validateSearch() {
+            var searchInput = document.getElementById('search').value.trim();
+            if (searchInput === '') {
+              return false;
+            }
+            return true;
+          }
+
+          // Hide dropdown when clicking outside
+          document.addEventListener('click', function(event) {
+            var dropdown = document.getElementById('dropdown');
+            var searchBox = document.getElementById('search');
+            if (!searchBox.contains(event.target) && !dropdown.contains(event.target)) {
+              dropdown.classList.add('hidden');
+            }
+          });
         </script>
-        <i class="fas fa-search absolute right-3 top-1/2 transform -translate-y-1/2 text-black text-lg sm:text-xl"></i>
       </div>
+
+    </div>
     </div>
     <!-- Logo Start -->
     <div class="flex justify-center">
@@ -76,11 +155,11 @@ $totalProduct = $obj->totalProduct();
         <?php
         if (isset($_SESSION['USER_LOGIN'])) {
         ?>
-        <a href="account"><i class="fas fa-user"></i> Account</a>
+          <a href="account"><i class="fas fa-user"></i> Account</a>
         <?php
         } else {
         ?>
-        <a href="login"><i class="fas fa-user"></i> Login</a>
+          <a href="login"><i class="fas fa-user"></i> Login</a>
         <?php
         }
         ?>
@@ -134,8 +213,10 @@ $totalProduct = $obj->totalProduct();
         <ul
           class="hidden w-full absolute bg-white text-black shadow-xl grid-cols-2 sm:grid-cols-4 gap-10 z-50 top-12 left-0 p-10"
           id="menu">
-          <div class="w-full hover:underline absolute top-0 flex justify-center align-middle left-0 font-bold border-b p-1 md:hidden" onclick="toggleShop()" >
-          <i class="fa-solid fa-xmark text-base cursor-pointer pr-2" onclick="toggleShop()"></i><p onclick="toggleShop()">Close</p></div>
+          <div class="w-full hover:underline absolute top-0 flex justify-center align-middle left-0 font-bold border-b p-1 md:hidden" onclick="toggleShop()">
+            <i class="fa-solid fa-xmark text-base cursor-pointer pr-2" onclick="toggleShop()"></i>
+            <p onclick="toggleShop()">Close</p>
+          </div>
           <?php
           // Fetch categories
           $categoriesQuery = mysqli_query($con, "SELECT * FROM categories");
