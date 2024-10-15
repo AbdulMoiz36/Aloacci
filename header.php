@@ -70,7 +70,7 @@ $unique_products_json = json_encode($unique_products);
         </form>
 
         <!-- Dropdown container -->
-        <div id="dropdown" class="absolute bg-white border rounded-lg w-full hidden z-10"></div>
+        <div id="dropdown" class="absolute bg-white border rounded-lg sm:w-full md:w-[150%] hidden z-10 shadow-lg"></div>
 
         <script>
           // Function to show the dropdown with products
@@ -108,7 +108,7 @@ $unique_products_json = json_encode($unique_products);
             <div>
               <p class="font-semibold text-gray-800">${product.name}</p>
               <p class="text-sm text-gray-500">${product.description}</p>
-              <p class="text-sm font-medium text-green-600">${product.price}</p>
+              <p class="text-sm font-bold text-red-600">Rs.${product.price}</p>
             </div>
           </a>
         `;
