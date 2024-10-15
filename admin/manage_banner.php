@@ -9,10 +9,35 @@ isAdmin();
 $msg = '';
 
 if (isset($_REQUEST['submit'])) {
+    $maxFileSize = 2 * 1024 * 1024; // Maximum file size of 2MB
+    $allowedFileTypes = ['image/png', 'image/jpg', 'image/jpeg'];
 
-    // Image validation
-    if ($_FILES['image']['type'] != '' && !in_array($_FILES['image']['type'], ['image/png', 'image/jpg', 'image/jpeg'])) {
-        $msg = "Please select only png, jpg, or jpeg format";
+    // Check if an image is uploaded
+    if ($_FILES['image']['error'] !== UPLOAD_ERR_NO_FILE) {
+        // Validate file type
+        if (!in_array($_FILES['image']['type'], $allowedFileTypes)) {
+            $msg = "Please select only PNG, JPG, or JPEG format.";
+        }
+
+        // Validate file size
+        if ($_FILES['image']['size'] > $maxFileSize) {
+            $msg = "File size exceeds 2MB limit.";
+        }
+
+        // Validate image dimensions
+        if ($_FILES['image']['error'] === UPLOAD_ERR_OK) {
+            $imageDetails = getimagesize($_FILES['image']['tmp_name']);
+            if ($imageDetails === false) {
+                $msg = "The file is not a valid image.";
+            } else {
+                $width = $imageDetails[0];
+                $height = $imageDetails[1];
+                // Check if dimensions are 1920x600
+                if ($width !== 1920 || $height !== 600) {
+                    $msg = "Image dimensions must be 1920x600 pixels.";
+                }
+            }
+        }
     }
 
     if ($msg == '') {
@@ -23,10 +48,10 @@ if (isset($_REQUEST['submit'])) {
                 $tempname = $_FILES["image"]["tmp_name"];
                 $folder = "../image/" . $image;
                 move_uploaded_file($tempname, $folder);
+
+                // Update the banner in the database
+                mysqli_query($con, "UPDATE banner SET image='$image' WHERE id='{$_GET['id']}'");
             }
-
-            mysqli_query($con, "update banner set image='$image'");
-
         }
 
         echo "<script>window.location.href='banner'</script>";
@@ -46,9 +71,11 @@ if (isset($_REQUEST['submit'])) {
                 <div class="card-body card-block">
                     <div class="form-row">
 
+
                         <div class="form-group col-12">
                             <label for="image" class="form-control-label">Image</label>
                             <input type="file" name="image" class="form-control" required>
+                            <small class="form-text text-muted">Please upload an image with dimensions 1920x600 pixels.</small>
                         </div>
 
                         <button id="payment-button" name="submit" type="submit"
@@ -64,5 +91,5 @@ if (isset($_REQUEST['submit'])) {
     </div>
 
     <?php
-include "footer.php"
-?>
+    include "footer.php"
+    ?>

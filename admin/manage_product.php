@@ -41,7 +41,7 @@ $image_required = 'required';
 if (isset($_GET['id']) && $_GET['id'] != '') {
     $image_required = '';
     $_id = get_safe_value($con, $_GET['id']);
-    
+
     // Fetch product details from product table
     $res = mysqli_query($con, "select * from product where id=$_id");
     $check = mysqli_num_rows($res);
@@ -187,7 +187,6 @@ if (isset($_REQUEST['submit'])) {
             if ($format5 != '' && $price5 != '' && $qty5 != '') {
                 mysqli_query($con, "INSERT INTO product_format (`product_id`, `format`, `price`, `qty`) VALUES ('$_id', '$format5', '$price5', '$qty5')");
             }
-
         } else {
             // Insert new product
             $image = $_FILES["image"]["name"];
@@ -246,11 +245,11 @@ if (isset($_REQUEST['submit'])) {
                             <select class="form-control" name="categories_id" id="category">
                                 <option>Select Category</option>
                                 <?php
-                                    $categories = mysqli_query($con, "SELECT * FROM categories");
-                                    while ($row = mysqli_fetch_array($categories)) {
-                                        $selected = ($row['id'] == $category_id) ? 'selected' : '';
-                                        echo "<option value='{$row['id']}' $selected>{$row['categories']}</option>";
-                                    }
+                                $categories = mysqli_query($con, "SELECT * FROM categories");
+                                while ($row = mysqli_fetch_array($categories)) {
+                                    $selected = ($row['id'] == $category_id) ? 'selected' : '';
+                                    echo "<option value='{$row['id']}' $selected>{$row['categories']}</option>";
+                                }
                                 ?>
                             </select>
                         </div>
@@ -418,18 +417,17 @@ if (isset($_REQUEST['submit'])) {
 
                                 <?php
 
-									$select_gender = mysqli_query($con,"select * from gender");
+                                $select_gender = mysqli_query($con, "select * from gender");
 
-									while($gender_row = mysqli_fetch_array($select_gender)){
-										if($gender_row['id']==$gender_id){
-											echo "<option selected value=".$gender_row['id']."> ".$gender_row['gender']." </option>";
-										}
-										else{
-											echo "<option value=".$gender_row['id']."> ".$gender_row['gender']." </option>";
-										}
-									}
+                                while ($gender_row = mysqli_fetch_array($select_gender)) {
+                                    if ($gender_row['id'] == $gender_id) {
+                                        echo "<option selected value=" . $gender_row['id'] . "> " . $gender_row['gender'] . " </option>";
+                                    } else {
+                                        echo "<option value=" . $gender_row['id'] . "> " . $gender_row['gender'] . " </option>";
+                                    }
+                                }
 
-									?>
+                                ?>
 
                             </select>
 
@@ -442,18 +440,17 @@ if (isset($_REQUEST['submit'])) {
 
                                 <?php
 
-									$select_genre = mysqli_query($con,"select * from genre");
+                                $select_genre = mysqli_query($con, "select * from genre");
 
-									while($genre_row = mysqli_fetch_array($select_genre)){
-										if($genre_row['id']==$genre_id){
-											echo "<option selected value=".$genre_row['id']."> ".$genre_row['genre']." </option>";
-										}
-										else{
-											echo "<option value=".$genre_row['id']."> ".$genre_row['genre']." </option>";
-										}
-									}
+                                while ($genre_row = mysqli_fetch_array($select_genre)) {
+                                    if ($genre_row['id'] == $genre_id) {
+                                        echo "<option selected value=" . $genre_row['id'] . "> " . $genre_row['genre'] . " </option>";
+                                    } else {
+                                        echo "<option value=" . $genre_row['id'] . "> " . $genre_row['genre'] . " </option>";
+                                    }
+                                }
 
-									?>
+                                ?>
 
                             </select>
 
@@ -466,18 +463,17 @@ if (isset($_REQUEST['submit'])) {
 
                                 <?php
 
-									$select_type = mysqli_query($con,"select * from type");
+                                $select_type = mysqli_query($con, "select * from type");
 
-									while($type_row = mysqli_fetch_array($select_type)){
-										if($type_row['id']==$type_id){
-											echo "<option selected value=".$type_row['id']."> ".$type_row['type']." </option>";
-										}
-										else{
-											echo "<option value=".$type_row['id']."> ".$type_row['type']." </option>";
-										}
-									}
+                                while ($type_row = mysqli_fetch_array($select_type)) {
+                                    if ($type_row['id'] == $type_id) {
+                                        echo "<option selected value=" . $type_row['id'] . "> " . $type_row['type'] . " </option>";
+                                    } else {
+                                        echo "<option value=" . $type_row['id'] . "> " . $type_row['type'] . " </option>";
+                                    }
+                                }
 
-									?>
+                                ?>
 
                             </select>
 
@@ -493,18 +489,17 @@ if (isset($_REQUEST['submit'])) {
 
                                 <?php
 
-									$select_season = mysqli_query($con,"select * from season");
+                                $select_season = mysqli_query($con, "select * from season");
 
-									while($season_row = mysqli_fetch_array($select_season)){
-										if($season_row['id']==$season_id){
-											echo "<option selected value=".$season_row['id']."> ".$season_row['season']." </option>";
-										}
-										else{
-											echo "<option value=".$season_row['id']."> ".$season_row['season']." </option>";
-										}
-									}
+                                while ($season_row = mysqli_fetch_array($select_season)) {
+                                    if ($season_row['id'] == $season_id) {
+                                        echo "<option selected value=" . $season_row['id'] . "> " . $season_row['season'] . " </option>";
+                                    } else {
+                                        echo "<option value=" . $season_row['id'] . "> " . $season_row['season'] . " </option>";
+                                    }
+                                }
 
-									?>
+                                ?>
 
                             </select>
 
@@ -517,18 +512,17 @@ if (isset($_REQUEST['submit'])) {
 
                                 <?php
 
-									$select_sillage = mysqli_query($con,"select * from sillage");
+                                $select_sillage = mysqli_query($con, "select * from sillage");
 
-									while($sillage_row = mysqli_fetch_array($select_sillage)){
-										if($sillage_row['id']==$sillage_id){
-											echo "<option selected value=".$sillage_row['id']."> ".$sillage_row['sillage']." </option>";
-										}
-										else{
-											echo "<option value=".$sillage_row['id']."> ".$sillage_row['sillage']." </option>";
-										}
-									}
+                                while ($sillage_row = mysqli_fetch_array($select_sillage)) {
+                                    if ($sillage_row['id'] == $sillage_id) {
+                                        echo "<option selected value=" . $sillage_row['id'] . "> " . $sillage_row['sillage'] . " </option>";
+                                    } else {
+                                        echo "<option value=" . $sillage_row['id'] . "> " . $sillage_row['sillage'] . " </option>";
+                                    }
+                                }
 
-									?>
+                                ?>
 
                             </select>
 
@@ -541,18 +535,17 @@ if (isset($_REQUEST['submit'])) {
 
                                 <?php
 
-									$select_lasting = mysqli_query($con,"select * from lasting");
+                                $select_lasting = mysqli_query($con, "select * from lasting");
 
-									while($lasting_row = mysqli_fetch_array($select_lasting)){
-										if($lasting_row['id']==$lasting_id){
-											echo "<option selected value=".$lasting_row['id']."> ".$lasting_row['lasting']." </option>";
-										}
-										else{
-											echo "<option value=".$lasting_row['id']."> ".$lasting_row['lasting']." </option>";
-										}
-									}
+                                while ($lasting_row = mysqli_fetch_array($select_lasting)) {
+                                    if ($lasting_row['id'] == $lasting_id) {
+                                        echo "<option selected value=" . $lasting_row['id'] . "> " . $lasting_row['lasting'] . " </option>";
+                                    } else {
+                                        echo "<option value=" . $lasting_row['id'] . "> " . $lasting_row['lasting'] . " </option>";
+                                    }
+                                }
 
-									?>
+                                ?>
 
                             </select>
 
@@ -561,18 +554,42 @@ if (isset($_REQUEST['submit'])) {
 
                     <div class="form-group">
                         <label for="image" class="form-control-label">Image</label>
-                        <input type="file" name="image" class="form-control" <?= $image_required ?>>
+                        <input type="file" name="image" class="form-control" id="image" <?= $image_required ?> onchange="validateImageSize()">
+                        <small class="form-text text-muted">Please upload an image with dimensions 800x1200 pixels.</small>
                     </div>
-
+                    
                     <div class="form-group">
                         <label for="image2" class="form-control-label">Image 2</label>
-                        <input type="file" name="image2" class="form-control">
+                        <input type="file" name="image2" class="form-control" id="image" onchange="validateImageSize()">
+                        <small class="form-text text-muted">Please upload an image with dimensions 800x1200 pixels.</small>
                     </div>
-
+                    
                     <div class="form-group">
                         <label for="image3" class="form-control-label">Image 3</label>
-                        <input type="file" name="image3" class="form-control">
+                        <input type="file" name="image3" class="form-control" id="image" onchange="validateImageSize()">
+                        <small class="form-text text-muted">Please upload an image with dimensions 800x1200 pixels.</small>
                     </div>
+
+                                <!-- Check Image Size -->
+                    <script>
+                        function validateImageSize() {
+                            const fileInput = document.getElementById('image');
+                            const file = fileInput.files[0];
+
+                            if (file) {
+                                const img = new Image();
+                                img.onload = function() {
+                                    // Check if the image dimensions are 800x1200
+                                    if (img.width !== 800 || img.height !== 1200) {
+                                        alert('Image must be 800x1200 pixels in size.');
+                                        fileInput.value = ''; // Clear the input
+                                    }
+                                };
+
+                                img.src = URL.createObjectURL(file); // Create a URL for the image
+                            }
+                        }
+                    </script>
 
                     <div class="form-group">
                         <label for="description" class="form-control-label">Description</label>
@@ -598,5 +615,5 @@ if (isset($_REQUEST['submit'])) {
     </div>
 
     <?php
-include "footer.php"
-?>
+    include "footer.php"
+    ?>
