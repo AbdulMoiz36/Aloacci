@@ -50,12 +50,20 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!-- Sweet Alert -->
 <!-- Custom -->
-    <!-- scripts -->
-    <script src="./js/script.js" defer ></script>
-    <script src="./js/shop.js" defer></script>
-    <script src="./js/custom.js" defer></script>
-    <!-- toaster -->
-     <script src="./admin/assets/bundles/izitoast/js/iziToast.min.js" defer></script>
-     <script src="./admin/assets/js/page/toastr.js" defer></script>
+<!-- scripts -->
+<script src="./js/script.js" defer></script>
+<script src="./js/shop.js" defer></script>
+<script src="./js/custom.js" defer></script>
+<!-- toaster -->
+<script src="./admin/assets/bundles/izitoast/js/iziToast.min.js" defer></script>
+<script src="./admin/assets/js/page/toastr.js" defer></script>
+<!-- Chat Bot -->
+<script>
+  window.chtlConfig = {
+    chatbotId: "9238571551"
+  }
+</script>
+<script async data-id="9238571551" id="chatling-embed-script" type="text/javascript" src="https://chatling.ai/js/embed.js"></script>
 </body>
+
 </html>
