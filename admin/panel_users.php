@@ -19,7 +19,7 @@ if(isset($_GET['type']) && $_GET['type']!=''){
          $status = '0';
       }
 
-      $update_status = mysqli_query($con,"update admin_user set Status='$status' where id=$id");
+      $update_status = mysqli_query($con,"update admin_user set status='$status' where id=$id");
    }
 }
 

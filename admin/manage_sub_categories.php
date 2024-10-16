@@ -58,7 +58,7 @@ if(isset($_GET['id']) && $_GET['id'] !=''){
             if(isset($_GET['id']) && $_GET['id'] !=''){
                 mysqli_query($con,"update sub_categories set category_id='$category_id', sub_categories='$sub_categories' where id='$_id'");
             } else {
-                mysqli_query($con,"insert into sub_categories (category_id, sub_categories, status) Value ('$category_id', '$sub_categories', '1')");
+                mysqli_query($con,"insert into sub_categories (category_id, sub_categories) Value ('$category_id', '$sub_categories')");
             }
 
             echo "<script>window.location.href='sub_categories'</script>";
