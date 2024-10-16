@@ -19,12 +19,12 @@ $user = mysqli_fetch_assoc($sql);
             
             <label for="" class="flex flex-col text-lg font-semibold">
                 Address:
-                <input type="text" name="address" class="border border-slate-400 rounded-md w-full p-2 mt-2 font-normal" value="<?= htmlspecialchars($user['address']) ?>" required/>
+                <input type="text" name="address" class="border border-slate-400 rounded-md w-full p-2 mt-2 font-normal" value="<?= get_safe_value($con, $user['address']) ?>" required/>
             </label>
 
             <label for="" class="flex flex-col text-lg font-semibold">
                 City:
-                <input type="text" name="city" class="border border-slate-400 rounded-md w-full p-2 mt-2 font-normal" value="<?= htmlspecialchars($user['city']) ?>" required/>
+                <input type="text" name="city" class="border border-slate-400 rounded-md w-full p-2 mt-2 font-normal" value="<?= get_safe_value($con, $user['city']) ?>" required/>
             </label>
 
             <!-- Change button type to 'submit' to trigger form submission -->
@@ -35,8 +35,8 @@ $user = mysqli_fetch_assoc($sql);
 
 <?php
 if (isset($_POST['update'])) {
-    $address = trim(mysqli_real_escape_string($con, $_POST['address']));
-    $city = trim(mysqli_real_escape_string($con, $_POST['city']));
+    $address = get_safe_value($con, $_POST['address']);
+    $city = get_safe_value($con, $_POST['city']);
 
     if (!empty($address) && !empty($city)) {
         // Update the user data in the database securely

@@ -1,6 +1,6 @@
 <?php
 include 'header.php';
-$product_id = mysqli_real_escape_string($con, $_GET['id']);
+$product_id = get_safe_value($con, $_GET['id']);
 
 if ($product_id > 0) {
     $get_product = get_product($con, '', '', $product_id);

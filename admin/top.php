@@ -119,6 +119,9 @@ $row = mysqli_fetch_array($res);
             <li class="dropdown <?= $active=="review.php" || $active == "review_detail.php"? 'active':''; ?>">
               <a href="review" class="nav-link"><i data-feather="monitor"></i><span>Review</span></a>
             </li>
+            <li class="dropdown <?= $active=="cities.php" || $active == "manage_cities.php"? 'active':''; ?>">
+              <a href="cities" class="nav-link"><i data-feather="monitor"></i><span>Cities</span></a>
+            </li>
             <li class="menu-header">Admin Users</li>
             <li class="dropdown <?= $active=="panel_users.php" || $active == "manage_panel_users.php"? 'active':''; ?>">
               <a href="panel_users" class="nav-link"><i data-feather="monitor"></i><span>Staff</span></a>
