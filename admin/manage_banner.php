@@ -6,9 +6,28 @@ include "top.php";
 /* Restrict employee to access this page */
 isAdmin();
 
+$banner = '';
 $msg = '';
 
+if(isset($_GET['id']) && $_GET['id'] !=''){
+   $_id = get_safe_value($con,$_GET['id']);
+   $res = mysqli_query($con,"select * from banner where id=$_id");
+
+   $check = mysqli_num_rows($res);
+
+   if($check>0){
+      $row = mysqli_fetch_assoc($res);
+      $banner = $row['banner'];
+   }
+   else{
+      header('Location: banner');
+      die();
+   }
+
+}
+
 if (isset($_REQUEST['submit'])) {
+
     $maxFileSize = 5 * 1024 * 1024; // Maximum file size of 2MB
     $allowedFileTypes = ['image/png', 'image/jpg', 'image/jpeg'];
 
@@ -49,9 +68,16 @@ if (isset($_REQUEST['submit'])) {
                 $folder = "../image/" . $image;
                 move_uploaded_file($tempname, $folder);
 
-                // Update the banner in the database
-                mysqli_query($con, "UPDATE banner SET image='$image' WHERE id='{$_GET['id']}'");
             }
+            mysqli_query($con, "UPDATE banner SET image='$image' WHERE id=$_id");
+        }else{
+            // Insert new banner
+            $image = $_FILES["image"]["name"];
+            $tempname = $_FILES["image"]["tmp_name"];
+            $folder = "../image/" . $image;
+            move_uploaded_file($tempname, $folder);
+
+            mysqli_query($con, "INSERT INTO banner (`image`) VALUES ('$image')");
         }
 
         echo "<script>window.location.href='banner'</script>";
