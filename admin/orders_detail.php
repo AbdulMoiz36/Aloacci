@@ -25,7 +25,7 @@ if(isset($_POST['update_order_status'])){
                 <th>Format</th>
                 <th>Qty</th>
                 <th>Price</th>
-                <th>Total Price</th>
+                <th>Sub Total</th>
               </tr>
             </thead>
             <tbody>
@@ -44,11 +44,12 @@ if(isset($_POST['update_order_status'])){
         $mobile = $userInfo['mobile'];
         $address = $userInfo['address'];
         $city = $userInfo['city'];
+        $shipping = $userInfo['shipping'];
 
         // Loop through order details to display them
         while ($row = mysqli_fetch_assoc($res)) {
             $total_price += ($row['qty'] * $row['price']);
-    ?>
+              ?>
               <tr class="pb-0">
                 <td><img src="../image/<?= htmlspecialchars($row['image']) ?>" height="50" width="50" alt="">
                   <?= htmlspecialchars($row['name']) ?></td>
@@ -58,11 +59,16 @@ if(isset($_POST['update_order_status'])){
                 <td><?= htmlspecialchars($row['qty'] * $row['price']) ?></td>
               </tr>
               <?php
-        }
-    ?>
+                }
+              ?>
+              <tr>
+                <td style="text-align: center;" colspan="4"><b>Shipping</b></td>
+                <td><b><?= htmlspecialchars($shipping == 0 ? 'Free' : $shipping) ?></b></td>
+              </tr>
+
               <tr>
                 <td style="text-align: center;" colspan="4"><b>Total</b></td>
-                <td><b><?= htmlspecialchars($total_price) ?></b></td>
+                <td><b><?= htmlspecialchars($total_price + $shipping) ?></b></td>
               </tr>
             </tbody>
           </table>

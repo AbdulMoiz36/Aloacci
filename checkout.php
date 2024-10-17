@@ -8,10 +8,9 @@ if (!isset($_SESSION['USER_LOGIN']) || $_SESSION['USER_LOGIN'] == '') {
 }
 
 if (!isset($_SERVER['HTTP_REFERER'])) {
-    // echo("Access Denied");
     echo "<script>window.location.href='shop'</script>";
     exit;
-  }
+}
 
 $user_id = $_SESSION['USER_ID'];
 $sql = mysqli_query($con, "SELECT `name`, `email`, `mobile`, `address`, `city` FROM `users` WHERE `id` = '$user_id'");
@@ -25,8 +24,6 @@ if (isset($_SESSION['cart']) && count($_SESSION['cart']) > 0) {
     foreach ($_SESSION['cart'] as $key => $val) {
         // Split the $key into $pid and $format
         list($pid, $selected_format) = explode('_', $key);
-
-        // Fetch product details using only $pid
         $productArr = get_product($con, '', '', $pid);
         $price = $val['price'];
         $qty = $val['qty'];
@@ -35,18 +32,34 @@ if (isset($_SESSION['cart']) && count($_SESSION['cart']) > 0) {
     }
 }
 
+$shipping_cost = 250; // Default shipping cost
 if (isset($_POST['submit'])) {
     $address = get_safe_value($con, $_POST['address']);
     $email = get_safe_value($con, $_POST['email']);
     $mobile = get_safe_value($con, $_POST['mobile']);
     $city = get_safe_value($con, $_POST['city']);
-    $total_price = $cart_total; // Use the calculated total price
+    
+    // Check city for shipping cost
+    if ($city === 'Karachi') {
+        $shipping_cost = 180;
+    }
+
+    // Check if the subtotal exceeds the shipping price from the shipment table
+    $shipment_sql = mysqli_query($con, "SELECT `price` FROM `shipment` WHERE `status` = 1");
+    $shipment_data = mysqli_fetch_assoc($shipment_sql);
+    $shipment_price = $shipment_data['price'];
+
+    if ($cart_total > $shipment_price) {
+        $shipping_cost = 0; // Free shipping if subtotal exceeds shipment price
+    }
+
+    $total_price = $cart_total + $shipping_cost; // Total price including shipping
     $order_status = '1';
     $date = date('Y-m-d H:i:s'); // Proper date format
 
     // Insert order details into the orders table
-    mysqli_query($con, "INSERT INTO orders (user_id, email, mobile, address, city, total_price, order_status, date) 
-                        VALUES ('$user_id', '$email', '$mobile', '$address', '$city', '$total_price', '$order_status', '$date')");
+    mysqli_query($con, "INSERT INTO orders (user_id, email, mobile, address, city, total_price, shipping, order_status, date) 
+                        VALUES ('$user_id', '$email', '$mobile', '$address', '$city', '$total_price', '$shipping_cost', '$order_status', '$date')");
 
     $order_id = mysqli_insert_id($con); // Get the order ID for the order
 
@@ -187,23 +200,63 @@ while ($row = mysqli_fetch_assoc($cities_result)) {
             </div>
 
             <!-- Total Area -->
-            <div class="w-full mt-5">
-                <div class="flex justify-between text-sm flex-wrap">
-                    <p>Subtotal:</p>
-                    <p>Rs.<?= number_format($cart_total, 2) ?></p>
-                </div>
-                <div class="flex justify-between mt-2 text-sm">
-                    <p>Shipping:</p>
-                    <p>FREE</p>
-                </div>
-                <div class="flex justify-center md:justify-between mt-4 border-t p-5 text-lg ">
-                    <p class="font-bold">Total:</p>
-                    <p class="font-bold">Rs.<?= number_format($cart_total, 2) ?></p>
-                </div>
-            </div>
+<!-- Total Area -->
+<div class="w-full mt-5">
+    <div class="flex justify-between text-sm flex-wrap">
+        <p>Subtotal:</p>
+        <p>Rs.<?= number_format($cart_total, 2) ?></p>
+    </div>
+    <div class="flex justify-between mt-2 text-sm">
+        <p>Shipping:</p>
+        <p id="shippingCost">Rs. 0.00</p> <!-- Default shipping cost set to 0 -->
+    </div>
+    <div class="flex justify-center md:justify-between mt-4 border-t p-5 text-lg ">
+        <p class="font-bold">Total:</p>
+        <p class="font-bold" id="totalPrice">Rs.<?= number_format($cart_total, 2) ?></p> <!-- Default total -->
+    </div>
+</div>
+
+
         </div>
     </div>
 </section>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const citySelect = document.querySelector('select[name="city"]');
+        const shippingDisplay = document.querySelector('#shippingCost');
+        const totalDisplay = document.querySelector('#totalPrice');
+
+        // Default values
+        let subtotal = parseFloat("<?= $cart_total ?>");
+        let initialShippingCost = 0; // Default shipping cost
+
+        // Display initial total
+        totalDisplay.innerText = `Rs. ${subtotal.toFixed(2)}`;
+
+        citySelect.addEventListener('change', function() {
+            const selectedCity = this.value;
+
+            // Make AJAX request to calculate shipping and total
+            fetch('calculate_shipping.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ city: selectedCity, subtotal: subtotal })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Update the shipping cost and total price in the UI
+                shippingDisplay.innerText = `Rs. ${data.shipping}`;
+                totalDisplay.innerText = `Rs. ${data.total}`;
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    });
+</script>
+
+
 
 <?php
 include 'footer.php';
