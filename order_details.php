@@ -1,14 +1,24 @@
 <?php
 include 'header.php';
-// User must login first to access this page.//
-if (isset($_SESSION['USER_LOGIN']) && $_SESSION['USER_LOGIN'] != '') {
-} else {
+if (!isset($_GET['id'])) {
     echo "<script>window.location.href='index'</script>";
-    die();
 }
 $id = $_GET['id'];
-$sql = mysqli_query($con, "SELECT o.*,s.name as order_status,u.name as user_name FROM `orders` as o JOIN order_status as s ON o.order_status = s.id JOIN users as u ON o.user_id = u.id where o.id = '$id'");
+
+// Query to fetch order details based on the order ID
+$sql = mysqli_query($con, "SELECT o.*, s.name as order_status FROM `orders` as o JOIN order_status as s ON o.order_status = s.id WHERE o.id = '$id'");
+
+// Fetch the result
 $order = mysqli_fetch_array($sql);
+
+// Check if the order exists
+if (!$order) {
+    // If no data is found, redirect to index
+    echo "<script>window.location.href='index'</script>";
+    exit; // Make sure to exit after the redirect to stop further execution
+}
+
+
 // Function to get the appropriate CSS class based on the status
 function getStatusClass($status)
 {
@@ -34,7 +44,7 @@ function getStatusClass($status)
         <h2 class="font-manrope font-bold text-4xl leading-10 text-black text-center">
             Order Details
         </h2>
-        <p class="mt-4 font-normal text-lg leading-8 text-gray-500 mb-11 text-center">Dear <?= $order['user_name'] ?>, Thank You for making a purchase.</p>
+        <p class="mt-4 font-normal text-lg leading-8 text-gray-500 mb-11 text-center">Dear <?= $order['name'] ?>, Thank You for making a purchase.</p>
         <div class="main-box border border-gray-200 rounded-xl pt-6 max-w-xl max-lg:mx-auto lg:max-w-full bg-slate-50">
             <div
                 class="flex flex-col lg:flex-row lg:items-center justify-between px-6 pb-6 border-b border-gray-200">
@@ -97,15 +107,20 @@ function getStatusClass($status)
                                             </p>
                                         </div>
                                     </div>
-                                    <div class="col-span-2 flex items-center max-lg:mt-3">
-                                        <div class="flex gap-3 lg:block">
-                                            <p class="font-medium text-sm leading-7 text-black">Write A Review</p>
-                                            <a href="review?pid=<?=$order_d['product_id']?>&oid=<?=$id?>&format=<?=$format?>" class="font-medium text-sm leading-6 whitespace-nowrap py-1 px-3 rounded-full lg:mt-3 flex items-center justify-center">
-                                                <i class="fa-regular fa-pen-to-square"></i>
-                                            </a>
+                                    <?php
+                                    if ($order['user_id'] != 0) {
+                                    ?>
+                                        <div class="col-span-2 flex items-center max-lg:mt-3">
+                                            <div class="flex gap-3 lg:block">
+                                                <p class="font-medium text-sm leading-7 text-black">Write A Review</p>
+                                                <a href="review?pid=<?= $order_d['product_id'] ?>&oid=<?= $id ?>&format=<?= $format ?>" class="font-medium text-sm leading-6 whitespace-nowrap py-1 px-3 rounded-full lg:mt-3 flex items-center justify-center">
+                                                    <i class="fa-regular fa-pen-to-square"></i>
+                                                </a>
+                                            </div>
                                         </div>
-                                    </div>
-
+                                    <?php
+                                    }
+                                    ?>
                                 </div>
                             </div>
                         </div>
@@ -119,9 +134,13 @@ function getStatusClass($status)
             </div>
             <div class="w-full border-t border-gray-200 px-6 flex flex-col lg:flex-row items-center justify-between ">
 
-                <p class="font-semibold text-lg text-black py-6">Shipping: <span class="text-amber-600">Rs.</span></p>
+                <p class="font-semibold text-lg text-black py-6">Shipping: <span class="text-amber-600">Rs.<?= $order['shipping'] ?></span></p>
                 <p class="font-semibold text-lg text-black py-6">Address: <span class="text-amber-600"><?= $order['address'] ?>,<?= $order['city'] ?></span></p>
-                <p class="font-semibold text-lg text-black py-6">Total Price: <span class="text-amber-600">Rs.<?= $order['total_price'] ?></span></p>
+                <div class="flex flex-col py-6">
+                    <p class="font-semibold text-lg text-black ">Total Price: <span class="text-amber-600">Rs.<?= $order['total_price'] ?></span></p>
+                    <p class="text-xs text-gray-400">*Including Shipping Charges</p>
+                </div>
+
             </div>
 
         </div>
