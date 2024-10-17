@@ -47,13 +47,13 @@ if(isset($_REQUEST['submit'])){
               <div class="col-12">
                 <div class="card">
                 <div class="card-header">
-                  <h4>shipment</h4><span>Form</span>
+                  <h4>Manage Free Shipment</h4><span>Form</span>
                </div>
                <form method="post">
 							<div class="card-body card-block">
 							   <div class="form-group">
 									<label for="Price" class=" form-control-label">Add Price</label>
-									<input type="text" name="price" placeholder="Enter Price Name" class="form-control" autofocus required value="<?= $price ?>">
+									<input type="text" name="price" placeholder="Enter Price" class="form-control" autofocus required value="<?= $price ?>">
 								</div>
 							   <button id="payment-button" name="submit" type="submit" class="btn btn-lg btn-primary btn-block">
 							   <span id="payment-button-amount">Submit</span>
