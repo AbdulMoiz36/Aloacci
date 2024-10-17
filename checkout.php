@@ -65,6 +65,13 @@ if (isset($_POST['submit'])) {
     unset($_SESSION['cart']);
     echo "<script>window.location.href='thankyou'</script>";
 }
+
+// Fetch cities from the database
+$cities_result = mysqli_query($con, "SELECT `id`, `cities` FROM `cities` ORDER BY `cities` ASC");
+$cities = [];
+while ($row = mysqli_fetch_assoc($cities_result)) {
+    $cities[] = $row;
+}
 ?>
 
 <section class="flex justify-center py-10">
@@ -78,15 +85,20 @@ if (isset($_POST['submit'])) {
                         class="border placeholder:text-sm border-gray-300 rounded-md outline-none p-2">
                 </div>
                 <div class="flex flex-col">
-                <label for="city" class="flex flex-col">
-                City:
-                <select name="city" class="border placeholder:text-sm border-gray-300 rounded-md outline-none p-2 font-normal" required>
-                    <option value="">Select a city</option>
-                    <option value="New York" <?= $user['city'] == 'New York' ? 'selected' : '' ?>>New York</option>
-                    <option value="Los Angeles" <?= $user['city'] == 'Los Angeles' ? 'selected' : '' ?>>Los Angeles</option>
-                    <!-- Add more city options as needed -->
-                </select>
-            </label>
+                    <label for="city" class="flex flex-col">
+                        City:
+                        <select name="city"
+                            class="border placeholder:text-sm border-gray-300 rounded-md outline-none p-2 font-normal"
+                            required>
+                            <option value="" selected disabled>Select a City</option>
+                            <?php foreach ($cities as $city) { ?>
+                            <option value="<?= $city['cities'] ?>"
+                                <?= ($city['cities'] == $data['city']) ? 'selected' : '' ?>>
+                                <?= $city['cities'] ?>
+                            </option>
+                            <?php } ?>
+                        </select>
+                    </label>
                 </div>
                 <div class="flex flex-col">
                     <label for="">Address:</label>
@@ -106,12 +118,14 @@ if (isset($_POST['submit'])) {
                         $formats = ['Cash On Delivery (COD)', 'Credit/Debit Card', 'Bank Deposit'];
                         foreach ($formats as $format) {
                         ?>
-                            <div class="flex items-center gap-2">
-                                <input type="radio" name="format" id="<?= $format ?>" value="<?= $format ?>" class="hidden" required>
-                                <label for="<?= $format ?>" class="cursor-pointer p-2 w-full rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-200">
-                                    <?= $format ?>
-                                </label>
-                            </div>
+                        <div class="flex items-center gap-2">
+                            <input type="radio" name="format" id="<?= $format ?>" value="<?= $format ?>" class="hidden"
+                                required>
+                            <label for="<?= $format ?>"
+                                class="cursor-pointer p-2 w-full rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-200">
+                                <?= $format ?>
+                            </label>
+                        </div>
                         <?php } ?>
                     </div>
                 </div>
@@ -122,7 +136,6 @@ if (isset($_POST['submit'])) {
                         border-color: #F59E0B;
                     }
                 </style>
-
 
                 <input type="submit" name="submit" value="Place Order"
                     class="bg-black hover:bg-slate-900 text-white p-5 rounded-md font-bold hover:cursor-pointer"></input>
@@ -148,24 +161,25 @@ if (isset($_POST['submit'])) {
 
                         $cart_total += $price * $qty;
                 ?>
-                        <!-- Card -->
-                        <div class="flex justify-between p-2 w-full border-b flex-wrap">
-                            <div class="flex">
-                                <div class="relative px-2 w-[70px] h-[70px]">
-                                    <img src="./image/<?= $image ?>" class="w-[70px] h-[70px]" alt="Product Image">
-                                    <p class="rounded-full bg-red-700 absolute -top-2 -right-2 text-sm px-2 py-1 text-white font-bold">
-                                        <?= $qty ?></p>
-                                </div>
-                                <div class="self-center ml-2">
-                                    <p class="self-center text-wrap"><?= $pname ?></p>
-                                    <p class="self-center text-sm text-slate-600">Format: <?= $selected_format ?></p>
-                                </div>
-                            </div>
-                            <div class="self-center text-wrap">
-                                <p>Rs.<?= number_format($price * $qty, 2) ?></p>
-                            </div>
+                <!-- Card -->
+                <div class="flex justify-between p-2 w-full border-b flex-wrap">
+                    <div class="flex">
+                        <div class="relative px-2 w-[70px] h-[70px]">
+                            <img src="./image/<?= $image ?>" class="w-[70px] h-[70px]" alt="Product Image">
+                            <p
+                                class="rounded-full bg-red-700 absolute -top-2 -right-2 text-sm px-2 py-1 text-white font-bold">
+                                <?= $qty ?></p>
                         </div>
-                        <!-- Card End -->
+                        <div class="self-center ml-2">
+                            <p class="self-center text-wrap"><?= $pname ?></p>
+                            <p class="self-center text-sm text-slate-600">Format: <?= $selected_format ?></p>
+                        </div>
+                    </div>
+                    <div class="self-center text-wrap">
+                        <p>Rs.<?= number_format($price * $qty, 2) ?></p>
+                    </div>
+                </div>
+                <!-- Card End -->
                 <?php
                     }
                 }

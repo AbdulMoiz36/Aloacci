@@ -24,10 +24,16 @@ $user = mysqli_fetch_assoc($sql);
             <label for="city" class="flex flex-col text-lg font-semibold">
                 City:
                 <select name="city" class="border border-slate-400 rounded-md w-full p-2 mt-2 font-normal" required>
-                    <option value="">Select a city</option>
-                    <option value="New York" <?= $user['city'] == 'New York' ? 'selected' : '' ?>>New York</option>
-                    <option value="Los Angeles" <?= $user['city'] == 'Los Angeles' ? 'selected' : '' ?>>Los Angeles</option>
-                    <!-- Add more city options as needed -->
+                    <option value="" selected disabled>Select a City</option>
+                    <?php
+                    // Fetch cities from the database
+                    $city_sql = mysqli_query($con, "SELECT `cities` FROM `cities`");
+                    while ($row = mysqli_fetch_assoc($city_sql)) {
+                        // Check if the current city is selected
+                        $selected = ($user['city'] == $row['cities']) ? 'selected' : '';
+                        echo "<option value='{$row['cities']}' $selected>{$row['cities']}</option>";
+                    }
+                    ?>
                 </select>
             </label>
 
