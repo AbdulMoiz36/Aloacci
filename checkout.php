@@ -78,9 +78,15 @@ if (isset($_POST['submit'])) {
                         class="border placeholder:text-sm border-gray-300 rounded-md outline-none p-2">
                 </div>
                 <div class="flex flex-col">
-                    <label for="">City:</label>
-                    <input type="text" name="city" value="<?= $data['city'] ?>"
-                        class="border placeholder:text-sm border-gray-300 rounded-md outline-none p-2" required>
+                <label for="city" class="flex flex-col">
+                City:
+                <select name="city" class="border placeholder:text-sm border-gray-300 rounded-md outline-none p-2 font-normal" required>
+                    <option value="">Select a city</option>
+                    <option value="New York" <?= $user['city'] == 'New York' ? 'selected' : '' ?>>New York</option>
+                    <option value="Los Angeles" <?= $user['city'] == 'Los Angeles' ? 'selected' : '' ?>>Los Angeles</option>
+                    <!-- Add more city options as needed -->
+                </select>
+            </label>
                 </div>
                 <div class="flex flex-col">
                     <label for="">Address:</label>

@@ -1,18 +1,96 @@
 <?php
 include "header.php";
-$select = "SELECT * FROM banner LIMIT 1";
+$select = "SELECT * FROM banner";
 $res = mysqli_query($con, $select);
 
-// Hero Section Start
 if (mysqli_num_rows($res) > 0) {
-    $row = mysqli_fetch_assoc($res); // Fetch a single row
-?>
-    <div class="Hero bg-slate-400 h-[20vh] md:h-[70vh]">
-        <img src="./image/<?= $row['image'] ?>" alt="Banner" class="object-cover w-full h-full">
-    </div>
-<?php
+    $images = [];
+    while ($row = mysqli_fetch_assoc($res)) {
+        $images[] = $row['image']; // Collect all images
+    }
+
+    // If there's more than one image, show carousel
+    if (count($images) > 1) {
+        ?>
+        <div id="heroCarousel" class="relative Hero bg-slate-400 h-[20vh] md:h-[70vh] overflow-hidden">
+            <div class="carousel-track relative w-full h-full flex transition-transform duration-700 ease-in-out">
+                <!-- Carousel items -->
+                <?php foreach ($images as $index => $image) { ?>
+                    <div class="carousel-item min-w-full h-full">
+                        <img src="./image/<?= $image ?>" alt="Banner" class="object-cover md:object-fit w-full h-full">
+                    </div>
+                <?php } ?>
+            </div>
+
+            <!-- Carousel indicators -->
+            <div class="absolute bottom-0 left-0 right-0 z-10 flex justify-center p-4">
+                <?php foreach ($images as $index => $image) { ?>
+                    <button data-slide="<?= $index ?>" class="indicator w-3 h-3 mx-1 rounded-full bg-gray-400"></button>
+                <?php } ?>
+            </div>
+        </div>
+        <script>
+            // JavaScript for carousel functionality
+            let currentSlide = 0;
+            const slides = document.querySelectorAll('#heroCarousel .carousel-item');
+            const indicators = document.querySelectorAll('#heroCarousel .indicator');
+            const track = document.querySelector('#heroCarousel .carousel-track');
+
+            function showSlide(index) {
+                const slideWidth = slides[0].offsetWidth;
+                const offset = -slideWidth * index;
+                track.style.transform = `translateX(${offset}px)`;
+
+                // Update currentSlide
+                currentSlide = index;
+
+                // Update active indicator
+                indicators.forEach((indicator, i) => {
+                    indicator.classList.toggle('bg-gray-700', i === index); // Active indicator styling
+                    indicator.classList.toggle('bg-gray-200', i !== index); // Inactive indicator styling
+                });
+            }
+
+            indicators.forEach((indicator, index) => {
+                indicator.addEventListener('click', () => {
+                    showSlide(index);
+                });
+            });
+
+            // Optionally add automatic sliding
+            setInterval(() => {
+                let nextSlide = (currentSlide + 1) % slides.length;
+                showSlide(nextSlide);
+            }, 5000); // Slide every 5 seconds
+
+            // Initialize the first slide as active
+            showSlide(0);
+        </script>
+        <style>
+            .carousel-item {
+                transition: transform 0.7s ease;
+            }
+
+            /* Active indicator style */
+            .indicator.bg-gray-900 {
+                background-color: #1a202c; /* Darker gray for active */
+            }
+        </style>
+        <?php
+    } else {
+        // Only one image, no need for carousel
+        ?>
+        <div class="Hero bg-slate-400 h-[20vh] md:h-[70vh]">
+            <img src="./image/<?= $images[0] ?>" alt="Banner" class="object-cover md:object-fit w-full h-full">
+        </div>
+        <?php
+    }
 }
 ?>
+
+
+
+
 <!-- Hero Section End-->
 
 <!-- Products Showcase -->

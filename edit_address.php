@@ -1,11 +1,10 @@
 <?php
 include "header.php";
 // User must login first to access this page.//
-if(isset($_SESSION['USER_LOGIN']) && $_SESSION['USER_LOGIN']!=''){
-}
-else {
+if (isset($_SESSION['USER_LOGIN']) && $_SESSION['USER_LOGIN'] != '') {
+} else {
     echo "<script>window.location.href='index'</script>";
-   die();
+    die();
 }
 $user_id = $_SESSION['USER_ID'];
 $sql = mysqli_query($con, "SELECT `address`, `city` FROM `users` WHERE `id` = '$user_id'");
@@ -14,17 +13,22 @@ $user = mysqli_fetch_assoc($sql);
 
 <section class="md:px-10 md:py-10 py-10 flex justify-center align-middle">
     <div class="p-5 md:p-10 md:w-4/6 w-full flex justify-center">
-        <form method="post" class="flex flex-col justify-center gap-4">
+        <form method="post" class="flex flex-col justify-center gap-4 w-2/4" >
             <h1 class="text-4xl font-bold mb-8 text-center underline">Edit Address</h1>
-            
-            <label for="" class="flex flex-col text-lg font-semibold">
+
+            <label for="" class="flex flex-col text-lg font-semibold ">
                 Address:
-                <input type="text" name="address" class="border border-slate-400 rounded-md w-full p-2 mt-2 font-normal" value="<?= get_safe_value($con, $user['address']) ?>" required/>
+                <input type="text" name="address" class="border border-slate-400 rounded-md w-full p-2 mt-2 font-normal" value="<?= get_safe_value($con, $user['address']) ?>" required />
             </label>
 
-            <label for="" class="flex flex-col text-lg font-semibold">
+            <label for="city" class="flex flex-col text-lg font-semibold">
                 City:
-                <input type="text" name="city" class="border border-slate-400 rounded-md w-full p-2 mt-2 font-normal" value="<?= get_safe_value($con, $user['city']) ?>" required/>
+                <select name="city" class="border border-slate-400 rounded-md w-full p-2 mt-2 font-normal" required>
+                    <option value="">Select a city</option>
+                    <option value="New York" <?= $user['city'] == 'New York' ? 'selected' : '' ?>>New York</option>
+                    <option value="Los Angeles" <?= $user['city'] == 'Los Angeles' ? 'selected' : '' ?>>Los Angeles</option>
+                    <!-- Add more city options as needed -->
+                </select>
             </label>
 
             <!-- Change button type to 'submit' to trigger form submission -->
@@ -45,9 +49,9 @@ if (isset($_POST['update'])) {
         if ($update) {
             // Corrected JavaScript for redirection
             echo '<script>window.location.href = "account";</script>';
-            exit(); 
-        } 
-    } 
+            exit();
+        }
+    }
 }
 
 include "footer.php";
