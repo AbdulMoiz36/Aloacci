@@ -20,7 +20,7 @@ if(isset($_GET['id']) && $_GET['id'] !=''){
       $banner = $row['banner'];
    }
    else{
-      header('Location: banner');
+      echo "<script>window.location.href='banner'</script>";
       die();
    }
 

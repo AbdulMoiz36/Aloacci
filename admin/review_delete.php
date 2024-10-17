@@ -13,6 +13,4 @@ $delete = "delete from reviews where id=$_id";
 
 $res = mysqli_query($con,$delete);
 
-header('Location: review');
-
-?>
+echo "<script>window.location.href='review'</script>";

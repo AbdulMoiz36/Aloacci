@@ -21,7 +21,7 @@ if(isset($_GET['id']) && $_GET['id'] !=''){
       $genre = $row['genre'];
    }
    else{
-      header('Location: genre');
+      echo "<script>window.location.href='genre'</script>";
       die();
    }
 

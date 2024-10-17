@@ -1,3 +1,3 @@
 <?php
-error_reporting(0);
+// error_reporting(0);
 $con = mysqli_connect("localhost","root","","aloacci");

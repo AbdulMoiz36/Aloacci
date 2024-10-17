@@ -11,7 +11,7 @@ if(isset($_SESSION['ADMIN_LOGIN']) && $_SESSION['ADMIN_LOGIN']!=''){
 
 }
 else {
-   header('Location: login');
+   echo "<script>window.location.href='login'</script>";
    die();
 }
 
@@ -85,6 +85,9 @@ $row = mysqli_fetch_array($res);
             <?php
             if($_SESSION['ADMIN_ROLE']=='1'){
             ?>
+            <li class="dropdown <?= $active=="shipment.php" || $active == "manage_free_shipment.php"? 'active':''; ?>">
+              <a href="shipment" class="nav-link"><i data-feather="monitor"></i><span>Manage Free Shipment</span></a>
+            </li>
             <li class="dropdown <?= $active=="create_order.php"? 'active':''; ?>">
               <a href="create_order" class="nav-link"><i data-feather="monitor"></i><span>Create Order</span></a>
             </li>

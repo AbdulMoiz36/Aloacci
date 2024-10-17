@@ -13,4 +13,4 @@ $delete = "delete from cities where id=$_id";
 
 $res = mysqli_query($con,$delete);
 
-header('Location: cities');
+echo "<script>window.location.href='cities'</script>";

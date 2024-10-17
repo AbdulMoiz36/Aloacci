@@ -13,4 +13,4 @@ $delete = "delete from type where id=$_id";
 
 $res = mysqli_query($con,$delete);
 
-header('Location: type');
+echo "<script>window.location.href='type'</script>";

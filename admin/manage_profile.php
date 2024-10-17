@@ -30,7 +30,7 @@ if ($_SESSION['ADMIN_ROLE'] == "1") {
             $mobile = $row['mobile'];
             $role_id = $row['role_id'];
         } else {
-            header('Location: profile');
+            echo "<script>window.location.href='profile'</script>";
             die();
         }
     }
@@ -121,7 +121,7 @@ if ($_SESSION['ADMIN_ROLE'] == "1") {
             $row = mysqli_fetch_array($res);
             $old_password = $row['password']; // Store the old password for checking
         } else {
-            header('Location: profile');
+            echo "<script>window.location.href='profile'</script>";
             die();
         }
     }

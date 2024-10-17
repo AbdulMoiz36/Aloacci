@@ -21,7 +21,7 @@ if(isset($_GET['id']) && $_GET['id'] !=''){
       $type = $row['type'];
    }
    else{
-      header('Location: type');
+      echo "<script>window.location.href='type'</script>";
       die();
    }
 

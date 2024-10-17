@@ -88,7 +88,7 @@ if (isset($_GET['id']) && $_GET['id'] != '') {
             $qty5 = isset($formats[4]) ? $formats[4]['qty'] : '';
         }
     } else {
-        header('Location: product');
+        echo "<script>window.location.href='product'</script>";
         die();
     }
 }

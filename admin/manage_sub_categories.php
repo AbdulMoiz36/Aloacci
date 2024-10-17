@@ -23,7 +23,7 @@ if(isset($_GET['id']) && $_GET['id'] !=''){
 	   $sub_categories = $row['sub_categories'];
 	}
 	else{
-	   header('Location: sub_categories');
+	   echo "<script>window.location.href='sub_categories'</script>";
 	   die();
 	}
  

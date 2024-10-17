@@ -21,7 +21,7 @@ if(isset($_GET['id']) && $_GET['id'] !=''){
       $cities = $row['cities'];
    }
    else{
-      header('Location: cities');
+      echo "<script>window.location.href='cities'</script>";
       die();
    }
 

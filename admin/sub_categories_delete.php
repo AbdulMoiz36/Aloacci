@@ -13,6 +13,4 @@ $delete = "delete from sub_categories where id=$_id";
 
 $res = mysqli_query($con,$delete);
 
-header('Location: sub_categories');
-
-?>
+echo "<script>window.location.href='sub_categories'</script>";

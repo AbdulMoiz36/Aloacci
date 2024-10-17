@@ -21,7 +21,7 @@ if(isset($_GET['id']) && $_GET['id'] !=''){
       $cat = $row['categories'];
    }
    else{
-      header('Location: categories');
+      echo "<script>window.location.href='categories'</script>";
       die();
    }
 
