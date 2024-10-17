@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 12, 2024 at 10:37 PM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Generation Time: Oct 17, 2024 at 01:43 PM
+-- Server version: 10.4.25-MariaDB
+-- PHP Version: 8.1.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -30,7 +30,7 @@ SET time_zone = "+00:00";
 CREATE TABLE `admin_role` (
   `id` int(11) NOT NULL,
   `role` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `admin_role`
@@ -55,15 +55,15 @@ CREATE TABLE `admin_user` (
   `email` varchar(50) NOT NULL,
   `mobile` varchar(50) NOT NULL,
   `status` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `admin_user`
 --
 
 INSERT INTO `admin_user` (`id`, `image`, `name`, `password`, `role_id`, `email`, `mobile`, `status`) VALUES
-(19, 'blank-profile-picture-973460_1280.png', 'Moiz', 'moiz', 1, 'moiz@gmail.com', '03245633589', 1),
-(21, 'blank-profile-picture-973460_1280.png', 'admin', 'admin@1Aloacci', 1, 'admin@gmail.com', '123', 1);
+(1, 'crossmyheart.jpeg', 'Sajjad', 'ce245834f602c2099a87e9f0080157ff', 1, 'sajjadsaleem341@gmail.com', '03176122252', 1),
+(2, 'tippingpoint_76_11zon.jpeg', 'Moiz', '2a77d9de907385ebf2b94d6b35fbcdd0', 1, 'amir@gmail.com', '02116549871', 1);
 
 -- --------------------------------------------------------
 
@@ -74,14 +74,15 @@ INSERT INTO `admin_user` (`id`, `image`, `name`, `password`, `role_id`, `email`,
 CREATE TABLE `banner` (
   `id` int(11) NOT NULL,
   `image` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `banner`
 --
 
 INSERT INTO `banner` (`id`, `image`) VALUES
-(1, 'ai-generated-8328480_1920.png');
+(2, 'shop-3398039_1920.jpg'),
+(4, 'ai-generated-8328480_1920.png');
 
 -- --------------------------------------------------------
 
@@ -92,7 +93,7 @@ INSERT INTO `banner` (`id`, `image`) VALUES
 CREATE TABLE `categories` (
   `id` int(11) NOT NULL,
   `categories` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `categories`
@@ -111,6 +112,26 @@ INSERT INTO `categories` (`id`, `categories`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `cities`
+--
+
+CREATE TABLE `cities` (
+  `id` int(11) NOT NULL,
+  `cities` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `cities`
+--
+
+INSERT INTO `cities` (`id`, `cities`) VALUES
+(1, 'Karachi'),
+(2, 'Lahore'),
+(3, 'Islamabad');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `contact_us`
 --
 
@@ -121,7 +142,7 @@ CREATE TABLE `contact_us` (
   `subject` varchar(255) NOT NULL,
   `message` text NOT NULL,
   `date` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -132,7 +153,7 @@ CREATE TABLE `contact_us` (
 CREATE TABLE `gender` (
   `id` int(11) NOT NULL,
   `gender` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `gender`
@@ -152,7 +173,7 @@ INSERT INTO `gender` (`id`, `gender`) VALUES
 CREATE TABLE `genre` (
   `id` int(11) NOT NULL,
   `genre` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `genre`
@@ -171,7 +192,7 @@ INSERT INTO `genre` (`id`, `genre`) VALUES
 CREATE TABLE `lasting` (
   `id` int(11) NOT NULL,
   `lasting` int(2) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `lasting`
@@ -201,7 +222,7 @@ CREATE TABLE `orders` (
   `order_from` tinyint(4) NOT NULL,
   `order_status` int(11) NOT NULL,
   `date` date NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -216,7 +237,7 @@ CREATE TABLE `orders_detail` (
   `format` varchar(50) NOT NULL,
   `qty` int(11) NOT NULL,
   `price` float NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -227,7 +248,7 @@ CREATE TABLE `orders_detail` (
 CREATE TABLE `order_status` (
   `id` int(11) NOT NULL,
   `name` varchar(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `order_status`
@@ -263,7 +284,7 @@ CREATE TABLE `product` (
   `description` varchar(5000) NOT NULL,
   `breif` varchar(2000) NOT NULL,
   `status` tinyint(4) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `product`
@@ -290,7 +311,7 @@ CREATE TABLE `product_format` (
   `format` varchar(50) NOT NULL,
   `price` int(11) NOT NULL,
   `qty` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `product_format`
@@ -329,7 +350,7 @@ CREATE TABLE `reviews` (
   `comment` text NOT NULL,
   `image` varchar(255) NOT NULL,
   `date` date NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -340,7 +361,7 @@ CREATE TABLE `reviews` (
 CREATE TABLE `season` (
   `id` int(11) NOT NULL,
   `season` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `season`
@@ -355,13 +376,32 @@ INSERT INTO `season` (`id`, `season`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `shipment`
+--
+
+CREATE TABLE `shipment` (
+  `id` int(11) NOT NULL,
+  `price` int(11) NOT NULL,
+  `status` tinyint(4) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `shipment`
+--
+
+INSERT INTO `shipment` (`id`, `price`, `status`) VALUES
+(1, 3000, 1);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `sillage`
 --
 
 CREATE TABLE `sillage` (
   `id` int(11) NOT NULL,
   `sillage` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `sillage`
@@ -381,49 +421,48 @@ INSERT INTO `sillage` (`id`, `sillage`) VALUES
 CREATE TABLE `sub_categories` (
   `id` int(11) NOT NULL,
   `category_id` int(11) NOT NULL,
-  `sub_categories` varchar(50) NOT NULL,
-  `status` tinyint(4) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `sub_categories` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `sub_categories`
 --
 
-INSERT INTO `sub_categories` (`id`, `category_id`, `sub_categories`, `status`) VALUES
-(1, 1, 'Men', 1),
-(2, 1, 'Women', 1),
-(3, 1, 'New Arrival', 1),
-(4, 2, 'Explorer', 1),
-(5, 2, 'Executive', 1),
-(6, 2, 'Elite', 1),
-(7, 3, 'Inferno', 1),
-(8, 3, 'Lady Eve', 1),
-(9, 3, 'Dauntless', 1),
-(10, 3, 'Saiful Malook', 1),
-(11, 3, 'Rain On Me', 1),
-(12, 4, 'Catch 22 Perfume Wax', 1),
-(13, 4, 'Merry Me Perfume Wax', 1),
-(14, 4, 'Saiful Malook Perfume Wax', 1),
-(15, 4, 'Heavenly Vibes Perfume Wax', 1),
-(16, 4, 'Oud War Perfume Wax', 1),
-(17, 4, 'Velvet Smooth Perfume Wax', 1),
-(18, 5, 'Living Floral Body Mist', 1),
-(19, 5, 'Lost Light Body Mist', 1),
-(20, 5, 'Heavenly Vibes Body Mist', 1),
-(21, 6, '5 Samples of Your Choice', 1),
-(22, 6, 'Mr. Ayaz Samoo\'s Choice', 1),
-(23, 6, 'Mr & Mrs Faizan Sheikh\'s Choice', 1),
-(24, 6, 'Top 5 Samples', 1),
-(25, 6, 'Top Rated New Arrival Samples', 1),
-(26, 7, 'Air Freshener', 1),
-(27, 7, 'Car Diffuser', 1),
-(28, 7, 'Reed Diffuser', 1),
-(29, 7, 'Candles', 1),
-(30, 8, 'Catch 22 Gold Edition - For Men', 1),
-(31, 8, 'Farat - For Men', 1),
-(32, 8, 'Qarar - For Men', 1),
-(33, 8, 'Zarf - Unisex', 1),
-(34, 8, 'Rabt - For Men', 1);
+INSERT INTO `sub_categories` (`id`, `category_id`, `sub_categories`) VALUES
+(1, 1, 'Men'),
+(2, 1, 'Women'),
+(3, 1, 'New Arrival'),
+(4, 2, 'Explorer'),
+(5, 2, 'Executive'),
+(6, 2, 'Elite'),
+(7, 3, 'Inferno'),
+(8, 3, 'Lady Eve'),
+(9, 3, 'Dauntless'),
+(10, 3, 'Saiful Malook'),
+(11, 3, 'Rain On Me'),
+(12, 4, 'Catch 22 Perfume Wax'),
+(13, 4, 'Merry Me Perfume Wax'),
+(14, 4, 'Saiful Malook Perfume Wax'),
+(15, 4, 'Heavenly Vibes Perfume Wax'),
+(16, 4, 'Oud War Perfume Wax'),
+(17, 4, 'Velvet Smooth Perfume Wax'),
+(18, 5, 'Living Floral Body Mist'),
+(19, 5, 'Lost Light Body Mist'),
+(20, 5, 'Heavenly Vibes Body Mist'),
+(21, 6, '5 Samples of Your Choice'),
+(22, 6, 'Mr. Ayaz Samoo\'s Choice'),
+(23, 6, 'Mr & Mrs Faizan Sheikh\'s Choice'),
+(24, 6, 'Top 5 Samples'),
+(25, 6, 'Top Rated New Arrival Samples'),
+(26, 7, 'Air Freshener'),
+(27, 7, 'Car Diffuser'),
+(28, 7, 'Reed Diffuser'),
+(29, 7, 'Candles'),
+(30, 8, 'Catch 22 Gold Edition - For Men'),
+(31, 8, 'Farat - For Men'),
+(32, 8, 'Qarar - For Men'),
+(33, 8, 'Zarf - Unisex'),
+(34, 8, 'Rabt - For Men');
 
 -- --------------------------------------------------------
 
@@ -434,7 +473,7 @@ INSERT INTO `sub_categories` (`id`, `category_id`, `sub_categories`, `status`) V
 CREATE TABLE `type` (
   `id` int(11) NOT NULL,
   `type` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `type`
@@ -463,15 +502,14 @@ CREATE TABLE `users` (
   `city` varchar(50) NOT NULL,
   `address` varchar(100) NOT NULL,
   `date` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `users`
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `mobile`, `city`, `address`, `date`) VALUES
-(1, 'Sajjad', 'sajjadsaleem341@gmail.com', 'sajjad', '03176122252', '', '', '2024-10-10 09:45:05'),
-(2, 'Moiz', 'moiz@gmail.com', 'moiz', '03032708236', '', '', '2024-10-10 09:45:05');
+(1, 'Sajjad', 'sajjadsaleem341@gmail.com', 'ce245834f602c2099a87e9f0080157ff', '03176122252', '', 'H#194, St#01, Scheme 33', '2024-10-14 10:44:19');
 
 --
 -- Indexes for dumped tables
@@ -501,6 +539,12 @@ ALTER TABLE `banner`
 ALTER TABLE `categories`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `Id` (`id`);
+
+--
+-- Indexes for table `cities`
+--
+ALTER TABLE `cities`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `contact_us`
@@ -550,7 +594,7 @@ ALTER TABLE `order_status`
 ALTER TABLE `product`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `Id` (`id`),
-  ADD KEY `Category_Id` (`category_id`);
+  ADD KEY `category_id` (`category_id`);
 
 --
 -- Indexes for table `product_format`
@@ -571,6 +615,12 @@ ALTER TABLE `reviews`
 -- Indexes for table `season`
 --
 ALTER TABLE `season`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `shipment`
+--
+ALTER TABLE `shipment`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -612,19 +662,25 @@ ALTER TABLE `admin_role`
 -- AUTO_INCREMENT for table `admin_user`
 --
 ALTER TABLE `admin_user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `banner`
 --
 ALTER TABLE `banner`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT for table `cities`
+--
+ALTER TABLE `cities`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `contact_us`
@@ -654,13 +710,13 @@ ALTER TABLE `lasting`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `orders_detail`
 --
 ALTER TABLE `orders_detail`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `order_status`
@@ -693,6 +749,12 @@ ALTER TABLE `season`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
+-- AUTO_INCREMENT for table `shipment`
+--
+ALTER TABLE `shipment`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `sillage`
 --
 ALTER TABLE `sillage`
@@ -714,7 +776,7 @@ ALTER TABLE `type`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Constraints for dumped tables
@@ -743,7 +805,7 @@ ALTER TABLE `reviews`
 -- Constraints for table `sub_categories`
 --
 ALTER TABLE `sub_categories`
-  ADD CONSTRAINT `sub_categories_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `sub_categories_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
