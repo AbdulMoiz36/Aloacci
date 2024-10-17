@@ -190,32 +190,11 @@ foreach ($get_product as $product) {
                     };
                 </script>
             </div>
-
-
-            <!-- Add to Cart Button -->
-            <?php if (!isset($_SESSION['USER_LOGIN'])): ?>
-                <div>
-                    <a href="login">
-                        <div class="border-2 border-black text-lg font-semibold rounded-full text-center mb-2 p-3 w-full">Add To Cart</div>
-                    </a>
-                </div>
-            <?php else: ?>
                 <button id="addToCartBtn" class="border-2 border-black text-lg font-semibold rounded-full mb-2 p-3"
                     onclick="addToCart('<?= $get_product[0]['id'] ?>')">Add To Cart</button>
-            <?php endif; ?>
 
             </form>
-
-            <!-- Buy It Now Button -->
-            <?php if (!isset($_SESSION['USER_LOGIN'])): ?>
-                <div>
-                    <a href="login">
-                        <div class="w-full p-3 border-2 hover:cursor-pointer bg-gradient-to-bl text-center from-yellow-500 via-yellow-500 to-amber-600 shadow-sm hover:shadow-xl transition-shadow ease-in-out duration-300 font-semibold rounded-full text-white">Buy It Now</div>
-                    </a>
-                </div>
-            <?php else: ?>
                 <div onclick="addToCartAndCheckout(<?= $product_id ?>)" class="w-full p-3 text-center border-2 hover:cursor-pointer bg-gradient-to-bl from-yellow-500 via-yellow-500 to-amber-600 shadow-sm hover:shadow-xl transition-shadow ease-in-out duration-300 font-semibold rounded-full text-white">Buy It Now</div>
-            <?php endif; ?>
 
             <script>
                 function addToCart(productId) {

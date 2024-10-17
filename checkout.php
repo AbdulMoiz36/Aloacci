@@ -1,20 +1,20 @@
 <?php
 include 'header.php';
 
-// Ensure user is logged in
-if (!isset($_SESSION['USER_LOGIN']) || $_SESSION['USER_LOGIN'] == '') {
-    echo "<script>window.location.href='index'</script>";
-    die();
-}
+// $user_id = $_SESSION['USER_ID'];
+$user_id = isset($_SESSION['USER_ID']) ? $_SESSION['USER_ID'] : null;
 
 if (!isset($_SERVER['HTTP_REFERER'])) {
     echo "<script>window.location.href='shop'</script>";
     exit;
 }
 
-$user_id = $_SESSION['USER_ID'];
-$sql = mysqli_query($con, "SELECT `name`, `email`, `mobile`, `address`, `city` FROM `users` WHERE `id` = '$user_id'");
-$data = mysqli_fetch_assoc($sql);
+$data = ['name' => '', 'email' => '', 'mobile' => '', 'address' => '', 'city' => ''];
+if ($user_id) {
+    $sql = mysqli_query($con, "SELECT `name`, `email`, `mobile`, `address`, `city` FROM `users` WHERE `id` = '$user_id'");
+    $data = mysqli_fetch_assoc($sql);
+}
+
 
 // Initialize cart total
 $cart_total = 0;
@@ -36,6 +36,7 @@ $shipping_cost = 250; // Default shipping cost
 if (isset($_POST['submit'])) {
     $address = get_safe_value($con, $_POST['address']);
     $email = get_safe_value($con, $_POST['email']);
+    $name = get_safe_value($con, $_POST['name']);
     $mobile = get_safe_value($con, $_POST['mobile']);
     $city = get_safe_value($con, $_POST['city']);
     
@@ -58,8 +59,8 @@ if (isset($_POST['submit'])) {
     $date = date('Y-m-d H:i:s'); // Proper date format
 
     // Insert order details into the orders table
-    mysqli_query($con, "INSERT INTO orders (user_id, email, mobile, address, city, total_price, shipping, order_status, date) 
-                        VALUES ('$user_id', '$email', '$mobile', '$address', '$city', '$total_price', '$shipping_cost', '$order_status', '$date')");
+    mysqli_query($con, "INSERT INTO orders (user_id, name, email, mobile, address, city, total_price, shipping, order_status, date) 
+                        VALUES ('$user_id', '$name', '$email', '$mobile', '$address', '$city', '$total_price', '$shipping_cost', '$order_status', '$date')");
 
     $order_id = mysqli_insert_id($con); // Get the order ID for the order
 
@@ -113,6 +114,15 @@ while ($row = mysqli_fetch_assoc($cities_result)) {
                         </select>
                     </label>
                 </div>
+
+                <?php if (!$user_id) { ?>
+                <div class="flex flex-col">
+                    <label for="">Name:</label>
+                    <input type="text" name="name"
+                        class="border placeholder:text-sm border-gray-300 rounded-md outline-none p-2" required>
+                </div>
+                <?php } ?>
+
                 <div class="flex flex-col">
                     <label for="">Address:</label>
                     <input type="text" name="address" value="<?= $data['address'] ?>"
@@ -121,7 +131,7 @@ while ($row = mysqli_fetch_assoc($cities_result)) {
                 <div class="flex flex-col">
                     <label for="">Phone Number:</label>
                     <input type="text" name="mobile" value="<?= $data['mobile'] ?>"
-                        class="border placeholder:text-sm border-gray-300 rounded-md outline-none p-2">
+                        class="border placeholder:text-sm border-gray-300 rounded-md outline-none p-2" required>
                 </div>
                 <div class="flex flex-col mt-4 border-y py-5">
                     <label class="text-lg font-semibold">Select Payment Method:</label>
@@ -200,22 +210,21 @@ while ($row = mysqli_fetch_assoc($cities_result)) {
             </div>
 
             <!-- Total Area -->
-<!-- Total Area -->
-<div class="w-full mt-5">
-    <div class="flex justify-between text-sm flex-wrap">
-        <p>Subtotal:</p>
-        <p>Rs.<?= number_format($cart_total, 2) ?></p>
-    </div>
-    <div class="flex justify-between mt-2 text-sm">
-        <p>Shipping:</p>
-        <p id="shippingCost">Rs. 0.00</p> <!-- Default shipping cost set to 0 -->
-    </div>
-    <div class="flex justify-center md:justify-between mt-4 border-t p-5 text-lg ">
-        <p class="font-bold">Total:</p>
-        <p class="font-bold" id="totalPrice">Rs.<?= number_format($cart_total, 2) ?></p> <!-- Default total -->
-    </div>
-</div>
-
+            <div class="w-full mt-5">
+                <div class="flex justify-between text-sm flex-wrap">
+                    <p>Subtotal:</p>
+                    <p>Rs.<?= number_format($cart_total, 2) ?></p>
+                </div>
+                <div class="flex justify-between mt-2 text-sm">
+                    <p>Shipping:</p>
+                    <p id="shippingCost">Rs. 0.00</p> <!-- Default shipping cost set to 0 -->
+                </div>
+                <div class="flex justify-center md:justify-between mt-4 border-t p-5 text-lg ">
+                    <p class="font-bold">Total:</p>
+                    <p class="font-bold" id="totalPrice">Rs.<?= number_format($cart_total, 2) ?></p>
+                    <!-- Default total -->
+                </div>
+            </div>
 
         </div>
     </div>

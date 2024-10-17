@@ -162,16 +162,6 @@ $unique_products_json = json_encode($unique_products);
       </div>
       <!-- Cart -->
       <div class="flex items-center space-x-3 text-lg sm:text-xl">
-        <?php
-        if (!isset($_SESSION['USER_LOGIN'])) {
-        ?>
-          <a href="login">
-            <i class="fa-sharp fa-solid fa-bag-shopping"></i>
-            <span>Cart</span>
-          </a>
-        <?php
-        } else {
-        ?>
           <a href="cart" class="flex items-center cart-link">
             <!-- Cart Icon -->
             <div class="relative">
@@ -186,10 +176,6 @@ $unique_products_json = json_encode($unique_products);
             <!-- Cart Text -->
             <span class="ml-2">Cart</span>
           </a>
-
-        <?php
-        }
-        ?>
       </div>
     </div>
   </header>
