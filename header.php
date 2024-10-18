@@ -187,9 +187,8 @@ $unique_products_json = json_encode($unique_products);
     <!-- List Of All Main Pags -->
     <ul class="flex flex-col sm:flex-row gap-4 sm:gap-10 text-white text-center py-3">
       <a href="index">Home</a>
-      <a href="shop">Shop</a>
       <li class="hover:cursor-pointer" id="shop" onclick="toggleShop()">
-        Categories
+        Shop
         <i class="fa-solid fa-angle-down ml-1 align-middle text-sm"></i>
         <!-- Menu For Shop -->
         <ul
