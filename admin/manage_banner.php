@@ -9,21 +9,19 @@ isAdmin();
 $banner = '';
 $msg = '';
 
-if(isset($_GET['id']) && $_GET['id'] !=''){
-   $_id = get_safe_value($con,$_GET['id']);
-   $res = mysqli_query($con,"select * from banner where id=$_id");
+if (isset($_GET['id']) && $_GET['id'] != '') {
+    $_id = get_safe_value($con, $_GET['id']);
+    $res = mysqli_query($con, "select * from banner where id='$_id'");
 
-   $check = mysqli_num_rows($res);
+    $check = mysqli_num_rows($res);
 
-   if($check>0){
-      $row = mysqli_fetch_assoc($res);
-      $banner = $row['banner'];
-   }
-   else{
-      echo "<script>window.location.href='banner'</script>";
-      die();
-   }
-
+    if ($check > 0) {
+        $row = mysqli_fetch_assoc($res);
+        $banner = $row['image'];
+    } else {
+        echo "<script>window.location.href='banner'</script>";
+        die();
+    }
 }
 
 if (isset($_REQUEST['submit'])) {
@@ -67,10 +65,9 @@ if (isset($_REQUEST['submit'])) {
                 $tempname = $_FILES["image"]["tmp_name"];
                 $folder = "../image/" . $image;
                 move_uploaded_file($tempname, $folder);
-
             }
             mysqli_query($con, "UPDATE banner SET image='$image' WHERE id=$_id");
-        }else{
+        } else {
             // Insert new banner
             $image = $_FILES["image"]["name"];
             $tempname = $_FILES["image"]["tmp_name"];
@@ -88,7 +85,7 @@ if (isset($_REQUEST['submit'])) {
 ?>
 
 <div class="row">
-    <div style="margin: auto;" class="col-6">
+    <div style="margin: auto;" class="col-10">
         <div class="card">
             <div class="card-header">
                 <h4>Banner</h4><span>Form</span>
@@ -98,10 +95,20 @@ if (isset($_REQUEST['submit'])) {
                     <div class="form-row">
 
 
-                        <div class="form-group col-12">
+                        <div class="form-group col-6">
                             <label for="image" class="form-control-label">Image</label>
                             <small class="form-text text-muted">Please upload an image with dimensions 1920x600 pixels.</small>
-                            <input type="file" name="image" class="form-control" required>
+                            <input type="file" name="image" class="form-control" id="image" onchange="validateImageSize('image', 'imagePreview', 'imagePreviewContainer')" required>
+                        </div>
+                        <div class="form-group col-6" style="display: flex;justify-content: space-around;">
+                            <div id="imagePreviewContainer" class="mb-4" style="display:none;">
+                            <p>Selected Image:</p>    
+                            <img id="imagePreview" src="#" alt="Selected Image 2" style="max-width: 150px; max-height: 150px;" class="border" />
+                            </div>
+                            <div style="display: <?= !empty($banner) ? 'block' : 'none'; ?>;">
+                                <p>Current Image:</p>    
+                                <img src="<?= !empty($banner) ? '../image/' . $banner : '#'; ?>" alt="Current Image 1" style="max-width: 150px; max-height: 150px;" class="border" />
+                            </div>
                         </div>
 
                         <button id="payment-button" name="submit" type="submit"
@@ -115,6 +122,45 @@ if (isset($_REQUEST['submit'])) {
             </form>
         </div>
     </div>
+
+    <!-- JS For Images  -->
+    <script>
+        function validateImageSize(inputId, imgId, containerId) {
+            const fileInput = document.getElementById(inputId);
+            const file = fileInput.files[0];
+
+            if (file) {
+                const img = new Image();
+                img.onload = function() {
+                    // Check if the image dimensions are 800x1200
+                    if (img.width !== 1920 || img.height !== 600) {
+                        alert('Image must be 800x1200 pixels in size.');
+                        document.getElementById(containerId).style.display = 'none'; // Hide preview
+                        fileInput.value = '';
+                    } else {
+                        previewImage(file, imgId, containerId); // Show preview if valid
+                    }
+                };
+
+                img.src = URL.createObjectURL(file); // Create a URL for the image
+            }
+        }
+
+        function previewImage(file, imgId, containerId) {
+            const reader = new FileReader();
+
+            // Load image preview
+            reader.onload = function(e) {
+                const img = document.getElementById(imgId);
+                img.src = e.target.result;
+
+                // Show the image preview container
+                document.getElementById(containerId).style.display = 'block';
+            };
+
+            reader.readAsDataURL(file); // Convert file to base64 string
+        }
+    </script>
 
     <?php
     include "footer.php"

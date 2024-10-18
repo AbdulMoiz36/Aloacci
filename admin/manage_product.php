@@ -551,29 +551,67 @@ if (isset($_REQUEST['submit'])) {
 
                         </div>
                     </div>
-
-                    <div class="form-group">
-                        <label for="image" class="form-control-label">Image</label>
-                        <input type="file" name="image" class="form-control" id="image" <?= $image_required ?> onchange="validateImageSize()">
-                        <small class="form-text text-muted">Please upload an image with dimensions 800x1200 pixels.</small>
+                    <hr>
+                    <!-- Image 1 -->
+                    <div class="form-row">
+                        <div class="form-group col-6">
+                            <label for="image" class="form-control-label">Image 1</label>
+                            <input type="file" name="image" class="form-control" id="image" <?= $image_required ?> onchange="validateImageSize('image', 'imagePreview1', 'imagePreviewContainer1')">
+                            <small class="form-text text-muted">Please upload an image with dimensions 800x1200 pixels.</small>
+                        </div>
+                        <div class="form-group col-6" style="display: flex;justify-content: space-around;">
+                            <div id="imagePreviewContainer1" class="mb-4" style="display:none;">
+                            <p>Selected Image:</p>    
+                            <img id="imagePreview1" src="#" alt="Selected Image 1" style="max-width: 150px; max-height: 150px;" class="border" />
+                            </div>
+                            <div style="display: <?= !empty($image) ? 'block' : 'none'; ?>;">
+                                <p>Current Image:</p>    
+                                <img src="<?= !empty($image) ? '../image/' . $image : '#'; ?>" alt="Current Image 1" style="max-width: 150px; max-height: 150px;" class="border" />
+                            </div>
+                        </div>
                     </div>
-                    
-                    <div class="form-group">
-                        <label for="image2" class="form-control-label">Image 2</label>
-                        <input type="file" name="image2" class="form-control" id="image" onchange="validateImageSize()">
-                        <small class="form-text text-muted">Please upload an image with dimensions 800x1200 pixels.</small>
+                    <hr>
+                    <!-- Image 2 -->
+                    <div class="form-row">
+                        <div class="form-group col-6">
+                            <label for="image2" class="form-control-label">Image 2</label>
+                            <input type="file" name="image2" class="form-control" id="image2" onchange="validateImageSize('image2', 'imagePreview2', 'imagePreviewContainer2')">
+                            <small class="form-text text-muted">Please upload an image with dimensions 800x1200 pixels.</small>
+                        </div>
+                        <div class="form-group col-6" style="display: flex;justify-content: space-around;">
+                            <div id="imagePreviewContainer2" class="mb-4" style="display:none;">
+                            <p>Selected Image:</p>    
+                            <img id="imagePreview2" src="#" alt="Selected Image 2" style="max-width: 150px; max-height: 150px;" class="border" />
+                            </div>
+                            <div style="display: <?= !empty($image2) ? 'block' : 'none'; ?>;">
+                                <p>Current Image:</p>    
+                                <img src="<?= !empty($image2) ? '../image/' . $image2 : '#'; ?>" alt="Current Image 1" style="max-width: 150px; max-height: 150px;" class="border" />
+                            </div>
+                        </div>
                     </div>
-                    
-                    <div class="form-group">
-                        <label for="image3" class="form-control-label">Image 3</label>
-                        <input type="file" name="image3" class="form-control" id="image" onchange="validateImageSize()">
-                        <small class="form-text text-muted">Please upload an image with dimensions 800x1200 pixels.</small>
+                    <hr>
+                    <!-- Image 3 -->
+                    <div class="form-row">
+                        <div class="form-group col-6">
+                            <label for="image3" class="form-control-label">Image 3</label>
+                            <input type="file" name="image3" class="form-control" id="image3" onchange="validateImageSize('image3', 'imagePreview3', 'imagePreviewContainer3')">
+                            <small class="form-text text-muted">Please upload an image with dimensions 800x1200 pixels.</small>
+                        </div>
+                        <div class="form-group col-6" style="display: flex;justify-content: space-around;">
+                            <div id="imagePreviewContainer3" class="mb-4" style="display:none;">
+                            <p>Selected Image:</p>    
+                            <img id="imagePreview3" src="#" alt="Selected Image 3" style="max-width: 150px; max-height: 150px;" class="border" />
+                            </div>
+                            <div style="display: <?= !empty($image3) ? 'block' : 'none'; ?>;">
+                                <p>Current Image:</p>    
+                                <img src="<?= !empty($image3) ? '../image/' . $image3 : '#'; ?>" alt="Current Image 3" style="max-width: 150px; max-height: 150px;" class="border" />
+                            </div>
+                        </div>
                     </div>
-
-                                <!-- Check Image Size -->
+                    <!-- JS For Images  -->
                     <script>
-                        function validateImageSize() {
-                            const fileInput = document.getElementById('image');
+                        function validateImageSize(inputId, imgId, containerId) {
+                            const fileInput = document.getElementById(inputId);
                             const file = fileInput.files[0];
 
                             if (file) {
@@ -582,12 +620,30 @@ if (isset($_REQUEST['submit'])) {
                                     // Check if the image dimensions are 800x1200
                                     if (img.width !== 800 || img.height !== 1200) {
                                         alert('Image must be 800x1200 pixels in size.');
-                                        fileInput.value = ''; // Clear the input
+                                        document.getElementById(containerId).style.display = 'none'; // Hide preview
+                                        fileInput.value = '';
+                                    } else {
+                                        previewImage(file, imgId, containerId); // Show preview if valid
                                     }
                                 };
 
                                 img.src = URL.createObjectURL(file); // Create a URL for the image
                             }
+                        }
+
+                        function previewImage(file, imgId, containerId) {
+                            const reader = new FileReader();
+
+                            // Load image preview
+                            reader.onload = function(e) {
+                                const img = document.getElementById(imgId);
+                                img.src = e.target.result;
+
+                                // Show the image preview container
+                                document.getElementById(containerId).style.display = 'block';
+                            };
+
+                            reader.readAsDataURL(file); // Convert file to base64 string
                         }
                     </script>
 
