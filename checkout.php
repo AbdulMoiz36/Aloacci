@@ -101,7 +101,7 @@ if (isset($_POST['submit'])) {
     unset($_SESSION['cart']);
 
     // Redirect to Thank You page with order ID
-    echo "<script>window.location.href='thankyou.php?order_id=$order_id'</script>";
+    echo "<script>window.location.href='thankyou.php?order_id=$order_id&pn=$mobile'</script>";
 }
 
 // Fetch cities from the database

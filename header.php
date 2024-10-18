@@ -10,10 +10,10 @@ $all_products = get_product($con);
 $unique_products = [];
 
 foreach ($all_products as $list) {
-    // Use the ID as the key to ensure uniqueness
-    if (!isset($unique_products[$list['id']])) {
-        $unique_products[$list['id']] = $list; // Store the entire product
-    }
+  // Use the ID as the key to ensure uniqueness
+  if (!isset($unique_products[$list['id']])) {
+    $unique_products[$list['id']] = $list; // Store the entire product
+  }
 }
 
 // Reindex the unique products array
@@ -83,7 +83,7 @@ $unique_products_json = json_encode($unique_products);
               dropdown.classList.add('hidden');
               return;
             }
-            
+
             // Simulate fetching product data from backend (you can replace this with an actual fetch call)
             var products = <?= $unique_products_json ?>;
 
@@ -162,20 +162,20 @@ $unique_products_json = json_encode($unique_products);
       </div>
       <!-- Cart -->
       <div class="flex items-center space-x-3 text-lg sm:text-xl">
-          <a href="cart" class="flex items-center cart-link">
-            <!-- Cart Icon -->
-            <div class="relative">
-              <i class="fa-sharp fa-solid fa-bag-shopping text-xl"></i>
-              <!-- Badge showing total products -->
-              <span
-                class="cart-quantity absolute top-0 -right-2 transform translate-x-2 -translate-y-2 bg-amber-600 text-white rounded-full px-2 py-0.5 text-xs font-bold">
-                <?php echo $totalProduct ?>
-              </span>
-            </div>
+        <a href="cart" class="flex items-center cart-link">
+          <!-- Cart Icon -->
+          <div class="relative">
+            <i class="fa-sharp fa-solid fa-bag-shopping text-xl"></i>
+            <!-- Badge showing total products -->
+            <span
+              class="cart-quantity absolute top-0 -right-2 transform translate-x-2 -translate-y-2 bg-amber-600 text-white rounded-full px-2 py-0.5 text-xs font-bold">
+              <?php echo $totalProduct ?>
+            </span>
+          </div>
 
-            <!-- Cart Text -->
-            <span class="ml-2">Cart</span>
-          </a>
+          <!-- Cart Text -->
+          <span class="ml-2">Cart</span>
+        </a>
       </div>
     </div>
   </header>
@@ -226,9 +226,122 @@ $unique_products_json = json_encode($unique_products);
       <a href="about">
         <li class="hover:underline hover:cursor-pointer">About</li>
       </a>
-      <a href="contact">
-        <li class="hover:underline hover:cursor-pointer">Contact</li>
-      </a>
+      <!-- Contact Button with Dropdown (without anchor) -->
+      <div class="relative flex justify-center">
+        <div class="hover:cursor-pointer flex items-center" id="contactDropdownToggle" onclick="toggleDropdown()">
+          <li class="hover:underline hover:cursor-pointer">Contact</li>
+          <i class="fa-solid fa-angle-down ml-1.5 mt-1 align-middle text-sm"></i>
+        </div>
+
+        <!-- Dropdown Menu -->
+        <div id="contactDropdownMenu" class="hidden absolute rght-0 top-6 md:left-0  w-48 border-2 bg-white rounded-md shadow-lg z-50">
+          <ul class="py-1">
+            <li>
+              <a href="contact" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-gray-900 border-b-slate-400 border-b">
+                Contact Us
+              </a>
+            </li>
+            <li>
+              <a href="javascript:void(0)" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-gray-900" onclick="openModal()">
+                Track Your Order
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Modal -->
+      <div id="orderModal" class="hidden fixed inset-0 z-50 items-center justify-center bg-black bg-opacity-50">
+        <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-8">
+          <h2 class="text-2xl font-bold mb-4 text-black">Track Your Order</h2>
+
+          <!-- Error message -->
+          <p id="errorMessage" class="text-red-500 text-sm mb-4 hidden">No orders found for this ID and phone number.</p>
+
+          <!-- Input fields -->
+          <div class="mb-4">
+            <label for="orderId" class="block text-sm font-bold text-gray-700 text-left">Order ID:</label>
+            <input type="text" id="orderId" class="block text-black border w-full p-2 border-gray-300 rounded-md shadow-sm focus:ring-amber-500 focus:border-amber-500 sm:text-sm" placeholder="Enter your order ID">
+          </div>
+
+          <div class="mb-4">
+            <label for="phoneNumber" class="block text-sm font-bold text-gray-700 text-left">Phone Number</label>
+            <input type="text" id="phoneNumber" class="block text-black w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-amber-500 focus:border-amber-500 sm:text-sm" maxlength="11" placeholder="Enter your 11-digit phone number">
+          </div>
+
+          <!-- Modal actions -->
+          <div class="flex justify-end">
+            <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded-md mr-2" onclick="closeModal()">Cancel</button>
+            <button type="button" class="bg-amber-600 text-white px-4 py-2 rounded-md" onclick="submitOrder()">Track</button>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        // Function to open the modal
+        function openModal() {
+          document.getElementById('orderModal').classList.remove('hidden');
+          document.getElementById('orderModal').classList.add('flex');
+        }
+
+        // Function to close the modal
+        function closeModal() {
+          document.getElementById('orderModal').classList.add('hidden');
+        }
+
+        function submitOrder() {
+          const orderId = document.getElementById('orderId').value;
+          const phoneNumber = document.getElementById('phoneNumber').value;
+          const errorMessage = document.getElementById('errorMessage');
+
+          // Clear any previous errors
+          errorMessage.classList.add('hidden');
+
+          // Validate inputs
+          if (orderId.trim() === '' || phoneNumber.trim() === '') {
+            errorMessage.textContent = 'Both fields are required.';
+            errorMessage.classList.remove('hidden');
+            return;
+          }
+
+          // Send AJAX request to PHP script
+          const xhr = new XMLHttpRequest();
+          xhr.open('POST', 'track_order.php', true);
+          xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+          xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+              const response = JSON.parse(xhr.responseText);
+              if (response.success) {
+                // Redirect to order details page
+                window.location.href = `order_details.php?id=${response.order_id}`;
+              } else {
+                // Show error message
+                errorMessage.textContent = 'No orders found for this ID and phone number.';
+                errorMessage.classList.remove('hidden');
+              }
+            }
+          };
+          xhr.send(`orderId=${orderId}&phoneNumber=${phoneNumber}`);
+        }
+
+        // Toggle dropdown on click
+        function toggleDropdown() {
+          const dropdownMenu = document.getElementById('contactDropdownMenu');
+          dropdownMenu.classList.toggle('hidden');
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+          const dropdownMenu = document.getElementById('contactDropdownMenu');
+          const toggleButton = document.getElementById('contactDropdownToggle');
+          if (!toggleButton.contains(event.target) && !dropdownMenu.contains(event.target)) {
+            dropdownMenu.classList.add('hidden');
+          }
+        });
+      </script>
+
+
+
     </ul>
   </nav>
   <!-- Navbar End -->

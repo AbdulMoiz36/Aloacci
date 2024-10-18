@@ -51,9 +51,15 @@ function getStatusClass($status)
                 <div class="data">
                     <p class="font-semibold text-base leading-7 text-black">Order Id: <span class="text-amber-600 font-medium">#<?= $id ?></span></p>
                     <p class="font-semibold text-base leading-7 text-black mt-4">Order Date : <span class="text-gray-500 font-medium"><?= $order['date'] ?></span></p>
+                    <p class="font-semibold text-base leading-7 text-black mt-4">Order Status :
+                    <span class="font-medium text-sm leading-6 whitespace-nowrap py-0.5 px-3 rounded-full lg:mt-3 <?= getStatusClass($order['order_status']) ?>">
+                        <?= $order['order_status'] ?>
+                    </span>
+                    </p>
                 </div>
-                <div class="data">
-                    <p class="font-semibold text-base leading-7 text-black">Email: <span class="text-gray-500 font-medium"><?= $order['email'] ?></span></p>
+                <div class="data mt-4 md:mt-0">
+                    <p class="font-semibold text-base leading-7 text-black">Name: <span class="text-gray-500 font-medium"><?= $order['name'] ?></span></p>
+                    <p class="font-semibold text-base leading-7 text-black mt-4">Email: <span class="text-gray-500 font-medium"><?= $order['email'] ?></span></p>
                     <p class="font-semibold text-base leading-7 text-black mt-4">Phone Number: <span class="text-gray-500 font-medium"><?= $order['mobile'] ?></span></p>
                 </div>
 
@@ -96,17 +102,16 @@ function getStatusClass($status)
                                     <div class="col-span-1 flex items-center max-lg:mt-3">
                                         <div class="flex gap-3 lg:block">
                                             <p class="font-medium text-sm leading-7 text-black">Price</p>
-                                            <p class="lg:mt-4 font-medium text-sm leading-7 text-green-600">Rs.<?= $price ?></p>
+                                            <p class="lg:mt-4 font-medium text-sm leading-7 text-green-700">Rs.<?= $price ?></p>
                                         </div>
                                     </div>
-                                    <div class="col-span-2 flex items-center max-lg:mt-3">
+                                    <div class="col-span-1 flex items-center max-lg:mt-3">
                                         <div class="flex gap-3 lg:block">
-                                            <p class="font-medium text-sm leading-7 text-black">Status</p>
-                                            <p class="font-medium text-sm leading-6 whitespace-nowrap py-0.5 px-3 rounded-full lg:mt-3 <?= getStatusClass($order['order_status']) ?>">
-                                                <?= $order['order_status'] ?>
-                                            </p>
+                                            <p class="font-medium text-sm leading-7 text-black">Subtotal</p>
+                                            <p class="lg:mt-4 font-semibold text-sm leading-7 text-green-600">Rs.<?= $price * $quantity ?></p>
                                         </div>
                                     </div>
+                                    
                                     <?php
                                     if ($order['user_id'] != 0) {
                                     ?>
@@ -133,9 +138,12 @@ function getStatusClass($status)
 
             </div>
             <div class="w-full border-t border-gray-200 px-6 flex flex-col lg:flex-row items-center justify-between ">
-
-                <p class="font-semibold text-lg text-black py-6">Shipping: <span class="text-amber-600">Rs.<?= $order['shipping'] ?></span></p>
-                <p class="font-semibold text-lg text-black py-6">Address: <span class="text-amber-600"><?= $order['address'] ?>,<?= $order['city'] ?></span></p>
+                <p class="font-semibold text-lg text-black py-6">Shipping:
+                    <span class="text-amber-600">
+                        <?= $order['shipping'] == 0 ? "Free" : "Rs." . $order['shipping'] ?>
+                    </span>
+                </p>
+                <p class="font-semibold text-lg text-black py-6">Address: <span class="text-amber-600"><?= $order['address'] ?>, <?= $order['city'] ?></span></p>
                 <div class="flex flex-col py-6">
                     <p class="font-semibold text-lg text-black ">Total Price: <span class="text-amber-600">Rs.<?= $order['total_price'] ?></span></p>
                     <p class="text-xs text-gray-400">*Including Shipping Charges</p>
