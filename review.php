@@ -105,51 +105,52 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 ?>
 
-<section class="py-10 w-full flex justify-center align-middle">
-    <div class="w-full md:w-3/6 shadow-lg p-8 flex flex-col justify-center border">
-        <h1 class="text-4xl font-bold underline text-center">Review</h1>
-        <form action="" method="POST" enctype="multipart/form-data" class="mt-8 w-full flex justify-center">
-            <div class="flex flex-col gap-8 py-8 w-full">
-                <div class="flex flex-col gap-5">
-                    <div>
-                        <p class="text-xl text-gray-700">Product Name:</p>
-                        <p class="text-lg ml-5">- <?=$product['name']?></p>
-                    </div>
-                    <div>
-                        <p class="text-xl text-gray-700">User Email:</p>
-                        <p class="text-lg ml-5">- <?=$email?></p>
-                    </div>
+<section class="py-12 w-full flex justify-center items-center bg-gray-100">
+    <div class="w-full md:w-2/5 lg:w-2/4 bg-white rounded-lg shadow-xl p-8 border border-gray-200">
+        <h1 class="text-3xl font-semibold text-gray-800 text-center mb-6">Leave a Review</h1>
+        <form action="" method="POST" enctype="multipart/form-data" class="w-full">
+            <div class="flex flex-col gap-6">
+                <!-- Product and User Info -->
+                <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
+                    <p class="text-lg text-gray-700 font-medium">Product Name: <span class="font-semibold"><?=$product['name']?></span></p>
+                    <p class="text-lg text-gray-700 font-medium mt-2">User Email: <span class="font-semibold"><?=$email?></span></p>
                 </div>
 
-                <!-- Review Stars -->
+                <!-- Rating Section -->
                 <div class="flex flex-col">
-                    <label for="rating" class="text-xl">Rating:</label>
-                    <div class="flex gap-1" id="rating-container">
+                    <label for="rating" class="text-lg font-medium text-gray-800 mb-2">Rating:</label>
+                    <div class="flex gap-2" id="rating-container">
                         <?php for ($i = 1; $i <= 5; $i++): ?>
-                            <input type="radio" name="rating" id="star<?= $i ?>" value="<?= $i ?>" class="hidden" />
-                            <label for="star<?= $i ?>" class="cursor-pointer text-2xl text-gray-300 hover:text-amber-500 transition-colors duration-300">
+                            <input type="radio" name="rating" id="star<?= $i ?>" value="<?= $i ?>" class="hidden" required>
+                            <label for="star<?= $i ?>" class="cursor-pointer text-2xl text-gray-300 hover:text-yellow-400 transition-colors duration-200">
                                 <i class="fa-solid fa-star"></i>
                             </label>
                         <?php endfor; ?>
                     </div>
                 </div>
 
-                <!-- Image Upload -->
+                <!-- Image Upload Section -->
                 <div class="flex flex-col">
-                    <label for="image" class="text-xl">Upload Image:</label>
-                    <p class="text-sm text-amber-600">(Max: 5 images)</p>
-                    <input type="file" name="images[]" id="image" accept="image/*" class="p-1 rounded-lg border" multiple />
+                    <label for="image" class="text-lg font-medium text-gray-800 mb-2">Upload Image:</label>
+                    <p class="text-sm text-gray-500 mb-2">(You can upload up to 5 images)</p>
+                    <input type="file" name="images[]" id="image" accept="image/*" class="border border-gray-300 p-2 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-yellow-400" multiple>
                 </div>
 
+                <!-- Message Section -->
                 <div class="flex flex-col">
-                    <label for="message" class="text-xl">Message:</label>
-                    <textarea name="message" id="message" class="p-1 rounded-lg border" rows="8" required></textarea>
+                    <label for="message" class="text-lg font-medium text-gray-800 mb-2">Message:</label>
+                    <textarea name="message" id="message" class="border border-gray-300 p-3 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-yellow-400" rows="6" placeholder="Share your experience..." required></textarea>
                 </div>
-                <button class="w-full p-3 border border-amber-500 text-lg font-semibold shadow-sm hover:shadow-lg transition-shadow ease-in-out duration-300 rounded-full bg-yellow-500 text-white">Submit</button>
+
+                <!-- Submit Button -->
+                <button type="submit" class="w-full py-3 bg-yellow-500 text-white font-semibold rounded-lg shadow-lg hover:bg-yellow-600 transition-all duration-300 ease-in-out focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2">
+                    Submit Review
+                </button>
             </div>
         </form>
     </div>
 </section>
+
 
 <!-- JavaScript to handle star rating selection -->
 <script>
