@@ -20,7 +20,7 @@ include 'header.php'
                         About Us
                     </h2>
 
-                    <p>
+                    <p class="mr-5">
                         Donec porttitor, enim ut dapibus lobortis, lectus sem tincidunt dui, eget ornare lectus ex non
                         libero. Nam rhoncus diam ultrices porttitor laoreet. Ut mollis fermentum ex, vel viverra lorem
                         volutpat sodales. In ornare porttitor odio sit amet laoreet. Sed laoreet, nulla a posuere
