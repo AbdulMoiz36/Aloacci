@@ -48,26 +48,31 @@ foreach ($get_product as $product) {
     <div class="flex flex-wrap p-2 md:p-10">
         <div class="w-100 md:w-1/2 flex gap-2">
             <!-- Sidebar Thumbnails (only displayed if there is more than one image) -->
-            <?php if (!empty($product_image2)): ?>
-                <div class="w-1/6 space-y-2">
-                    <?php if (!empty($product_image)): ?>
-                        <img src="./image/<?= $product_image ?>" alt="Thumbnail 1"
-                            class="cursor-pointer border-2 border-slate-200" onclick="changeImage(this.src)">
-                    <?php endif; ?>
-                    <?php if (!empty($product_image2)): ?>
-                        <img src="./image/<?= $product_image2 ?>" alt="Thumbnail 2"
-                            class="cursor-pointer border-2 border-slate-200" onclick="changeImage(this.src)">
-                    <?php endif; ?>
-                    <?php if (!empty($product_image3)): ?>
-                        <img src="./image/<?= $product_image3 ?>" alt="Thumbnail 2"
-                            class="cursor-pointer border-2 border-slate-200" onclick="changeImage(this.src)">
-                    <?php endif; ?>
-                </div>
+            <?php if (!empty($product_image) || !empty($product_image2) || !empty($product_image3)): ?>
+            <div class="w-1/6 space-y-2">
+                <?php if (!empty($product_image)): ?>
+                <img src="./image/<?= $product_image ?>" alt="Thumbnail 1"
+                    class="cursor-pointer border-2 border-slate-200" onclick="changeImage(this.src)">
+                <?php endif; ?>
+                <?php if (!empty($product_image2)): ?>
+                <img src="./image/<?= $product_image2 ?>" alt="Thumbnail 2"
+                    class="cursor-pointer border-2 border-slate-200" onclick="changeImage(this.src)">
+                <?php endif; ?>
+                <?php if (!empty($product_image3)): ?>
+                <img src="./image/<?= $product_image3 ?>" alt="Thumbnail 3"
+                    class="cursor-pointer border-2 border-slate-200" onclick="changeImage(this.src)">
+                <?php endif; ?>
+            </div>
             <?php endif; ?>
 
+            <?php
+            // Determine which image to use as the main image
+            $mainImage = !empty($product_image) ? $product_image : (!empty($product_image2) ? $product_image2 : $product_image3);
+            ?>
+
             <!-- Main Image -->
-            <div class="<?= empty($product_image2) ? 'w-full' : 'w-5/6' ?>">
-                <img id="mainImage" src="./image/<?= $product_image ?>" alt="Selected Product Image"
+            <div class="<?= empty($product_image) ? 'w-full' : 'w-5/6' ?>">
+                <img id="mainImage" src="./image/<?= $mainImage ?>" alt="Selected Product Image"
                     class="border-2 border-slate-200 max-h-[850px] mx-auto">
             </div>
         </div>

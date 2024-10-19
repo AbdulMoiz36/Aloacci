@@ -296,13 +296,29 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
             <!-- Product image wrapper -->
             <div class="relative h-[70%] w-full">
                 <a href="product_details?id=<?= $list['id'] ?>" class="product-link w-full">
-                    <img src="./image/<?= $list['image'] ?>" alt="<?= $list['name'] ?>"
+                    <?php 
+                    // Determine which image to display as the main image
+                    $main_image = '';
+                    if (!empty($list['image'])) {
+                        $main_image = $list['image'];
+                    } elseif (!empty($list['image2'])) {
+                        $main_image = $list['image2'];
+                    } elseif (!empty($list['image3'])) {
+                        $main_image = $list['image3'];
+                    }
+                    ?>
+
+                    <img src="./image/<?= $main_image ?>" alt="<?= $list['name'] ?>"
                         class="h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0">
-                    <?php if ($list['image2'] != ''): ?>
+
+                    <?php if ($list['image2'] != '' && $list['image2'] != $main_image): ?>
                     <img src="./image/<?= $list['image2'] ?>" alt="<?= $list['name'] ?> Hover"
                         class="absolute top-0 left-0 h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100">
+                    <?php elseif ($list['image3'] != '' && $list['image3'] != $main_image): ?>
+                    <img src="./image/<?= $list['image3'] ?>" alt="<?= $list['name'] ?> Hover"
+                        class="absolute top-0 left-0 h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100">
                     <?php else: ?>
-                    <img src="./image/<?= $list['image'] ?>" alt="<?= $list['name'] ?> Hover"
+                    <img src="./image/<?= $main_image ?>" alt="<?= $list['name'] ?> Hover"
                         class="absolute top-0 left-0 h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100">
                     <?php endif; ?>
                 </a>

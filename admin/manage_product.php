@@ -170,6 +170,31 @@ if (isset($_REQUEST['submit'])) {
                 move_uploaded_file($tempname3, $folder3);
             }
 
+            // Handle removal of images based on user input
+            if (isset($_POST['remove_image1'])) {
+            if (file_exists("../image/" . $image)) {
+            unlink("../image/" . $image);
+            }
+            $image = ''; // Clear the image value
+            mysqli_query($con, "UPDATE product SET image='' WHERE id='$_id'");
+            }
+
+            if (isset($_POST['remove_image2'])) {
+            if (file_exists("../image/" . $image2)) {
+            unlink("../image/" . $image2);
+            }
+            $image2 = ''; // Clear the image2 value
+            mysqli_query($con, "UPDATE product SET image2='' WHERE id='$_id'");
+            }
+
+            if (isset($_POST['remove_image3'])) {
+            if (file_exists("../image/" . $image3)) {
+            unlink("../image/" . $image3);
+            }
+            $image3 = ''; // Clear the image3 value
+            mysqli_query($con, "UPDATE product SET image3='' WHERE id='$_id'");
+            }
+
             mysqli_query($con, "update product set category_id='$category_id', sub_category_id='$sub_category_id', name='$name', gender_id='$gender_id', genre_id='$genre_id', type_id='$type_id', season_id='$season_id', sillage_id='$sillage_id', lasting_id='$lasting_id', breif='$breif', description='$description', image='$image', image2='$image2', image3='$image3' where id='$_id'");
 
             // Update format and price in product_format table
@@ -567,6 +592,9 @@ if (isset($_REQUEST['submit'])) {
                             <div style="display: <?= !empty($image) ? 'block' : 'none'; ?>;">
                                 <p>Current Image:</p>    
                                 <img src="<?= !empty($image) ? '../image/' . $image : '#'; ?>" alt="Current Image 1" style="max-width: 150px; max-height: 150px;" class="border" />
+                                <div>
+                                    <input type="checkbox" name="remove_image1" value="1"> Remove Image
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -586,6 +614,9 @@ if (isset($_REQUEST['submit'])) {
                             <div style="display: <?= !empty($image2) ? 'block' : 'none'; ?>;">
                                 <p>Current Image:</p>    
                                 <img src="<?= !empty($image2) ? '../image/' . $image2 : '#'; ?>" alt="Current Image 1" style="max-width: 150px; max-height: 150px;" class="border" />
+                                <div>
+                                    <input type="checkbox" name="remove_image2" value="2"> Remove Image
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -605,6 +636,9 @@ if (isset($_REQUEST['submit'])) {
                             <div style="display: <?= !empty($image3) ? 'block' : 'none'; ?>;">
                                 <p>Current Image:</p>    
                                 <img src="<?= !empty($image3) ? '../image/' . $image3 : '#'; ?>" alt="Current Image 3" style="max-width: 150px; max-height: 150px;" class="border" />
+                                <div>
+                                    <input type="checkbox" name="remove_image3" value="3"> Remove Image
+                                </div>
                             </div>
                         </div>
                     </div>
