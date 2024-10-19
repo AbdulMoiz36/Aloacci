@@ -1,5 +1,4 @@
 <?php
-include "config.php";
 include "top.php";
 $order_id=get_safe_value($con,$_GET['id']);
 if(isset($_POST['update_order_status'])){

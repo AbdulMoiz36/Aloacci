@@ -1,5 +1,8 @@
 <?php
-include 'header.php'
+include 'header.php';
+$select = "SELECT * FROM about";
+$res = mysqli_query($con, $select);
+$row = mysqli_fetch_assoc($res);
 ?>
 
 <section>
@@ -21,19 +24,14 @@ include 'header.php'
                     </h2>
 
                     <p class="mr-5">
-                        Donec porttitor, enim ut dapibus lobortis, lectus sem tincidunt dui, eget ornare lectus ex non
-                        libero. Nam rhoncus diam ultrices porttitor laoreet. Ut mollis fermentum ex, vel viverra lorem
-                        volutpat sodales. In ornare porttitor odio sit amet laoreet. Sed laoreet, nulla a posuere
-                        ultrices, purus nulla tristique turpis, hendrerit rutrum augue quam ut est. Fusce malesuada
-                        posuere libero, vitae dapibus eros facilisis euismod. Sed sed lobortis justo, ut tincidunt
-                        velit. Mauris in maximus eros.
+                    <?= $row['about'] ?>
                     </p>
                 </div>
             </main>
         </div>
     </div>
     <div class="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2">
-        <img class="h-56 w-full object-cover object-center sm:h-72 md:h-96 lg:w-full lg:h-full" src="./image/Florse.jpeg" alt="">
+        <img class="h-56 w-full object-cover object-center sm:h-72 md:h-96 lg:w-full lg:h-full" src="./image/<?= $row['image'] ?>" height="50" width="50" alt="">
     </div>
 </div>
 

@@ -1,5 +1,4 @@
 <?php
-include "config.php";
 include "top.php";
 
 $select = "select * from admin_user where admin_user.id='".$_SESSION['ADMIN_ID']."'";

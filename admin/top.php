@@ -94,6 +94,9 @@ $row = mysqli_fetch_array($res);
             <li class="dropdown <?= $active=="banner.php" || $active == "manage_banner.php"? 'active':''; ?>">
               <a href="banner" class="nav-link"><i data-feather="monitor"></i><span>Banners</span></a>
             </li>
+            <li class="dropdown <?= $active=="about.php" || $active == "manage_about.php"? 'active':''; ?>">
+              <a href="about" class="nav-link"><i data-feather="monitor"></i><span>About</span></a>
+            </li>
             <li class="dropdown <?= $active=="categories.php" || $active == "manage_categories.php"? 'active':''; ?>">
               <a href="categories" class="nav-link"><i data-feather="monitor"></i><span>Categories</span></a>
             </li>

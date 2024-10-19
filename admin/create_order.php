@@ -1,6 +1,4 @@
 <?php
-
-include "config.php";
 include "top.php";
 
 /* Restrict employee to access this page */
