@@ -171,13 +171,6 @@ if (isset($_REQUEST['submit'])) {
             }
 
             // Handle removal of images based on user input
-            if (isset($_POST['remove_image1'])) {
-            if (file_exists("../image/" . $image)) {
-            unlink("../image/" . $image);
-            }
-            $image = ''; // Clear the image value
-            mysqli_query($con, "UPDATE product SET image='' WHERE id='$_id'");
-            }
 
             if (isset($_POST['remove_image2'])) {
             if (file_exists("../image/" . $image2)) {
@@ -592,9 +585,6 @@ if (isset($_REQUEST['submit'])) {
                             <div style="display: <?= !empty($image) ? 'block' : 'none'; ?>;">
                                 <p>Current Image:</p>    
                                 <img src="<?= !empty($image) ? '../image/' . $image : '#'; ?>" alt="Current Image 1" style="max-width: 150px; max-height: 150px;" class="border" />
-                                <div>
-                                    <input type="checkbox" name="remove_image1" value="1"> Remove Image
-                                </div>
                             </div>
                         </div>
                     </div>
