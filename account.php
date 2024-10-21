@@ -12,7 +12,7 @@ $sql = mysqli_query($con, "SELECT `name`,`email`,`mobile`,`address`,`city` FROM 
 $user = mysqli_fetch_assoc($sql);
 
 // Fetch all orders related to the user with the order status
-$osql = mysqli_query($con, "SELECT o.total_price, o.id, o.date, os.name as order_status FROM `orders` as o JOIN `order_status` as os on o.order_status = os.id WHERE `user_id` = '$user_id'");
+$osql = mysqli_query($con, "SELECT o.total_price, o.id, o.date, os.name as order_status FROM `orders` as o JOIN `order_status` as os on o.order_status = os.id WHERE `user_id` = '$user_id' ORDER BY o.date DESC, o.id DESC");
 ?>
 
 <section class="md:px-10 md:py-10 flex justify-center align-middle px-0 py-8 ">

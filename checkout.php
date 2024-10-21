@@ -118,11 +118,14 @@ while ($row = mysqli_fetch_assoc($cities_result)) {
             <h2 class="text-3xl font-bold">Delivery:</h2>
             <p class="text-xs text-gray-600 mt-2">All fields are requrired to be filled correctly.</p>
             <form method="POST" class="mt-5 flex flex-col gap-8">
-                <div class="flex flex-col">
-                    <label for="">Name:<span class="text-red-600 font-bold">*</span></label>
-                    <input type="text" name="name"
-                        class="border placeholder:text-sm border-gray-300 rounded-md outline-none p-2" value="<?= $data['name'] ?>" required>
-                </div>
+
+                <?php if (!$user_id) { ?>
+                    <div class="flex flex-col">
+                        <label for="">Name:<span class="text-red-600 font-bold">*</span></label>
+                        <input type="text" name="name" class="border placeholder:text-sm border-gray-300 rounded-md outline-none p-2" required>
+                    </div>
+                <?php } ?>
+
                 <div class="flex flex-col">
                     <label for="">Email:<span class="text-red-600 font-bold">*</span></label>
                     <input type="text" name="email" value="<?= $data['email'] ?>"
