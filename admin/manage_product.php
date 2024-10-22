@@ -114,7 +114,7 @@ if (isset($_REQUEST['submit'])) {
     $qty5 = get_safe_value($con, $_REQUEST['qty5']);
     $gender_id = get_safe_value($con, $_REQUEST['gender_id']);
     $genre_id = get_safe_value($con, $_REQUEST['genre_id']);
-    $type_id = get_safe_value($con, $_REQUEST['type_id']);
+    $type_id = $_REQUEST['type_id'];
     $season_id = get_safe_value($con, $_REQUEST['season_id']);
     $sillage_id = get_safe_value($con, $_REQUEST['sillage_id']);
     $lasting_id = get_safe_value($con, $_REQUEST['lasting_id']);
@@ -190,6 +190,16 @@ if (isset($_REQUEST['submit'])) {
 
             mysqli_query($con, "update product set category_id='$category_id', sub_category_id='$sub_category_id', name='$name', gender_id='$gender_id', genre_id='$genre_id', type_id='$type_id', season_id='$season_id', sillage_id='$sillage_id', lasting_id='$lasting_id', breif='$breif', description='$description', image='$image', image2='$image2', image3='$image3' where id='$_id'");
 
+            mysqli_query($con, "DELETE FROM product_details WHERE product_id='$_id'");
+    
+    // Insert new types for this product
+    if (!empty($_REQUEST['type_id'])) {
+        foreach ($_REQUEST['type_id'] as $type_id) {
+            $type_id = get_safe_value($con, $type_id);
+            mysqli_query($con, "INSERT INTO product_details (product_id, type_id) VALUES ('$_id', '$type_id')");
+        }
+    }
+
             // Update format and price in product_format table
             mysqli_query($con, "DELETE FROM product_format WHERE product_id='$_id'");
             mysqli_query($con, "INSERT INTO product_format (`product_id`, `format`, `price`, `qty`) VALUES ('$_id', '$format', '$price', '$qty')");
@@ -224,6 +234,14 @@ if (isset($_REQUEST['submit'])) {
 
             mysqli_query($con, "INSERT INTO product (`category_id`, `sub_category_id`, `name`, `gender_id`, `genre_id`, `type_id`, `season_id`, `sillage_id`, `lasting_id`, `breif`, `description`, `status`, `image`, `image2`, `image3`) VALUES ('$category_id', '$sub_category_id', '$name', '$gender_id', '$genre_id', '$type_id', '$season_id', '$sillage_id', '$lasting_id', '$breif', '$description', '1', '$image', '$image2', '$image3')");
             $product_id = mysqli_insert_id($con);
+    
+    // Insert types for the new product
+    if (!empty($_REQUEST['type_id'])) {
+        foreach ($_REQUEST['type_id'] as $type_id) {
+            $type_id = get_safe_value($con, $type_id);
+            mysqli_query($con, "INSERT INTO product_details (product_id, type_id) VALUES ('$product_id', '$type_id')");
+        }
+    }
 
             // Insert format and price in product_format table
             mysqli_query($con, "INSERT INTO product_format (`product_id`, `format`, `price`, `qty`) VALUES ('$product_id', '$format', '$price', '$qty')");
@@ -473,29 +491,77 @@ if (isset($_REQUEST['submit'])) {
                             </select>
 
                         </div>
+                        <?php
+
+                        if (isset($_GET['id']) && $_GET['id'] != '') {
+                            
+                            // Fetch the types associated with the product
+                            $result = mysqli_query($con, "SELECT type_id FROM product_details WHERE product_id = '$_id'");
+                            $selected_types = [];
+                            
+                            while ($row = mysqli_fetch_array($result)) {
+                                $selected_types[] = $row['type_id'];
+                            }
+                        } else {
+                            // If product_id is not set, initialize selected_types as an empty array
+                            $selected_types = [];
+                        }
+
+                        ?>
+
                         <div class="form-group col-4">
-                            <label for="type" class=" form-control-label">Type</label>
-                            <select class="form-control" name="type_id">
-
-                                <option value="" selected disabled>Select Type</option>
-
-                                <?php
-
-                                $select_type = mysqli_query($con, "select * from type");
-
-                                while ($type_row = mysqli_fetch_array($select_type)) {
-                                    if ($type_row['id'] == $type_id) {
-                                        echo "<option selected value=" . $type_row['id'] . "> " . $type_row['type'] . " </option>";
-                                    } else {
-                                        echo "<option value=" . $type_row['id'] . "> " . $type_row['type'] . " </option>";
-                                    }
-                                }
-
-                                ?>
-
-                            </select>
-
+                            <label for="type" class="form-control-label">Type</label>
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="typeDropdown"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Select Type
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="typeDropdown">
+                                    <div class="form-check">
+                                        <?php
+                                        $select_type = mysqli_query($con, "SELECT * FROM type");
+                                        while ($type_row = mysqli_fetch_array($select_type)) {
+                                            $selected = in_array($type_row['id'], $selected_types) ? 'checked' : '';
+                                            echo "<label class='dropdown-item'>
+                                                    <input type='checkbox' class='form-check-input' name='type_id[]' value='" . $type_row['id'] . "' $selected>
+                                                    " . $type_row['type'] . "
+                                                </label>";
+                                        }
+                                        ?>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+
+                        <style>
+                            .dropdown-menu {
+                                max-height: 200px;
+                                /* Limit height */
+                                overflow-y: auto;
+                                /* Enable scroll */
+                            }
+
+                            .dropdown-item {
+                                cursor: pointer;
+                                /* Change cursor to pointer */
+                            }
+                        </style>
+                        <script>
+                            $(document).ready(function() {
+                                // Open dropdown
+                                $('.dropdown-toggle').click(function(e) {
+                                    e.stopPropagation(); // Stop the event from bubbling up
+                                    $(this).next('.dropdown-menu')
+                                        .toggle(); // Show or hide the dropdown
+                                });
+                                // Close dropdown when clicking outside of it
+                                $(document).click(function(e) {
+                                    if (!$(e.target).closest('.dropdown').length) {
+                                        $('.dropdown-menu').hide(); // Hide all dropdowns
+                                    }
+                                });
+                            });
+                        </script>
                     </div>
 
                     <div class="form-row">
@@ -574,17 +640,21 @@ if (isset($_REQUEST['submit'])) {
                     <div class="form-row">
                         <div class="form-group col-6">
                             <label for="image" class="form-control-label">Image 1</label>
-                            <input type="file" name="image" class="form-control" id="image" <?= $image_required ?> onchange="validateImageSize('image', 'imagePreview1', 'imagePreviewContainer1')">
-                            <small class="form-text text-muted">Please upload an image with dimensions 800x1200 pixels.</small>
+                            <input type="file" name="image" class="form-control" id="image" <?= $image_required ?>
+                                onchange="validateImageSize('image', 'imagePreview1', 'imagePreviewContainer1')">
+                            <small class="form-text text-muted">Please upload an image with dimensions 800x1200
+                                pixels.</small>
                         </div>
                         <div class="form-group col-6" style="display: flex;justify-content: space-around;">
                             <div id="imagePreviewContainer1" class="mb-4" style="display:none;">
-                            <p>Selected Image:</p>    
-                            <img id="imagePreview1" src="#" alt="Selected Image 1" style="max-width: 150px; max-height: 150px;" class="border" />
+                                <p>Selected Image:</p>
+                                <img id="imagePreview1" src="#" alt="Selected Image 1"
+                                    style="max-width: 150px; max-height: 150px;" class="border" />
                             </div>
                             <div style="display: <?= !empty($image) ? 'block' : 'none'; ?>;">
-                                <p>Current Image:</p>    
-                                <img src="<?= !empty($image) ? '../image/' . $image : '#'; ?>" alt="Current Image 1" style="max-width: 150px; max-height: 150px;" class="border" />
+                                <p>Current Image:</p>
+                                <img src="<?= !empty($image) ? '../image/' . $image : '#'; ?>" alt="Current Image 1"
+                                    style="max-width: 150px; max-height: 150px;" class="border" />
                             </div>
                         </div>
                     </div>
@@ -593,17 +663,21 @@ if (isset($_REQUEST['submit'])) {
                     <div class="form-row">
                         <div class="form-group col-6">
                             <label for="image2" class="form-control-label">Image 2</label>
-                            <input type="file" name="image2" class="form-control" id="image2" onchange="validateImageSize('image2', 'imagePreview2', 'imagePreviewContainer2')">
-                            <small class="form-text text-muted">Please upload an image with dimensions 800x1200 pixels.</small>
+                            <input type="file" name="image2" class="form-control" id="image2"
+                                onchange="validateImageSize('image2', 'imagePreview2', 'imagePreviewContainer2')">
+                            <small class="form-text text-muted">Please upload an image with dimensions 800x1200
+                                pixels.</small>
                         </div>
                         <div class="form-group col-6" style="display: flex;justify-content: space-around;">
                             <div id="imagePreviewContainer2" class="mb-4" style="display:none;">
-                            <p>Selected Image:</p>    
-                            <img id="imagePreview2" src="#" alt="Selected Image 2" style="max-width: 150px; max-height: 150px;" class="border" />
+                                <p>Selected Image:</p>
+                                <img id="imagePreview2" src="#" alt="Selected Image 2"
+                                    style="max-width: 150px; max-height: 150px;" class="border" />
                             </div>
                             <div style="display: <?= !empty($image2) ? 'block' : 'none'; ?>;">
-                                <p>Current Image:</p>    
-                                <img src="<?= !empty($image2) ? '../image/' . $image2 : '#'; ?>" alt="Current Image 1" style="max-width: 150px; max-height: 150px;" class="border" />
+                                <p>Current Image:</p>
+                                <img src="<?= !empty($image2) ? '../image/' . $image2 : '#'; ?>" alt="Current Image 1"
+                                    style="max-width: 150px; max-height: 150px;" class="border" />
                                 <div>
                                     <input type="checkbox" name="remove_image2" value="2"> Remove Image
                                 </div>
@@ -615,17 +689,21 @@ if (isset($_REQUEST['submit'])) {
                     <div class="form-row">
                         <div class="form-group col-6">
                             <label for="image3" class="form-control-label">Image 3</label>
-                            <input type="file" name="image3" class="form-control" id="image3" onchange="validateImageSize('image3', 'imagePreview3', 'imagePreviewContainer3')">
-                            <small class="form-text text-muted">Please upload an image with dimensions 800x1200 pixels.</small>
+                            <input type="file" name="image3" class="form-control" id="image3"
+                                onchange="validateImageSize('image3', 'imagePreview3', 'imagePreviewContainer3')">
+                            <small class="form-text text-muted">Please upload an image with dimensions 800x1200
+                                pixels.</small>
                         </div>
                         <div class="form-group col-6" style="display: flex;justify-content: space-around;">
                             <div id="imagePreviewContainer3" class="mb-4" style="display:none;">
-                            <p>Selected Image:</p>    
-                            <img id="imagePreview3" src="#" alt="Selected Image 3" style="max-width: 150px; max-height: 150px;" class="border" />
+                                <p>Selected Image:</p>
+                                <img id="imagePreview3" src="#" alt="Selected Image 3"
+                                    style="max-width: 150px; max-height: 150px;" class="border" />
                             </div>
                             <div style="display: <?= !empty($image3) ? 'block' : 'none'; ?>;">
-                                <p>Current Image:</p>    
-                                <img src="<?= !empty($image3) ? '../image/' . $image3 : '#'; ?>" alt="Current Image 3" style="max-width: 150px; max-height: 150px;" class="border" />
+                                <p>Current Image:</p>
+                                <img src="<?= !empty($image3) ? '../image/' . $image3 : '#'; ?>" alt="Current Image 3"
+                                    style="max-width: 150px; max-height: 150px;" class="border" />
                                 <div>
                                     <input type="checkbox" name="remove_image3" value="3"> Remove Image
                                 </div>
@@ -637,7 +715,6 @@ if (isset($_REQUEST['submit'])) {
                         function validateImageSize(inputId, imgId, containerId) {
                             const fileInput = document.getElementById(inputId);
                             const file = fileInput.files[0];
-
                             if (file) {
                                 const img = new Image();
                                 img.onload = function() {
@@ -650,31 +727,27 @@ if (isset($_REQUEST['submit'])) {
                                         previewImage(file, imgId, containerId); // Show preview if valid
                                     }
                                 };
-
                                 img.src = URL.createObjectURL(file); // Create a URL for the image
                             }
                         }
 
                         function previewImage(file, imgId, containerId) {
                             const reader = new FileReader();
-
                             // Load image preview
                             reader.onload = function(e) {
                                 const img = document.getElementById(imgId);
                                 img.src = e.target.result;
-
                                 // Show the image preview container
                                 document.getElementById(containerId).style.display = 'block';
                             };
-
                             reader.readAsDataURL(file); // Convert file to base64 string
                         }
                     </script>
 
                     <div class="form-group">
                         <label for="description" class="form-control-label">Description</label>
-                        <textarea name="description" placeholder="Enter Product Description"
-                            class="form-control" required><?= $description ?></textarea>
+                        <textarea name="description" placeholder="Enter Product Description" class="form-control"
+                            required><?= $description ?></textarea>
                     </div>
 
                     <div class="form-group">
