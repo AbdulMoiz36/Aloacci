@@ -242,7 +242,7 @@ $unique_products_json = json_encode($unique_products);
               </a>
             </li>
             <li>
-              <a href="javascript:void(0)" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-gray-900" onclick="openModal()">
+              <a href="javascript:void(0)" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-gray-900" onclick="openTrackModal()">
                 Track Your Order
               </a>
             </li>
@@ -271,7 +271,7 @@ $unique_products_json = json_encode($unique_products);
 
           <!-- Modal actions -->
           <div class="flex justify-end">
-            <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded-md mr-2" onclick="closeModal()">Cancel</button>
+            <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded-md mr-2" onclick="closeTrackModal()">Cancel</button>
             <button type="button" class="bg-amber-600 text-white px-4 py-2 rounded-md" onclick="submitOrder()">Track</button>
           </div>
         </div>
@@ -279,13 +279,13 @@ $unique_products_json = json_encode($unique_products);
 
       <script>
         // Function to open the modal
-        function openModal() {
+        function openTrackModal() {
           document.getElementById('orderModal').classList.remove('hidden');
           document.getElementById('orderModal').classList.add('flex');
         }
 
         // Function to close the modal
-        function closeModal() {
+        function closeTrackModal() {
           document.getElementById('orderModal').classList.add('hidden');
         }
 

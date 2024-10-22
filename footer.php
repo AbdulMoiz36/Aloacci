@@ -25,8 +25,10 @@
           <li><a href="shop" class="hover:text-amber-500">Shop</a></li>
           <li><a href="about" class="hover:text-amber-500">About Us</a></li>
           <li><a href="contact" class="hover:text-amber-500">Contact</a></li>
+          <li><a href="javascript:void(0)" class="hover:text-amber-500" onclick="openTrackModal()">Track Your Order</a></li>
         </ul>
       </div>
+      
 
       <!-- Column 4: Social Links -->
       <div class="mb-6 md:mb-0">

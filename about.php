@@ -23,7 +23,7 @@ $row = mysqli_fetch_assoc($res);
                         About Us
                     </h2>
 
-                    <p class="mr-5">
+                    <p class="mr-5 overflow-y-auto">
                     <?= $row['about'] ?>
                     </p>
                 </div>

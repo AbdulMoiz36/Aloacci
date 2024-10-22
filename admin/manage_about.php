@@ -15,7 +15,8 @@ if (isset($_GET['id']) && $_GET['id'] != '') {
 
     if ($check > 0) {
         $row = mysqli_fetch_assoc($res);
-        $about = $row['image'];
+        $about = $row['about'];  // Get the 'about' text
+        $image = $row['image'];
     } else {
         echo "<script>window.location.href='about'</script>";
         die();
@@ -24,7 +25,8 @@ if (isset($_GET['id']) && $_GET['id'] != '') {
 
 if (isset($_REQUEST['submit'])) {
 
-    $maxFileSize = 5 * 1024 * 1024; // Maximum file size of 2MB
+    $aboutText = get_safe_value($con, $_POST['about']);  // Get the 'about' text from the form
+    $maxFileSize = 5 * 1024 * 1024; // Maximum file size of 5MB
     $allowedFileTypes = ['image/png', 'image/jpg', 'image/jpeg'];
 
     // Check if an image is uploaded
@@ -47,9 +49,8 @@ if (isset($_REQUEST['submit'])) {
             } else {
                 $width = $imageDetails[0];
                 $height = $imageDetails[1];
-                // Check if dimensions are 1920x600
-                if ($width !== 1920 || $height !== 600) {
-                    $msg = "Image dimensions must be 1920x600 pixels.";
+                if ($width !== 720 || $height !== 500) {
+                    $msg = "Image dimensions must be 960x720 pixels.";
                 }
             }
         }
@@ -57,21 +58,21 @@ if (isset($_REQUEST['submit'])) {
 
     if ($msg == '') {
         if (isset($_GET['id']) && $_GET['id'] != '') {
-            // Update existing about
+            // Update existing about text and image
             if ($_FILES["image"]["name"] != '') {
                 $image = $_FILES["image"]["name"];
                 $tempname = $_FILES["image"]["tmp_name"];
                 $folder = "../image/" . $image;
                 move_uploaded_file($tempname, $folder);
             }
-            mysqli_query($con, "UPDATE about SET image='$image' WHERE id=$_id");
+
+            mysqli_query($con, "UPDATE about SET about='$aboutText', image='$image' WHERE id=$_id");
         }
 
         echo "<script>window.location.href='about'</script>";
         die();
     }
 }
-
 ?>
 
 <div class="row">
@@ -84,74 +85,81 @@ if (isset($_REQUEST['submit'])) {
                 <div class="card-body card-block">
                     <div class="form-row">
 
+                        <!-- Textarea for 'about' text -->
+                        <div class="form-group col-12">
+                            <label for="aboutText" class="form-control-label">About Text</label>
+                            <textarea name="about" id="aboutText" rows="5" class="border" style="width: 100%;"><?= $about ?></textarea>
+                        </div>
 
                         <div class="form-group col-6">
                             <label for="image" class="form-control-label">Image</label>
-                            <small class="form-text text-muted">Please upload an image with dimensions 1920x600 pixels.</small>
-                            <input type="file" name="image" class="form-control" id="image" onchange="validateImageSize('image', 'imagePreview', 'imagePreviewContainer')" required>
+                            <small class="form-text text-muted">Please upload an image with dimensions 960x720 pixels.</small>
+                            <input type="file" name="image" class="form-control" id="image" onchange="validateImageSize('image', 'imagePreview', 'imagePreviewContainer')">
                         </div>
+
                         <div class="form-group col-6" style="display: flex;justify-content: space-around;">
                             <div id="imagePreviewContainer" class="mb-4" style="display:none;">
-                            <p>Selected Image:</p>    
-                            <img id="imagePreview" src="#" alt="Selected Image 2" style="max-width: 150px; max-height: 150px;" class="border" />
+                                <p>Selected Image:</p>    
+                                <img id="imagePreview" src="#" alt="Selected Image 2" style="max-width: 150px; max-height: 150px;" class="border" />
                             </div>
-                            <div style="display: <?= !empty($about) ? 'block' : 'none'; ?>;">
+                            <div style="display: <?= !empty($image) ? 'block' : 'none'; ?>;">
                                 <p>Current Image:</p>    
-                                <img src="<?= !empty($about) ? '../image/' . $about : '#'; ?>" alt="Current Image 1" style="max-width: 150px; max-height: 150px;" class="border" />
+                                <img src="<?= !empty($image) ? '../image/' . $image : '#'; ?>" alt="Current Image 1" style="max-width: 150px; max-height: 150px;" class="border" />
                             </div>
                         </div>
 
-                        <button id="payment-button" name="submit" type="submit"
-                            class="btn btn-lg btn-primary btn-block">
-                            <span id="payment-button-amount">Upload</span>
+                        <button id="payment-button" name="submit" type="submit" class="btn btn-lg btn-primary btn-block">
+                            <span id="payment-button-amount">Submit</span>
                         </button>
                         <div style="color: red; margin-top: 10px;">
                             <?= $msg ?>
                         </div>
                     </div>
+                </div>
             </form>
         </div>
     </div>
+</div>
 
-    <!-- JS For Images  -->
-    <script>
-        function validateImageSize(inputId, imgId, containerId) {
-            const fileInput = document.getElementById(inputId);
-            const file = fileInput.files[0];
+<!-- JS For Images -->
+<script>
+    function validateImageSize(inputId, imgId, containerId) {
+        const fileInput = document.getElementById(inputId);
+        const file = fileInput.files[0];
 
-            if (file) {
-                const img = new Image();
-                img.onload = function() {
-                    // Check if the image dimensions are 800x1200
-                    if (img.width !== 1920 || img.height !== 600) {
-                        alert('Image must be 800x1200 pixels in size.');
-                        document.getElementById(containerId).style.display = 'none'; // Hide preview
-                        fileInput.value = '';
-                    } else {
-                        previewImage(file, imgId, containerId); // Show preview if valid
-                    }
-                };
-
-                img.src = URL.createObjectURL(file); // Create a URL for the image
-            }
-        }
-
-        function previewImage(file, imgId, containerId) {
-            const reader = new FileReader();
-
-            // Load image preview
-            reader.onload = function(e) {
-                const img = document.getElementById(imgId);
-                img.src = e.target.result;
-
-                // Show the image preview container
-                document.getElementById(containerId).style.display = 'block';
+        if (file) {
+            const img = new Image();
+            img.onload = function() {
+                // Check if the image dimensions are 960x720
+                if (img.width !== 720 || img.height !== 500) {
+                    alert('Image must be 960x300 pixels in size.');
+                    document.getElementById(containerId).style.display = 'none'; // Hide preview
+                    fileInput.value = '';
+                } else {
+                    previewImage(file, imgId, containerId); // Show preview if valid
+                }
             };
 
-            reader.readAsDataURL(file); // Convert file to base64 string
+            img.src = URL.createObjectURL(file); // Create a URL for the image
         }
-    </script>
+    }
 
-    <?php
-    include "footer.php"
-    ?>
+    function previewImage(file, imgId, containerId) {
+        const reader = new FileReader();
+
+        // Load image preview
+        reader.onload = function(e) {
+            const img = document.getElementById(imgId);
+            img.src = e.target.result;
+
+            // Show the image preview container
+            document.getElementById(containerId).style.display = 'block';
+        };
+
+        reader.readAsDataURL(file); // Convert file to base64 string
+    }
+</script>
+
+<?php
+include "footer.php";
+?>

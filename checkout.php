@@ -178,6 +178,36 @@ while ($row = mysqli_fetch_assoc($cities_result)) {
                         <?php } ?>
                     </div>
                 </div>
+                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    function checkSelected() {
+        const formats = document.getElementsByName('format');
+        let selected = false;
+
+        // Check if any radio button is selected
+        for (let i = 0; i < formats.length; i++) {
+            if (formats[i].checked) {
+                selected = true;
+                break;
+            }
+        }
+
+        // If none is selected, show Swal alert
+        if (!selected) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Please select a payment method',
+                text: 'You need to choose a payment option before proceeding.',
+                confirmButtonText: 'OK'
+            });
+            return false; // Prevent form submission if not selected
+        }
+
+        return true; // Proceed if selected
+    }
+</script>
+
                 <style>
                     input[type="radio"]:checked+label {
                         background-color: #F59E0B;
@@ -187,7 +217,7 @@ while ($row = mysqli_fetch_assoc($cities_result)) {
                 </style>
 
                 <input type="submit" name="submit" value="Place Order"
-                    class="bg-black hover:bg-slate-900 text-white p-5 rounded-md font-bold hover:cursor-pointer"></input>
+                    class="bg-black hover:bg-slate-900 text-white p-5 rounded-md font-bold hover:cursor-pointer" onclick="checkSelected()"></input>
             </form>
         </div>
 
@@ -241,8 +271,22 @@ while ($row = mysqli_fetch_assoc($cities_result)) {
                     <p>Subtotal:</p>
                     <p>Rs.<?= number_format($cart_total, 2) ?></p>
                 </div>
-                <div class="flex justify-between mt-2 text-sm">
-                    <p>Shipping:</p>
+                <hr class="my-5">
+                <div class="flex justify-between mt-2 text-sm ">
+                    <div>
+                        <p>Shipping:</p>
+                        <p class="text-xs text-gray-500">Karachi: Rs.180</p>
+                        <p class="text-xs text-gray-500">Other Cities: Rs.250</p>
+                        <?php
+                                $shipquery = mysqli_query($con,"SELECT `status`,`price` FROM shipment");
+                                $shipment = mysqli_fetch_array($shipquery);
+                                if($shipment['status'] == 1){
+                            ?>
+                            <p class="mt-2 text-red-600 font-semibold"><span class="text-black font-semibold">Free Shipping: </span>Above Rs.<?=$shipment['price']?></p>
+                            <?php
+                                }
+                            ?>
+                    </div>
                     <p id="shippingCost">Rs. 0.00</p> <!-- Default shipping cost set to 0 -->
                 </div>
                 <div class="flex justify-center md:justify-between mt-4 border-t p-5 text-lg ">

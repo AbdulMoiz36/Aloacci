@@ -49,20 +49,20 @@ foreach ($get_product as $product) {
         <div class="w-100 md:w-1/2 flex gap-2">
             <!-- Sidebar Thumbnails (only displayed if there is more than one image) -->
             <?php if (!empty($product_image) || !empty($product_image2) || !empty($product_image3)): ?>
-            <div class="w-1/6 space-y-2">
-                <?php if (!empty($product_image)): ?>
-                <img src="./image/<?= $product_image ?>" alt="Thumbnail 1"
-                    class="cursor-pointer border-2 border-slate-200" onclick="changeImage(this.src)">
-                <?php endif; ?>
-                <?php if (!empty($product_image2)): ?>
-                <img src="./image/<?= $product_image2 ?>" alt="Thumbnail 2"
-                    class="cursor-pointer border-2 border-slate-200" onclick="changeImage(this.src)">
-                <?php endif; ?>
-                <?php if (!empty($product_image3)): ?>
-                <img src="./image/<?= $product_image3 ?>" alt="Thumbnail 3"
-                    class="cursor-pointer border-2 border-slate-200" onclick="changeImage(this.src)">
-                <?php endif; ?>
-            </div>
+                <div class="w-1/6 space-y-2">
+                    <?php if (!empty($product_image)): ?>
+                        <img src="./image/<?= $product_image ?>" alt="Thumbnail 1"
+                            class="cursor-pointer border-2 border-slate-200" onclick="changeImage(this.src)">
+                    <?php endif; ?>
+                    <?php if (!empty($product_image2)): ?>
+                        <img src="./image/<?= $product_image2 ?>" alt="Thumbnail 2"
+                            class="cursor-pointer border-2 border-slate-200" onclick="changeImage(this.src)">
+                    <?php endif; ?>
+                    <?php if (!empty($product_image3)): ?>
+                        <img src="./image/<?= $product_image3 ?>" alt="Thumbnail 3"
+                            class="cursor-pointer border-2 border-slate-200" onclick="changeImage(this.src)">
+                    <?php endif; ?>
+                </div>
             <?php endif; ?>
 
             <?php
@@ -195,11 +195,11 @@ foreach ($get_product as $product) {
                     };
                 </script>
             </div>
-                <button id="addToCartBtn" class="border-2 border-black text-lg font-semibold rounded-full mb-2 p-3"
-                    onclick="addToCart('<?= $get_product[0]['id'] ?>')">Add To Cart</button>
+            <button id="addToCartBtn" class="border-2 border-black text-lg font-semibold rounded-full mb-2 p-3"
+                onclick="addToCart('<?= $get_product[0]['id'] ?>')">Add To Cart</button>
 
             </form>
-                <div onclick="addToCartAndCheckout(<?= $product_id ?>)" class="w-full p-3 text-center border-2 hover:cursor-pointer bg-gradient-to-bl from-yellow-500 via-yellow-500 to-amber-600 shadow-sm hover:shadow-xl transition-shadow ease-in-out duration-300 font-semibold rounded-full text-white">Buy It Now</div>
+            <div onclick="addToCartAndCheckout(<?= $product_id ?>)" class="w-full p-3 text-center border-2 hover:cursor-pointer bg-gradient-to-bl from-yellow-500 via-yellow-500 to-amber-600 shadow-sm hover:shadow-xl transition-shadow ease-in-out duration-300 font-semibold rounded-full text-white">Buy It Now</div>
 
             <script>
                 function addToCart(productId) {
@@ -260,21 +260,62 @@ foreach ($get_product as $product) {
                 <!-- Tab Contents -->
                 <div class="bg-white p-6 rounded-b-lg shadow-lg">
                     <div id="tab1" class="tab-content block">
+                    <h2 class="text-xl font-semibold underline mb-2">Description:</h2>
                         <p><?= $brief ?></p>
                     </div>
 
                     <div id="tab2" class="tab-content hidden flex flex-col gap-4">
-                        <p class="font-semibold text-black"><span class="font-semibold text-amber-600">Sillage:</span> <?=$performance['sillage']?></p>
-                        <p class="font-semibold text-black"><span class="font-semibold text-amber-600">Lasting:</span> <?=$performance['lasting']?>hrs</p>
-                        <p class="font-semibold text-black"><span class="font-semibold text-amber-600">Gender:</span> <?=$performance['gender']?></p>
-                        <p class="font-semibold text-black"><span class="font-semibold text-amber-600">Genre:</span> <?=$performance['genre']?></p>
-                        <p class="font-semibold text-black"><span class="font-semibold text-amber-600">Type:</span> <?=$performance['type']?></p>
-                        <p class="font-semibold text-black"><span class="font-semibold text-amber-600">Season:</span> <?=$performance['season']?></p>
+                    <h2 class="text-xl font-semibold underline">Performance:</h2>
+                        <?php if (!empty($performance['sillage'])): ?>
+                            <p class="font-semibold text-black"><span class="font-semibold text-amber-600">Sillage:</span> <?= $performance['sillage'] ?></p>
+                        <?php endif; ?>
+
+                        <?php if (!empty($performance['lasting'])): ?>
+                            <p class="font-semibold text-black"><span class="font-semibold text-amber-600">Lasting:</span> <?= $performance['lasting'] ?>hrs</p>
+                        <?php endif; ?>
+
+                        <?php if (!empty($performance['gender'])): ?>
+                            <p class="font-semibold text-black"><span class="font-semibold text-amber-600">Gender:</span> <?= $performance['gender'] ?></p>
+                        <?php endif; ?>
+
+                        <?php if (!empty($performance['genre'])): ?>
+                            <p class="font-semibold text-black"><span class="font-semibold text-amber-600">Genre:</span> <?= $performance['genre'] ?></p>
+                        <?php endif; ?>
+
+                        <?php if (!empty($performance['type'])): ?>
+                            <p class="font-semibold text-black"><span class="font-semibold text-amber-600">Type:</span> <?= $performance['type'] ?></p>
+                        <?php endif; ?>
+
+                        <?php if (!empty($performance['season'])): ?>
+                            <p class="font-semibold text-black"><span class="font-semibold text-amber-600">Season:</span> <?= $performance['season'] ?></p>
+                        <?php endif; ?>
                     </div>
 
+
                     <div id="tab3" class="tab-content hidden">
-                        <h2 class="text-xl font-semibold">Shipping Content</h2>
-                        <p>This is the content for the Shipping tab.</p>
+                        <h2 class="text-xl font-semibold underline">Shipping Charges:</h2>
+                        <div class="flex flex-col gap-3 mt-3">
+                            <div class="flex flex-wrap">
+                                <p class="font-semibold">Karachi:&nbsp;</p>
+                                <p>Rs.180</p>
+                            </div>
+                            <div class="flex flex-wrap">
+                                <p class="font-semibold">Other Cities:&nbsp;</p>
+                                <p>Rs.250</p>
+                            </div>
+                            <?php
+                                $shipquery = mysqli_query($con,"SELECT `status`,`price` FROM shipment");
+                                $shipment = mysqli_fetch_array($shipquery);
+                                if($shipment['status'] == 1){
+                            ?>
+                            <div class="flex flex-wrap">
+                                <p class="font-semibold text-black">Free Shipping For Order Above <span class="font-semibold text-red-600">Rs.<?=$shipment['price']?></span></p>
+                            </div>
+                            <?php
+                                }
+                            ?>
+                            
+                        </div>
                     </div>
                 </div>
             </div>

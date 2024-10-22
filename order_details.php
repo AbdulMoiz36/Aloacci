@@ -20,7 +20,7 @@ if (!$order) {
 
 if($order['user_id'] != 0 || $order['user_id'] != ''){
     $uid = $order['user_id']; 
-    $usql = mysqli_query($con,"SELECT `name` FROM `users` WHERE `id` = $id");
+    $usql = mysqli_query($con,"SELECT `name` FROM `users` WHERE `id` = $uid");
     $user = mysqli_fetch_array($usql);
 }
 
