@@ -79,8 +79,8 @@ if (isset($_POST['submit'])) {
         }
     } else {
         // Insert order details into the orders table
-        mysqli_query($con, "INSERT INTO orders (user_id, name, email, mobile, address, city, total_price, shipping, order_status, date) 
-                        VALUES ('$user_id', '$name', '$email', '$mobile', '$address', '$city', '$total_price', '$shipping_cost', '$order_status', '$date')");
+        mysqli_query($con, "INSERT INTO orders (user_id, email, mobile, address, city, total_price, shipping, order_status, date) 
+                        VALUES ('$user_id', '$email', '$mobile', '$address', '$city', '$total_price', '$shipping_cost', '$order_status', '$date')");
         $order_id = mysqli_insert_id($con); // Get the order ID for the order
         // Insert each product in the cart into orders_detail
         foreach ($_SESSION['cart'] as $key => $val) {
@@ -93,9 +93,6 @@ if (isset($_POST['submit'])) {
                             VALUES ('$order_id', '$pid', '$selected_format', '$qty', '$price')");
         }
     }
-
-
-    $order_id = mysqli_insert_id($con); // Get the order ID for the order
 
     // Clear the cart after the order is placed
     unset($_SESSION['cart']);

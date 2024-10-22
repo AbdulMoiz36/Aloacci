@@ -18,6 +18,11 @@ if (!$order) {
     exit; // Make sure to exit after the redirect to stop further execution
 }
 
+if($order['user_id'] != 0 || $order['user_id'] != ''){
+    $uid = $order['user_id']; 
+    $usql = mysqli_query($con,"SELECT `name` FROM `users` WHERE `id` = $id");
+    $user = mysqli_fetch_array($usql);
+}
 
 // Function to get the appropriate CSS class based on the status
 function getStatusClass($status)
@@ -44,7 +49,7 @@ function getStatusClass($status)
         <h2 class="font-manrope font-bold text-4xl leading-10 text-black text-center">
             Order Details
         </h2>
-        <p class="mt-4 font-normal text-lg leading-8 text-gray-500 mb-11 text-center">Dear <?= $order['name'] ?>, Thank You for making a purchase.</p>
+        <p class="mt-4 font-normal text-lg leading-8 text-gray-500 mb-11 text-center">Dear <?= $order['name'] == '' ? $user['name'] : $order['name'] ?>, Thank You for making a purchase.</p>
         <div class="main-box border border-gray-200 rounded-xl pt-6 max-w-xl max-lg:mx-auto lg:max-w-full bg-slate-50">
             <div
                 class="flex flex-col lg:flex-row lg:items-center justify-between px-6 pb-6 border-b border-gray-200">
@@ -58,7 +63,7 @@ function getStatusClass($status)
                     </p>
                 </div>
                 <div class="data mt-4 md:mt-0">
-                    <p class="font-semibold text-base leading-7 text-black">Name: <span class="text-gray-500 font-medium"><?= $order['name'] ?></span></p>
+                    <p class="font-semibold text-base leading-7 text-black">Name: <span class="text-gray-500 font-medium"><?= $order['name'] == '' ? $user['name'] : $order['name'] ?></span></p>
                     <p class="font-semibold text-base leading-7 text-black mt-4">Email: <span class="text-gray-500 font-medium"><?= $order['email'] ?></span></p>
                     <p class="font-semibold text-base leading-7 text-black mt-4">Phone Number: <span class="text-gray-500 font-medium"><?= $order['mobile'] ?></span></p>
                 </div>
