@@ -105,7 +105,7 @@ if (mysqli_num_rows($res) > 0) {
 
             <!-- Products section -->
             <div id="products-container"
-                class="w-full px-3 flex justify-start gap-2 md:gap-5 overflow-hidden overflow-x-auto">
+                class="w-full px-3 py-2 flex justify-start gap-2 md:gap-5 overflow-hidden overflow-x-auto">
                 <?php
         // Fetch all products
         $get_product = get_product($con);
@@ -178,10 +178,10 @@ if (mysqli_num_rows($res) > 0) {
                     <div
                         class="w-full justify-center items-start gap-6 grid sm:grid-cols-2 grid-cols-1 lg:order-first order-last">
                         <div class="pt-24 lg:justify-center sm:justify-end justify-start items-start gap-2.5 flex">
-                            <img class=" rounded-xl object-cover" src="./image/<?= $about_row['image'] ?>"
+                            <img class=" rounded-xl object-cover" src="./image/umeed_77_11zon.jpeg"
                                 alt="about Us image" />
                         </div>
-                        <img class="sm:ml-0 ml-auto rounded-xl object-cover" src="./image/<?= $about_row['image'] ?>"
+                        <img class="sm:ml-0 ml-auto rounded-xl object-cover" src="./image/umeed.jpeg"
                             alt="about Us image" />
                     </div>
                     <div class="w-full flex-col justify-center lg:items-start items-center gap-10 inline-flex">
@@ -192,9 +192,27 @@ if (mysqli_num_rows($res) > 0) {
                                     Lorem ipsum dolor sit amet.</h2>
                                 <p
                                     class="text-gray-500 text-base font-normal leading-relaxed lg:text-start text-center">
-                                    <?= $about_row['about'] ?>
+                                    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quaerat delectus beatae
+                                    harum culpa reprehenderit perspiciatis dignissimos suscipit id repellendus repellat
+                                    exercitationem debitis explicabo, ipsam pariatur ipsum eos doloremque soluta illum.
                                 </p>
                             </div>
+                            <div
+                                class="w-full lg:justify-start justify-center items-center sm:gap-10 gap-5 inline-flex">
+                                <div class="flex-col justify-start items-start inline-flex">
+                                    <h3 class="text-gray-900 text-4xl font-bold font-manrope leading-normal">33+</h3>
+                                    <h6 class="text-gray-500 text-base font-normal leading-relaxed">Years of Experience
+                                    </h6>
+                                </div>
+                                <div class="flex-col justify-start items-start inline-flex">
+                                    <h4 class="text-gray-900 text-4xl font-bold font-manrope leading-normal">125+</h4>
+                                    <h6 class="text-gray-500 text-base font-normal leading-relaxed">Successful Products
+                                    </h6>
+                                </div>
+                                <div class="flex-col justify-start items-start inline-flex">
+                                    <h4 class="text-gray-900 text-4xl font-bold font-manrope leading-normal">52+</h4>
+                                    <h6 class="text-gray-500 text-base font-normal leading-relaxed">Happy Clients</h6>
+                                </div>
                             </div>
                         </div>
 
@@ -288,8 +306,7 @@ if (mysqli_num_rows($res) > 0) {
                         <div class="sm:text-center lg:text-left">
 
                             <p>
-                                <?= $about_row['about'] ?>
-                            </p>
+                                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Repudiandae distinctio enim ratione inventore saepe soluta itaque quas facilis similique odit? Dolor, est nihil velit minus numquam hic at facere, labore soluta dicta ea quaerat neque exercitationem possimus voluptatem illum ipsa doloremque consequuntur ratione. Explicabo harum corporis mollitia nisi incidunt, ab commodi exercitationem tempore, quibusdam similique earum quas magni vero quos beatae eligendi amet? Pariatur ut adipisci unde reprehenderit eos quaerat,  
                         </div>
                     </main>
                 </div>

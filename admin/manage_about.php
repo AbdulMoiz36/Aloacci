@@ -5,20 +5,16 @@ include "top.php";
 isAdmin();
 
 $about = '';
-$image = '';
 $msg = '';
 
 if (isset($_GET['id']) && $_GET['id'] != '') {
-    $image_required = '';
     $_id = get_safe_value($con, $_GET['id']);
-
     $res = mysqli_query($con, "select * from about where id='$_id'");
+
     $check = mysqli_num_rows($res);
 
     if ($check > 0) {
         $row = mysqli_fetch_assoc($res);
-        $about = $row['about'];
-        $image = $row['image'];
         $about = $row['about'];  // Get the 'about' text
         $image = $row['image'];
     } else {
@@ -28,8 +24,6 @@ if (isset($_GET['id']) && $_GET['id'] != '') {
 }
 
 if (isset($_REQUEST['submit'])) {
-
-    $about = get_safe_value($con, $_REQUEST['about']);
 
     $aboutText = get_safe_value($con, $_POST['about']);  // Get the 'about' text from the form
     $maxFileSize = 5 * 1024 * 1024; // Maximum file size of 5MB
@@ -71,7 +65,6 @@ if (isset($_REQUEST['submit'])) {
                 $folder = "../image/" . $image;
                 move_uploaded_file($tempname, $folder);
             }
-            mysqli_query($con, "UPDATE about SET about='$about', image='$image' WHERE id=$_id");
 
             mysqli_query($con, "UPDATE about SET about='$aboutText', image='$image' WHERE id=$_id");
         }
@@ -90,17 +83,8 @@ if (isset($_REQUEST['submit'])) {
             </div>
             <form method="post" enctype="multipart/form-data">
                 <div class="card-body card-block">
-
                     <div class="form-row">
 
-                        <div class="form-group col-12">
-                            <label for="about" class="form-control-label">About</label>
-                            <textarea name="about" placeholder="Enter About" class="form-control"
-                                required><?= $about ?></textarea>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
                         <!-- Textarea for 'about' text -->
                         <div class="form-group col-12">
                             <label for="aboutText" class="form-control-label">About Text</label>
@@ -115,16 +99,9 @@ if (isset($_REQUEST['submit'])) {
 
                         <div class="form-group col-6" style="display: flex;justify-content: space-around;">
                             <div id="imagePreviewContainer" class="mb-4" style="display:none;">
-                                <p>Selected Image:</p>
-                                <img id="imagePreview" src="#" alt="Selected Image 2"
-                                    style="max-width: 150px; max-height: 150px;" class="border" />
                                 <p>Selected Image:</p>    
                                 <img id="imagePreview" src="#" alt="Selected Image 2" style="max-width: 150px; max-height: 150px;" class="border" />
                             </div>
-                            <div style="display: <?= !empty($image) ? 'block' : 'none'; ?>;">
-                                <p>Current Image:</p>
-                                <img src="<?= !empty($image) ? '../image/' . $image : '#'; ?>" alt="Current Image 1"
-                                    style="max-width: 150px; max-height: 150px;" class="border" />
                             <div style="display: <?= !empty($image) ? 'block' : 'none'; ?>;">
                                 <p>Current Image:</p>    
                                 <img src="<?= !empty($image) ? '../image/' . $image : '#'; ?>" alt="Current Image 1" style="max-width: 150px; max-height: 150px;" class="border" />
