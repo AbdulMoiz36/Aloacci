@@ -15,7 +15,7 @@ if (isset($_GET['id']) && $_GET['id'] != '') {
 
     if ($check > 0) {
         $row = mysqli_fetch_assoc($res);
-        $about = $row['about'];  // Get the 'about' text
+        $about = $row['about'];  
         $image = $row['image'];
     } else {
         echo "<script>window.location.href='about'</script>";
@@ -25,7 +25,7 @@ if (isset($_GET['id']) && $_GET['id'] != '') {
 
 if (isset($_REQUEST['submit'])) {
 
-    $aboutText = get_safe_value($con, $_POST['about']);  // Get the 'about' text from the form
+    $aboutText = get_safe_value($con, $_POST['about']); 
     $maxFileSize = 5 * 1024 * 1024; // Maximum file size of 5MB
     $allowedFileTypes = ['image/png', 'image/jpg', 'image/jpeg'];
 
@@ -50,7 +50,7 @@ if (isset($_REQUEST['submit'])) {
                 $width = $imageDetails[0];
                 $height = $imageDetails[1];
                 if ($width !== 720 || $height !== 500) {
-                    $msg = "Image dimensions must be 960x720 pixels.";
+                    $msg = "Image dimensions must be 720x500 pixels.";
                 }
             }
         }
@@ -93,7 +93,7 @@ if (isset($_REQUEST['submit'])) {
 
                         <div class="form-group col-6">
                             <label for="image" class="form-control-label">Image</label>
-                            <small class="form-text text-muted">Please upload an image with dimensions 960x720 pixels.</small>
+                            <small class="form-text text-muted">Please upload an image with dimensions 720x500 pixels.</small>
                             <input type="file" name="image" class="form-control" id="image" onchange="validateImageSize('image', 'imagePreview', 'imagePreviewContainer')">
                         </div>
 
@@ -132,7 +132,7 @@ if (isset($_REQUEST['submit'])) {
             img.onload = function() {
                 // Check if the image dimensions are 960x720
                 if (img.width !== 720 || img.height !== 500) {
-                    alert('Image must be 960x300 pixels in size.');
+                    alert('Image must be 720x500 pixels in size.');
                     document.getElementById(containerId).style.display = 'none'; // Hide preview
                     fileInput.value = '';
                 } else {

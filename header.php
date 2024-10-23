@@ -59,8 +59,7 @@ $unique_products_json = json_encode($unique_products);
     class="bg-black h-auto flex-wrap-reverse justify-center items-center sm:flex sm:justify-between sm:px-10 px-5 py-3">
     <!-- Search Box Start -->
     <div class="flex gap-4">
-      <i id="menu-icon" class="fa-solid fa-bars sm:hidden block text-lg text-white cursor-pointer"
-        onclick="toggleNavbar()"></i>
+      <a href="index" class="md:hidden"><img src="./img/logo-cropped-bottom.png" alt="Logo" width="50px"  /></a>
       <div class="relative w-full">
         <form method="GET" action="shop" onsubmit="return validateSearch()">
           <input type="search" placeholder="Search" name="search" id="search"
@@ -142,10 +141,12 @@ $unique_products_json = json_encode($unique_products);
     </div>
     <!-- Logo Start -->
     <div class="flex justify-center">
-      <a href="index"><img src="./img/logo-cropped-bottom.png" alt="Logo" width="100px" /></a>
+      <a href="index"><img src="./img/logo-cropped-bottom.png" alt="Logo" width="100px" class="hidden md:block" /></a>
     </div>
     <!-- Acccount And Cart Start -->
-    <div class="flex justify-center space-x-10 text-white items-center">
+    <div class="flex justify-center space-x-10 text-white items-center mt-7 md:mt-0">
+    <i id="menu-icon" class="fa-solid fa-bars sm:hidden block text-lg text-white cursor-pointer md:hidden"
+    onclick="toggleNavbar()"></i>
       <!-- Account -->
       <div class="flex items-center space-x-3 text-lg sm:text-xl">
         <?php

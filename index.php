@@ -16,24 +16,24 @@ if (mysqli_num_rows($res) > 0) {
 
     // If there's more than one image, show carousel
     if (count($images) > 1) {
-        ?>
-<div id="heroCarousel" class="relative Hero bg-slate-400 h-[20vh] md:h-[70vh] overflow-hidden">
-    <div class="carousel-track relative w-full h-full flex transition-transform duration-700 ease-in-out">
-        <!-- Carousel items -->
-        <?php foreach ($images as $index => $image) { ?>
-        <div class="carousel-item min-w-full h-full">
-            <img src="./image/<?= $image ?>" alt="Banner" class="object-cover md:object-fit w-full h-full">
-        </div>
-        <?php } ?>
-    </div>
+?>
+        <div id="heroCarousel" class="relative Hero bg-slate-400 h-[20vh] md:h-[70vh] overflow-hidden">
+            <div class="carousel-track relative w-full h-full flex transition-transform duration-700 ease-in-out">
+                <!-- Carousel items -->
+                <?php foreach ($images as $index => $image) { ?>
+                    <div class="carousel-item min-w-full h-full">
+                        <img src="./image/<?= $image ?>" alt="Banner" class="object-cover md:object-fit w-full h-full">
+                    </div>
+                <?php } ?>
+            </div>
 
-    <!-- Carousel indicators -->
-    <div class="absolute bottom-0 left-0 right-0 z-10 flex justify-center p-4">
-        <?php foreach ($images as $index => $image) { ?>
-        <button data-slide="<?= $index ?>" class="indicator w-3 h-3 mx-1 rounded-full bg-gray-400"></button>
-        <?php } ?>
-    </div>
-</div>
+            <!-- Carousel indicators -->
+            <div class="absolute bottom-0 left-0 right-0 z-10 flex justify-center p-4">
+                <?php foreach ($images as $index => $image) { ?>
+                    <button data-slide="<?= $index ?>" class="indicator w-3 h-3 mx-1 rounded-full bg-gray-400"></button>
+                <?php } ?>
+            </div>
+        </div>
         <script>
             // JavaScript for carousel functionality
             let currentSlide = 0;
@@ -82,31 +82,31 @@ if (mysqli_num_rows($res) > 0) {
                 /* Darker gray for active */
             }
         </style>
-        <?php
+    <?php
     } else {
         // Only one image, no need for carousel
-        ?>
+    ?>
         <div class="Hero bg-slate-400 h-[20vh] md:h-[70vh]">
             <img src="./image/<?= $images[0] ?>" alt="Banner" class="object-cover md:object-fit w-full h-full">
         </div>
-        <?php
+<?php
     }
 }
 ?>
 
-        <!-- Hero Section End-->
+<!-- Hero Section End-->
 
-        <!-- Products Showcase -->
-        <section>
-            <!-- Heading and View All -->
-            <div class="p-5 lg:p-16 flex justify-between">
-                <h2 class="font-bold text-2xl md:text-3xl">Best Sellers</h2>
-            </div>
+<!-- Products Showcase -->
+<section>
+    <!-- Heading and View All -->
+    <div class="p-5 lg:p-16 flex justify-between">
+        <h2 class="font-bold text-2xl md:text-3xl">Best Sellers</h2>
+    </div>
 
-            <!-- Products section -->
-            <div id="products-container"
-                class="w-full px-3 py-2 flex justify-start gap-2 md:gap-5 overflow-hidden overflow-x-auto">
-                <?php
+    <!-- Products section -->
+    <div id="products-container"
+        class="w-full px-3 py-2 flex justify-start gap-2 md:gap-5 overflow-hidden overflow-x-auto">
+        <?php
         // Fetch all products
         $get_product = get_product($con);
 
@@ -135,30 +135,30 @@ if (mysqli_num_rows($res) > 0) {
             }
         ?>
 
-                <div
-                    class="product-card w-full md:w-72 h-[20rem] lg:h-[30rem] flex gap-2 flex-col relative group shadow">
+            <div
+                class="product-card w-full md:w-72 h-[20rem] lg:h-[30rem] flex gap-2 flex-col relative group shadow">
 
-                    <!-- Product image wrapper -->
-                    <div class="relative h-[65%] w-full">
-                        <a href="product_details?id=<?= $list['id'] ?>" class="product-link w-full">
-                            <img src="./image/<?= $main_image ?>" alt="<?= $list['name'] ?>"
-                                class="h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0">
-                            <img src="./image/<?= $hover_image ?>" alt="<?= $list['name'] ?> Hover"
-                                class="absolute top-0 left-0 h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100">
-                        </a>
-                    </div>
-
-                    <!-- Product details -->
-                    <div class="px-4 py-2 h-[35%] flex flex-col justify-evenly">
-                        <a href="product_details?id=<?= $list['id'] ?>"
-                            class="text-sm md:text-lg font-bold hover:underline"><?= $list['name'] ?></a>
-                        <p class="text-gray-600 overflow-hidden text-ellipsis line-clamp-2 text-xs md:text-base">
-                            <?= $list['description'] ?> </p>
-                        <p class="text-xs md:text-lg font-bold text-red-500">Rs. <?= $list['price'] ?></p>
-                    </div>
+                <!-- Product image wrapper -->
+                <div class="relative h-[65%] w-full">
+                    <a href="product_details?id=<?= $list['id'] ?>" class="product-link w-full">
+                        <img src="./image/<?= $main_image ?>" alt="<?= $list['name'] ?>"
+                            class="h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0">
+                        <img src="./image/<?= $hover_image ?>" alt="<?= $list['name'] ?> Hover"
+                            class="absolute top-0 left-0 h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100">
+                    </a>
                 </div>
 
-                <?php
+                <!-- Product details -->
+                <div class="px-4 py-2 h-[35%] flex flex-col justify-evenly">
+                    <a href="product_details?id=<?= $list['id'] ?>"
+                        class="text-sm md:text-lg font-bold hover:underline"><?= $list['name'] ?></a>
+                    <p class="text-gray-600 overflow-hidden text-ellipsis line-clamp-2 text-xs md:text-base">
+                        <?= $list['description'] ?> </p>
+                    <p class="text-xs md:text-lg font-bold text-red-500">Rs. <?= $list['price'] ?></p>
+                </div>
+            </div>
+
+        <?php
 
             // Increment the displayed products counter
             $displayed_products++;
@@ -169,69 +169,69 @@ if (mysqli_num_rows($res) > 0) {
             }
         }
         ?>
+    </div>
+</section>
+
+<section class="py-24 relative">
+    <div class="w-full max-w-7xl px-4 md:px-5 lg:px-5 mx-auto">
+        <div class="w-full justify-start items-center gap-12 grid lg:grid-cols-2 grid-cols-1">
+            <div
+                class="w-full justify-center items-start gap-6 grid sm:grid-cols-2 grid-cols-1 lg:order-first order-last">
+                <div class="pt-24 lg:justify-center sm:justify-end justify-start items-start gap-2.5 flex">
+                    <img class=" rounded-xl object-cover" src="./image/umeed_77_11zon.jpeg"
+                        alt="about Us image" />
+                </div>
+                <img class="sm:ml-0 ml-auto rounded-xl object-cover" src="./image/umeed.jpeg"
+                    alt="about Us image" />
             </div>
-        </section>
-
-        <section class="py-24 relative">
-            <div class="w-full max-w-7xl px-4 md:px-5 lg:px-5 mx-auto">
-                <div class="w-full justify-start items-center gap-12 grid lg:grid-cols-2 grid-cols-1">
-                    <div
-                        class="w-full justify-center items-start gap-6 grid sm:grid-cols-2 grid-cols-1 lg:order-first order-last">
-                        <div class="pt-24 lg:justify-center sm:justify-end justify-start items-start gap-2.5 flex">
-                            <img class=" rounded-xl object-cover" src="./image/umeed_77_11zon.jpeg"
-                                alt="about Us image" />
-                        </div>
-                        <img class="sm:ml-0 ml-auto rounded-xl object-cover" src="./image/umeed.jpeg"
-                            alt="about Us image" />
+            <div class="w-full flex-col justify-center lg:items-start items-center gap-10 inline-flex">
+                <div class="w-full flex-col justify-center items-start gap-8 flex">
+                    <div class="w-full flex-col justify-start lg:items-start items-center gap-3 flex">
+                        <h2
+                            class="text-gray-900 text-4xl font-bold font-manrope leading-normal lg:text-start text-center">
+                            Lorem ipsum dolor sit amet.</h2>
+                        <p
+                            class="text-gray-500 text-base font-normal leading-relaxed lg:text-start text-center">
+                            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quaerat delectus beatae
+                            harum culpa reprehenderit perspiciatis dignissimos suscipit id repellendus repellat
+                            exercitationem debitis explicabo, ipsam pariatur ipsum eos doloremque soluta illum.
+                        </p>
                     </div>
-                    <div class="w-full flex-col justify-center lg:items-start items-center gap-10 inline-flex">
-                        <div class="w-full flex-col justify-center items-start gap-8 flex">
-                            <div class="w-full flex-col justify-start lg:items-start items-center gap-3 flex">
-                                <h2
-                                    class="text-gray-900 text-4xl font-bold font-manrope leading-normal lg:text-start text-center">
-                                    Lorem ipsum dolor sit amet.</h2>
-                                <p
-                                    class="text-gray-500 text-base font-normal leading-relaxed lg:text-start text-center">
-                                    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quaerat delectus beatae
-                                    harum culpa reprehenderit perspiciatis dignissimos suscipit id repellendus repellat
-                                    exercitationem debitis explicabo, ipsam pariatur ipsum eos doloremque soluta illum.
-                                </p>
-                            </div>
-                            <div
-                                class="w-full lg:justify-start justify-center items-center sm:gap-10 gap-5 inline-flex">
-                                <div class="flex-col justify-start items-start inline-flex">
-                                    <h3 class="text-gray-900 text-4xl font-bold font-manrope leading-normal">33+</h3>
-                                    <h6 class="text-gray-500 text-base font-normal leading-relaxed">Years of Experience
-                                    </h6>
-                                </div>
-                                <div class="flex-col justify-start items-start inline-flex">
-                                    <h4 class="text-gray-900 text-4xl font-bold font-manrope leading-normal">125+</h4>
-                                    <h6 class="text-gray-500 text-base font-normal leading-relaxed">Successful Products
-                                    </h6>
-                                </div>
-                                <div class="flex-col justify-start items-start inline-flex">
-                                    <h4 class="text-gray-900 text-4xl font-bold font-manrope leading-normal">52+</h4>
-                                    <h6 class="text-gray-500 text-base font-normal leading-relaxed">Happy Clients</h6>
-                                </div>
-                            </div>
+                    <div
+                        class="w-full lg:justify-start justify-center items-center sm:gap-10 gap-5 inline-flex">
+                        <div class="flex-col justify-start items-start inline-flex">
+                            <h3 class="text-gray-900 text-4xl font-bold font-manrope leading-normal">33+</h3>
+                            <h6 class="text-gray-500 text-base font-normal leading-relaxed">Years of Experience
+                            </h6>
                         </div>
-
+                        <div class="flex-col justify-start items-start inline-flex">
+                            <h4 class="text-gray-900 text-4xl font-bold font-manrope leading-normal">125+</h4>
+                            <h6 class="text-gray-500 text-base font-normal leading-relaxed">Successful Products
+                            </h6>
+                        </div>
+                        <div class="flex-col justify-start items-start inline-flex">
+                            <h4 class="text-gray-900 text-4xl font-bold font-manrope leading-normal">52+</h4>
+                            <h6 class="text-gray-500 text-base font-normal leading-relaxed">Happy Clients</h6>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </section>
 
-        <!-- New Arrival -->
-        <section>
-            <!-- Heading and View All -->
-            <div class="p-5 lg:p-16 flex justify-between">
-                <h2 class="font-bold text-2xl md:text-3xl">New Arrival</h2>
             </div>
+        </div>
+    </div>
+</section>
 
-            <!-- Products section -->
-            <div id="products-container"
-                class="w-full p-3 flex justify-start gap-2 md:gap-5 overflow-hidden overflow-x-auto">
-                <?php
+<!-- New Arrival -->
+<section>
+    <!-- Heading and View All -->
+    <div class="p-5 lg:p-16 flex justify-between">
+        <h2 class="font-bold text-2xl md:text-3xl">New Arrival</h2>
+    </div>
+
+    <!-- Products section -->
+    <div id="products-container"
+        class="w-full p-3 flex justify-start gap-2 md:gap-5 overflow-hidden overflow-x-auto">
+        <?php
         // Fetch all products
         $get_product = get_product($con);
 
@@ -255,30 +255,30 @@ if (mysqli_num_rows($res) > 0) {
             }
         ?>
 
-                <div
-                    class="product-card w-full md:w-72 h-[20rem] lg:h-[30rem] flex gap-2 flex-col relative group shadow">
+            <div
+                class="product-card w-full md:w-72 h-[20rem] lg:h-[30rem] flex gap-2 flex-col relative group shadow">
 
-                    <!-- Product image wrapper -->
-                    <div class="relative h-[65%] w-full">
-                        <a href="product_details?id=<?= $list['id'] ?>" class="product-link w-full">
-                            <img src="./image/<?= $main_image ?>" alt="<?= $list['name'] ?>"
-                                class="h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0">
-                            <img src="./image/<?= $hover_image ?>" alt="<?= $list['name'] ?> Hover"
-                                class="absolute top-0 left-0 h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100">
-                        </a>
-                    </div>
-
-                    <!-- Product details -->
-                    <div class="px-4 py-2 h-[35%] flex flex-col justify-evenly">
-                        <a href="product_details?id=<?= $list['id'] ?>"
-                            class="text-sm md:text-lg font-bold hover:underline"><?= $list['name'] ?></a>
-                        <p class="text-gray-600 overflow-hidden text-ellipsis line-clamp-2 text-xs md:text-base">
-                            <?= $list['description'] ?> </p>
-                        <p class="text-xs md:text-lg font-bold text-red-500">Rs. <?= $list['price'] ?></p>
-                    </div>
+                <!-- Product image wrapper -->
+                <div class="relative h-[65%] w-full">
+                    <a href="product_details?id=<?= $list['id'] ?>" class="product-link w-full">
+                        <img src="./image/<?= $main_image ?>" alt="<?= $list['name'] ?>"
+                            class="h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0">
+                        <img src="./image/<?= $hover_image ?>" alt="<?= $list['name'] ?> Hover"
+                            class="absolute top-0 left-0 h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100">
+                    </a>
                 </div>
 
-                <?php
+                <!-- Product details -->
+                <div class="px-4 py-2 h-[35%] flex flex-col justify-evenly">
+                    <a href="product_details?id=<?= $list['id'] ?>"
+                        class="text-sm md:text-lg font-bold hover:underline"><?= $list['name'] ?></a>
+                    <p class="text-gray-600 overflow-hidden text-ellipsis line-clamp-2 text-xs md:text-base">
+                        <?= $list['description'] ?> </p>
+                    <p class="text-xs md:text-lg font-bold text-red-500">Rs. <?= $list['price'] ?></p>
+                </div>
+            </div>
+
+        <?php
 
             // Increment the displayed products counter
             $displayed_products++;
@@ -289,32 +289,33 @@ if (mysqli_num_rows($res) > 0) {
             }
         }
         ?>
-            </div>
-        </section>
+    </div>
+</section>
 
-        <div id="about" class="relative bg-white overflow-hidden p-5 md:p-0 ">
-            <div class="max-w-7xl mx-auto">
-                <div class="relative z-10 pb-8 bg-white sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32">
-                    <svg class="hidden lg:block absolute right-0 inset-y-0 h-full w-48 text-white transform translate-x-1/2"
-                        fill="currentColor" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-                        <polygon points="50,0 100,0 50,100 0,100"></polygon>
-                    </svg>
+<div id="about" class="relative bg-white overflow-hidden p-5 md:p-0 ">
+    <div class="max-w-7xl mx-auto">
+        <div class="relative z-10 pb-8 bg-white sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32">
+            <svg class="hidden lg:block absolute right-0 inset-y-0 h-full w-48 text-white transform translate-x-1/2"
+                fill="currentColor" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                <polygon points="50,0 100,0 50,100 0,100"></polygon>
+            </svg>
 
-                    <div class="pt-1"></div>
+            <div class="pt-1"></div>
 
-                    <main class="mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28">
-                        <div class="sm:text-center lg:text-left">
+            <main class="mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28">
+                <div class="sm:text-center lg:text-left">
 
-                            <p>
-                                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Repudiandae distinctio enim ratione inventore saepe soluta itaque quas facilis similique odit? Dolor, est nihil velit minus numquam hic at facere, labore soluta dicta ea quaerat neque exercitationem possimus voluptatem illum ipsa doloremque consequuntur ratione. Explicabo harum corporis mollitia nisi incidunt, ab commodi exercitationem tempore, quibusdam similique earum quas magni vero quos beatae eligendi amet? Pariatur ut adipisci unde reprehenderit eos quaerat,  
-                        </div>
-                    </main>
+                    <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, quo mollitia exercitationem animi atque obcaecati ut consequuntur! Similique voluptas, sit, nulla recusandae deleniti ducimus eos, quia facilis dolores est adipisci ut modi accusantium. Itaque nihil blanditiis aliquam distinctio labore, porro tempora dolore ratione deserunt? Soluta commodi quod consectetur repellat voluptatem ipsa, sequi iure facere praesentium, quaerat omnis cum error voluptatum tempore magnam alias quae quia fugiat voluptas vero qui dolore. Nam soluta qui ipsam optio? Perspiciatis, qui ipsum placeat delectus id aut quasi voluptatem illum est, veritatis dicta minus consequuntur. Hic blanditiis, harum perferendis magnam commodi dolorum, iste consectetur similique
+                    </p>
                 </div>
-            </div>
-            <div class="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2">
-                <img class="h-56 w-full object-cover object-center sm:h-72 md:h-96 lg:w-full lg:h-full" src="./image/<?= $about_row['image'] ?>" alt="">
-            </div>
+            </main>
         </div>
-        <?php
+    </div>
+    <div class="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2">
+        <img class="h-56 w-full object-cover object-center sm:h-72 md:h-96 lg:w-full lg:h-full" src="./image/crossmyheart.jpeg" alt="">
+    </div>
+</div>
+<?php
 include "footer.php";
 ?>

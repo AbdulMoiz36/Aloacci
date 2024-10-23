@@ -20,7 +20,7 @@ if (isset($_SESSION['USER_ID'])) {
     <div class="w-full md:w-5/6 grid grid-cols-1 md:grid-cols-2 gap-8 border rounded-lg">
         <!-- Right: Image Section (on top for small screens) -->
         <div class="flex justify-center items-center order-1 md:order-none">
-            <img src="./img/messenger-isometric-color-vector-29602122.jpg" alt="Contact Us" class="w-full h-full object-cover rounded-l-none rounded-t-lg md:rounded-l-lg md:rounded-tr-none" />
+            <img src="./image/messenger-isometric-color-vector-29602122.jpg" alt="Contact Us" class="w-full h-full object-cover rounded-l-none rounded-t-lg md:rounded-l-lg md:rounded-tr-none" />
         </div>
 
         <!-- Left: Form Section (on bottom for small screens) -->

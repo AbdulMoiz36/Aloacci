@@ -59,13 +59,6 @@
 <!-- toaster -->
 <script src="./admin/assets/bundles/izitoast/js/iziToast.min.js" defer></script>
 <script src="./admin/assets/js/page/toastr.js" defer></script>
-<!-- Chat Bot -->
-<script>
-  window.chtlConfig = {
-    chatbotId: "9238571551"
-  }
-</script>
-<script async data-id="9238571551" id="chatling-embed-script" type="text/javascript" src="https://chatling.ai/js/embed.js"></script>
 </body>
 
 </html>

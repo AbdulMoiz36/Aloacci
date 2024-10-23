@@ -13,20 +13,13 @@ $product_image = htmlspecialchars($get_product[0]['image']);
 $product_image2 = htmlspecialchars($get_product[0]['image2']);
 $product_image3 = htmlspecialchars($get_product[0]['image3']);
 $product_name = htmlspecialchars($get_product[0]['name']);
-// $product_gender_id = htmlspecialchars($get_product[0]['gender_id']);
-// $product_genre_id = htmlspecialchars($get_product[0]['genre_id']);
-// $product_type_id = htmlspecialchars($get_product[0]['type_id']);
-// $product_season_id = htmlspecialchars($get_product[0]['season_id']);
-// $product_sillage_id = htmlspecialchars($get_product[0]['sillage_id']);
-// $product_lasting_id = htmlspecialchars($get_product[0]['lasting_id']);
 $brief = htmlspecialchars($get_product[0]['breif']);
 $product_formats = array_map('htmlspecialchars', array_column($get_product, 'format'));
 $product_prices = array_map('htmlspecialchars', array_column($get_product, 'price'));
 $product_quantities = array_column($get_product, 'qty'); // Fetch the quantity of each format
 $reviewsql = mysqli_query($con, "SELECT COUNT(*) AS total_reviews FROM reviews WHERE product_id = '$product_id';");
 $total_reviews = mysqli_fetch_array($reviewsql);
-// $performance_sql = mysqli_query($con, "SELECT gen.gender,ge.genre,l.lasting,s.season,si.sillage,t.type FROM `product`as p JOIN gender as gen ON gen.id = p.gender_id JOIN genre as ge ON ge.id = p.genre_id JOIN lasting as l ON l.id = p.lasting_id JOIN season as s ON s.id = p.sillage_id JOIN sillage as si ON si.id = p.sillage_id JOIN `type` as t On t.id = p.type_id  WHERE p.id = '$product_id'");
-// $performance = mysqli_fetch_array($performance_sql);
+
 
 // Fetch the quantity for each format from product_format and subtract the sold quantity
 $product_quantities = [];
@@ -260,35 +253,129 @@ foreach ($get_product as $product) {
                 <!-- Tab Contents -->
                 <div class="bg-white p-6 rounded-b-lg shadow-lg">
                     <div id="tab1" class="tab-content block">
-                    <h2 class="text-xl font-semibold underline mb-2">Description:</h2>
+                        <h2 class="text-xl font-semibold underline mb-2">Description:</h2>
                         <p><?= $brief ?></p>
                     </div>
 
                     <div id="tab2" class="tab-content hidden flex flex-col gap-4">
-                    <h2 class="text-xl font-semibold underline">Performance:</h2>
-                        <?php if (!empty($performance['sillage'])): ?>
-                            <p class="font-semibold text-black"><span class="font-semibold text-amber-600">Sillage:</span> <?= $performance['sillage'] ?></p>
+                        <h2 class="text-xl font-semibold underline">Performance:</h2>
+                    <!-- Sillage -->
+                        <?php
+                        $perf_sillage = mysqli_query($con, "SELECT sillage FROM product_details as pd 
+                        JOIN sillage as s ON pd.sillage_id = s.id
+WHERE pd.product_id = '$product_id' AND pd.sillage_id IS NOT NULL");
+
+                        if (mysqli_num_rows($perf_sillage) > 0): ?>
+                            <p class="font-semibold text-black">
+                                <span class="font-semibold text-amber-600">Sillage:</span>
+                                <?php
+                                $sillages = [];
+                                while ($performance = mysqli_fetch_assoc($perf_sillage)) {
+                                    $sillages[] = $performance['sillage']; 
+                                }
+                                echo implode(', ', $sillages); 
+                                ?>
+                            </p>
+                        <?php endif; ?>
+                        <!-- Lasting -->
+                        <?php
+                        // Fetch all lasting values associated with the product
+                        $perf_lasting = mysqli_query($con, "SELECT lasting FROM product_details as pd 
+JOIN lasting as l ON pd.lasting_id = l.id
+WHERE pd.product_id = '$product_id' AND pd.lasting_id IS NOT NULL");
+
+                        if (mysqli_num_rows($perf_lasting) > 0): ?>
+                            <p class="font-semibold text-black">
+                                <span class="font-semibold text-amber-600">Lasting:</span>
+                                <?php
+                                $lasting = []; // Initialize an array to store lasting values
+                                while ($performance = mysqli_fetch_assoc($perf_lasting)) {
+                                    $lasting[] = $performance['lasting'] . 'hrs'; // Collect each lasting value and append 'hrs'
+                                }
+                                echo implode(', ', $lasting); // Join the array with commas and print it
+                                ?>
+                            </p>
                         <?php endif; ?>
 
-                        <?php if (!empty($performance['lasting'])): ?>
-                            <p class="font-semibold text-black"><span class="font-semibold text-amber-600">Lasting:</span> <?= $performance['lasting'] ?>hrs</p>
+
+                        <?php
+                        // Fetch all genders associated with the product
+                        $perf_gender = mysqli_query($con, "SELECT g.gender FROM product_details as pd 
+JOIN gender as g ON pd.gender_id = g.id 
+WHERE pd.product_id = '$product_id' AND pd.gender_id != 0");
+
+                        if (mysqli_num_rows($perf_gender) > 0): ?>
+                            <p class="font-semibold text-black">
+                                <span class="font-semibold text-amber-600">Gender:</span>
+                                <?php
+                                $genders = []; // Initialize an array to store genders
+                                while ($performance = mysqli_fetch_assoc($perf_gender)) {
+                                    $genders[] = $performance['gender']; // Collect each gender into the array
+                                }
+                                echo implode(', ', $genders); // Join the array with commas and print it
+                                ?>
+                            </p>
                         <?php endif; ?>
 
-                        <?php if (!empty($performance['gender'])): ?>
-                            <p class="font-semibold text-black"><span class="font-semibold text-amber-600">Gender:</span> <?= $performance['gender'] ?></p>
+
+                        <?php
+                        // Fetch all genres associated with the product
+                        $perf_genre = mysqli_query($con, "SELECT g.genre FROM product_details as pd 
+                        JOIN genre as g ON pd.genre_id = g.id 
+                        WHERE pd.product_id = '$product_id' AND pd.genre_id != 0");
+
+                        if (mysqli_num_rows($perf_genre) > 0): ?>
+                            <p class="font-semibold text-black">
+                                <span class="font-semibold text-amber-600">Genre:</span>
+                                <?php
+                                $genres = []; // Initialize an array to store genres
+                                while ($performance = mysqli_fetch_assoc($perf_genre)) {
+                                    $genres[] = $performance['genre']; // Collect each genre into the array
+                                }
+                                echo implode(', ', $genres); // Join the array with commas and print it
+                                ?>
+                            </p>
                         <?php endif; ?>
 
-                        <?php if (!empty($performance['genre'])): ?>
-                            <p class="font-semibold text-black"><span class="font-semibold text-amber-600">Genre:</span> <?= $performance['genre'] ?></p>
+
+                        <?php
+                        // Fetch all types associated with the product
+                        $perf_type = mysqli_query($con, "SELECT t.type FROM product_details as pd 
+JOIN type as t ON pd.type_id = t.id 
+WHERE pd.product_id = '$product_id' AND pd.type_id != 0");
+
+                        if (mysqli_num_rows($perf_type) > 0): ?>
+                            <p class="font-semibold text-black">
+                                <span class="font-semibold text-amber-600">Type:</span>
+                                <?php
+                                $types = []; // Initialize an array to store types
+                                while ($performance = mysqli_fetch_assoc($perf_type)) {
+                                    $types[] = $performance['type']; // Collect each type into the array
+                                }
+                                echo implode(', ', $types); // Join the array with commas and print it
+                                ?>
+                            </p>
                         <?php endif; ?>
 
-                        <?php if (!empty($performance['type'])): ?>
-                            <p class="font-semibold text-black"><span class="font-semibold text-amber-600">Type:</span> <?= $performance['type'] ?></p>
+
+                        <?php
+                        $perf_season = mysqli_query($con, "SELECT s.season FROM product_details as pd 
+JOIN season as s ON pd.season_id = s.id 
+WHERE pd.product_id = '$product_id' AND pd.season_id != 0");
+
+                        if (mysqli_num_rows($perf_season) > 0): ?>
+                            <p class="font-semibold text-black">
+                                <span class="font-semibold text-amber-600">Season:</span>
+                                <?php
+                                $seasons = [];
+                                while ($performance = mysqli_fetch_assoc($perf_season)) {
+                                    $seasons[] = $performance['season'];
+                                }
+                                echo implode(', ', $seasons);
+                                ?>
+                            </p>
                         <?php endif; ?>
 
-                        <?php if (!empty($performance['season'])): ?>
-                            <p class="font-semibold text-black"><span class="font-semibold text-amber-600">Season:</span> <?= $performance['season'] ?></p>
-                        <?php endif; ?>
                     </div>
 
 
@@ -304,17 +391,17 @@ foreach ($get_product as $product) {
                                 <p>Rs.250</p>
                             </div>
                             <?php
-                                $shipquery = mysqli_query($con,"SELECT `status`,`price` FROM shipment");
-                                $shipment = mysqli_fetch_array($shipquery);
-                                if($shipment['status'] == 1){
+                            $shipquery = mysqli_query($con, "SELECT `status`,`price` FROM shipment");
+                            $shipment = mysqli_fetch_array($shipquery);
+                            if ($shipment['status'] == 1) {
                             ?>
-                            <div class="flex flex-wrap">
-                                <p class="font-semibold text-black">Free Shipping For Order Above <span class="font-semibold text-red-600">Rs.<?=$shipment['price']?></span></p>
-                            </div>
+                                <div class="flex flex-wrap">
+                                    <p class="font-semibold text-black">Free Shipping For Order Above <span class="font-semibold text-red-600">Rs.<?= $shipment['price'] ?></span></p>
+                                </div>
                             <?php
-                                }
+                            }
                             ?>
-                            
+
                         </div>
                     </div>
                 </div>
