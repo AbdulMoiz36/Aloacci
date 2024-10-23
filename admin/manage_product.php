@@ -515,10 +515,10 @@ if (isset($_REQUEST['submit'])) {
                         ?>
 
                     <div class="form-row">
-                        <div class="form-group col-2">
+                        <div class="form-group col-4">
                             <label for="gender" class="form-control-label">Gender</label>
                             <div class="dropdown">
-                                <button class="dropdown-toggle form-control" style="width: 100%;text-align:left;" type="button" id="genderDropdown"
+                                <button class="dropdown-toggle form-control" style="width: 100%;text-align:left;display: flex;justify-content: space-between;" type="button" id="genderDropdown"
                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Select Gender
                                 </button>
@@ -539,10 +539,10 @@ if (isset($_REQUEST['submit'])) {
                             </div>
                         </div>
 
-                        <div class="form-group col-2">
+                        <div class="form-group col-4">
                             <label for="genre" class="form-control-label">Genre</label>
                             <div class="dropdown">
-                                <button class="dropdown-toggle form-control" style="width: 100%;text-align:left;" type="button" id="genreDropdown"
+                                <button class="dropdown-toggle form-control" style="width: 100%;text-align:left;display: flex;justify-content: space-between;" type="button" id="genreDropdown"
                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Select Genre
                                 </button>
@@ -563,10 +563,10 @@ if (isset($_REQUEST['submit'])) {
                             </div>
                         </div>
 
-                        <div class="form-group col-2">
+                        <div class="form-group col-4">
                             <label for="type" class="form-control-label">Type</label>
                             <div class="dropdown">
-                                <button class="dropdown-toggle form-control" style="width: 100%;text-align:left;" type="button" id="typeDropdown"
+                                <button class="dropdown-toggle form-control" style="width: 100%;text-align:left;display: flex;justify-content: space-between;" type="button" id="typeDropdown"
                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Select Type
                                 </button>
@@ -587,10 +587,10 @@ if (isset($_REQUEST['submit'])) {
                             </div>
                         </div>
 
-                        <div class="form-group col-2">
+                        <div class="form-group col-4">
                             <label for="season" class="form-control-label">Season</label>
                             <div class="dropdown">
-                                <button class="dropdown-toggle form-control" style="width: 100%;text-align:left;" type="button" id="seasonDropdown"
+                                <button class="dropdown-toggle form-control" style="width: 100%;text-align:left;display: flex;justify-content: space-between;" type="button" id="seasonDropdown"
                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Select Season
                                 </button>
@@ -611,10 +611,10 @@ if (isset($_REQUEST['submit'])) {
                             </div>
                         </div>
 
-                        <div class="form-group col-2">
+                        <div class="form-group col-4">
     <label for="sillage" class="form-control-label">Sillage</label>
     <div class="dropdown">
-        <button class="dropdown-toggle form-control" style="width: 100%;text-align:left;" type="button" id="sillageDropdown"
+        <button class="dropdown-toggle form-control" style="width: 100%;text-align:left;display: flex;justify-content: space-between;" type="button" id="sillageDropdown"
             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Select Sillage
         </button>
@@ -635,10 +635,10 @@ if (isset($_REQUEST['submit'])) {
     </div>
 </div>
 
-<div class="form-group col-2">
+<div class="form-group col-4">
     <label for="lasting" class="form-control-label">Lasting</label>
     <div class="dropdown">
-        <button class="dropdown-toggle form-control" style="width: 100%;text-align:left;" type="button" id="lastingDropdown"
+        <button class="dropdown-toggle form-control" style="width: 100%;text-align:left;display: flex;justify-content: space-between;" type="button" id="lastingDropdown"
             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Select Lasting
         </button>
@@ -666,6 +666,7 @@ if (isset($_REQUEST['submit'])) {
                                 max-height: 200px;
                                 overflow-y: auto;
                                 padding: 1rem;
+                                width: 100%;
                             }
 
                             .dropdown-item {
@@ -674,6 +675,9 @@ if (isset($_REQUEST['submit'])) {
                             }
                             .dropdown-item:hover{
                                 background-color: aliceblue;
+                            }
+                            .dropdown-toggle::after{
+                            margin-top: 0.5rem;
                             }
                         </style>
                         <script>
