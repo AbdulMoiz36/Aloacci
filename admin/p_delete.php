@@ -9,6 +9,10 @@ isAdmin();
 if(isset($_REQUEST['id']) && is_numeric($_REQUEST['id'])) {
     $_id = mysqli_real_escape_string($con, $_REQUEST['id']);
 
+    /* Delete related records in product_details first to maintain referential integrity */
+    $deleteDetails = "DELETE FROM product_details WHERE product_id = $_id";
+    $resDetails = mysqli_query($con, $deleteDetails);
+
     /* Delete related records in product_format first to maintain referential integrity */
     $deleteFormats = "DELETE FROM product_format WHERE product_id = $_id";
     $resFormats = mysqli_query($con, $deleteFormats);
@@ -19,7 +23,7 @@ if(isset($_REQUEST['id']) && is_numeric($_REQUEST['id'])) {
 
     /* Check if the query executed successfully and redirect */
     if($resProduct) {
-        echo "<script>window.location.href='product'</script>";
+        header("Location:product");
     } else {
         echo "Error deleting product.";
     }

@@ -13,5 +13,7 @@ $delete = "delete from genre where id=$_id";
 
 $res = mysqli_query($con,$delete);
 
-echo "<script>window.location.href='genre'</script>";
+if($res) {
+    header("Location:genre");
+}
 

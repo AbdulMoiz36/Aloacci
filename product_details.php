@@ -13,20 +13,20 @@ $product_image = htmlspecialchars($get_product[0]['image']);
 $product_image2 = htmlspecialchars($get_product[0]['image2']);
 $product_image3 = htmlspecialchars($get_product[0]['image3']);
 $product_name = htmlspecialchars($get_product[0]['name']);
-$product_gender_id = htmlspecialchars($get_product[0]['gender_id']);
-$product_genre_id = htmlspecialchars($get_product[0]['genre_id']);
-$product_type_id = htmlspecialchars($get_product[0]['type_id']);
-$product_season_id = htmlspecialchars($get_product[0]['season_id']);
-$product_sillage_id = htmlspecialchars($get_product[0]['sillage_id']);
-$product_lasting_id = htmlspecialchars($get_product[0]['lasting_id']);
+// $product_gender_id = htmlspecialchars($get_product[0]['gender_id']);
+// $product_genre_id = htmlspecialchars($get_product[0]['genre_id']);
+// $product_type_id = htmlspecialchars($get_product[0]['type_id']);
+// $product_season_id = htmlspecialchars($get_product[0]['season_id']);
+// $product_sillage_id = htmlspecialchars($get_product[0]['sillage_id']);
+// $product_lasting_id = htmlspecialchars($get_product[0]['lasting_id']);
 $brief = htmlspecialchars($get_product[0]['breif']);
 $product_formats = array_map('htmlspecialchars', array_column($get_product, 'format'));
 $product_prices = array_map('htmlspecialchars', array_column($get_product, 'price'));
 $product_quantities = array_column($get_product, 'qty'); // Fetch the quantity of each format
 $reviewsql = mysqli_query($con, "SELECT COUNT(*) AS total_reviews FROM reviews WHERE product_id = '$product_id';");
 $total_reviews = mysqli_fetch_array($reviewsql);
-$performance_sql = mysqli_query($con, "SELECT gen.gender,ge.genre,l.lasting,s.season,si.sillage,t.type FROM `product`as p JOIN gender as gen ON gen.id = p.gender_id JOIN genre as ge ON ge.id = p.genre_id JOIN lasting as l ON l.id = p.lasting_id JOIN season as s ON s.id = p.sillage_id JOIN sillage as si ON si.id = p.sillage_id JOIN `type` as t On t.id = p.type_id  WHERE p.id = '$product_id'");
-$performance = mysqli_fetch_array($performance_sql);
+// $performance_sql = mysqli_query($con, "SELECT gen.gender,ge.genre,l.lasting,s.season,si.sillage,t.type FROM `product`as p JOIN gender as gen ON gen.id = p.gender_id JOIN genre as ge ON ge.id = p.genre_id JOIN lasting as l ON l.id = p.lasting_id JOIN season as s ON s.id = p.sillage_id JOIN sillage as si ON si.id = p.sillage_id JOIN `type` as t On t.id = p.type_id  WHERE p.id = '$product_id'");
+// $performance = mysqli_fetch_array($performance_sql);
 
 // Fetch the quantity for each format from product_format and subtract the sold quantity
 $product_quantities = [];

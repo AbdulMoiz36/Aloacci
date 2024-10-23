@@ -13,4 +13,6 @@ $delete = "delete from contact_us where id=$_id";
 
 $res = mysqli_query($con,$delete);
 
-echo "<script>window.location.href='contact_us'</script>";
+if($res) {
+    header("Location:contact_us");
+}

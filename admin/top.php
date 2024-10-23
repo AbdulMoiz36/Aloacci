@@ -83,7 +83,7 @@ $row = mysqli_fetch_array($res);
           <ul class="sidebar-menu">
             <li class="menu-header">Ecommerce</li>
             <?php
-            if($_SESSION['ADMIN_ROLE']=='1'){
+            if($_SESSION['ADMIN_ROLE']== 1){
             ?>
             <li class="dropdown <?= $active=="shipment.php" || $active == "manage_free_shipment.php"? 'active':''; ?>">
               <a href="shipment" class="nav-link"><i data-feather="monitor"></i><span>Manage Free Shipment</span></a>

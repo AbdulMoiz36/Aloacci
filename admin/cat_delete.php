@@ -13,4 +13,6 @@ $delete = "delete from categories where id=$_id";
 
 $res = mysqli_query($con,$delete);
 
-echo "<script>window.location.href='categories'</script>";
+if($res) {
+    header("Location:categories");
+}

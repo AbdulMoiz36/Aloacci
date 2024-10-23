@@ -11,7 +11,7 @@ function isAdmin(){
     if(!isset($_SESSION['ADMIN_LOGIN'])){
         echo "<script>window.location.href='login'</script>";
     }
-    if($_SESSION['ADMIN_ROLE']!='1'){
+    if($_SESSION['ADMIN_ROLE']!=1){
         echo "<script>window.location.href='index'</script>";
     }
 }

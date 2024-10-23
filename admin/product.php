@@ -119,9 +119,7 @@ $serial_no = 1;
                               <i class="fas fa-pencil-alt"></i>
                            </a>
                            <a href="p_delete?id=<?= $row['id'] ?>" class="btn btn-danger btn-action"
-                              data-toggle="tooltip" title="Delete"
-                              data-confirm="Are You Sure?|This action can not be undone. Do you want to continue?"
-                              data-confirm-yes="alert('Deleted')">
+                              data-toggle="tooltip" title="Delete">
                               <i class="fas fa-trash-alt"></i>
                            </a>
                         </td>
