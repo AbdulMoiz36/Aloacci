@@ -88,7 +88,7 @@ if (isset($_REQUEST['submit'])) {
                         <!-- Textarea for 'about' text -->
                         <div class="form-group col-12">
                             <label for="aboutText" class="form-control-label">About Text</label>
-                            <textarea name="about" id="aboutText" rows="5" class="border" style="width: 100%;"><?= $about ?></textarea>
+                            <textarea name="about" id="aboutText" rows="5" class="border" style="width: 100%;" required><?= $about ?></textarea>
                         </div>
 
                         <div class="form-group col-6">
