@@ -518,7 +518,7 @@ if (isset($_REQUEST['submit'])) {
                         <div class="form-group col-2">
                             <label for="gender" class="form-control-label">Gender</label>
                             <div class="dropdown">
-                                <button class="btn btn-secondary dropdown-toggle" type="button" id="genderDropdown"
+                                <button class="dropdown-toggle form-control" style="width: 100%;text-align:left;" type="button" id="genderDropdown"
                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Select Gender
                                 </button>
@@ -542,7 +542,7 @@ if (isset($_REQUEST['submit'])) {
                         <div class="form-group col-2">
                             <label for="genre" class="form-control-label">Genre</label>
                             <div class="dropdown">
-                                <button class="btn btn-secondary dropdown-toggle" type="button" id="genreDropdown"
+                                <button class="dropdown-toggle form-control" style="width: 100%;text-align:left;" type="button" id="genreDropdown"
                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Select Genre
                                 </button>
@@ -566,7 +566,7 @@ if (isset($_REQUEST['submit'])) {
                         <div class="form-group col-2">
                             <label for="type" class="form-control-label">Type</label>
                             <div class="dropdown">
-                                <button class="btn btn-secondary dropdown-toggle" type="button" id="typeDropdown"
+                                <button class="dropdown-toggle form-control" style="width: 100%;text-align:left;" type="button" id="typeDropdown"
                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Select Type
                                 </button>
@@ -590,7 +590,7 @@ if (isset($_REQUEST['submit'])) {
                         <div class="form-group col-2">
                             <label for="season" class="form-control-label">Season</label>
                             <div class="dropdown">
-                                <button class="btn btn-secondary dropdown-toggle" type="button" id="seasonDropdown"
+                                <button class="dropdown-toggle form-control" style="width: 100%;text-align:left;" type="button" id="seasonDropdown"
                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Select Season
                                 </button>
@@ -614,7 +614,7 @@ if (isset($_REQUEST['submit'])) {
                         <div class="form-group col-2">
     <label for="sillage" class="form-control-label">Sillage</label>
     <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="sillageDropdown"
+        <button class="dropdown-toggle form-control" style="width: 100%;text-align:left;" type="button" id="sillageDropdown"
             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Select Sillage
         </button>
@@ -638,7 +638,7 @@ if (isset($_REQUEST['submit'])) {
 <div class="form-group col-2">
     <label for="lasting" class="form-control-label">Lasting</label>
     <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="lastingDropdown"
+        <button class="dropdown-toggle form-control" style="width: 100%;text-align:left;" type="button" id="lastingDropdown"
             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Select Lasting
         </button>
@@ -664,14 +664,16 @@ if (isset($_REQUEST['submit'])) {
                         <style>
                             .dropdown-menu {
                                 max-height: 200px;
-                                /* Limit height */
                                 overflow-y: auto;
-                                /* Enable scroll */
+                                padding: 1rem;
                             }
 
                             .dropdown-item {
                                 cursor: pointer;
                                 /* Change cursor to pointer */
+                            }
+                            .dropdown-item:hover{
+                                background-color: aliceblue;
                             }
                         </style>
                         <script>
