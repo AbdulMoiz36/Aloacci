@@ -199,6 +199,13 @@ $unique_products_json = json_encode($unique_products);
             <i class="fa-solid fa-xmark text-base cursor-pointer pr-2" onclick="toggleShop()"></i>
             <p onclick="toggleShop()">Close</p>
           </div>
+          <li class="text-start font-semibold">
+          <a href="shop?" class="font-semibold">All Products</a>
+          <ul class="mt-2 font-thin flex flex-col gap-1">
+          <a href="shop?genders=1"><li class="hover:underline hover:cursor-pointer">Man</li></a>
+          <a href="shop?genders=2"><li class="hover:underline hover:cursor-pointer">Woman</li></a>
+          </ul>
+          </li>
           <?php
           // Fetch categories
           $categoriesQuery = mysqli_query($con, "SELECT * FROM categories");

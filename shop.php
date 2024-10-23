@@ -153,6 +153,33 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
         <div id="selected-values" class="flex flex-wrap gap-2">
             <!-- Selected values will be added here dynamically -->
         </div>
+        <?php
+        // Sort Genders alphabetically
+        usort($genders, function ($a, $b) {
+            return strcmp($a['gender'], $b['gender']);
+        });
+
+        // Sort Genres alphabetically
+        usort($genres, function ($a, $b) {
+            return strcmp($a['genre'], $b['genre']);
+        });
+
+        // Sort Types alphabetically
+        usort($types, function ($a, $b) {
+            return strcmp($a['type'], $b['type']);
+        });
+
+        // Sort Seasons alphabetically
+        usort($seasons, function ($a, $b) {
+            return strcmp($a['season'], $b['season']);
+        });
+
+        // Sort Sillages alphabetically
+        usort($sillages, function ($a, $b) {
+            return strcmp($a['sillage'], $b['sillage']);
+        });
+        ?>
+
 
         <!-- Gender filter section -->
         <div class="mt-4">
@@ -164,12 +191,12 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
                 </p>
                 <div id="dropdown-gender-content" class="mt-2 text-lg">
                     <?php foreach ($genders as $gender): ?>
-                    <label class="flex items-center hover:bg-gray-200 p-2 cursor-pointer">
-                        <input type="checkbox" value="<?= htmlspecialchars($gender['id']) ?>"
-                            class="gender-checkbox custom-checkbox mr-2" data-name="<?= $gender['gender'] ?>"
-                            onclick="filterProducts()">
-                        <?= htmlspecialchars($gender['gender']) ?>
-                    </label>
+                        <label class="flex items-center hover:bg-gray-200 p-2 cursor-pointer">
+                            <input type="checkbox" value="<?= htmlspecialchars($gender['id']) ?>"
+                                class="gender-checkbox custom-checkbox mr-2" data-name="<?= $gender['gender'] ?>"
+                                onclick="filterProducts()">
+                            <?= htmlspecialchars($gender['gender']) ?>
+                        </label>
                     <?php endforeach; ?>
                 </div>
             </div>
@@ -184,12 +211,12 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
                 </p>
                 <div id="dropdown-genre-content" class="mt-2 text-lg">
                     <?php foreach ($genres as $genre): ?>
-                    <label class="flex items-center hover:bg-gray-200 p-2 cursor-pointer">
-                        <input type="checkbox" value="<?= htmlspecialchars($genre['id']) ?>"
-                            class="genre-checkbox custom-checkbox mr-2" data-name="<?= $genre['genre'] ?>"
-                            onclick="filterProducts()">
-                        <?= htmlspecialchars($genre['genre']) ?>
-                    </label>
+                        <label class="flex items-center hover:bg-gray-200 p-2 cursor-pointer">
+                            <input type="checkbox" value="<?= htmlspecialchars($genre['id']) ?>"
+                                class="genre-checkbox custom-checkbox mr-2" data-name="<?= $genre['genre'] ?>"
+                                onclick="filterProducts()">
+                            <?= htmlspecialchars($genre['genre']) ?>
+                        </label>
                     <?php endforeach; ?>
                 </div>
             </div>
@@ -204,11 +231,11 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
                 </p>
                 <div id="dropdown-type-content" class="mt-2 text-lg">
                     <?php foreach ($types as $type): ?>
-                    <label class="flex items-center hover:bg-gray-200 p-2 cursor-pointer">
-                        <input type="checkbox" value="<?= htmlspecialchars($type['id']) ?>"
-                            class="type-checkbox custom-checkbox mr-2" onclick="filterProducts()">
-                        <?= htmlspecialchars($type['type']) ?>
-                    </label>
+                        <label class="flex items-center hover:bg-gray-200 p-2 cursor-pointer">
+                            <input type="checkbox" value="<?= htmlspecialchars($type['id']) ?>"
+                                class="type-checkbox custom-checkbox mr-2" onclick="filterProducts()">
+                            <?= htmlspecialchars($type['type']) ?>
+                        </label>
                     <?php endforeach; ?>
                 </div>
             </div>
@@ -223,11 +250,11 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
                 </p>
                 <div id="dropdown-season-content" class="mt-2 text-lg">
                     <?php foreach ($seasons as $season): ?>
-                    <label class="flex items-center hover:bg-gray-200 p-2 cursor-pointer">
-                        <input type="checkbox" value="<?= htmlspecialchars($season['id']) ?>"
-                            class="season-checkbox custom-checkbox mr-2" onclick="filterProducts()">
-                        <?= htmlspecialchars($season['season']) ?>
-                    </label>
+                        <label class="flex items-center hover:bg-gray-200 p-2 cursor-pointer">
+                            <input type="checkbox" value="<?= htmlspecialchars($season['id']) ?>"
+                                class="season-checkbox custom-checkbox mr-2" onclick="filterProducts()">
+                            <?= htmlspecialchars($season['season']) ?>
+                        </label>
                     <?php endforeach; ?>
                 </div>
             </div>
@@ -242,11 +269,11 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
                 </p>
                 <div id="dropdown-sillage-content" class="mt-2 text-lg">
                     <?php foreach ($sillages as $sillage): ?>
-                    <label class="flex items-center hover:bg-gray-200 p-2 cursor-pointer">
-                        <input type="checkbox" value="<?= htmlspecialchars($sillage['id']) ?>"
-                            class="sillage-checkbox custom-checkbox mr-2" onclick="filterProducts()">
-                        <?= htmlspecialchars($sillage['sillage']) ?>
-                    </label>
+                        <label class="flex items-center hover:bg-gray-200 p-2 cursor-pointer">
+                            <input type="checkbox" value="<?= htmlspecialchars($sillage['id']) ?>"
+                                class="sillage-checkbox custom-checkbox mr-2" onclick="filterProducts()">
+                            <?= htmlspecialchars($sillage['sillage']) ?>
+                        </label>
                     <?php endforeach; ?>
                 </div>
             </div>
@@ -261,11 +288,11 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
                 </p>
                 <div id="dropdown-lasting-content" class="mt-2 text-lg">
                     <?php foreach ($lastings as $lasting): ?>
-                    <label class="flex items-center hover:bg-gray-200 p-2 cursor-pointer">
-                        <input type="checkbox" value="<?= htmlspecialchars($lasting['id']) ?>"
-                            class="lasting-checkbox custom-checkbox mr-2" onclick="filterProducts()">
-                        <?= htmlspecialchars($lasting['lasting']) ?> hrs
-                    </label>
+                        <label class="flex items-center hover:bg-gray-200 p-2 cursor-pointer">
+                            <input type="checkbox" value="<?= htmlspecialchars($lasting['id']) ?>"
+                                class="lasting-checkbox custom-checkbox mr-2" onclick="filterProducts()">
+                            <?= htmlspecialchars($lasting['lasting']) ?> hrs
+                        </label>
                     <?php endforeach; ?>
                 </div>
             </div>
@@ -276,93 +303,93 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
     <!-- Products section -->
     <div id="products-container" class="w-full p-3 flex flex-wrap justify-center gap-5">
         <?php
-    $unique_products = [];
-    foreach ($get_product as $list) {
-        if (in_array($list['id'], $unique_products)) continue;
-        $unique_products[] = $list['id'];
+        $unique_products = [];
+        foreach ($get_product as $list) {
+            if (in_array($list['id'], $unique_products)) continue;
+            $unique_products[] = $list['id'];
 
-    // Fetch all type_id values for the product from the product_details table
-    $productDetailsQuery = mysqli_query($con, "SELECT GROUP_CONCAT(gender_id) AS gender_id, GROUP_CONCAT(genre_id) AS genre_id, GROUP_CONCAT(type_id) AS type_id, GROUP_CONCAT(season_id) AS season_id, GROUP_CONCAT(sillage_id) AS sillage_id, GROUP_CONCAT(lasting_id) AS lasting_id
+            // Fetch all type_id values for the product from the product_details table
+            $productDetailsQuery = mysqli_query($con, "SELECT GROUP_CONCAT(gender_id) AS gender_id, GROUP_CONCAT(genre_id) AS genre_id, GROUP_CONCAT(type_id) AS type_id, GROUP_CONCAT(season_id) AS season_id, GROUP_CONCAT(sillage_id) AS sillage_id, GROUP_CONCAT(lasting_id) AS lasting_id
                                                FROM product_details 
                                                WHERE product_id = '{$list['id']}'");
-    $productDetails = mysqli_fetch_assoc($productDetailsQuery);
-    
-    // Convert the type_id and season_id into comma-separated values
-    $gender_id = $productDetails['gender_id'];
-    $genre_id = $productDetails['genre_id'];
-    $type_id = $productDetails['type_id'];
-    $season_id = $productDetails['season_id'];
-    $sillage_id = $productDetails['sillage_id'];
-    $lasting_id = $productDetails['lasting_id'];
+            $productDetails = mysqli_fetch_assoc($productDetailsQuery);
 
-        $product_formats = []; // Get product formats
-        foreach ($get_product as $p) {
-            if ($p['id'] == $list['id']) {
-                // Query to get the total ordered quantity for the current format
-                $order_qty_result = mysqli_query($con, "SELECT SUM(qty) AS total_ordered_qty FROM orders_detail WHERE product_id = '{$p['id']}' AND format = '{$p['format']}'");
-                $order_qty_row = mysqli_fetch_assoc($order_qty_result);
-                $total_ordered_qty = $order_qty_row['total_ordered_qty'] ?? 0; // If no orders, default to 0
+            // Convert the type_id and season_id into comma-separated values
+            $gender_id = $productDetails['gender_id'];
+            $genre_id = $productDetails['genre_id'];
+            $type_id = $productDetails['type_id'];
+            $season_id = $productDetails['season_id'];
+            $sillage_id = $productDetails['sillage_id'];
+            $lasting_id = $productDetails['lasting_id'];
 
-                // Subtract total ordered quantity from available stock in product_format
-                $available_qty = $p['qty'] - $total_ordered_qty;
-                $available_qty = max(0, $available_qty); // Ensure we don't have negative quantities
-                
-                $product_formats[] = [
-                    'format' => $p['format'],
-                    'price' => $p['price'],
-                    'qty' => $available_qty // Store available quantity
-                ];
+            $product_formats = []; // Get product formats
+            foreach ($get_product as $p) {
+                if ($p['id'] == $list['id']) {
+                    // Query to get the total ordered quantity for the current format
+                    $order_qty_result = mysqli_query($con, "SELECT SUM(qty) AS total_ordered_qty FROM orders_detail WHERE product_id = '{$p['id']}' AND format = '{$p['format']}'");
+                    $order_qty_row = mysqli_fetch_assoc($order_qty_result);
+                    $total_ordered_qty = $order_qty_row['total_ordered_qty'] ?? 0; // If no orders, default to 0
+
+                    // Subtract total ordered quantity from available stock in product_format
+                    $available_qty = $p['qty'] - $total_ordered_qty;
+                    $available_qty = max(0, $available_qty); // Ensure we don't have negative quantities
+
+                    $product_formats[] = [
+                        'format' => $p['format'],
+                        'price' => $p['price'],
+                        'qty' => $available_qty // Store available quantity
+                    ];
+                }
             }
-        }
-    ?>
-        <div class="product-card w-96 md:w-72 h-[40rem] md:h-[30rem] flex gap-2 flex-col relative group shadow"
-            data-gender-id="<?= $gender_id ?>" data-genre-id="<?= $genre_id ?>" data-type-id="<?= $type_id ?>" data-season-id="<?= $season_id ?>" data-sillage-id="<?= $sillage_id ?>" data-lasting-id="<?= $lasting_id ?>" >
-            <div class="openModalBtn z-10 absolute -top-2 -right-2 bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full p-3 flex items-center justify-center text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out cursor-pointer"
-                data-product-id="<?= $list['id'] ?>" data-product-name="<?= $list['name'] ?>"
-                data-product-formats="<?= htmlspecialchars(json_encode($product_formats)) ?>">
-                <i class="fas fa-plus text-white pl-0.5 font-semibold"></i>
+        ?>
+            <div class="product-card w-96 md:w-72 h-[40rem] md:h-[30rem] flex gap-2 flex-col relative group shadow"
+                data-gender-id="<?= $gender_id ?>" data-genre-id="<?= $genre_id ?>" data-type-id="<?= $type_id ?>" data-season-id="<?= $season_id ?>" data-sillage-id="<?= $sillage_id ?>" data-lasting-id="<?= $lasting_id ?>">
+                <div class="openModalBtn z-10 absolute -top-2 -right-2 bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full p-3 flex items-center justify-center text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out cursor-pointer"
+                    data-product-id="<?= $list['id'] ?>" data-product-name="<?= $list['name'] ?>"
+                    data-product-formats="<?= htmlspecialchars(json_encode($product_formats)) ?>">
+                    <i class="fas fa-plus text-white pl-0.5 font-semibold"></i>
+                </div>
+
+                <!-- Product image wrapper -->
+                <div class="relative h-[70%] w-full">
+                    <a href="product_details?id=<?= $list['id'] ?>" class="product-link w-full">
+                        <?php
+                        // Determine which image to display as the main image
+                        $main_image = '';
+                        if (!empty($list['image'])) {
+                            $main_image = $list['image'];
+                        } elseif (!empty($list['image2'])) {
+                            $main_image = $list['image2'];
+                        } elseif (!empty($list['image3'])) {
+                            $main_image = $list['image3'];
+                        }
+                        ?>
+
+                        <img src="./image/<?= $main_image ?>" alt="<?= $list['name'] ?>"
+                            class="h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0">
+
+                        <?php if ($list['image2'] != '' && $list['image2'] != $main_image): ?>
+                            <img src="./image/<?= $list['image2'] ?>" alt="<?= $list['name'] ?> Hover"
+                                class="absolute top-0 left-0 h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100">
+                        <?php elseif ($list['image3'] != '' && $list['image3'] != $main_image): ?>
+                            <img src="./image/<?= $list['image3'] ?>" alt="<?= $list['name'] ?> Hover"
+                                class="absolute top-0 left-0 h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100">
+                        <?php else: ?>
+                            <img src="./image/<?= $main_image ?>" alt="<?= $list['name'] ?> Hover"
+                                class="absolute top-0 left-0 h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100">
+                        <?php endif; ?>
+                    </a>
+                </div>
+
+                <!-- Product details -->
+                <div class="px-4 py-2 h-full flex flex-col justify-evenly">
+                    <a href="product_details?id=<?= $list['id'] ?>"
+                        class="text-lg font-bold hover:underline"><?= htmlspecialchars($list['name']) ?></a>
+                    <p class="text-gray-600 overflow-hidden text-ellipsis line-clamp-2">
+                        <?= htmlspecialchars($list['description']) ?></p>
+                    <p class="text-lg font-bold text-red-500">Rs. <?= htmlspecialchars($list['price']) ?></p>
+                </div>
             </div>
-
-            <!-- Product image wrapper -->
-            <div class="relative h-[70%] w-full">
-                <a href="product_details?id=<?= $list['id'] ?>" class="product-link w-full">
-                    <?php 
-                    // Determine which image to display as the main image
-                    $main_image = '';
-                    if (!empty($list['image'])) {
-                        $main_image = $list['image'];
-                    } elseif (!empty($list['image2'])) {
-                        $main_image = $list['image2'];
-                    } elseif (!empty($list['image3'])) {
-                        $main_image = $list['image3'];
-                    }
-                    ?>
-
-                    <img src="./image/<?= $main_image ?>" alt="<?= $list['name'] ?>"
-                        class="h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0">
-
-                    <?php if ($list['image2'] != '' && $list['image2'] != $main_image): ?>
-                    <img src="./image/<?= $list['image2'] ?>" alt="<?= $list['name'] ?> Hover"
-                        class="absolute top-0 left-0 h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100">
-                    <?php elseif ($list['image3'] != '' && $list['image3'] != $main_image): ?>
-                    <img src="./image/<?= $list['image3'] ?>" alt="<?= $list['name'] ?> Hover"
-                        class="absolute top-0 left-0 h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100">
-                    <?php else: ?>
-                    <img src="./image/<?= $main_image ?>" alt="<?= $list['name'] ?> Hover"
-                        class="absolute top-0 left-0 h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100">
-                    <?php endif; ?>
-                </a>
-            </div>
-
-            <!-- Product details -->
-            <div class="px-4 py-2 h-full flex flex-col justify-evenly">
-                <a href="product_details?id=<?= $list['id'] ?>"
-                    class="text-lg font-bold hover:underline"><?= htmlspecialchars($list['name']) ?></a>
-                <p class="text-gray-600 overflow-hidden text-ellipsis line-clamp-2">
-                    <?= htmlspecialchars($list['description']) ?></p>
-                <p class="text-lg font-bold text-red-500">Rs. <?= htmlspecialchars($list['price']) ?></p>
-            </div>
-        </div>
         <?php } ?>
     </div>
 
@@ -428,43 +455,43 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
             const productGenreIds = product.getAttribute('data-genre-id').split(
                 ','); // Get all genre_ids as an array
             const productTypeIds = product.getAttribute('data-type-id').split(
-            ','); // Get all type_ids as an array
+                ','); // Get all type_ids as an array
             const productSeasonIds = product.getAttribute('data-season-id').split(
-            ','); // Get all season_ids as an array
+                ','); // Get all season_ids as an array
             const productSillageIds = product.getAttribute('data-sillage-id').split(
                 ','); // Get all sillage_ids as an array
             const productLastingIds = product.getAttribute('data-lasting-id').split(
                 ','); // Get all lasting_ids as an array
 
-                // Check if any selected gender matches one of the product's gender_ids
-                const genderMatch = selectedGenders.length === 0 || selectedGenders.some(genderId =>
+            // Check if any selected gender matches one of the product's gender_ids
+            const genderMatch = selectedGenders.length === 0 || selectedGenders.some(genderId =>
                 productGenderIds.includes(genderId));
 
-                // Check if any selected genre matches one of the product's genre_ids
-                const genreMatch = selectedGenres.length === 0 || selectedGenres.some(genreId =>
+            // Check if any selected genre matches one of the product's genre_ids
+            const genreMatch = selectedGenres.length === 0 || selectedGenres.some(genreId =>
                 productGenreIds.includes(genreId));
 
-                // Check if any selected type matches one of the product's type_ids
-                const typeMatch = selectedTypes.length === 0 || selectedTypes.some(typeId =>
+            // Check if any selected type matches one of the product's type_ids
+            const typeMatch = selectedTypes.length === 0 || selectedTypes.some(typeId =>
                 productTypeIds.includes(typeId));
 
-                // Check if any selected season matches one of the product's season_ids
-                const seasonMatch = selectedSeasons.length === 0 || selectedSeasons.some(seasonId =>
+            // Check if any selected season matches one of the product's season_ids
+            const seasonMatch = selectedSeasons.length === 0 || selectedSeasons.some(seasonId =>
                 productSeasonIds.includes(seasonId));
 
-                // Check if any selected sillage matches one of the product's sillage_ids
-                const sillageMatch = selectedSillages.length === 0 || selectedSillages.some(sillageId =>
+            // Check if any selected sillage matches one of the product's sillage_ids
+            const sillageMatch = selectedSillages.length === 0 || selectedSillages.some(sillageId =>
                 productSillageIds.includes(sillageId));
 
-                // Check if any selected lasting matches one of the product's lasting_ids
-                const lastingMatch = selectedLastings.length === 0 || selectedLastings.some(lastingId =>
+            // Check if any selected lasting matches one of the product's lasting_ids
+            const lastingMatch = selectedLastings.length === 0 || selectedLastings.some(lastingId =>
                 productLastingIds.includes(lastingId));
 
-                if (genderMatch && genreMatch && typeMatch && seasonMatch && sillageMatch && lastingMatch) {
+            if (genderMatch && genreMatch && typeMatch && seasonMatch && sillageMatch && lastingMatch) {
                 product.style.display = 'flex'; // Show the product if it matches
-                } else {
+            } else {
                 product.style.display = 'none'; // Hide the product if it doesn't match
-                }
+            }
         });
         // Set selected option in sort dropdown
         const sortSelect = document.querySelector('select');
@@ -584,10 +611,10 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
             class="w-full p-3 border-2 hover:cursor-pointer text-center border-black text-lg font-semibold rounded-full text-black">Add
             To
             Cart</div>
-            <div style="margin-top: 20px;" onclick="addToCartAndCheckout(currentProductId)"
-                class="w-full p-3 border-2 hover:cursor-pointer bg-gradient-to-bl from-yellow-500 via-yellow-500 to-amber-600 shadow-sm hover:shadow-lg transition-shadow ease-in-out duration-300 font-semibold rounded-full text-white text-center">
-                Buy It
-                Now</div>
+        <div style="margin-top: 20px;" onclick="addToCartAndCheckout(currentProductId)"
+            class="w-full p-3 border-2 hover:cursor-pointer bg-gradient-to-bl from-yellow-500 via-yellow-500 to-amber-600 shadow-sm hover:shadow-lg transition-shadow ease-in-out duration-300 font-semibold rounded-full text-white text-center">
+            Buy It
+            Now</div>
         <div id="closeModalBtn"
             class="absolute -top-2 -right-2 hover:cursor-pointer shadow-md hover:shadow-xl font-bold bg-gradient-to-bl from-yellow-500 via-yellow-500 to-amber-600 text-white px-4 py-2 rounded-full hover:bg-red-600 focus:outline-none">
             <i class="fa-solid fa-xmark"></i>

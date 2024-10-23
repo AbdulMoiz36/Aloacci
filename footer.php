@@ -6,7 +6,7 @@
 
       <!-- Column 1: Logo Section -->
       <div class="mb-6 md:mb-0 flex justify-center">
-        <img src="./img/logo.png" alt="Company Logo" class="w-3/4 md:w-3/4 lg:w-2/4 mb-4">
+        <img src="./img/logo.png" alt="Company Logo" class="w-2/4 md:w-3/4 lg:w-2/4 mb-4">
       </div>
 
       <!-- Column 2: About Section -->

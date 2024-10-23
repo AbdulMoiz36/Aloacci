@@ -176,9 +176,9 @@ if (mysqli_num_rows($res) > 0) {
     <div class="w-full max-w-7xl px-4 md:px-5 lg:px-5 mx-auto">
         <div class="w-full justify-start items-center gap-12 grid lg:grid-cols-2 grid-cols-1">
             <div
-                class="w-full justify-center items-start gap-6 grid sm:grid-cols-2 grid-cols-1 lg:order-first order-last">
+                class="w-full justify-center items-start gap-6 grid grid-cols-2  lg:order-first order-last">
                 <div class="pt-24 lg:justify-center sm:justify-end justify-start items-start gap-2.5 flex">
-                    <img class=" rounded-xl object-cover" src="./image/umeed_77_11zon.jpeg"
+                    <img class=" rounded-xl object-cover"  src="./image/umeed_77_11zon.jpeg"
                         alt="about Us image" />
                 </div>
                 <img class="sm:ml-0 ml-auto rounded-xl object-cover" src="./image/umeed.jpeg"
@@ -306,7 +306,7 @@ if (mysqli_num_rows($res) > 0) {
                 <div class="sm:text-center lg:text-left">
 
                     <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, quo mollitia exercitationem animi atque obcaecati ut consequuntur! Similique voluptas, sit, nulla recusandae deleniti ducimus eos, quia facilis dolores est adipisci ut modi accusantium. Itaque nihil blanditiis aliquam distinctio labore, porro tempora dolore ratione deserunt? Soluta commodi quod consectetur repellat voluptatem ipsa, sequi iure facere praesentium, quaerat omnis cum error voluptatum tempore magnam alias quae quia fugiat voluptas vero qui dolore. Nam soluta qui ipsam optio? Perspiciatis, qui ipsum placeat delectus id aut quasi voluptatem illum est, veritatis dicta minus consequuntur. Hic blanditiis, harum perferendis magnam commodi dolorum, iste consectetur similique
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, quo mollitia exercitationem animi atque obcaecati ut consequuntur! Similique voluptas, sit, nulla recusandae deleniti ducimus eos, quia facilis dolores est adipisci ut modi accusantium. Itaque nihil blanditiis aliquam distinctio labore, porro tempora dolore ratione deserunt? Soluta commodi quod consectetur repellat voluptatem ipsa.
                     </p>
                 </div>
             </main>

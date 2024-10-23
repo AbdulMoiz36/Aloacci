@@ -183,25 +183,25 @@ if (isset($_REQUEST['submit'])) {
             // Handle removal of images based on user input
 
             if (isset($_POST['remove_image2'])) {
-            if (file_exists("../image/" . $image2)) {
-            unlink("../image/" . $image2);
-            }
-            $image2 = ''; // Clear the image2 value
-            mysqli_query($con, "UPDATE product SET image2='' WHERE id='$_id'");
+                if (file_exists("../image/" . $image2)) {
+                    unlink("../image/" . $image2);
+                }
+                $image2 = ''; // Clear the image2 value
+                mysqli_query($con, "UPDATE product SET image2='' WHERE id='$_id'");
             }
 
             if (isset($_POST['remove_image3'])) {
-            if (file_exists("../image/" . $image3)) {
-            unlink("../image/" . $image3);
-            }
-            $image3 = ''; // Clear the image3 value
-            mysqli_query($con, "UPDATE product SET image3='' WHERE id='$_id'");
+                if (file_exists("../image/" . $image3)) {
+                    unlink("../image/" . $image3);
+                }
+                $image3 = ''; // Clear the image3 value
+                mysqli_query($con, "UPDATE product SET image3='' WHERE id='$_id'");
             }
 
             mysqli_query($con, "update product set category_id='$category_id', sub_category_id='$sub_category_id', name='$name', breif='$breif', description='$description', image='$image', image2='$image2', image3='$image3' where id='$_id'");
 
             mysqli_query($con, "DELETE FROM product_details WHERE product_id='$_id'");
-    
+
             foreach ($gender_ids as $gender_id) {
                 mysqli_query($con, "INSERT INTO product_details (product_id, gender_id) VALUES ('$_id', '$gender_id')");
             }
@@ -257,7 +257,7 @@ if (isset($_REQUEST['submit'])) {
 
             mysqli_query($con, "INSERT INTO product (`category_id`, `sub_category_id`, `name`, `breif`, `description`, `status`, `image`, `image2`, `image3`) VALUES ('$category_id', '$sub_category_id', '$name', '$breif', '$description', '1', '$image', '$image2', '$image3')");
             $product_id = mysqli_insert_id($con);
-    
+
             foreach ($gender_ids as $gender_id) {
                 mysqli_query($con, "INSERT INTO product_details (product_id, gender_id) VALUES ('$product_id', '$gender_id')");
             }
@@ -483,39 +483,39 @@ if (isset($_REQUEST['submit'])) {
 
                     <?php
 
-                        if (isset($_GET['id']) && $_GET['id'] != '') {
-                            
-                            // Fetch the types associated with the product
-                            $result = mysqli_query($con, "SELECT * FROM product_details WHERE product_id = '$_id'");
-                            $selected_genders = [];
-                            $selected_genres = [];
-                            $selected_types = [];
-                            $selected_seasons = [];
-                            $selected_sillages = [];
-                            $selected_lastings = [];
-                            
-                            while ($row = mysqli_fetch_array($result)) {
-                                $selected_genders[] = $row['gender_id'];
-                                $selected_genres[] = $row['genre_id'];
-                                $selected_types[] = $row['type_id'];
-                                $selected_seasons[] = $row['season_id'];
-                                $selected_sillages[] = $row['sillage_id'];
-                                $selected_lastings[] = $row['lasting_id'];
-                            }
-                        } else {
-                            // If product_id is not set, initialize selected_types as an empty array
-                            $selected_genders = [];
-                            $selected_genres = [];
-                            $selected_types = [];
-                            $selected_seasons = [];
-                            $selected_sillages = [];
-                            $selected_lastings = [];
-                        }
+                    if (isset($_GET['id']) && $_GET['id'] != '') {
 
-                        ?>
+                        // Fetch the types associated with the product
+                        $result = mysqli_query($con, "SELECT * FROM product_details WHERE product_id = '$_id'");
+                        $selected_genders = [];
+                        $selected_genres = [];
+                        $selected_types = [];
+                        $selected_seasons = [];
+                        $selected_sillages = [];
+                        $selected_lastings = [];
+
+                        while ($row = mysqli_fetch_array($result)) {
+                            $selected_genders[] = $row['gender_id'];
+                            $selected_genres[] = $row['genre_id'];
+                            $selected_types[] = $row['type_id'];
+                            $selected_seasons[] = $row['season_id'];
+                            $selected_sillages[] = $row['sillage_id'];
+                            $selected_lastings[] = $row['lasting_id'];
+                        }
+                    } else {
+                        // If product_id is not set, initialize selected_types as an empty array
+                        $selected_genders = [];
+                        $selected_genres = [];
+                        $selected_types = [];
+                        $selected_seasons = [];
+                        $selected_sillages = [];
+                        $selected_lastings = [];
+                    }
+
+                    ?>
 
                     <div class="form-row">
-                        <div class="form-group col-4">
+                        <div class="form-group col-2">
                             <label for="gender" class="form-control-label">Gender</label>
                             <div class="dropdown">
                                 <button class="dropdown-toggle form-control" style="width: 100%;text-align:left;display: flex;justify-content: space-between;" type="button" id="genderDropdown"
@@ -539,7 +539,7 @@ if (isset($_REQUEST['submit'])) {
                             </div>
                         </div>
 
-                        <div class="form-group col-4">
+                        <div class="form-group col-2">
                             <label for="genre" class="form-control-label">Genre</label>
                             <div class="dropdown">
                                 <button class="dropdown-toggle form-control" style="width: 100%;text-align:left;display: flex;justify-content: space-between;" type="button" id="genreDropdown"
@@ -563,7 +563,7 @@ if (isset($_REQUEST['submit'])) {
                             </div>
                         </div>
 
-                        <div class="form-group col-4">
+                        <div class="form-group col-2">
                             <label for="type" class="form-control-label">Type</label>
                             <div class="dropdown">
                                 <button class="dropdown-toggle form-control" style="width: 100%;text-align:left;display: flex;justify-content: space-between;" type="button" id="typeDropdown"
@@ -587,7 +587,7 @@ if (isset($_REQUEST['submit'])) {
                             </div>
                         </div>
 
-                        <div class="form-group col-4">
+                        <div class="form-group col-2">
                             <label for="season" class="form-control-label">Season</label>
                             <div class="dropdown">
                                 <button class="dropdown-toggle form-control" style="width: 100%;text-align:left;display: flex;justify-content: space-between;" type="button" id="seasonDropdown"
@@ -611,92 +611,94 @@ if (isset($_REQUEST['submit'])) {
                             </div>
                         </div>
 
-                        <div class="form-group col-4">
-    <label for="sillage" class="form-control-label">Sillage</label>
-    <div class="dropdown">
-        <button class="dropdown-toggle form-control" style="width: 100%;text-align:left;display: flex;justify-content: space-between;" type="button" id="sillageDropdown"
-            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Select Sillage
-        </button>
-        <div class="dropdown-menu" aria-labelledby="sillageDropdown">
-            <div class="form-check">
-                <?php
-                $select_sillage = mysqli_query($con, "SELECT * FROM sillage");
-                while ($sillage_row = mysqli_fetch_array($select_sillage)) {
-                    $selected = in_array($sillage_row['id'], $selected_sillages) ? 'checked' : '';
-                    echo "<label class='dropdown-item'>
+                        <div class="form-group col-2">
+                            <label for="sillage" class="form-control-label">Sillage</label>
+                            <div class="dropdown">
+                                <button class="dropdown-toggle form-control" style="width: 100%;text-align:left;display: flex;justify-content: space-between;" type="button" id="sillageDropdown"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Select Sillage
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="sillageDropdown">
+                                    <div class="form-check">
+                                        <?php
+                                        $select_sillage = mysqli_query($con, "SELECT * FROM sillage");
+                                        while ($sillage_row = mysqli_fetch_array($select_sillage)) {
+                                            $selected = in_array($sillage_row['id'], $selected_sillages) ? 'checked' : '';
+                                            echo "<label class='dropdown-item'>
                             <input type='radio' class='form-check-input' name='sillage_id' value='" . $sillage_row['id'] . "' $selected>
                             " . $sillage_row['sillage'] . "
                         </label>";
-                }
-                ?>
-            </div>
-        </div>
-    </div>
-</div>
+                                        }
+                                        ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-<div class="form-group col-4">
-    <label for="lasting" class="form-control-label">Lasting</label>
-    <div class="dropdown">
-        <button class="dropdown-toggle form-control" style="width: 100%;text-align:left;display: flex;justify-content: space-between;" type="button" id="lastingDropdown"
-            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Select Lasting
-        </button>
-        <div class="dropdown-menu" aria-labelledby="lastingDropdown">
-            <div class="form-check">
-                <?php
-                $select_lasting = mysqli_query($con, "SELECT * FROM lasting");
-                while ($lasting_row = mysqli_fetch_array($select_lasting)) {
-                    $selected = in_array($lasting_row['id'], $selected_lastings) ? 'checked' : '';
-                    echo "<label class='dropdown-item'>
+                        <div class="form-group col-2">
+                            <label for="lasting" class="form-control-label">Lasting</label>
+                            <div class="dropdown">
+                                <button class="dropdown-toggle form-control" style="width: 100%;text-align:left;display: flex;justify-content: space-between;" type="button" id="lastingDropdown"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Select Lasting
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="lastingDropdown">
+                                    <div class="form-check">
+                                        <?php
+                                        $select_lasting = mysqli_query($con, "SELECT * FROM lasting");
+                                        while ($lasting_row = mysqli_fetch_array($select_lasting)) {
+                                            $selected = in_array($lasting_row['id'], $selected_lastings) ? 'checked' : '';
+                                            echo "<label class='dropdown-item'>
                             <input type='radio' class='form-check-input' name='lasting_id' value='" . $lasting_row['id'] . "' $selected>
                             " . $lasting_row['lasting'] . "
                         </label>";
-                }
-                ?>
-            </div>
-        </div>
-    </div>
-</div>
+                                        }
+                                        ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
 
                     </div>
-                        <style>
-                            .dropdown-menu {
-                                max-height: 200px;
-                                overflow-y: auto;
-                                padding: 1rem;
-                                width: 100%;
-                            }
+                    <style>
+                        .dropdown-menu {
+                            max-height: 200px;
+                            overflow-y: auto;
+                            padding: 1rem;
+                            width: 100%;
+                        }
 
-                            .dropdown-item {
-                                cursor: pointer;
-                                /* Change cursor to pointer */
-                            }
-                            .dropdown-item:hover{
-                                background-color: aliceblue;
-                            }
-                            .dropdown-toggle::after{
+                        .dropdown-item {
+                            cursor: pointer;
+                            /* Change cursor to pointer */
+                        }
+
+                        .dropdown-item:hover {
+                            background-color: aliceblue;
+                        }
+
+                        .dropdown-toggle::after {
                             margin-top: 0.5rem;
-                            }
-                        </style>
-                        <script>
-                            $(document).ready(function() {
-                                // Open dropdown
-                                $('.dropdown-toggle').click(function(e) {
-                                    e.stopPropagation(); // Stop the event from bubbling up
-                                    $(this).next('.dropdown-menu')
-                                        .toggle(); // Show or hide the dropdown
-                                });
-                                // Close dropdown when clicking outside of it
-                                $(document).click(function(e) {
-                                    if (!$(e.target).closest('.dropdown').length) {
-                                        $('.dropdown-menu').hide(); // Hide all dropdowns
-                                    }
-                                });
+                        }
+                    </style>
+                    <script>
+                        $(document).ready(function() {
+                            // Open dropdown
+                            $('.dropdown-toggle').click(function(e) {
+                                e.stopPropagation(); // Stop the event from bubbling up
+                                $(this).next('.dropdown-menu')
+                                    .toggle(); // Show or hide the dropdown
                             });
-                        </script>
-                        <br><br>
+                            // Close dropdown when clicking outside of it
+                            $(document).click(function(e) {
+                                if (!$(e.target).closest('.dropdown').length) {
+                                    $('.dropdown-menu').hide(); // Hide all dropdowns
+                                }
+                            });
+                        });
+                    </script>
+                    <br><br>
                     <!-- Image 1 -->
                     <div class="form-row">
                         <div class="form-group col-6">

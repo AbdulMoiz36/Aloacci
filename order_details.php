@@ -18,9 +18,9 @@ if (!$order) {
     exit; // Make sure to exit after the redirect to stop further execution
 }
 
-if($order['user_id'] != 0 || $order['user_id'] != ''){
-    $uid = $order['user_id']; 
-    $usql = mysqli_query($con,"SELECT `name` FROM `users` WHERE `id` = $uid");
+if ($order['user_id'] != 0 || $order['user_id'] != '') {
+    $uid = $order['user_id'];
+    $usql = mysqli_query($con, "SELECT `name` FROM `users` WHERE `id` = $uid");
     $user = mysqli_fetch_array($usql);
 }
 
@@ -57,9 +57,9 @@ function getStatusClass($status)
                     <p class="font-semibold text-base leading-7 text-black">Order Id: <span class="text-amber-600 font-medium">#<?= $id ?></span></p>
                     <p class="font-semibold text-base leading-7 text-black mt-4">Order Date : <span class="text-gray-500 font-medium"><?= $order['date'] ?></span></p>
                     <p class="font-semibold text-base leading-7 text-black mt-4">Order Status :
-                    <span class="font-medium text-sm leading-6 whitespace-nowrap py-0.5 px-3 rounded-full lg:mt-3 <?= getStatusClass($order['order_status']) ?>">
-                        <?= $order['order_status'] ?>
-                    </span>
+                        <span class="font-medium text-sm leading-6 whitespace-nowrap py-0.5 px-3 rounded-full lg:mt-3 <?= getStatusClass($order['order_status']) ?>">
+                            <?= $order['order_status'] ?>
+                        </span>
                     </p>
                 </div>
                 <div class="data mt-4 md:mt-0">
@@ -72,7 +72,7 @@ function getStatusClass($status)
             <div class="w-full px-3 min-[400px]:px-6">
 
                 <?php
-                $order_details = mysqli_query($con, "SELECT od.*, p.image, p.name,g.gender FROM `orders_detail` as od JOIN `product` as p ON od.product_id = p.id JOIN gender as g ON p.gender_id = g.id WHERE od.order_id = '$id'");
+                $order_details = mysqli_query($con, "SELECT od.*, p.image, p.name FROM `orders_detail` as od JOIN `product` as p ON od.product_id = p.id WHERE od.order_id = '$id'");
 
                 while ($order_d = mysqli_fetch_assoc($order_details)) {
                     // Extract values from the current row
@@ -81,6 +81,7 @@ function getStatusClass($status)
                     $quantity = $order_d['qty'];
                     $price = $order_d['price'];
                     $format = $order_d['format'];
+                    $product_id = $order_d['product_id'];
                 ?>
 
                     <!-- Order Detail Structure -->
@@ -95,10 +96,23 @@ function getStatusClass($status)
                                     <div class="">
                                         <h2 class="font-semibold text-xl leading-8 text-black mb-3"><?= $product_name ?></h2>
                                         <p class="font-normal text-lg leading-8 text-gray-500 mb-3">
-                                            <?= $order_d['gender'] ?></p>
+                                            <?php
+                                            // Fetch all genders associated with the product
+                                            $perf_gender = mysqli_query($con, "SELECT g.gender FROM product_details as pd 
+JOIN gender as g ON pd.gender_id = g.id 
+WHERE pd.product_id = '$product_id' AND pd.gender_id != 0");
+
+                                            if (mysqli_num_rows($perf_gender) > 0):
+
+                                                $genders = [];
+                                                while ($performance = mysqli_fetch_assoc($perf_gender)) {
+                                                    $genders[] = $performance['gender'];
+                                                }
+                                                echo implode(', ', $genders); 
+                                            endif; ?></p>
                                         <div class="flex items-center">
                                             <p class="font-medium text-base leading-7 text-black pr-4 mr-4 border-r border-gray-200">
-                                                Size: <span class="text-gray-500"><?= $format ?></span></p> <!-- Add size dynamically if needed -->
+                                                Size: <span class="text-gray-500"><?= $format ?></span></p> 
                                             <p class="font-medium text-base leading-7 text-black">Qty: <span class="text-gray-500"><?= $quantity ?></span></p>
                                         </div>
                                     </div>
@@ -116,7 +130,7 @@ function getStatusClass($status)
                                             <p class="lg:mt-4 font-semibold text-sm leading-7 text-green-600">Rs.<?= $price * $quantity ?></p>
                                         </div>
                                     </div>
-                                    
+
                                     <?php
                                     if ($order['user_id'] != 0) {
                                     ?>
