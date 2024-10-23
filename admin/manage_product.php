@@ -25,12 +25,6 @@ $qty2 = '';
 $qty3 = '';
 $qty4 = '';
 $qty5 = '';
-$gender_id = '';
-$genre_id = '';
-$type_id = '';
-$season_id = '';
-$sillage_id = '';
-$lasting_id = '';
 $image = '';
 $image2 = '';
 $image3 = '';
@@ -51,17 +45,29 @@ if (isset($_GET['id']) && $_GET['id'] != '') {
         $category_id = $row['category_id'];
         $sub_category_id = $row['sub_category_id'];
         $name = $row['name'];
-        $gender_id = $row['gender_id'];
-        $genre_id = $row['genre_id'];
-        $type_id = $row['type_id'];
-        $season_id = $row['season_id'];
-        $sillage_id = $row['sillage_id'];
-        $lasting_id = $row['lasting_id'];
         $breif = $row['breif'];
         $description = $row['description'];
         $image = $row['image'];
         $image2 = $row['image2'];
         $image3 = $row['image3'];
+
+        // Fetch types, genders, and genres from product_details table
+        $details_res = mysqli_query($con, "SELECT * FROM product_details WHERE product_id=$_id");
+        $selected_genders = [];
+        $selected_genres = [];
+        $selected_types = [];
+        $selected_seasons = [];
+        $selected_sillages = [];
+        $selected_lastings = [];
+
+        while ($detail_row = mysqli_fetch_assoc($details_res)) {
+            $selected_genders[] = $detail_row['gender_id'];
+            $selected_genres[] = $detail_row['genre_id'];
+            $selected_types[] = $detail_row['type_id'];
+            $selected_seasons[] = $detail_row['season_id'];
+            $selected_sillages[] = $detail_row['sillage_id'];
+            $selected_lastings[] = $detail_row['lasting_id'];
+        }
 
         // Fetch product formats and prices from product_format table
         $format_res = mysqli_query($con, "SELECT * FROM product_format WHERE product_id=$_id");
@@ -112,12 +118,6 @@ if (isset($_REQUEST['submit'])) {
     $format5 = get_safe_value($con, $_REQUEST['format5']);
     $price5 = get_safe_value($con, $_REQUEST['price5']);
     $qty5 = get_safe_value($con, $_REQUEST['qty5']);
-    $gender_id = get_safe_value($con, $_REQUEST['gender_id']);
-    $genre_id = get_safe_value($con, $_REQUEST['genre_id']);
-    $type_id = get_safe_value($con, $_REQUEST['type_id']);
-    $season_id = get_safe_value($con, $_REQUEST['season_id']);
-    $sillage_id = get_safe_value($con, $_REQUEST['sillage_id']);
-    $lasting_id = get_safe_value($con, $_REQUEST['lasting_id']);
     $qty = get_safe_value($con, $_REQUEST['qty']);
     $qty2 = get_safe_value($con, $_REQUEST['qty2']);
     $qty3 = get_safe_value($con, $_REQUEST['qty3']);
@@ -125,6 +125,16 @@ if (isset($_REQUEST['submit'])) {
     $qty5 = get_safe_value($con, $_REQUEST['qty5']);
     $breif = get_safe_value($con, $_REQUEST['breif']);
     $description = get_safe_value($con, $_REQUEST['description']);
+
+    // Retrieve other form data
+    $gender_ids = isset($_POST['gender_id']) ? $_POST['gender_id'] : [];
+    $genre_ids = isset($_POST['genre_id']) ? $_POST['genre_id'] : [];
+    $type_ids = isset($_POST['type_id']) ? $_POST['type_id'] : [];
+    $season_ids = isset($_POST['season_id']) ? $_POST['season_id'] : [];
+
+    // Get selected sillage and lasting
+    $sillage_id = isset($_POST['sillage_id']) ? $_POST['sillage_id'] : null;
+    $lasting_id = isset($_POST['lasting_id']) ? $_POST['lasting_id'] : null;
 
     // Validation for product existence
     $res = mysqli_query($con, "select * from product where category_id='$category_id' and sub_category_id='$sub_category_id' and name='$name'");
@@ -188,7 +198,30 @@ if (isset($_REQUEST['submit'])) {
             mysqli_query($con, "UPDATE product SET image3='' WHERE id='$_id'");
             }
 
-            mysqli_query($con, "update product set category_id='$category_id', sub_category_id='$sub_category_id', name='$name', gender_id='$gender_id', genre_id='$genre_id', type_id='$type_id', season_id='$season_id', sillage_id='$sillage_id', lasting_id='$lasting_id', breif='$breif', description='$description', image='$image', image2='$image2', image3='$image3' where id='$_id'");
+            mysqli_query($con, "update product set category_id='$category_id', sub_category_id='$sub_category_id', name='$name', breif='$breif', description='$description', image='$image', image2='$image2', image3='$image3' where id='$_id'");
+
+            mysqli_query($con, "DELETE FROM product_details WHERE product_id='$_id'");
+    
+            foreach ($gender_ids as $gender_id) {
+                mysqli_query($con, "INSERT INTO product_details (product_id, gender_id) VALUES ('$_id', '$gender_id')");
+            }
+            foreach ($genre_ids as $genre_id) {
+                mysqli_query($con, "INSERT INTO product_details (product_id, genre_id) VALUES ('$_id', '$genre_id')");
+            }
+            foreach ($type_ids as $type_id) {
+                mysqli_query($con, "INSERT INTO product_details (product_id, type_id) VALUES ('$_id', '$type_id')");
+            }
+            foreach ($season_ids as $season_id) {
+                mysqli_query($con, "INSERT INTO product_details (product_id, season_id) VALUES ('$_id', '$season_id')");
+            }
+
+            // Insert selected sillage and lasting
+            if ($sillage_id) {
+                mysqli_query($con, "INSERT INTO product_details (product_id, sillage_id) VALUES ('$_id', '$sillage_id')");
+            }
+            if ($lasting_id) {
+                mysqli_query($con, "INSERT INTO product_details (product_id, lasting_id) VALUES ('$_id', '$lasting_id')");
+            }
 
             // Update format and price in product_format table
             mysqli_query($con, "DELETE FROM product_format WHERE product_id='$_id'");
@@ -222,8 +255,29 @@ if (isset($_REQUEST['submit'])) {
             $folder3 = "../image/" . $image3;
             move_uploaded_file($tempname3, $folder3);
 
-            mysqli_query($con, "INSERT INTO product (`category_id`, `sub_category_id`, `name`, `gender_id`, `genre_id`, `type_id`, `season_id`, `sillage_id`, `lasting_id`, `breif`, `description`, `status`, `image`, `image2`, `image3`) VALUES ('$category_id', '$sub_category_id', '$name', '$gender_id', '$genre_id', '$type_id', '$season_id', '$sillage_id', '$lasting_id', '$breif', '$description', '1', '$image', '$image2', '$image3')");
+            mysqli_query($con, "INSERT INTO product (`category_id`, `sub_category_id`, `name`, `breif`, `description`, `status`, `image`, `image2`, `image3`) VALUES ('$category_id', '$sub_category_id', '$name', '$breif', '$description', '1', '$image', '$image2', '$image3')");
             $product_id = mysqli_insert_id($con);
+    
+            foreach ($gender_ids as $gender_id) {
+                mysqli_query($con, "INSERT INTO product_details (product_id, gender_id) VALUES ('$product_id', '$gender_id')");
+            }
+            foreach ($genre_ids as $genre_id) {
+                mysqli_query($con, "INSERT INTO product_details (product_id, genre_id) VALUES ('$product_id', '$genre_id')");
+            }
+            foreach ($type_ids as $type_id) {
+                mysqli_query($con, "INSERT INTO product_details (product_id, type_id) VALUES ('$product_id', '$type_id')");
+            }
+            foreach ($season_ids as $season_id) {
+                mysqli_query($con, "INSERT INTO product_details (product_id, season_id) VALUES ('$product_id', '$season_id')");
+            }
+
+            // Insert selected sillage and lasting
+            if ($sillage_id) {
+                mysqli_query($con, "INSERT INTO product_details (product_id, sillage_id) VALUES ('$product_id', '$sillage_id')");
+            }
+            if ($lasting_id) {
+                mysqli_query($con, "INSERT INTO product_details (product_id, lasting_id) VALUES ('$product_id', '$lasting_id')");
+            }
 
             // Insert format and price in product_format table
             mysqli_query($con, "INSERT INTO product_format (`product_id`, `format`, `price`, `qty`) VALUES ('$product_id', '$format', '$price', '$qty')");
@@ -425,207 +479,284 @@ if (isset($_REQUEST['submit'])) {
                                 value="<?= $qty5 ?>">
                         </div>
                     </div>
+                    <br><br>
+
+                    <?php
+
+                        if (isset($_GET['id']) && $_GET['id'] != '') {
+                            
+                            // Fetch the types associated with the product
+                            $result = mysqli_query($con, "SELECT * FROM product_details WHERE product_id = '$_id'");
+                            $selected_genders = [];
+                            $selected_genres = [];
+                            $selected_types = [];
+                            $selected_seasons = [];
+                            $selected_sillages = [];
+                            $selected_lastings = [];
+                            
+                            while ($row = mysqli_fetch_array($result)) {
+                                $selected_genders[] = $row['gender_id'];
+                                $selected_genres[] = $row['genre_id'];
+                                $selected_types[] = $row['type_id'];
+                                $selected_seasons[] = $row['season_id'];
+                                $selected_sillages[] = $row['sillage_id'];
+                                $selected_lastings[] = $row['lasting_id'];
+                            }
+                        } else {
+                            // If product_id is not set, initialize selected_types as an empty array
+                            $selected_genders = [];
+                            $selected_genres = [];
+                            $selected_types = [];
+                            $selected_seasons = [];
+                            $selected_sillages = [];
+                            $selected_lastings = [];
+                        }
+
+                        ?>
 
                     <div class="form-row">
-                        <div class="form-group col-4">
-                            <label for="gender" class=" form-control-label">Gender</label>
-                            <select class="form-control" name="gender_id">
-
-                                <option value="" selected disabled>Select Gender</option>
-
-                                <?php
-
-                                $select_gender = mysqli_query($con, "select * from gender");
-
-                                while ($gender_row = mysqli_fetch_array($select_gender)) {
-                                    if ($gender_row['id'] == $gender_id) {
-                                        echo "<option selected value=" . $gender_row['id'] . "> " . $gender_row['gender'] . " </option>";
-                                    } else {
-                                        echo "<option value=" . $gender_row['id'] . "> " . $gender_row['gender'] . " </option>";
-                                    }
-                                }
-
-                                ?>
-
-                            </select>
-
+                        <div class="form-group col-2">
+                            <label for="gender" class="form-control-label">Gender</label>
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="genderDropdown"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Select Gender
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="genderDropdown">
+                                    <div class="form-check">
+                                        <?php
+                                        $select_gender = mysqli_query($con, "SELECT * FROM gender");
+                                        while ($gender_row = mysqli_fetch_array($select_gender)) {
+                                            $selected = in_array($gender_row['id'], $selected_genders) ? 'checked' : '';
+                                            echo "<label class='dropdown-item'>
+                                                    <input type='checkbox' class='form-check-input' name='gender_id[]' value='" . $gender_row['id'] . "' $selected>
+                                                    " . $gender_row['gender'] . "
+                                                </label>";
+                                        }
+                                        ?>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="form-group col-4">
-                            <label for="genre" class=" form-control-label">Genre</label>
-                            <select class="form-control" name="genre_id">
 
-                                <option value="" selected disabled>Select Genre</option>
-
-                                <?php
-
-                                $select_genre = mysqli_query($con, "select * from genre");
-
-                                while ($genre_row = mysqli_fetch_array($select_genre)) {
-                                    if ($genre_row['id'] == $genre_id) {
-                                        echo "<option selected value=" . $genre_row['id'] . "> " . $genre_row['genre'] . " </option>";
-                                    } else {
-                                        echo "<option value=" . $genre_row['id'] . "> " . $genre_row['genre'] . " </option>";
-                                    }
-                                }
-
-                                ?>
-
-                            </select>
-
+                        <div class="form-group col-2">
+                            <label for="genre" class="form-control-label">Genre</label>
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="genreDropdown"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Select Genre
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="genreDropdown">
+                                    <div class="form-check">
+                                        <?php
+                                        $select_genre = mysqli_query($con, "SELECT * FROM genre");
+                                        while ($genre_row = mysqli_fetch_array($select_genre)) {
+                                            $selected = in_array($genre_row['id'], $selected_genres) ? 'checked' : '';
+                                            echo "<label class='dropdown-item'>
+                                                    <input type='checkbox' class='form-check-input' name='genre_id[]' value='" . $genre_row['id'] . "' $selected>
+                                                    " . $genre_row['genre'] . "
+                                                </label>";
+                                        }
+                                        ?>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="form-group col-4">
-                            <label for="type" class=" form-control-label">Type</label>
-                            <select class="form-control" name="type_id">
 
-                                <option value="" selected disabled>Select Type</option>
-
-                                <?php
-
-                                $select_type = mysqli_query($con, "select * from type");
-
-                                while ($type_row = mysqli_fetch_array($select_type)) {
-                                    if ($type_row['id'] == $type_id) {
-                                        echo "<option selected value=" . $type_row['id'] . "> " . $type_row['type'] . " </option>";
-                                    } else {
-                                        echo "<option value=" . $type_row['id'] . "> " . $type_row['type'] . " </option>";
-                                    }
-                                }
-
-                                ?>
-
-                            </select>
-
+                        <div class="form-group col-2">
+                            <label for="type" class="form-control-label">Type</label>
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="typeDropdown"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Select Type
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="typeDropdown">
+                                    <div class="form-check">
+                                        <?php
+                                        $select_type = mysqli_query($con, "SELECT * FROM type");
+                                        while ($type_row = mysqli_fetch_array($select_type)) {
+                                            $selected = in_array($type_row['id'], $selected_types) ? 'checked' : '';
+                                            echo "<label class='dropdown-item'>
+                                                    <input type='checkbox' class='form-check-input' name='type_id[]' value='" . $type_row['id'] . "' $selected>
+                                                    " . $type_row['type'] . "
+                                                </label>";
+                                        }
+                                        ?>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+
+                        <div class="form-group col-2">
+                            <label for="season" class="form-control-label">Season</label>
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="seasonDropdown"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Select Season
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="seasonDropdown">
+                                    <div class="form-check">
+                                        <?php
+                                        $select_season = mysqli_query($con, "SELECT * FROM season");
+                                        while ($season_row = mysqli_fetch_array($select_season)) {
+                                            $selected = in_array($season_row['id'], $selected_seasons) ? 'checked' : '';
+                                            echo "<label class='dropdown-item'>
+                                                    <input type='checkbox' class='form-check-input' name='season_id[]' value='" . $season_row['id'] . "' $selected>
+                                                    " . $season_row['season'] . "
+                                                </label>";
+                                        }
+                                        ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-2">
+    <label for="sillage" class="form-control-label">Sillage</label>
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="sillageDropdown"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Select Sillage
+        </button>
+        <div class="dropdown-menu" aria-labelledby="sillageDropdown">
+            <div class="form-check">
+                <?php
+                $select_sillage = mysqli_query($con, "SELECT * FROM sillage");
+                while ($sillage_row = mysqli_fetch_array($select_sillage)) {
+                    $selected = in_array($sillage_row['id'], $selected_sillages) ? 'checked' : '';
+                    echo "<label class='dropdown-item'>
+                            <input type='radio' class='form-check-input' name='sillage_id' value='" . $sillage_row['id'] . "' $selected>
+                            " . $sillage_row['sillage'] . "
+                        </label>";
+                }
+                ?>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="form-group col-2">
+    <label for="lasting" class="form-control-label">Lasting</label>
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="lastingDropdown"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Select Lasting
+        </button>
+        <div class="dropdown-menu" aria-labelledby="lastingDropdown">
+            <div class="form-check">
+                <?php
+                $select_lasting = mysqli_query($con, "SELECT * FROM lasting");
+                while ($lasting_row = mysqli_fetch_array($select_lasting)) {
+                    $selected = in_array($lasting_row['id'], $selected_lastings) ? 'checked' : '';
+                    echo "<label class='dropdown-item'>
+                            <input type='radio' class='form-check-input' name='lasting_id' value='" . $lasting_row['id'] . "' $selected>
+                            " . $lasting_row['lasting'] . "
+                        </label>";
+                }
+                ?>
+            </div>
+        </div>
+    </div>
+</div>
+
+
                     </div>
+                        <style>
+                            .dropdown-menu {
+                                max-height: 200px;
+                                /* Limit height */
+                                overflow-y: auto;
+                                /* Enable scroll */
+                            }
 
-                    <div class="form-row">
-                        <div class="form-group col-4">
-                            <label for="season" class=" form-control-label">Season</label>
-                            <select class="form-control" name="season_id">
-
-                                <option value="" selected disabled>Select Season</option>
-
-                                <?php
-
-                                $select_season = mysqli_query($con, "select * from season");
-
-                                while ($season_row = mysqli_fetch_array($select_season)) {
-                                    if ($season_row['id'] == $season_id) {
-                                        echo "<option selected value=" . $season_row['id'] . "> " . $season_row['season'] . " </option>";
-                                    } else {
-                                        echo "<option value=" . $season_row['id'] . "> " . $season_row['season'] . " </option>";
+                            .dropdown-item {
+                                cursor: pointer;
+                                /* Change cursor to pointer */
+                            }
+                        </style>
+                        <script>
+                            $(document).ready(function() {
+                                // Open dropdown
+                                $('.dropdown-toggle').click(function(e) {
+                                    e.stopPropagation(); // Stop the event from bubbling up
+                                    $(this).next('.dropdown-menu')
+                                        .toggle(); // Show or hide the dropdown
+                                });
+                                // Close dropdown when clicking outside of it
+                                $(document).click(function(e) {
+                                    if (!$(e.target).closest('.dropdown').length) {
+                                        $('.dropdown-menu').hide(); // Hide all dropdowns
                                     }
-                                }
-
-                                ?>
-
-                            </select>
-
-                        </div>
-                        <div class="form-group col-4">
-                            <label for="sillage" class=" form-control-label">Sillage</label>
-                            <select class="form-control" name="sillage_id">
-
-                                <option value="" selected disabled>Select Sillage</option>
-
-                                <?php
-
-                                $select_sillage = mysqli_query($con, "select * from sillage");
-
-                                while ($sillage_row = mysqli_fetch_array($select_sillage)) {
-                                    if ($sillage_row['id'] == $sillage_id) {
-                                        echo "<option selected value=" . $sillage_row['id'] . "> " . $sillage_row['sillage'] . " </option>";
-                                    } else {
-                                        echo "<option value=" . $sillage_row['id'] . "> " . $sillage_row['sillage'] . " </option>";
-                                    }
-                                }
-
-                                ?>
-
-                            </select>
-
-                        </div>
-                        <div class="form-group col-4">
-                            <label for="lasting" class=" form-control-label">Lasting</label>
-                            <select class="form-control" name="lasting_id">
-
-                                <option value="" selected disabled>Select Lasting</option>
-
-                                <?php
-
-                                $select_lasting = mysqli_query($con, "select * from lasting");
-
-                                while ($lasting_row = mysqli_fetch_array($select_lasting)) {
-                                    if ($lasting_row['id'] == $lasting_id) {
-                                        echo "<option selected value=" . $lasting_row['id'] . "> " . $lasting_row['lasting'] . " </option>";
-                                    } else {
-                                        echo "<option value=" . $lasting_row['id'] . "> " . $lasting_row['lasting'] . " </option>";
-                                    }
-                                }
-
-                                ?>
-
-                            </select>
-
-                        </div>
-                    </div>
-                    <hr>
+                                });
+                            });
+                        </script>
+                        <br><br>
                     <!-- Image 1 -->
                     <div class="form-row">
                         <div class="form-group col-6">
                             <label for="image" class="form-control-label">Image 1</label>
-                            <input type="file" name="image" class="form-control" id="image" <?= $image_required ?> onchange="validateImageSize('image', 'imagePreview1', 'imagePreviewContainer1')">
-                            <small class="form-text text-muted">Please upload an image with dimensions 800x1200 pixels.</small>
+                            <input type="file" name="image" class="form-control" id="image" <?= $image_required ?>
+                                onchange="validateImageSize('image', 'imagePreview1', 'imagePreviewContainer1')">
+                            <small class="form-text text-muted">Please upload an image with dimensions 800x1200
+                                pixels.</small>
                         </div>
                         <div class="form-group col-6" style="display: flex;justify-content: space-around;">
                             <div id="imagePreviewContainer1" class="mb-4" style="display:none;">
-                            <p>Selected Image:</p>    
-                            <img id="imagePreview1" src="#" alt="Selected Image 1" style="max-width: 150px; max-height: 150px;" class="border" />
+                                <p>Selected Image:</p>
+                                <img id="imagePreview1" src="#" alt="Selected Image 1"
+                                    style="max-width: 150px; max-height: 150px;" class="border" />
                             </div>
                             <div style="display: <?= !empty($image) ? 'block' : 'none'; ?>;">
-                                <p>Current Image:</p>    
-                                <img src="<?= !empty($image) ? '../image/' . $image : '#'; ?>" alt="Current Image 1" style="max-width: 150px; max-height: 150px;" class="border" />
+                                <p>Current Image:</p>
+                                <img src="<?= !empty($image) ? '../image/' . $image : '#'; ?>" alt="Current Image 1"
+                                    style="max-width: 150px; max-height: 150px;" class="border" />
                             </div>
                         </div>
                     </div>
-                    <hr>
                     <!-- Image 2 -->
                     <div class="form-row">
                         <div class="form-group col-6">
                             <label for="image2" class="form-control-label">Image 2</label>
-                            <input type="file" name="image2" class="form-control" id="image2" onchange="validateImageSize('image2', 'imagePreview2', 'imagePreviewContainer2')">
-                            <small class="form-text text-muted">Please upload an image with dimensions 800x1200 pixels.</small>
+                            <input type="file" name="image2" class="form-control" id="image2"
+                                onchange="validateImageSize('image2', 'imagePreview2', 'imagePreviewContainer2')">
+                            <small class="form-text text-muted">Please upload an image with dimensions 800x1200
+                                pixels.</small>
                         </div>
                         <div class="form-group col-6" style="display: flex;justify-content: space-around;">
                             <div id="imagePreviewContainer2" class="mb-4" style="display:none;">
-                            <p>Selected Image:</p>    
-                            <img id="imagePreview2" src="#" alt="Selected Image 2" style="max-width: 150px; max-height: 150px;" class="border" />
+                                <p>Selected Image:</p>
+                                <img id="imagePreview2" src="#" alt="Selected Image 2"
+                                    style="max-width: 150px; max-height: 150px;" class="border" />
                             </div>
                             <div style="display: <?= !empty($image2) ? 'block' : 'none'; ?>;">
-                                <p>Current Image:</p>    
-                                <img src="<?= !empty($image2) ? '../image/' . $image2 : '#'; ?>" alt="Current Image 1" style="max-width: 150px; max-height: 150px;" class="border" />
+                                <p>Current Image:</p>
+                                <img src="<?= !empty($image2) ? '../image/' . $image2 : '#'; ?>" alt="Current Image 1"
+                                    style="max-width: 150px; max-height: 150px;" class="border" />
                                 <div>
                                     <input type="checkbox" name="remove_image2" value="2"> Remove Image
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <hr>
                     <!-- Image 3 -->
                     <div class="form-row">
                         <div class="form-group col-6">
                             <label for="image3" class="form-control-label">Image 3</label>
-                            <input type="file" name="image3" class="form-control" id="image3" onchange="validateImageSize('image3', 'imagePreview3', 'imagePreviewContainer3')">
-                            <small class="form-text text-muted">Please upload an image with dimensions 800x1200 pixels.</small>
+                            <input type="file" name="image3" class="form-control" id="image3"
+                                onchange="validateImageSize('image3', 'imagePreview3', 'imagePreviewContainer3')">
+                            <small class="form-text text-muted">Please upload an image with dimensions 800x1200
+                                pixels.</small>
                         </div>
                         <div class="form-group col-6" style="display: flex;justify-content: space-around;">
                             <div id="imagePreviewContainer3" class="mb-4" style="display:none;">
-                            <p>Selected Image:</p>    
-                            <img id="imagePreview3" src="#" alt="Selected Image 3" style="max-width: 150px; max-height: 150px;" class="border" />
+                                <p>Selected Image:</p>
+                                <img id="imagePreview3" src="#" alt="Selected Image 3"
+                                    style="max-width: 150px; max-height: 150px;" class="border" />
                             </div>
                             <div style="display: <?= !empty($image3) ? 'block' : 'none'; ?>;">
-                                <p>Current Image:</p>    
-                                <img src="<?= !empty($image3) ? '../image/' . $image3 : '#'; ?>" alt="Current Image 3" style="max-width: 150px; max-height: 150px;" class="border" />
+                                <p>Current Image:</p>
+                                <img src="<?= !empty($image3) ? '../image/' . $image3 : '#'; ?>" alt="Current Image 3"
+                                    style="max-width: 150px; max-height: 150px;" class="border" />
                                 <div>
                                     <input type="checkbox" name="remove_image3" value="3"> Remove Image
                                 </div>
@@ -637,7 +768,6 @@ if (isset($_REQUEST['submit'])) {
                         function validateImageSize(inputId, imgId, containerId) {
                             const fileInput = document.getElementById(inputId);
                             const file = fileInput.files[0];
-
                             if (file) {
                                 const img = new Image();
                                 img.onload = function() {
@@ -650,31 +780,27 @@ if (isset($_REQUEST['submit'])) {
                                         previewImage(file, imgId, containerId); // Show preview if valid
                                     }
                                 };
-
                                 img.src = URL.createObjectURL(file); // Create a URL for the image
                             }
                         }
 
                         function previewImage(file, imgId, containerId) {
                             const reader = new FileReader();
-
                             // Load image preview
                             reader.onload = function(e) {
                                 const img = document.getElementById(imgId);
                                 img.src = e.target.result;
-
                                 // Show the image preview container
                                 document.getElementById(containerId).style.display = 'block';
                             };
-
                             reader.readAsDataURL(file); // Convert file to base64 string
                         }
                     </script>
 
                     <div class="form-group">
                         <label for="description" class="form-control-label">Description</label>
-                        <textarea name="description" placeholder="Enter Product Description"
-                            class="form-control" required><?= $description ?></textarea>
+                        <textarea name="description" placeholder="Enter Product Description" class="form-control"
+                            required><?= $description ?></textarea>
                     </div>
 
                     <div class="form-group">

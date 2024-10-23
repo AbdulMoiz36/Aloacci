@@ -13,4 +13,6 @@ $delete = "delete from banner where id=$_id";
 
 $res = mysqli_query($con,$delete);
 
-echo "<script>window.location.href='banner'</script>";
+if($res) {
+    header("Location:banner");
+}

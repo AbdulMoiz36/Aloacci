@@ -157,7 +157,7 @@ if ($_SESSION['ADMIN_ROLE'] == "1") {
 				<div class="card-body card-block">
 
 					<?php
-                    if ($_SESSION['ADMIN_ROLE'] == '1') {
+                    if ($_SESSION['ADMIN_ROLE'] == 1) {
                     ?>
 
 					<div class="form-group">
@@ -174,7 +174,7 @@ if ($_SESSION['ADMIN_ROLE'] == "1") {
 						<input type="file" name="image" class="form-control" <?= $image_required ?>>
 					</div>
 					<?php
-                    if ($_SESSION['ADMIN_ROLE'] == '1') {
+                    if ($_SESSION['ADMIN_ROLE'] == 1) {
                     ?>
 
 					<div class="form-group">
@@ -197,7 +197,7 @@ if ($_SESSION['ADMIN_ROLE'] == "1") {
 						<input type="text" name="password" placeholder="Enter Password" class="form-control" required>
 					</div>
 					<?php
-                    if ($_SESSION['ADMIN_ROLE'] == '1') {
+                    if ($_SESSION['ADMIN_ROLE'] == 1) {
                     ?>
 
 					<div class="form-group">

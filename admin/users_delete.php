@@ -13,4 +13,6 @@ $delete = "delete from users where id=$_id";
 
 $res = mysqli_query($con,$delete);
 
-echo "<script>window.location.href='users'</script>";
+if($res) {
+    header("Location:users");
+}

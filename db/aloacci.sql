@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 19, 2024 at 09:38 PM
--- Server version: 10.4.28-MariaDB
--- PHP Version: 8.2.4
+-- Generation Time: Oct 23, 2024 at 12:25 PM
+-- Server version: 10.4.25-MariaDB
+-- PHP Version: 8.1.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -31,14 +31,14 @@ CREATE TABLE `about` (
   `id` int(11) NOT NULL,
   `about` text NOT NULL,
   `image` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `about`
 --
 
 INSERT INTO `about` (`id`, `about`, `image`) VALUES
-(1, 'Donec porttitor, enim ut dapibus lobortis, lectus sem tincidunt dui, eget ornare lectus ex non\n                        libero. Nam rhoncus diam ultrices porttitor laoreet. Ut mollis fermentum ex, vel viverra lorem\n                        volutpat sodales. In ornare porttitor odio sit amet laoreet. Sed laoreet, nulla a posuere\n                        ultrices, purus nulla tristique turpis, hendrerit rutrum augue quam ut est. Fusce malesuada\n                        posuere libero, vitae dapibus eros facilisis euismod. Sed sed lobortis justo, ut tincidunt\n                        velit. Mauris in maximus eros.', 'Florse.jpeg');
+(2, 'We are a leading company dedicated to providing the best products and services in the industry. Stay connected with us for the latest updates and offers.', 'Florse.jpeg');
 
 -- --------------------------------------------------------
 
@@ -49,7 +49,7 @@ INSERT INTO `about` (`id`, `about`, `image`) VALUES
 CREATE TABLE `admin_role` (
   `id` int(11) NOT NULL,
   `role` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `admin_role`
@@ -74,7 +74,7 @@ CREATE TABLE `admin_user` (
   `email` varchar(50) NOT NULL,
   `mobile` varchar(50) NOT NULL,
   `status` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `admin_user`
@@ -82,7 +82,7 @@ CREATE TABLE `admin_user` (
 
 INSERT INTO `admin_user` (`id`, `image`, `name`, `password`, `role_id`, `email`, `mobile`, `status`) VALUES
 (1, 'crossmyheart.jpeg', 'Sajjad', 'ce245834f602c2099a87e9f0080157ff', 1, 'sajjadsaleem341@gmail.com', '03176122252', 1),
-(2, 'tippingpoint_76_11zon.jpeg', 'Moiz', '2a77d9de907385ebf2b94d6b35fbcdd0', 1, 'amir@gmail.com', '02116549871', 1);
+(2, 'tippingpoint_76_11zon.jpeg', 'Moiz', '2a77d9de907385ebf2b94d6b35fbcdd0', 2, 'moiz@gmail.com', '02116549871', 1);
 
 -- --------------------------------------------------------
 
@@ -93,7 +93,7 @@ INSERT INTO `admin_user` (`id`, `image`, `name`, `password`, `role_id`, `email`,
 CREATE TABLE `banner` (
   `id` int(11) NOT NULL,
   `image` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `banner`
@@ -112,7 +112,7 @@ INSERT INTO `banner` (`id`, `image`) VALUES
 CREATE TABLE `categories` (
   `id` int(11) NOT NULL,
   `categories` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `categories`
@@ -125,8 +125,7 @@ INSERT INTO `categories` (`id`, `categories`) VALUES
 (4, 'Perfume Wax'),
 (5, 'Body Mist'),
 (6, 'Sample Set'),
-(7, 'Air Freshners'),
-(8, 'Elite Fragrances');
+(7, 'Air Freshners');
 
 -- --------------------------------------------------------
 
@@ -137,7 +136,7 @@ INSERT INTO `categories` (`id`, `categories`) VALUES
 CREATE TABLE `cities` (
   `id` int(11) NOT NULL,
   `cities` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `cities`
@@ -161,7 +160,7 @@ CREATE TABLE `contact_us` (
   `subject` varchar(255) NOT NULL,
   `message` text NOT NULL,
   `date` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -172,7 +171,7 @@ CREATE TABLE `contact_us` (
 CREATE TABLE `gender` (
   `id` int(11) NOT NULL,
   `gender` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `gender`
@@ -191,7 +190,7 @@ INSERT INTO `gender` (`id`, `gender`) VALUES
 CREATE TABLE `genre` (
   `id` int(11) NOT NULL,
   `genre` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `genre`
@@ -199,7 +198,7 @@ CREATE TABLE `genre` (
 
 INSERT INTO `genre` (`id`, `genre`) VALUES
 (1, 'Arabic'),
-(2, 'French');
+(3, 'French');
 
 -- --------------------------------------------------------
 
@@ -210,7 +209,7 @@ INSERT INTO `genre` (`id`, `genre`) VALUES
 CREATE TABLE `lasting` (
   `id` int(11) NOT NULL,
   `lasting` int(2) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `lasting`
@@ -240,7 +239,7 @@ CREATE TABLE `orders` (
   `order_from` tinyint(4) NOT NULL,
   `order_status` int(11) NOT NULL,
   `date` date NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -255,7 +254,7 @@ CREATE TABLE `orders_detail` (
   `format` varchar(50) NOT NULL,
   `qty` int(11) NOT NULL,
   `price` float NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -266,7 +265,7 @@ CREATE TABLE `orders_detail` (
 CREATE TABLE `order_status` (
   `id` int(11) NOT NULL,
   `name` varchar(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `order_status`
@@ -293,29 +292,67 @@ CREATE TABLE `product` (
   `image2` varchar(255) NOT NULL,
   `image3` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
-  `gender_id` int(11) NOT NULL,
-  `genre_id` int(11) NOT NULL,
-  `type_id` int(11) NOT NULL,
-  `season_id` int(11) NOT NULL,
-  `sillage_id` int(11) NOT NULL,
-  `lasting_id` int(11) NOT NULL,
   `description` varchar(5000) NOT NULL,
   `breif` varchar(2000) NOT NULL,
   `status` tinyint(4) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `product`
 --
 
-INSERT INTO `product` (`id`, `category_id`, `sub_category_id`, `image`, `image2`, `image3`, `name`, `gender_id`, `genre_id`, `type_id`, `season_id`, `sillage_id`, `lasting_id`, `description`, `breif`, `status`) VALUES
-(3, 1, 1, 'smashmyhead_69_11zon_79b21c03-b7cf-4277-99a0-2d68f32f8025.jpeg', 'SmashMyHead.jpeg', '', 'Smash My Head', 1, 1, 6, 4, 3, 2, 'Our Top Rated Perfume ⭐', 'Smash My Head is an aromatic fougere fragrance for men. The top notes of this perfume include Bergamot, Calabrian and Pepper, while the  middle notes are Lavender, Sichuan pepper, Pink Pepper, Patchouli, Vetiver, Elemi and Geranium. The base notes are Cedar, Ambroxan and Labdanum. This fragrance is extremely fresh and noble but it simultaneously also has a rawness to it.', 1),
-(4, 1, 1, 'tippingpoint_76_11zon.jpeg', 'TippingPoint.jpeg', '', 'Tipping Point', 1, 2, 2, 2, 2, 1, 'Our #1 Office Wear! 👔', 'Tipping Point is a woody aromatic fragrance for men. The primary accords of this perfume are citrus, woody, warm spicy and aromatic. The top notes of this perfume are Grapefruit, Mint, Lemon and Pink Pepper, while the middle notes are Ginger, Jasmine, Nutmeg and Iso E Super. Its base notes include Incense, Cedar, Vetiver, Sandalwood, Labdanum, Patchouli and White Musk. This is a classic men’s fragrance that will be great for any occasion at any time of the year.', 1),
-(5, 1, 2, 'florse_25_11zon.jpeg', 'Florse.jpeg', '', 'Florse', 2, 1, 2, 3, 3, 2, 'Our Best Floral Fragrance', 'Florse is a floral fragrance for women. It is an extremely sensual and feminine fragrance. The top notes in this perfume are Pear, Mandarin Orange and Pepper, while the middle notes are Osmanthus, Peony and Rose. The base notes include Patchouli, Cedar, Leather and Musk.', 1),
-(6, 4, 13, 'Merryme_webimages.png', 'WhatsAppImage2023-11-10at11.32.21AM.jpeg', '', 'Merry Me Perfume Wax', 2, 1, 5, 1, 1, 3, 'A Premium Fragrance Wax', 'Try Merry Me Perfume Wax for its lovely flower and fruit scents. The smooth wax is easy to apply so you can enjoy smells of passionfruit, pineapple and strawberry all day long. It’s scent will make your day better.', 1),
-(10, 3, 10, 'saifulmulook_62_11zon.jpeg', '', '', 'Saiful Malook', 0, 2, 2, 1, 1, 3, 'Most Popular Aquatic Scent!', 'Saiful Malook is an aromatic aquatic fragrance for men. The top notes of this fragrance include mint and green nuances, coriander, lavender and rosemary, while the heart notes include geranium, jasmine, neroli and sandalwood. The base is composed of cedarwood, amber, musk and tobacco.', 1),
-(11, 1, 1, 'meltme_46_11zon.jpeg', 'MeltMe.jpeg', '', 'Melt Me', 1, 1, 1, 3, 1, 2, 'The All-Rounder Perfume', 'Melt Me is amber woody fragrance for men. The accords of the perfume are composed excellently to create a unique fragrance. The main accords of this perfume are woody and aromatic.\r\n\r\nThe top notes are very refreshing and contain lavender, lemon and juniper, while the middle notes include spanish labdanum, nutmeg and orange blossom. The base notes are quite aromatic and woody, consisting of musk, dry wood and patchouli. Melt Me is an appealing and pleasant scent, a definite compliment-puller. It is a fall scent exclusively for men.', 1),
-(12, 1, 2, 'Florse.jpeg', 'lostsymbol_40_11zon.jpeg', 'MeltMe.jpeg', 'Cross My Heart', 2, 2, 6, 3, 2, 2, 'The Most Noticeable Scent!', 'Cross My Heart is a woody spicy fragrance for men. The top notes of this perfume are Ginger, Lemon, Mint and Lavender, while the middle notes are Juniper, Apple, Guatemalan Geranium and Cardamom. The base notes include Amberwood, Tonka Bean and Haitian Vetiver. This fragrance is made for men who are courageous and driven enough to chase success.', 1);
+INSERT INTO `product` (`id`, `category_id`, `sub_category_id`, `image`, `image2`, `image3`, `name`, `description`, `breif`, `status`) VALUES
+(3, 1, 1, 'tippingpoint_76_11zon.jpeg', 'SmashMyHead.jpeg', '', 'Smash My Head', 'Our Top Rated Perfume ⭐', 'Smash My Head is an aromatic fougere fragrance for men. The top notes of this perfume include Bergamot, Calabrian and Pepper, while the  middle notes are Lavender, Sichuan pepper, Pink Pepper, Patchouli, Vetiver, Elemi and Geranium. The base notes are Cedar, Ambroxan and Labdanum. This fragrance is extremely fresh and noble but it simultaneously also has a rawness to it.', 1),
+(11, 1, 1, 'meltme_46_11zon.jpeg', '', '', 'Melt Me', 'The All-Rounder Perfume', 'Melt Me is amber woody fragrance for men. The accords of the perfume are composed excellently to create a unique fragrance. The main accords of this perfume are woody and aromatic.\r\n\r\nThe top notes are very refreshing and contain lavender, lemon and juniper, while the middle notes include spanish labdanum, nutmeg and orange blossom. The base notes are quite aromatic and woody, consisting of musk, dry wood and patchouli. Melt Me is an appealing and pleasant scent, a definite compliment-puller. It is a fall scent exclusively for men.', 1),
+(12, 1, 2, 'Florse.jpeg', 'lostsymbol_40_11zon.jpeg', '', 'Cross My Heart', 'The Most Noticeable Scent!', 'Cross My Heart is a woody spicy fragrance for men. The top notes of this perfume are Ginger, Lemon, Mint and Lavender, while the middle notes are Juniper, Apple, Guatemalan Geranium and Cardamom. The base notes include Amberwood, Tonka Bean and Haitian Vetiver. This fragrance is made for men who are courageous and driven enough to chase success.', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `product_details`
+--
+
+CREATE TABLE `product_details` (
+  `id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `gender_id` int(11) NOT NULL,
+  `genre_id` int(11) NOT NULL,
+  `type_id` int(11) NOT NULL,
+  `season_id` int(11) NOT NULL,
+  `sillage_id` int(11) NOT NULL,
+  `lasting_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `product_details`
+--
+
+INSERT INTO `product_details` (`id`, `product_id`, `gender_id`, `genre_id`, `type_id`, `season_id`, `sillage_id`, `lasting_id`) VALUES
+(12, 12, 1, 0, 0, 0, 0, 0),
+(13, 12, 0, 1, 0, 0, 0, 0),
+(14, 12, 0, 0, 1, 0, 0, 0),
+(15, 12, 0, 0, 2, 0, 0, 0),
+(16, 12, 0, 0, 0, 1, 0, 0),
+(17, 12, 0, 0, 0, 2, 0, 0),
+(18, 12, 0, 0, 0, 3, 0, 0),
+(19, 12, 0, 0, 0, 4, 0, 0),
+(20, 12, 0, 0, 0, 0, 1, 0),
+(21, 12, 0, 0, 0, 0, 0, 3),
+(22, 11, 2, 0, 0, 0, 0, 0),
+(23, 11, 0, 3, 0, 0, 0, 0),
+(24, 11, 0, 0, 4, 0, 0, 0),
+(25, 11, 0, 0, 5, 0, 0, 0),
+(26, 11, 0, 0, 0, 3, 0, 0),
+(27, 11, 0, 0, 0, 4, 0, 0),
+(28, 11, 0, 0, 0, 0, 3, 0),
+(29, 11, 0, 0, 0, 0, 0, 2),
+(30, 3, 2, 0, 0, 0, 0, 0),
+(31, 3, 0, 3, 0, 0, 0, 0),
+(32, 3, 0, 0, 3, 0, 0, 0),
+(33, 3, 0, 0, 0, 2, 0, 0),
+(34, 3, 0, 0, 0, 3, 0, 0),
+(35, 3, 0, 0, 0, 0, 3, 0),
+(36, 3, 0, 0, 0, 0, 0, 2);
 
 -- --------------------------------------------------------
 
@@ -329,29 +366,23 @@ CREATE TABLE `product_format` (
   `format` varchar(50) NOT NULL,
   `price` int(11) NOT NULL,
   `qty` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `product_format`
 --
 
 INSERT INTO `product_format` (`id`, `product_id`, `format`, `price`, `qty`) VALUES
-(24, 4, '50ml', 1100, 20),
-(25, 3, '10ml', 200, 10),
-(26, 3, '20ml', 400, 0),
-(27, 3, '50ml', 750, 10),
-(28, 3, '100ml', 1200, 10),
-(29, 3, '120ml', 1670, 10),
-(30, 6, '35gm', 850, 22),
-(31, 5, '50ml', 1200, 55),
-(32, 5, '100ml', 2200, 15),
-(33, 10, '50ml', 1350, 15),
-(34, 10, '100ml', 2200, 2),
-(35, 11, '50ml', 1100, 15),
-(36, 11, '100ml', 2200, 20),
-(55, 12, '10ml', 850, 25),
-(56, 12, '50ml', 2300, 20),
-(57, 12, '100ml', 4000, 0);
+(109, 12, '10ml', 850, 25),
+(110, 12, '50ml', 2300, 20),
+(111, 12, '100ml', 4000, 0),
+(112, 11, '50ml', 1100, 15),
+(113, 11, '100ml', 2200, 20),
+(114, 3, '10ml', 200, 10),
+(115, 3, '20ml', 400, 0),
+(116, 3, '50ml', 750, 10),
+(117, 3, '100ml', 1200, 10),
+(118, 3, '120ml', 1670, 10);
 
 -- --------------------------------------------------------
 
@@ -368,7 +399,7 @@ CREATE TABLE `reviews` (
   `comment` text NOT NULL,
   `image` varchar(255) NOT NULL,
   `date` date NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -379,7 +410,7 @@ CREATE TABLE `reviews` (
 CREATE TABLE `season` (
   `id` int(11) NOT NULL,
   `season` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `season`
@@ -401,7 +432,7 @@ CREATE TABLE `shipment` (
   `id` int(11) NOT NULL,
   `price` int(11) NOT NULL,
   `status` tinyint(4) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `shipment`
@@ -419,7 +450,7 @@ INSERT INTO `shipment` (`id`, `price`, `status`) VALUES
 CREATE TABLE `sillage` (
   `id` int(11) NOT NULL,
   `sillage` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `sillage`
@@ -440,7 +471,7 @@ CREATE TABLE `sub_categories` (
   `id` int(11) NOT NULL,
   `category_id` int(11) NOT NULL,
   `sub_categories` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `sub_categories`
@@ -475,12 +506,7 @@ INSERT INTO `sub_categories` (`id`, `category_id`, `sub_categories`) VALUES
 (26, 7, 'Air Freshener'),
 (27, 7, 'Car Diffuser'),
 (28, 7, 'Reed Diffuser'),
-(29, 7, 'Candles'),
-(30, 8, 'Catch 22 Gold Edition - For Men'),
-(31, 8, 'Farat - For Men'),
-(32, 8, 'Qarar - For Men'),
-(33, 8, 'Zarf - Unisex'),
-(34, 8, 'Rabt - For Men');
+(29, 7, 'Candles');
 
 -- --------------------------------------------------------
 
@@ -491,7 +517,7 @@ INSERT INTO `sub_categories` (`id`, `category_id`, `sub_categories`) VALUES
 CREATE TABLE `type` (
   `id` int(11) NOT NULL,
   `type` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `type`
@@ -520,7 +546,7 @@ CREATE TABLE `users` (
   `city` varchar(50) NOT NULL,
   `address` varchar(100) NOT NULL,
   `date` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `users`
@@ -621,6 +647,12 @@ ALTER TABLE `product`
   ADD KEY `category_id` (`category_id`);
 
 --
+-- Indexes for table `product_details`
+--
+ALTER TABLE `product_details`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `product_format`
 --
 ALTER TABLE `product_format`
@@ -680,7 +712,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `about`
 --
 ALTER TABLE `about`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `admin_role`
@@ -728,7 +760,7 @@ ALTER TABLE `gender`
 -- AUTO_INCREMENT for table `genre`
 --
 ALTER TABLE `genre`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `lasting`
@@ -758,13 +790,19 @@ ALTER TABLE `order_status`
 -- AUTO_INCREMENT for table `product`
 --
 ALTER TABLE `product`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+
+--
+-- AUTO_INCREMENT for table `product_details`
+--
+ALTER TABLE `product_details`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT for table `product_format`
 --
 ALTER TABLE `product_format`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=119;
 
 --
 -- AUTO_INCREMENT for table `reviews`

@@ -43,54 +43,72 @@ if ($search_str) {
 }
 
 // Fetch distinct genders using a JOIN between product and gender tables
-$genderQuery = mysqli_query($con, "SELECT DISTINCT g.gender, g.id FROM gender g 
-                                   JOIN product p ON g.id = p.gender_id 
+$genderQuery = mysqli_query($con, "SELECT DISTINCT s.gender, s.id 
+                                   FROM gender s 
+                                   JOIN product_details pd ON s.id = pd.gender_id 
+                                   JOIN product p ON p.id = pd.product_id
                                    WHERE p.status = 1");
+
 $genders = [];
 while ($row = mysqli_fetch_assoc($genderQuery)) {
     $genders[] = $row;
 }
 
 // Fetch distinct genres using a JOIN between product and genre tables
-$genreQuery = mysqli_query($con, "SELECT DISTINCT g.genre, g.id FROM genre g 
-                                   JOIN product p ON g.id = p.genre_id 
+$genreQuery = mysqli_query($con, "SELECT DISTINCT s.genre, s.id 
+                                   FROM genre s 
+                                   JOIN product_details pd ON s.id = pd.genre_id 
+                                   JOIN product p ON p.id = pd.product_id
                                    WHERE p.status = 1");
+
 $genres = [];
 while ($row = mysqli_fetch_assoc($genreQuery)) {
     $genres[] = $row;
 }
 
 // Fetch distinct types using a JOIN between product and type tables
-$typeQuery = mysqli_query($con, "SELECT DISTINCT g.type, g.id FROM type g 
-                                   JOIN product p ON g.id = p.type_id 
-                                   WHERE p.status = 1");
+$typeQuery = mysqli_query($con, "SELECT DISTINCT t.type, t.id 
+                                FROM type t 
+                                JOIN product_details pd ON t.id = pd.type_id 
+                                JOIN product p ON p.id = pd.product_id
+                                WHERE p.status = 1");
+
 $types = [];
 while ($row = mysqli_fetch_assoc($typeQuery)) {
     $types[] = $row;
 }
 
 // Fetch distinct seasons using a JOIN between product and season tables
-$seasonQuery = mysqli_query($con, "SELECT DISTINCT g.season, g.id FROM season g 
-                                   JOIN product p ON g.id = p.season_id 
+$seasonQuery = mysqli_query($con, "SELECT DISTINCT s.season, s.id 
+                                   FROM season s 
+                                   JOIN product_details pd ON s.id = pd.season_id 
+                                   JOIN product p ON p.id = pd.product_id
                                    WHERE p.status = 1");
+
 $seasons = [];
 while ($row = mysqli_fetch_assoc($seasonQuery)) {
     $seasons[] = $row;
 }
 
 // Fetch distinct sillages using a JOIN between product and sillage tables
-$sillageQuery = mysqli_query($con, "SELECT DISTINCT g.sillage, g.id FROM sillage g 
-                                   JOIN product p ON g.id = p.sillage_id 
+$sillageQuery = mysqli_query($con, "SELECT DISTINCT s.sillage, s.id 
+                                   FROM sillage s 
+                                   JOIN product_details pd ON s.id = pd.sillage_id 
+                                   JOIN product p ON p.id = pd.product_id
                                    WHERE p.status = 1");
+
 $sillages = [];
 while ($row = mysqli_fetch_assoc($sillageQuery)) {
     $sillages[] = $row;
 }
 
 // Fetch distinct lastings using a JOIN between product and lasting tables
-$lastingQuery = mysqli_query($con, "SELECT DISTINCT g.lasting, g.id FROM lasting g 
-                                   JOIN product p ON g.id = p.lasting_id 
+$lastingQuery = mysqli_query($con, "SELECT DISTINCT s.lasting, s.id 
+                                   FROM lasting s 
+                                   JOIN product_details pd ON s.id = pd.lasting_id 
+                                   JOIN product p ON p.id = pd.product_id
                                    WHERE p.status = 1");
+
 $lastings = [];
 while ($row = mysqli_fetch_assoc($lastingQuery)) {
     $lastings[] = $row;
@@ -110,7 +128,7 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
     <div class="text-sm md:text-base">
         <label for=""><span class="mr-1 md:mr-2"><i class="fa-solid fa-arrow-down-wide-short"></i></span><span
                 class="hidden md:inline">Sort By: </span><span class="md:hidden">Sort: </span></label>
-        <select class="w-auto pr-2" id="sort-dropdown" onchange="applySort(this.value)">
+        <select class="w-auto pr-2" id="sort-dropdown">
             <option value="" <?= ($sort == '') ? 'selected' : '' ?>>Select</option>
             <option value="a_to_z" <?= ($sort == 'a_to_z') ? 'selected' : '' ?>>A to Z</option>
             <option value="z_to_a" <?= ($sort == 'z_to_a') ? 'selected' : '' ?>>Z to A</option>
@@ -263,6 +281,20 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
         if (in_array($list['id'], $unique_products)) continue;
         $unique_products[] = $list['id'];
 
+    // Fetch all type_id values for the product from the product_details table
+    $productDetailsQuery = mysqli_query($con, "SELECT GROUP_CONCAT(gender_id) AS gender_id, GROUP_CONCAT(genre_id) AS genre_id, GROUP_CONCAT(type_id) AS type_id, GROUP_CONCAT(season_id) AS season_id, GROUP_CONCAT(sillage_id) AS sillage_id, GROUP_CONCAT(lasting_id) AS lasting_id
+                                               FROM product_details 
+                                               WHERE product_id = '{$list['id']}'");
+    $productDetails = mysqli_fetch_assoc($productDetailsQuery);
+    
+    // Convert the type_id and season_id into comma-separated values
+    $gender_id = $productDetails['gender_id'];
+    $genre_id = $productDetails['genre_id'];
+    $type_id = $productDetails['type_id'];
+    $season_id = $productDetails['season_id'];
+    $sillage_id = $productDetails['sillage_id'];
+    $lasting_id = $productDetails['lasting_id'];
+
         $product_formats = []; // Get product formats
         foreach ($get_product as $p) {
             if ($p['id'] == $list['id']) {
@@ -284,9 +316,7 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
         }
     ?>
         <div class="product-card w-96 md:w-72 h-[40rem] md:h-[30rem] flex gap-2 flex-col relative group shadow"
-            data-gender-id="<?= $list['gender_id'] ?>" data-genre-id="<?= $list['genre_id'] ?>"
-            data-type-id="<?= $list['type_id'] ?>" data-season-id="<?= $list['season_id'] ?>"
-            data-sillage-id="<?= $list['sillage_id'] ?>" data-lasting-id="<?= $list['lasting_id'] ?>">
+            data-gender-id="<?= $gender_id ?>" data-genre-id="<?= $genre_id ?>" data-type-id="<?= $type_id ?>" data-season-id="<?= $season_id ?>" data-sillage-id="<?= $sillage_id ?>" data-lasting-id="<?= $lasting_id ?>" >
             <div class="openModalBtn z-10 absolute -top-2 -right-2 bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full p-3 flex items-center justify-center text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out cursor-pointer"
                 data-product-id="<?= $list['id'] ?>" data-product-name="<?= $list['name'] ?>"
                 data-product-formats="<?= htmlspecialchars(json_encode($product_formats)) ?>">
@@ -344,62 +374,99 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
             checkbox.value);
         const selectedGenres = Array.from(document.querySelectorAll('.genre-checkbox:checked')).map(checkbox =>
             checkbox.value);
-        const selectedTypes = Array.from(document.querySelectorAll('.type-checkbox:checked')).map(checkbox =>
-            checkbox.value);
+        const selectedTypes = Array.from(document.querySelectorAll('.type-checkbox:checked')).map(checkbox => checkbox
+            .value);
         const selectedSeasons = Array.from(document.querySelectorAll('.season-checkbox:checked')).map(checkbox =>
             checkbox.value);
         const selectedSillages = Array.from(document.querySelectorAll('.sillage-checkbox:checked')).map(checkbox =>
             checkbox.value);
         const selectedLastings = Array.from(document.querySelectorAll('.lasting-checkbox:checked')).map(checkbox =>
             checkbox.value);
-        // Update URL with selected filters, removing empty parameters
+        // Update the URL with selected filters
         const url = new URL(window.location.href);
-        url.searchParams.delete('genders');
-        url.searchParams.delete('genres');
-        url.searchParams.delete('types');
-        url.searchParams.delete('seasons');
-        url.searchParams.delete('sillages');
-        url.searchParams.delete('lastings');
-        if (selectedGenders.length) {
+        // Only set the genders parameter if there are selected genders
+        if (selectedGenders.length > 0) {
             url.searchParams.set('genders', selectedGenders.join(','));
+        } else {
+            url.searchParams.delete('genders'); // Remove genders parameter if no checkbox is selected
         }
-        if (selectedGenres.length) {
+        // Only set the genres parameter if there are selected genres
+        if (selectedGenres.length > 0) {
             url.searchParams.set('genres', selectedGenres.join(','));
+        } else {
+            url.searchParams.delete('genres'); // Remove genres parameter if no checkbox is selected
         }
-        if (selectedTypes.length) {
+        // Only set the types parameter if there are selected types
+        if (selectedTypes.length > 0) {
             url.searchParams.set('types', selectedTypes.join(','));
+        } else {
+            url.searchParams.delete('types'); // Remove types parameter if no checkbox is selected
         }
-        if (selectedSeasons.length) {
+        // Only set the seasons parameter if there are selected seasons
+        if (selectedSeasons.length > 0) {
             url.searchParams.set('seasons', selectedSeasons.join(','));
+        } else {
+            url.searchParams.delete('seasons'); // Remove seasons parameter if no checkbox is selected
         }
-        if (selectedSillages.length) {
+        // Only set the sillages parameter if there are selected sillages
+        if (selectedSillages.length > 0) {
             url.searchParams.set('sillages', selectedSillages.join(','));
+        } else {
+            url.searchParams.delete('sillages'); // Remove sillages parameter if no checkbox is selected
         }
-        if (selectedLastings.length) {
+        // Only set the lastings parameter if there are selected lastings
+        if (selectedLastings.length > 0) {
             url.searchParams.set('lastings', selectedLastings.join(','));
+        } else {
+            url.searchParams.delete('lastings'); // Remove lastings parameter if no checkbox is selected
         }
-        window.history.replaceState({}, '', url);
+        window.history.replaceState({}, '', url); // Update URL without reloading
         const products = document.querySelectorAll('.product-card');
         products.forEach(product => {
-            const genderId = product.getAttribute('data-gender-id');
-            const genreId = product.getAttribute('data-genre-id');
-            const typeId = product.getAttribute('data-type-id');
-            const seasonId = product.getAttribute('data-season-id');
-            const sillageId = product.getAttribute('data-sillage-id');
-            const lastingId = product.getAttribute('data-lasting-id');
-            const genderMatch = selectedGenders.length === 0 || selectedGenders.includes(genderId);
-            const genreMatch = selectedGenres.length === 0 || selectedGenres.includes(genreId);
-            const typeMatch = selectedTypes.length === 0 || selectedTypes.includes(typeId);
-            const seasonMatch = selectedSeasons.length === 0 || selectedSeasons.includes(seasonId);
-            const sillageMatch = selectedSillages.length === 0 || selectedSillages.includes(sillageId);
-            const lastingMatch = selectedLastings.length === 0 || selectedLastings.includes(lastingId);
-            if (genderMatch && genreMatch && typeMatch && seasonMatch && sillageMatch && lastingMatch) {
-                // Instead of 'block', use 'flex' if you're using flexbox for layout
-                product.style.display = 'flex'; // or 'grid' if you're using a CSS grid layout
-            } else {
-                product.style.display = 'none';
-            }
+            const productGenderIds = product.getAttribute('data-gender-id').split(
+                ','); // Get all gender_ids as an array
+            const productGenreIds = product.getAttribute('data-genre-id').split(
+                ','); // Get all genre_ids as an array
+            const productTypeIds = product.getAttribute('data-type-id').split(
+            ','); // Get all type_ids as an array
+            const productSeasonIds = product.getAttribute('data-season-id').split(
+            ','); // Get all season_ids as an array
+            const productSillageIds = product.getAttribute('data-sillage-id').split(
+                ','); // Get all sillage_ids as an array
+            const productLastingIds = product.getAttribute('data-lasting-id').split(
+                ','); // Get all lasting_ids as an array
+
+                // Check if any selected gender matches one of the product's gender_ids
+                const genderMatch = selectedGenders.length === 0 || selectedGenders.some(genderId =>
+                productGenderIds.includes(genderId));
+
+                // Check if any selected genre matches one of the product's genre_ids
+                const genreMatch = selectedGenres.length === 0 || selectedGenres.some(genreId =>
+                productGenreIds.includes(genreId));
+
+                // Check if any selected type matches one of the product's type_ids
+                const typeMatch = selectedTypes.length === 0 || selectedTypes.some(typeId =>
+                productTypeIds.includes(typeId));
+
+                // Check if any selected season matches one of the product's season_ids
+                const seasonMatch = selectedSeasons.length === 0 || selectedSeasons.some(seasonId =>
+                productSeasonIds.includes(seasonId));
+
+                // Check if any selected sillage matches one of the product's sillage_ids
+                const sillageMatch = selectedSillages.length === 0 || selectedSillages.some(sillageId =>
+                productSillageIds.includes(sillageId));
+
+                // Check if any selected lasting matches one of the product's lasting_ids
+                const lastingMatch = selectedLastings.length === 0 || selectedLastings.some(lastingId =>
+                productLastingIds.includes(lastingId));
+
+                if (genderMatch && genreMatch && typeMatch && seasonMatch && sillageMatch && lastingMatch) {
+                product.style.display = 'flex'; // Show the product if it matches
+                } else {
+                product.style.display = 'none'; // Hide the product if it doesn't match
+                }
         });
+        // Set selected option in sort dropdown
         const sortSelect = document.querySelector('select');
         sortSelect.addEventListener('change', function() {
             const url = new URL(window.location.href);
