@@ -90,6 +90,11 @@ if(isset($_POST['update_order_status'])){
             <?= htmlspecialchars($address) ?>, <?= htmlspecialchars($city) ?>
           </div>
 
+          <div style="color:black;" class="card-header">
+            <h4>City</h4>
+            <?= htmlspecialchars($city) ?>
+          </div>
+
           <div style="color:black" ; class="card-header">
             <h4>Order Status</h4>
             <?php
