@@ -43,14 +43,23 @@ isAdmin();
                 <div class="form-row">
 
                     <div class="form-group col-6">
-                        <label for="city" class="form-control-label">City</label>
-                        <input type="text" name="city" placeholder="Enter City" class="form-control">
-                    </div>
-
-                    <div class="form-group col-6">
                         <label for="address" class="form-control-label">Address</label>
                         <input type="text" name="address" placeholder="Enter Address" class="form-control">
                     </div>
+
+                    <div class="form-group col-6">
+                        <label for="city" class="form-control-label">City</label>
+                        <select class="form-control" name="city" id="city">
+                            <option selected disabled>Select City</option>
+                            <?php
+                            $city = mysqli_query($con, "SELECT * FROM cities");
+                            while ($row = mysqli_fetch_array($city)) {
+                                echo "<option value='{$row['cities']}'>{$row['cities']}</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
+
 
                 </div>
             </div>
@@ -67,7 +76,7 @@ isAdmin();
 
                     <div class="form-group col-3">
                         <label for="product" class="form-control-label">Product</label>
-                        <select class="form-control" name="product_id" id="product" onchange="fetchFormats(this.value)">
+                        <select class="form-control" name="product_id" id="product">
                             <option selected disabled>Select Product</option>
                             <?php
                             $product = mysqli_query($con, "SELECT * FROM product");
@@ -174,15 +183,15 @@ isAdmin();
                                         }
                                         // Create a new row
                                         var row = `<tr>
-                    <td>${product_name}</td>
-                    <td>${format_name}</td>
-                    <td>${qty}</td>
-                    <td>${price}</td>
-                    <td>${total_price}</td>
-                    <td>
-                        <button class="btn btn-danger btn-sm delete-product"><i class="fas fa-trash-alt"></i></button>
-                    </td>
-                </tr>`;
+                                                        <td>${product_name}</td>
+                                                        <td>${format_name}</td>
+                                                        <td>${qty}</td>
+                                                        <td>${price}</td>
+                                                        <td>${total_price}</td>
+                                                        <td>
+                                                            <button class="btn btn-danger btn-sm delete-product"><i class="fas fa-trash-alt"></i></button>
+                                                        </td>
+                                                    </tr>`;
                                         $('tbody').append(row);
                                         // Update total amount
                                         totalAmount += parseFloat(total_price);
@@ -224,7 +233,8 @@ isAdmin();
                             // Collect user information
                             var mobile = $('input[name="mobile"]').val();
                             var name = $('input[name="name"]').val();
-                            var city = $('input[name="city"]').val();
+                            // var city = $('input[name="city"]').val();
+                            var city = $('#city').val(); // Get the selected city value
                             var address = $('input[name="address"]').val();
                             // Check if required user fields are empty
                             if (!name || !mobile || !city || !address) {
@@ -253,7 +263,8 @@ isAdmin();
                                     // Clear input fields
                                     $('input[name="name"]').val('');
                                     $('input[name="mobile"]').val('');
-                                    $('input[name="city"]').val('');
+                                    // $('input[name="city"]').val('');
+                                    $('#city').prop('selectedIndex', 0);
                                     $('input[name="address"]').val('');
                                     $('#qty').val(''); // Clear quantity field
                                     $('#price').val(''); // Clear price field

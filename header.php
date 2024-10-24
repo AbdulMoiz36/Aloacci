@@ -231,6 +231,9 @@ $unique_products_json = json_encode($unique_products);
         </ul>
       </li>
       <a href="shop?price_filter=less_1500">Less than 1500</a>
+      <a href="bundles">
+        <li class="hover:underline hover:cursor-pointer">Bundles</li>
+      </a>
       <a href="about">
         <li class="hover:underline hover:cursor-pointer">About</li>
       </a>

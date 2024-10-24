@@ -22,8 +22,38 @@ foreach ($products as $product) {
     $total_price += $product['total_price'];
 }
 
-// Insert user information into the order table
-$order_query = "INSERT INTO orders (mobile, name, city, address, total_price, order_from, order_status, date) VALUES ('$mobile', '$name', '$city', '$address', '$total_price', '$order_from', '$order_status', '$date')";
+// Determine shipping charges
+$shipping_charges = 0;
+if ($city == 'Karachi') {
+    $shipping_charges = 180; // Shipping charges for Karachi
+} else {
+    $shipping_charges = 250; // Shipping charges for other cities
+}
+
+// Check shipment status
+$shipment_status = 1; // Default to 1 for now; you can modify it as needed
+$shipment_query = "SELECT price, status FROM shipment WHERE status IN (0, 1)";
+$shipment_result = mysqli_query($con, $shipment_query);
+$shipment_price = 0;
+$shipment_status = 0; // Initialize shipment status
+
+if ($shipment_row = mysqli_fetch_assoc($shipment_result)) {
+    $shipment_price = $shipment_row['price'];
+    $shipment_status = $shipment_row['status'];
+}
+
+// Determine if shipping is free based on shipment status
+if ($shipment_status == 1 && $total_price > $shipment_price) {
+    $shipping_charges = 0; // Free shipping
+}
+
+// If shipment status is 0, ensure shipping charges are added
+if ($shipment_status == 0) {
+    // Keep the shipping charges as calculated based on the city
+}
+
+// Insert user information into the orders table
+$order_query = "INSERT INTO orders (mobile, name, city, address, total_price, shipping, order_from, order_status, date) VALUES ('$mobile', '$name', '$city', '$address', '$total_price', '$shipping_charges', '$order_from', '$order_status', '$date')";
 if (mysqli_query($con, $order_query)) {
     // Get the last inserted order ID
     $order_id = mysqli_insert_id($con);
