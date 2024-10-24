@@ -33,7 +33,7 @@ function get_product($con, $limit = '', $cat_id = '', $product_id = '', $search_
 
     // Apply max price filter
     if ($max_price !== "") {
-        $sql .= " AND product_format.price < $max_price";
+        $sql .= " AND (SELECT MIN(product_format.price) FROM product_format WHERE product_format.product_id = product.id) < $max_price";
     }
 
     // Apply product ID filter
