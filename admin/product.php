@@ -45,7 +45,7 @@ $serial_no = 1;
                   <thead>
                      <tr>
                         <th>Serial No.</th>
-                        <th>Categories</th>
+                        <!-- <th>Categories</th> -->
                         <th>P_Name</th>
                         <th>Image</th>
                         <th>Formats</th>
@@ -60,7 +60,7 @@ $serial_no = 1;
                      <?php while($row = mysqli_fetch_array($res)){ ?>
                      <tr>
                         <td> <?= $serial_no++; ?> </td>
-                        <td> <?= $row['categories'] ?> </td>
+                        <!-- <td> <?= $row['categories'] ?> </td> -->
                         <td> <?= $row['name'] ?> </td>
                         <td>
                            <?php
