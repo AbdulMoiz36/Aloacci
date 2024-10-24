@@ -46,7 +46,7 @@ $serial_no = 1;
                      <tr>
                         <th>Serial No.</th>
                         <!-- <th>Categories</th> -->
-                        <th>P_Name</th>
+                        <th>Product Name</th>
                         <th>Image</th>
                         <th>Formats</th>
                         <th>Prices</th>
