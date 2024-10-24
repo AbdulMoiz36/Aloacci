@@ -137,7 +137,7 @@ if (isset($_REQUEST['submit'])) {
     $lasting_id = isset($_POST['lasting_id']) ? $_POST['lasting_id'] : null;
 
     // Validation for product existence
-    $res = mysqli_query($con, "select * from product where category_id='$category_id' and sub_category_id='$sub_category_id' and name='$name'");
+    $res = mysqli_query($con, "select * from product where name='$name'");
     $check = mysqli_num_rows($res);
 
     if ($check > 0 && (!isset($_GET['id']) || $_GET['id'] != $row['id'])) {
@@ -308,6 +308,9 @@ if (isset($_REQUEST['submit'])) {
             <div class="card-header">
                 <h4>Products</h4><span>Form</span>
             </div>
+                <div style="color: red; margin: 10px;">
+                    <?= $msg ?>
+                </div>
             <form method="post" enctype="multipart/form-data">
                 <div class="card-body card-block">
                     <div class="form-row">
@@ -820,9 +823,6 @@ if (isset($_REQUEST['submit'])) {
                     <button id="payment-button" name="submit" type="submit" class="btn btn-lg btn-primary btn-block">
                         <span id="payment-button-amount">Submit</span>
                     </button>
-                    <div style="color: red; margin-top: 10px;">
-                        <?= $msg ?>
-                    </div>
                 </div>
             </form>
         </div>
