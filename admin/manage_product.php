@@ -518,11 +518,13 @@ if (isset($_REQUEST['submit'])) {
                     ?>
 
                     <div class="form-row">
-                        <div class="form-group col-2">
+                        <div class="form-group col-4">
                             <label for="gender" class="form-control-label">Gender</label>
                             <div class="dropdown">
-                                <button class="dropdown-toggle form-control" style="width: 100%;text-align:left;display: flex;justify-content: space-between;" type="button" id="genderDropdown"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <button class="dropdown-toggle form-control"
+                                    style="width: 100%;text-align:left;display: flex;justify-content: space-between;"
+                                    type="button" id="genderDropdown" data-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false">
                                     Select Gender
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="genderDropdown">
@@ -542,11 +544,13 @@ if (isset($_REQUEST['submit'])) {
                             </div>
                         </div>
 
-                        <div class="form-group col-2">
+                        <div class="form-group col-4">
                             <label for="genre" class="form-control-label">Genre</label>
                             <div class="dropdown">
-                                <button class="dropdown-toggle form-control" style="width: 100%;text-align:left;display: flex;justify-content: space-between;" type="button" id="genreDropdown"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <button class="dropdown-toggle form-control"
+                                    style="width: 100%;text-align:left;display: flex;justify-content: space-between;"
+                                    type="button" id="genreDropdown" data-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false">
                                     Select Genre
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="genreDropdown">
@@ -566,11 +570,13 @@ if (isset($_REQUEST['submit'])) {
                             </div>
                         </div>
 
-                        <div class="form-group col-2">
+                        <div class="form-group col-4">
                             <label for="type" class="form-control-label">Type</label>
                             <div class="dropdown">
-                                <button class="dropdown-toggle form-control" style="width: 100%;text-align:left;display: flex;justify-content: space-between;" type="button" id="typeDropdown"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <button class="dropdown-toggle form-control"
+                                    style="width: 100%;text-align:left;display: flex;justify-content: space-between;"
+                                    type="button" id="typeDropdown" data-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false">
                                     Select Type
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="typeDropdown">
@@ -590,11 +596,17 @@ if (isset($_REQUEST['submit'])) {
                             </div>
                         </div>
 
-                        <div class="form-group col-2">
+                    </div>
+                    
+                    <div class="form-row">
+
+                        <div class="form-group col-4">
                             <label for="season" class="form-control-label">Season</label>
                             <div class="dropdown">
-                                <button class="dropdown-toggle form-control" style="width: 100%;text-align:left;display: flex;justify-content: space-between;" type="button" id="seasonDropdown"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <button class="dropdown-toggle form-control"
+                                    style="width: 100%;text-align:left;display: flex;justify-content: space-between;"
+                                    type="button" id="seasonDropdown" data-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false">
                                     Select Season
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="seasonDropdown">
@@ -614,11 +626,13 @@ if (isset($_REQUEST['submit'])) {
                             </div>
                         </div>
 
-                        <div class="form-group col-2">
+                        <div class="form-group col-4">
                             <label for="sillage" class="form-control-label">Sillage</label>
                             <div class="dropdown">
-                                <button class="dropdown-toggle form-control" style="width: 100%;text-align:left;display: flex;justify-content: space-between;" type="button" id="sillageDropdown"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <button class="dropdown-toggle form-control"
+                                    style="width: 100%;text-align:left;display: flex;justify-content: space-between;"
+                                    type="button" id="sillageDropdown" data-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false">
                                     Select Sillage
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="sillageDropdown">
@@ -638,11 +652,13 @@ if (isset($_REQUEST['submit'])) {
                             </div>
                         </div>
 
-                        <div class="form-group col-2">
+                        <div class="form-group col-4">
                             <label for="lasting" class="form-control-label">Lasting</label>
                             <div class="dropdown">
-                                <button class="dropdown-toggle form-control" style="width: 100%;text-align:left;display: flex;justify-content: space-between;" type="button" id="lastingDropdown"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <button class="dropdown-toggle form-control"
+                                    style="width: 100%;text-align:left;display: flex;justify-content: space-between;"
+                                    type="button" id="lastingDropdown" data-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false">
                                     Select Lasting
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="lastingDropdown">
@@ -661,7 +677,6 @@ if (isset($_REQUEST['submit'])) {
                                 </div>
                             </div>
                         </div>
-
 
                     </div>
                     <style>
