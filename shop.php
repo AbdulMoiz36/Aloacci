@@ -115,10 +115,11 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
 }
 ?>
 
-<div class="w-full p-10 ">
+<div class="w-full p-10">
     <h1 class="font-bold text-4xl">Products</h1>
-    <p><?= count(array_unique(array_column($get_product, 'id'))) ?> Products</p>
+    <p id="product-count"><?= count(array_unique(array_column($get_product, 'id'))) ?> Products</p>
 </div>
+
 
 <!-- Sticky filter and sort section -->
 <div
@@ -397,111 +398,78 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
 
 <script>
     function filterProducts() {
-        const selectedGenders = Array.from(document.querySelectorAll('.gender-checkbox:checked')).map(checkbox =>
-            checkbox.value);
-        const selectedGenres = Array.from(document.querySelectorAll('.genre-checkbox:checked')).map(checkbox =>
-            checkbox.value);
-        const selectedTypes = Array.from(document.querySelectorAll('.type-checkbox:checked')).map(checkbox => checkbox
-            .value);
-        const selectedSeasons = Array.from(document.querySelectorAll('.season-checkbox:checked')).map(checkbox =>
-            checkbox.value);
-        const selectedSillages = Array.from(document.querySelectorAll('.sillage-checkbox:checked')).map(checkbox =>
-            checkbox.value);
-        const selectedLastings = Array.from(document.querySelectorAll('.lasting-checkbox:checked')).map(checkbox =>
-            checkbox.value);
-        // Update the URL with selected filters
-        const url = new URL(window.location.href);
-        // Only set the genders parameter if there are selected genders
-        if (selectedGenders.length > 0) {
-            url.searchParams.set('genders', selectedGenders.join(','));
-        } else {
-            url.searchParams.delete('genders'); // Remove genders parameter if no checkbox is selected
-        }
-        // Only set the genres parameter if there are selected genres
-        if (selectedGenres.length > 0) {
-            url.searchParams.set('genres', selectedGenres.join(','));
-        } else {
-            url.searchParams.delete('genres'); // Remove genres parameter if no checkbox is selected
-        }
-        // Only set the types parameter if there are selected types
-        if (selectedTypes.length > 0) {
-            url.searchParams.set('types', selectedTypes.join(','));
-        } else {
-            url.searchParams.delete('types'); // Remove types parameter if no checkbox is selected
-        }
-        // Only set the seasons parameter if there are selected seasons
-        if (selectedSeasons.length > 0) {
-            url.searchParams.set('seasons', selectedSeasons.join(','));
-        } else {
-            url.searchParams.delete('seasons'); // Remove seasons parameter if no checkbox is selected
-        }
-        // Only set the sillages parameter if there are selected sillages
-        if (selectedSillages.length > 0) {
-            url.searchParams.set('sillages', selectedSillages.join(','));
-        } else {
-            url.searchParams.delete('sillages'); // Remove sillages parameter if no checkbox is selected
-        }
-        // Only set the lastings parameter if there are selected lastings
-        if (selectedLastings.length > 0) {
-            url.searchParams.set('lastings', selectedLastings.join(','));
-        } else {
-            url.searchParams.delete('lastings'); // Remove lastings parameter if no checkbox is selected
-        }
-        window.history.replaceState({}, '', url); // Update URL without reloading
-        const products = document.querySelectorAll('.product-card');
-        products.forEach(product => {
-            const productGenderIds = product.getAttribute('data-gender-id').split(
-                ','); // Get all gender_ids as an array
-            const productGenreIds = product.getAttribute('data-genre-id').split(
-                ','); // Get all genre_ids as an array
-            const productTypeIds = product.getAttribute('data-type-id').split(
-                ','); // Get all type_ids as an array
-            const productSeasonIds = product.getAttribute('data-season-id').split(
-                ','); // Get all season_ids as an array
-            const productSillageIds = product.getAttribute('data-sillage-id').split(
-                ','); // Get all sillage_ids as an array
-            const productLastingIds = product.getAttribute('data-lasting-id').split(
-                ','); // Get all lasting_ids as an array
+    const selectedGenders = Array.from(document.querySelectorAll('.gender-checkbox:checked')).map(checkbox =>
+    checkbox.value);
+    const selectedGenres = Array.from(document.querySelectorAll('.genre-checkbox:checked')).map(checkbox =>
+    checkbox.value);
+    const selectedTypes = Array.from(document.querySelectorAll('.type-checkbox:checked')).map(checkbox =>
+    checkbox.value);
+    const selectedSeasons = Array.from(document.querySelectorAll('.season-checkbox:checked')).map(checkbox =>
+    checkbox.value);
+    const selectedSillages = Array.from(document.querySelectorAll('.sillage-checkbox:checked')).map(checkbox =>
+    checkbox.value);
+    const selectedLastings = Array.from(document.querySelectorAll('.lasting-checkbox:checked')).map(checkbox =>
+    checkbox.value);
 
-            // Check if any selected gender matches one of the product's gender_ids
-            const genderMatch = selectedGenders.length === 0 || selectedGenders.some(genderId =>
-                productGenderIds.includes(genderId));
+    // Update URL with selected filters
+    const url = new URL(window.location.href);
+    const filterParams = {
+    genders: selectedGenders,
+    genres: selectedGenres,
+    types: selectedTypes,
+    seasons: selectedSeasons,
+    sillages: selectedSillages,
+    lastings: selectedLastings
+    };
 
-            // Check if any selected genre matches one of the product's genre_ids
-            const genreMatch = selectedGenres.length === 0 || selectedGenres.some(genreId =>
-                productGenreIds.includes(genreId));
+    Object.entries(filterParams).forEach(([key, value]) => {
+    if (value.length > 0) {
+    url.searchParams.set(key, value.join(','));
+    } else {
+    url.searchParams.delete(key);
+    }
+    });
 
-            // Check if any selected type matches one of the product's type_ids
-            const typeMatch = selectedTypes.length === 0 || selectedTypes.some(typeId =>
-                productTypeIds.includes(typeId));
+    window.history.replaceState({}, '', url); // Update URL without reloading
 
-            // Check if any selected season matches one of the product's season_ids
-            const seasonMatch = selectedSeasons.length === 0 || selectedSeasons.some(seasonId =>
-                productSeasonIds.includes(seasonId));
+    // Filter products based on selected filters
+    const products = document.querySelectorAll('.product-card');
+    let visibleCount = 0;
 
-            // Check if any selected sillage matches one of the product's sillage_ids
-            const sillageMatch = selectedSillages.length === 0 || selectedSillages.some(sillageId =>
-                productSillageIds.includes(sillageId));
+    products.forEach(product => {
+    const productGenderIds = product.getAttribute('data-gender-id').split(',');
+    const productGenreIds = product.getAttribute('data-genre-id').split(',');
+    const productTypeIds = product.getAttribute('data-type-id').split(',');
+    const productSeasonIds = product.getAttribute('data-season-id').split(',');
+    const productSillageIds = product.getAttribute('data-sillage-id').split(',');
+    const productLastingIds = product.getAttribute('data-lasting-id').split(',');
 
-            // Check if any selected lasting matches one of the product's lasting_ids
-            const lastingMatch = selectedLastings.length === 0 || selectedLastings.some(lastingId =>
-                productLastingIds.includes(lastingId));
+    const matches = {
+    gender: selectedGenders.length === 0 || selectedGenders.some(id => productGenderIds.includes(id)),
+    genre: selectedGenres.length === 0 || selectedGenres.some(id => productGenreIds.includes(id)),
+    type: selectedTypes.length === 0 || selectedTypes.some(id => productTypeIds.includes(id)),
+    season: selectedSeasons.length === 0 || selectedSeasons.some(id => productSeasonIds.includes(id)),
+    sillage: selectedSillages.length === 0 || selectedSillages.some(id => productSillageIds.includes(id)),
+    lasting: selectedLastings.length === 0 || selectedLastings.some(id => productLastingIds.includes(id))
+    };
 
-            if (genderMatch && genreMatch && typeMatch && seasonMatch && sillageMatch && lastingMatch) {
-                product.style.display = 'flex'; // Show the product if it matches
-            } else {
-                product.style.display = 'none'; // Hide the product if it doesn't match
-            }
-        });
-        // Set selected option in sort dropdown
-        const sortSelect = document.querySelector('select');
-        sortSelect.addEventListener('change', function() {
-            const url = new URL(window.location.href);
-            url.searchParams.set('sort', this.value);
-            window.location.href = url.toString();
-        });
-        document.querySelector(`select option[value="${new URLSearchParams(window.location.search).get('sort')}"]`)
-            .selected = true;
+    const isVisible = Object.values(matches).every(Boolean);
+    product.style.display = isVisible ? 'flex' : 'none';
+    if (isVisible) visibleCount++;
+    });
+
+    // Update the product count dynamically
+    document.getElementById('product-count').textContent = `${visibleCount} Products`;
+
+    // Handle sorting selection
+    const sortSelect = document.querySelector('select');
+    sortSelect.addEventListener('change', function () {
+    const url = new URL(window.location.href);
+    url.searchParams.set('sort', this.value);
+    window.location.href = url.toString();
+    });
+    document.querySelector(`select option[value="${new URLSearchParams(window.location.search).get('sort')}"]`).selected
+    = true;
     }
     // Function to set checkbox states from URL parameters
     function setCheckboxStates() {
