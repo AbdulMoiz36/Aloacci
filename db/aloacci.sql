@@ -293,7 +293,7 @@ CREATE TABLE `product` (
   `image3` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
   `description` varchar(5000) NOT NULL,
-  `breif` varchar(2000) NOT NULL,
+  `brief` varchar(2000) NOT NULL,
   `status` tinyint(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -301,7 +301,7 @@ CREATE TABLE `product` (
 -- Dumping data for table `product`
 --
 
-INSERT INTO `product` (`id`, `category_id`, `sub_category_id`, `image`, `image2`, `image3`, `name`, `description`, `breif`, `status`) VALUES
+INSERT INTO `product` (`id`, `category_id`, `sub_category_id`, `image`, `image2`, `image3`, `name`, `description`, `brief`, `status`) VALUES
 (3, 1, 1, 'tippingpoint_76_11zon.jpeg', 'SmashMyHead.jpeg', '', 'Smash My Head', 'Our Top Rated Perfume ⭐', 'Smash My Head is an aromatic fougere fragrance for men. The top notes of this perfume include Bergamot, Calabrian and Pepper, while the  middle notes are Lavender, Sichuan pepper, Pink Pepper, Patchouli, Vetiver, Elemi and Geranium. The base notes are Cedar, Ambroxan and Labdanum. This fragrance is extremely fresh and noble but it simultaneously also has a rawness to it.', 1),
 (11, 1, 1, 'meltme_46_11zon.jpeg', '', '', 'Melt Me', 'The All-Rounder Perfume', 'Melt Me is amber woody fragrance for men. The accords of the perfume are composed excellently to create a unique fragrance. The main accords of this perfume are woody and aromatic.\r\n\r\nThe top notes are very refreshing and contain lavender, lemon and juniper, while the middle notes include spanish labdanum, nutmeg and orange blossom. The base notes are quite aromatic and woody, consisting of musk, dry wood and patchouli. Melt Me is an appealing and pleasant scent, a definite compliment-puller. It is a fall scent exclusively for men.', 1),
 (12, 1, 2, 'Florse.jpeg', 'lostsymbol_40_11zon.jpeg', '', 'Cross My Heart', 'The Most Noticeable Scent!', 'Cross My Heart is a woody spicy fragrance for men. The top notes of this perfume are Ginger, Lemon, Mint and Lavender, while the middle notes are Juniper, Apple, Guatemalan Geranium and Cardamom. The base notes include Amberwood, Tonka Bean and Haitian Vetiver. This fragrance is made for men who are courageous and driven enough to chase success.', 1);

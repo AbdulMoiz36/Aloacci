@@ -28,7 +28,7 @@ $qty5 = '';
 $image = '';
 $image2 = '';
 $image3 = '';
-$breif = '';
+$brief = '';
 $description = '';
 $image_required = 'required';
 
@@ -45,7 +45,7 @@ if (isset($_GET['id']) && $_GET['id'] != '') {
         $category_id = $row['category_id'];
         $sub_category_id = $row['sub_category_id'];
         $name = $row['name'];
-        $breif = $row['breif'];
+        $brief = $row['brief'];
         $description = $row['description'];
         $image = $row['image'];
         $image2 = $row['image2'];
@@ -123,7 +123,7 @@ if (isset($_REQUEST['submit'])) {
     $qty3 = get_safe_value($con, $_REQUEST['qty3']);
     $qty4 = get_safe_value($con, $_REQUEST['qty4']);
     $qty5 = get_safe_value($con, $_REQUEST['qty5']);
-    $breif = get_safe_value($con, $_REQUEST['breif']);
+    $brief = get_safe_value($con, $_REQUEST['brief']);
     $description = get_safe_value($con, $_REQUEST['description']);
 
     // Retrieve other form data
@@ -198,7 +198,7 @@ if (isset($_REQUEST['submit'])) {
                 mysqli_query($con, "UPDATE product SET image3='' WHERE id='$_id'");
             }
 
-            mysqli_query($con, "update product set category_id='$category_id', sub_category_id='$sub_category_id', name='$name', breif='$breif', description='$description', image='$image', image2='$image2', image3='$image3' where id='$_id'");
+            mysqli_query($con, "update product set category_id='$category_id', sub_category_id='$sub_category_id', name='$name', brief='$brief', description='$description', image='$image', image2='$image2', image3='$image3' where id='$_id'");
 
             mysqli_query($con, "DELETE FROM product_details WHERE product_id='$_id'");
 
@@ -255,7 +255,7 @@ if (isset($_REQUEST['submit'])) {
             $folder3 = "../image/" . $image3;
             move_uploaded_file($tempname3, $folder3);
 
-            mysqli_query($con, "INSERT INTO product (`category_id`, `sub_category_id`, `name`, `breif`, `description`, `status`, `image`, `image2`, `image3`) VALUES ('$category_id', '$sub_category_id', '$name', '$breif', '$description', '1', '$image', '$image2', '$image3')");
+            mysqli_query($con, "INSERT INTO product (`category_id`, `sub_category_id`, `name`, `brief`, `description`, `status`, `image`, `image2`, `image3`) VALUES ('$category_id', '$sub_category_id', '$name', '$brief', '$description', '1', '$image', '$image2', '$image3')");
             $product_id = mysqli_insert_id($con);
 
             foreach ($gender_ids as $gender_id) {
@@ -831,8 +831,8 @@ if (isset($_REQUEST['submit'])) {
 
                     <div class="form-group">
                         <label for="brief" class="form-control-label">Brief</label>
-                        <textarea name="breif" placeholder="Enter Product Brief"
-                            class="form-control"><?= $breif ?></textarea>
+                        <textarea name="brief" placeholder="Enter Product Brief"
+                            class="form-control"><?= $brief ?></textarea>
                     </div>
 
                     <button id="payment-button" name="submit" type="submit" class="btn btn-lg btn-primary btn-block">
