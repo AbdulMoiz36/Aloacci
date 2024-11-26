@@ -12,6 +12,9 @@ function get_product($con, $limit = '', $cat_id = '', $product_id = '', $search_
                    sub_categories.sub_categories, 
                    product_format.format, 
                    product_format.price, 
+                   product_format.sale_price, 
+                   product_format.unit_of_sale, 
+                   product_format.unit_of_measure, 
                    product_format.qty,  -- Added qty from product_format
                    (SELECT MIN(product_format.price) FROM product_format WHERE product_format.product_id = product.id) AS min_price 
             FROM product 

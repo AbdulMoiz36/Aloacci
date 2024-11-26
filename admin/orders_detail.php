@@ -50,7 +50,7 @@ if(isset($_POST['update_order_status'])){
             $total_price += ($row['qty'] * $row['price']);
               ?>
               <tr class="pb-0">
-                <td><img src="../image/<?= htmlspecialchars($row['image']) ?>" height="50" width="50" alt="">
+                <td><img src="../image/products/<?= htmlspecialchars($row['image']) ?>" height="50" width="50" alt="">
                   <?= htmlspecialchars($row['name']) ?></td>
                 <td><?= htmlspecialchars($row['format']) ?></td>
                 <td><?= htmlspecialchars($row['qty']) ?></td>

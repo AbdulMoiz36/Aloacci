@@ -19,7 +19,7 @@ if(isset($_GET['type']) && $_GET['type']!=''){
 $select = "
     SELECT p.*, 
            IFNULL(c.categories, 'No Category') as categories, 
-           GROUP_CONCAT(pf.format ORDER BY pf.id ASC SEPARATOR ', ') as formats,
+           GROUP_CONCAT(CONCAT(pf.format, ' (', pf.unit_of_measure, ')') ORDER BY pf.id ASC SEPARATOR ', ') as formats,
            GROUP_CONCAT(pf.price ORDER BY pf.id ASC SEPARATOR ', ') as prices,
            GROUP_CONCAT(pf.qty ORDER BY pf.id ASC SEPARATOR ', ') as qtys
     FROM product p
@@ -27,6 +27,7 @@ $select = "
     LEFT JOIN product_format pf ON p.id = pf.product_id
     GROUP BY p.id
     ORDER BY p.id DESC";
+
 
 $res = mysqli_query($con, $select);
 
@@ -63,22 +64,8 @@ $serial_no = 1;
                         <!-- <td> <?= $row['categories'] ?> </td> -->
                         <td> <?= $row['name'] ?> </td>
                         <td>
-                           <?php
-                           $mainImage = "../image/" . $row['image'];
-                           $altImage1 = "../image/" . $row['image2']; // Assuming 'image_2' is the column name for the second image
-                           $altImage2 = "../image/" . $row['image3']; // Assuming 'image_3' is the column name for the third image
-
-                           if (file_exists($mainImage) && !empty($row['image'])) {
-                              $imageToShow = $row['image'];
-                           } elseif (file_exists($altImage1) && !empty($row['image2'])) {
-                              $imageToShow = $row['image2'];
-                           } elseif (file_exists($altImage2) && !empty($row['image3'])) {
-                              $imageToShow = $row['image3'];
-                           } else {
-                              $imageToShow = "default.png"; // Optional: provide a default image if none are found
-                           }
-                           ?>
-                           <img src="../image/<?= $imageToShow ?>" height="50" width="50" alt="">
+                           
+                           <img src="../image/products/<?= $row['image'] ?>" height="50" width="50" alt="">
                         </td>
 
                         <td> <?= str_replace(", ", "<br>", $row['formats']) ?> </td>

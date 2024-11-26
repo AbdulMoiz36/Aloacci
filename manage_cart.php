@@ -6,16 +6,14 @@ require "add_cart_func.php";
 try {
     $pid = get_safe_value($con, $_POST['pid']);
     $type = get_safe_value($con, $_POST['type']);
-    $format = isset($_POST['format']) ? get_safe_value($con, $_POST['format']) : ''; // Default to empty string
-    $price = isset($_POST['price']) ? get_safe_value($con, $_POST['price']) : 0; // Default to 0
+    $format = isset($_POST['format']) ? get_safe_value($con, $_POST['format']) : '';
+    $price = isset($_POST['price']) ? get_safe_value($con, $_POST['price']) : 0;
     $qty = isset($_POST['qty']) ? get_safe_value($con, $_POST['qty']) : 0;
-    
+    $unitOfMeasure = isset($_POST['unitOfMeasure']) ? get_safe_value($con, $_POST['unitOfMeasure']) : ''; // Retrieve unitOfMeasure
 
-    // Check if quantity is available
-    $productSoldQtyByProductId = productSoldQtyByProductId($con, $pid, $format); // Include format
-    $productQty = productQty($con, $pid, $format); // Include format
+    $productSoldQtyByProductId = productSoldQtyByProductId($con, $pid, $format);
+    $productQty = productQty($con, $pid, $format);
     $pending_qty = $productQty - $productSoldQtyByProductId;
-    
 
     if ($qty > $pending_qty && $type !== 'remove') {
         echo "not_available";
@@ -24,18 +22,17 @@ try {
 
     $obj = new add_to_cart();
 
-switch ($type) {
-    case 'add':
-        $obj->addProduct($pid, $qty, $format, $price); // Pass format and price to add function
-        break;
-    case 'remove':
-        $obj->removeProduct($pid, $format); // Pass format to remove function
-        break;
-    case 'update':
-        $obj->updateProduct($pid, $qty, $format, $price); // Pass format and price to update function
-        break;
-}
-  
+    switch ($type) {
+        case 'add':
+            $obj->addProduct($pid, $qty, $format, $price, $unitOfMeasure); // Pass unitOfMeasure
+            break;
+        case 'remove':
+            $obj->removeProduct($pid, $format);
+            break;
+        case 'update':
+            $obj->updateProduct($pid, $qty, $format, $price, $unitOfMeasure); // Pass unitOfMeasure
+            break;
+    }
 
     echo $obj->totalProduct();
 } catch (Exception $e) {

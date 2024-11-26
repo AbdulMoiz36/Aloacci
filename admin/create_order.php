@@ -13,10 +13,7 @@ isAdmin();
         margin: 0;
     }
 
-    /* For Firefox */
-    input[type=number] {
-        -moz-appearance: textfield;
-    }
+
 </style>
 
 <div class="row">

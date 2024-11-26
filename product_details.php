@@ -15,7 +15,10 @@ $product_image3 = htmlspecialchars($get_product[0]['image3']);
 $product_name = htmlspecialchars($get_product[0]['name']);
 $brief = htmlspecialchars($get_product[0]['brief']);
 $product_formats = array_map('htmlspecialchars', array_column($get_product, 'format'));
+$unit_of_measures = array_map('htmlspecialchars', array_column($get_product, 'unit_of_measure'));
 $product_prices = array_map('htmlspecialchars', array_column($get_product, 'price'));
+$product_sale_prices = array_map('htmlspecialchars', array_column($get_product, 'sale_price'));
+$product_units = array_map('htmlspecialchars', array_column($get_product, 'unit_of_sale'));
 $product_quantities = array_column($get_product, 'qty'); // Fetch the quantity of each format
 $reviewsql = mysqli_query($con, "SELECT COUNT(*) AS total_reviews FROM reviews WHERE product_id = '$product_id';");
 $total_reviews = mysqli_fetch_array($reviewsql);
@@ -39,36 +42,105 @@ foreach ($get_product as $product) {
 
 <section class="w-full">
     <div class="flex flex-wrap p-2 md:p-10">
-        <div class="w-100 md:w-1/2 flex gap-2">
-            <!-- Sidebar Thumbnails (only displayed if there is more than one image) -->
-            <?php if (!empty($product_image) || !empty($product_image2) || !empty($product_image3)): ?>
-                <div class="w-1/6 space-y-2">
-                    <?php if (!empty($product_image)): ?>
-                        <img src="./image/<?= $product_image ?>" alt="Thumbnail 1"
-                            class="cursor-pointer border-2 border-slate-200" onclick="changeImage(this.src)">
-                    <?php endif; ?>
-                    <?php if (!empty($product_image2)): ?>
-                        <img src="./image/<?= $product_image2 ?>" alt="Thumbnail 2"
-                            class="cursor-pointer border-2 border-slate-200" onclick="changeImage(this.src)">
-                    <?php endif; ?>
-                    <?php if (!empty($product_image3)): ?>
-                        <img src="./image/<?= $product_image3 ?>" alt="Thumbnail 3"
-                            class="cursor-pointer border-2 border-slate-200" onclick="changeImage(this.src)">
-                    <?php endif; ?>
+        <div class="w-full md:w-1/2 flex gap-2">
+            <?php
+            // Assuming $product_image contains the main image path
+            $mainImage = $product_image;
+
+            // Fetch additional images from the database for the product
+            $productId = $product['id']; // Replace with your actual product ID variable
+
+            $additionalImages = [];
+            $query = "SELECT image_path FROM product_images WHERE product_id = '$productId'";
+            $result = $con->query($query);
+
+            if ($result && $result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    $additionalImages[] = $row['image_path'];
+                }
+            }
+            ?>
+
+            <!-- Sidebar Thumbnails (Left Side) -->
+            <?php if (!empty($additionalImages)): ?>
+                <div class="w-full md:w-1/6 space-y-2 max-h-[800px] overflow-y-auto custom-scrollbar">
+                    <img src="./image/products/<?= $product_image ?>" alt="Thumbnail" class="cursor-pointer border-2 border-slate-200"
+                        onclick="changeImage(this.src)">
+                    <?php foreach ($additionalImages as $imagePath): ?>
+                        <img src="./image/products/<?= $imagePath ?>" alt="Thumbnail"
+                            class="cursor-pointer border-2 border-slate-200"
+                            onclick="changeImage(this.src)">
+                    <?php endforeach; ?>
                 </div>
             <?php endif; ?>
 
-            <?php
-            // Determine which image to use as the main image
-            $mainImage = !empty($product_image) ? $product_image : (!empty($product_image2) ? $product_image2 : $product_image3);
-            ?>
-
-            <!-- Main Image -->
-            <div class="<?= empty($product_image) ? 'w-full' : 'w-5/6' ?>">
-                <img id="mainImage" src="./image/<?= $mainImage ?>" alt="Selected Product Image"
+            <!-- Main Image (Right Side) -->
+            <div class="w-full md:w-3/4">
+                <img id="mainImage" src="./image/products/<?= $mainImage ?>" alt="Selected Product Image"
                     class="border-2 border-slate-200 max-h-[850px] mx-auto">
             </div>
         </div>
+        <style>
+            .custom-scrollbar {
+                scrollbar-gutter: stable both-edges;
+                /* For consistent layout with a scrollbar on the left */
+                direction: rtl;
+                /* Temporarily reverse the content direction */
+                overflow-y: scroll;
+                padding-right: 10px;
+                /* Avoid content overlapping with the scrollbar */
+            }
+
+            .custom-scrollbar>* {
+                direction: ltr;
+                /* Restore normal content direction */
+            }
+
+            /* Webkit browsers (Chrome, Edge, Safari) */
+            .custom-scrollbar::-webkit-scrollbar {
+                width: 8px;
+                /* Adjust scrollbar width */
+            }
+
+            .custom-scrollbar::-webkit-scrollbar-thumb {
+                background: #70c745;
+                /* Use the green theme color */
+                border-radius: 4px;
+                /* Rounded scrollbar */
+            }
+
+            .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+                background: #56a533;
+                /* Darker green on hover */
+            }
+
+            .custom-scrollbar::-webkit-scrollbar-track {
+                background: white;
+                /* Light background for track */
+                border-radius: 4px;
+            }
+
+            /* For Firefox */
+            .custom-scrollbar {
+                scrollbar-width: thin;
+                /* Thin scrollbar */
+                scrollbar-color: goldenrod #f1f1f1;
+                /* Thumb color and track color */
+            }
+
+            /* For IE (optional fallback for older browsers) */
+            .custom-scrollbar::-ms-scrollbar {
+                color: goldenrod;
+            }
+        </style>
+        <script>
+            // JavaScript to update the main image when a thumbnail is clicked
+            function changeImage(newSrc) {
+                const mainImage = document.getElementById('mainImage');
+                mainImage.src = newSrc;
+            }
+        </script>
+
 
         <div class="w-full md:w-1/2 flex flex-col justify-center md:justify-start p-2 md:p-10 gap-6">
             <div>
@@ -76,7 +148,6 @@ foreach ($get_product as $product) {
                 <p><?= $total_reviews['total_reviews'] ?> Reviews</p>
             </div>
 
-            <!-- Product Formats and Prices -->
             <div class="mt-4">
                 <p class="font-semibold">Select Format:</p>
                 <div id="format-container" class="flex gap-3 flex-wrap">
@@ -84,12 +155,39 @@ foreach ($get_product as $product) {
                     $defaultSelected = false; // Flag to track if a default format is selected
                     foreach ($product_formats as $index => $format):
                         $isAvailable = $product_quantities[$index] > 0;
+                        $unitOfMeasure = $unit_of_measures[$index];
+                        $price = $product_prices[$index];
+                        $salePrice = $product_sale_prices[$index] ?? 0; // Sale price or default to 0
+                        $unitOfSale = $product_units[$index]; // Unit of sale for the format
+                        $unitOfMeasure = $unitOfMeasure == 0 || $unitOfMeasure == "" ? null : $unitOfMeasure;
+
+                        // Perform calculations for sale price
+                        $finalPrice = $price;
+                        if ($salePrice > 0) {
+                            if ($unitOfSale === "Price") {
+                                $finalPrice -= $salePrice; // Deduct the sale price
+                            } elseif ($unitOfSale === "Percentage") {
+                                $finalPrice -= ($price * $salePrice) / 100; // Deduct the sale percentage
+                            }
+                        }
+
+                        // Set the default price for display if the format is selected
+                        if ($isAvailable && !$defaultSelected) {
+                            $displayPrice = $finalPrice;
+                            $originalPrice = $price;
+                        }
                     ?>
                         <div class="format-option border-2 p-2 cursor-pointer my-2 <?= !$defaultSelected && $isAvailable ? 'bg-gray-200' : '' ?> w-fit
-                            <?= $isAvailable ? 'border-black' : 'border-gray-400 text-gray-400 cursor-not-allowed' ?>"
-                            data-price="<?= $product_prices[$index] ?>" data-qty="<?= $product_quantities[$index] ?>"
+                <?= $isAvailable ? 'border-black' : 'border-gray-400 text-gray-400 cursor-not-allowed' ?>"
+                            data-price="<?= $price ?>"
+                            data-sale-price="<?= $salePrice ?>"
+                            data-unit-of-sale="<?= $unitOfSale ?>"
+                            data-final-price="<?= $finalPrice ?>"
+                            data-unit-of-measure="<?= $unitOfMeasure ?>"
+                            data-format="<?= $format ?>"
+                            data-qty="<?= $product_quantities[$index] ?>"
                             <?= $isAvailable ? '' : 'data-disabled="true"' ?>>
-                            <?= $format ?>
+                            <?= $format . ' ' . $unitOfMeasure ?>
                         </div>
                     <?php
                         if ($isAvailable && !$defaultSelected) {
@@ -98,15 +196,67 @@ foreach ($get_product as $product) {
                     endforeach;
                     ?>
                 </div>
-                <p id="product-price" class="font-semibold text-lg mt-2">Price: Rs. <?= $product_prices[0] ?></p>
+                <!-- Display the calculated price -->
+                <p id="product-price" class="font-semibold text-lg mt-2">
+                    Price: <span>Rs. <?= isset($displayPrice) ? number_format($displayPrice) : '00' ?></span>
+                    <span class="line-through text-gray-500 ml-2 <?= $displayPrice === $originalPrice ? 'hidden' : '' ?> ">Rs. <?= isset($originalPrice) ? number_format($originalPrice) : '00' ?></span>
+                </p>
             </div>
 
             <div class="products--meta">
                 <p>
                     <span>Availability:</span>
-                    <span id="availability" class="<?= $product_quantities[0] > 0 ? '' : 'text-red-600' ?> mb-4"><?= $product_quantities[0] > 0 ? 'In Stock' : 'Not in Stock' ?></span>
+                    <span id="availability" class="<?= $product_quantities[0] > 0 ? '' : 'text-red-600' ?> mb-4">
+                        <?= $product_quantities[0] > 0 ? 'In Stock' : 'Not in Stock' ?>
+                    </span>
                 </p>
             </div>
+            <script>
+                document.addEventListener('DOMContentLoaded', () => {
+                    const formatOptions = document.querySelectorAll('.format-option');
+                    const priceDisplay = document.getElementById('product-price');
+
+                    // Ensure the price matches the default selected format
+                    const selectedFormat = document.querySelector('#format-container .bg-gray-200');
+                    if (selectedFormat) {
+                        const finalPrice = selectedFormat.getAttribute('data-final-price');
+                        const originalPrice = selectedFormat.getAttribute('data-price');
+                        priceDisplay.innerHTML = `
+                        Price: <span>Rs. ${parseFloat(finalPrice)}</span>
+            <span class="line-through text-gray-500 ml-2">Rs. ${parseFloat(originalPrice)}</span>
+        `;
+                    }
+
+                    // Add click event listeners to update the price when a format is selected
+                    formatOptions.forEach(option => {
+                        option.addEventListener('click', () => {
+                            if (!option.classList.contains('cursor-not-allowed')) {
+                                // Deselect other options
+                                formatOptions.forEach(opt => opt.classList.remove('bg-gray-200'));
+                                // Select the clicked option
+                                option.classList.add('bg-gray-200');
+
+                                // Update the price display
+                                const finalPrice = option.getAttribute('data-final-price');
+                                const originalPrice = option.getAttribute('data-price');
+                                if (finalPrice == originalPrice) {
+                                    priceDisplay.innerHTML = `
+                                Price: <span >Rs. ${finalPrice}</span>
+                                
+                `;
+                                } else {
+                                    priceDisplay.innerHTML = `
+                                Price: <span >Rs. ${finalPrice}</span>
+                                <span class="line-through text-gray-500 ml-2">Rs. ${originalPrice}</span>
+                `;
+                                }
+
+                            }
+                        });
+                    });
+                });
+            </script>
+
 
             <div>
                 <p class="font-semibold">Quantity:</p>
@@ -191,51 +341,107 @@ foreach ($get_product as $product) {
             <button id="addToCartBtn" class="border-2 border-black text-lg font-semibold rounded-full mb-2 p-3"
                 onclick="addToCart('<?= $get_product[0]['id'] ?>')">Add To Cart</button>
 
+
             </form>
             <div onclick="addToCartAndCheckout(<?= $product_id ?>)" class="w-full p-3 text-center border-2 hover:cursor-pointer bg-gradient-to-bl from-yellow-500 via-yellow-500 to-amber-600 shadow-sm hover:shadow-xl transition-shadow ease-in-out duration-300 font-semibold rounded-full text-white">Buy It Now</div>
 
             <script>
                 function addToCart(productId) {
-                    const selectedFormat = document.querySelector('#format-container .bg-gray-200'); // Get the selected format
-                    const quantity = document.getElementById('qty').value; // Get the quantity
-                    if (selectedFormat) {
-                        const format = selectedFormat.innerText.split(' - ')[0]; // Get the format text (remove price)
-                        const price = selectedFormat.dataset.price; // Get the price of the selected format
-                        const qty = selectedFormat.dataset.qty; // Get the available quantity of the selected format
+                    console.log("Product ID:", productId);
+                    const selectedFormat = document.querySelector('#format-container .bg-gray-200');
+                    console.log("Selected Format:", selectedFormat);
 
-                        if (parseInt(quantity) > parseInt(qty)) {
-                            alert("Selected quantity exceeds available stock.");
-                            return;
-                        }
+                    const quantity = document.getElementById('qty')?.value;
+                    console.log("Quantity:", quantity);
 
-                        // Call manage_cart with the current product ID, selected format, and quantity
-                        manage_cart(productId, 'add', quantity, format, price); // Pass the quantity and format
-                    } else {
+                    if (!selectedFormat) {
                         alert("Please select a format before adding to cart.");
+                        return;
                     }
+
+                    const format = selectedFormat.dataset.format;
+                    const unitOfMeasure = selectedFormat.dataset.unitOfMeasure; // Get unit of measure
+                    const price = selectedFormat.dataset.price;
+                    const salePrice = selectedFormat.dataset.salePrice || 0;
+                    const unitOfSale = selectedFormat.dataset.unitOfSale;
+                    const qtyAvailable = selectedFormat.dataset.qty;
+
+                    console.log("Price:", price, "Sale Price:", salePrice, "Unit of Sale:", unitOfSale);
+
+                    if (parseInt(quantity) > parseInt(qtyAvailable)) {
+                        alert("Selected quantity exceeds available stock.");
+                        return;
+                    }
+
+                    let finalPrice = price;
+                    if (salePrice > 0) {
+                        if (unitOfSale === "Price") {
+                            finalPrice -= salePrice;
+                        } else if (unitOfSale === "Percentage") {
+                            finalPrice -= (finalPrice * salePrice) / 100;
+                        }
+                    }
+
+                    finalPrice = finalPrice < 0 ? 0 : finalPrice;
+                    console.log("Final Price:", finalPrice);
+
+                    // Include unitOfMeasure in the manage_cart function
+                    manage_cart(productId, 'add', quantity, format, finalPrice, unitOfMeasure);
                 }
+
+
+
+
 
                 function addToCartAndCheckout(productId) {
                     const selectedFormat = document.querySelector('#format-container .bg-gray-200'); // Get the selected format
-                    const quantity = document.getElementById('qty').value; // Get the quantity
+                    const quantity = document.getElementById('qty')?.value; // Get the quantity
+
+                    if (!quantity || quantity <= 0) {
+                        alert("Please enter a valid quantity.");
+                        return;
+                    }
 
                     if (selectedFormat) {
-                        const format = selectedFormat.innerText.split(' - ')[0]; // Get the format text (remove price)
-                        const price = selectedFormat.dataset.price; // Get the price of the selected format
+                        const format = selectedFormat.dataset.format; // Extract the format text
+                        const price = parseFloat(selectedFormat.dataset.price); // Regular price
+                        const salePrice = parseFloat(selectedFormat.dataset.salePrice) || 0; // Sale price
+                        const unitOfSale = selectedFormat.dataset.unitOfSale; // Sale type (Price/Percentage)
+                        const unitOfMeasure = selectedFormat.dataset.unitOfMeasure; // Sale type (Price/Percentage)
 
-                        // Use AJAX to call manage_cart without reloading the page
+                        // Calculate final price
+                        let finalPrice = price;
+                        if (salePrice > 0) {
+                            if (unitOfSale === "Price") {
+                                finalPrice -= salePrice; // Deduct fixed sale price
+                            } else if (unitOfSale === "Percentage") {
+                                finalPrice -= (price * salePrice) / 100; // Deduct percentage
+                            }
+                        }
+                        finalPrice = Math.max(0, finalPrice); // Ensure price is not negative
+
+                        console.log("Product ID:", productId, "Format:", format, "Quantity:", quantity, "Final Price:", finalPrice);
+
+                        // AJAX call to manage_cart
                         const xhr = new XMLHttpRequest();
-                        xhr.open('POST', 'manage_cart', true); // Adjust this URL if needed
+                        xhr.open('POST', 'manage_cart', true);
                         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
                         xhr.onreadystatechange = function() {
-                            if (xhr.readyState === 4 && xhr.status === 200) {
-                                // Once the item is added to the cart, redirect to checkout
-                                window.location.href = 'checkout';
+                            if (xhr.readyState === 4) {
+                                if (xhr.status === 200) {
+                                    console.log("Cart updated successfully:", xhr.responseText);
+                                    window.location.href = 'checkout'; // Redirect to checkout
+                                } else {
+                                    console.error("Error updating cart:", xhr.responseText);
+                                    alert("Failed to add to cart. Please try again.");
+                                }
                             }
                         };
 
-                        // Send the cart data (adjust these parameters as needed)
-                        xhr.send(`pid=${productId}&type=add&qty=${quantity}&format=${format}&price=${price}`);
+                        // Send cart data to the server
+                        xhr.send(`pid=${productId}&type=add&qty=${quantity}&format=${format}&price=${finalPrice}&unitOfMeasure=${unitOfMeasure}`);
+                    } else {
+                        alert("Please select a format.");
                     }
                 }
             </script>
@@ -254,12 +460,72 @@ foreach ($get_product as $product) {
                 <div class="bg-white p-6 rounded-b-lg shadow-lg">
                     <div id="tab1" class="tab-content block">
                         <h2 class="text-xl font-semibold underline mb-2">Description:</h2>
-                        <p><?= $brief ?></p>
+                        <?= html_entity_decode($brief) ?>
                     </div>
+                    <!-- For italic,Not worrking -->
+                    <style>
+                        em,
+                        #tab1 i {
+                            font-style: italic !important;
+                        }
+
+                        /* Ensure links are blue and underlined */
+                        #tab1 a {
+                            color: blue !important;
+                            /* Set link color to blue */
+                            text-decoration: underline;
+                            /* Ensure links are underlined */
+                        }
+
+                        /* Optional: Change link color on hover */
+                        #tab1 a:hover {
+                            color: darkblue;
+                            /* You can adjust the hover color if needed */
+                        }
+
+                        #tab1 ul,
+                        #tab1 ol {
+                            margin-left: 20px;
+                            /* Indentation for all lists */
+                            padding-left: 20px;
+                            /* Prevents bullets/numbers from being hidden */
+                        }
+
+                        #tab1 ul {
+                            list-style-type: disc;
+                            /* Default bullet style */
+                        }
+
+                        #tab1 ol {
+                            list-style-type: decimal;
+                            /* Numbers for ordered lists */
+                        }
+
+                        /* Optional: Customize nested lists */
+                        #tab1 ul ul {
+                            list-style-type: circle;
+                            /* Nested unordered lists use circles */
+                            margin-left: 40px;
+                            /* Further indent nested lists */
+                        }
+
+                        #tab1 ol ol {
+                            list-style-type: lower-alpha;
+                            /* For nested ordered lists, you can use letters (a, b, c, etc.) */
+                            margin-left: 40px;
+                            /* Further indent nested ordered lists */
+                        }
+
+                        /* Optional: Add styles for <li> elements */
+                        #tab1 li {
+                            margin-bottom: 5px;
+                            /* Space between list items */
+                        }
+                    </style>
 
                     <div id="tab2" class="tab-content hidden flex flex-col gap-4">
                         <h2 class="text-xl font-semibold underline">Performance:</h2>
-                    <!-- Sillage -->
+                        <!-- Sillage -->
                         <?php
                         $perf_sillage = mysqli_query($con, "SELECT sillage FROM product_details as pd 
                         JOIN sillage as s ON pd.sillage_id = s.id
@@ -271,9 +537,9 @@ WHERE pd.product_id = '$product_id' AND pd.sillage_id IS NOT NULL");
                                 <?php
                                 $sillages = [];
                                 while ($performance = mysqli_fetch_assoc($perf_sillage)) {
-                                    $sillages[] = $performance['sillage']; 
+                                    $sillages[] = $performance['sillage'];
                                 }
-                                echo implode(', ', $sillages); 
+                                echo implode(', ', $sillages);
                                 ?>
                             </p>
                         <?php endif; ?>

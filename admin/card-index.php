@@ -7,28 +7,28 @@ $res = mysqli_query($con, $select);
 
 $serial_no = 1;
 
-// Fetch total orders
-$totalOrdersQuery = "SELECT COUNT(*) as total FROM orders";
-$totalOrdersResult = mysqli_query($con, $totalOrdersQuery);
-$totalOrders = mysqli_fetch_assoc($totalOrdersResult)['total'];
+// // Fetch total orders
+// $totalOrdersQuery = "SELECT COUNT(*) as total FROM orders";
+// $totalOrdersResult = mysqli_query($con, $totalOrdersQuery);
+// $totalOrders = mysqli_fetch_assoc($totalOrdersResult)['total'];
 
-// Fetch completed orders
-$completedOrdersQuery = "SELECT COUNT(*) as total FROM orders WHERE order_status = '5'";
-$completedOrdersResult = mysqli_query($con, $completedOrdersQuery);
-$completedOrders = mysqli_fetch_assoc($completedOrdersResult)['total'];
+// // Fetch completed orders
+// $completedOrdersQuery = "SELECT COUNT(*) as total FROM orders WHERE order_status = '5'";
+// $completedOrdersResult = mysqli_query($con, $completedOrdersQuery);
+// $completedOrders = mysqli_fetch_assoc($completedOrdersResult)['total'];
 
-// Fetch pending orders
-$pendingOrdersQuery = "SELECT COUNT(*) as total FROM orders WHERE order_status != '5'";
-$pendingOrdersResult = mysqli_query($con, $pendingOrdersQuery);
-$pendingOrders = mysqli_fetch_assoc($pendingOrdersResult)['total'];
+// // Fetch pending orders
+// $pendingOrdersQuery = "SELECT COUNT(*) as total FROM orders WHERE order_status != '5'";
+// $pendingOrdersResult = mysqli_query($con, $pendingOrdersQuery);
+// $pendingOrders = mysqli_fetch_assoc($pendingOrdersResult)['total'];
 
-// Fetch total users
-$totalUsersQuery = "SELECT COUNT(*) as total FROM users";
-$totalUsersResult = mysqli_query($con, $totalUsersQuery);
-$totalUsers = mysqli_fetch_assoc($totalUsersResult)['total'];
+// // Fetch total users
+// $totalUsersQuery = "SELECT COUNT(*) as total FROM users";
+// $totalUsersResult = mysqli_query($con, $totalUsersQuery);
+// $totalUsers = mysqli_fetch_assoc($totalUsersResult)['total'];
 
 ?>
-
+<!-- 
 <div class="row">
   <div class="col-lg-3 col-md-6 col-sm-6 col-12">
     <div class="card card-statistic-1 card-primary">
@@ -98,7 +98,7 @@ $totalUsers = mysqli_fetch_assoc($totalUsersResult)['total'];
       </div>
     </div>
   </div>
-</div>
+</div> -->
 
 <div class="row mb-3">
   <div class="col-md-3">

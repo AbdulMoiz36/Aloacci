@@ -49,16 +49,17 @@ function get_available_stock($con, $pid, $format) {
                     $pname = $productArr[0]['name'];
                     $qty = $val['qty'];
                     $price = $val['price']; 
+                    $unit_of_measure = $val['unit_of_measure']; 
                     $selected_format = $val['format'];
                     $available_stock = get_available_stock($con, $pid, $selected_format); // Check available stock
 
                     $cart_total += $price * $qty;
                 ?>
             <div class="flex gap-5 border-b border-slate-200 pb-3 p-10">
-                <div class="w-1/6"><img src="./image/<?= $image ?>" class="rounded-md" alt=""></div>
+                <div class="w-1/6"><img src="./image/products/<?= $image ?>" class="rounded-md" alt=""></div>
                 <div class="w-5/6 flex flex-col justify-evenly">
                     <p class="font-bold text-lg"><?= $pname ?></p>
-                    <p><span class="font-semibold">Format:</span> <?= $selected_format ?></p>
+                    <p><span class="font-semibold">Format:</span> <?= $selected_format.$unit_of_measure ?></p>
                     <!-- Display available stock -->
                     <!-- Quantity Selector -->
                     <div style="margin-bottom:20px">

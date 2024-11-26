@@ -41,7 +41,7 @@ $unique_products_json = json_encode($unique_products);
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Didact+Gothic&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Didact+Gothic&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
   <!-- Toaster -->
   <link rel="stylesheet" href="./admin/assets/bundles/izitoast/css/iziToast.min.css">
   <!-- Sweet Alert -->
@@ -59,7 +59,7 @@ $unique_products_json = json_encode($unique_products);
     class="bg-black h-auto flex-wrap-reverse justify-center items-center sm:flex sm:justify-between sm:px-10 px-5 py-3">
     <!-- Search Box Start -->
     <div class="flex gap-4">
-      <a href="index" class="md:hidden"><img src="./img/logo-cropped-bottom.png" alt="Logo" width="50px"  /></a>
+      <a href="index" class="md:hidden"><img src="./img/logo-cropped-bottom.png" alt="Logo" width="50px" /></a>
       <div class="relative w-full">
         <form method="GET" action="shop" onsubmit="return validateSearch()">
           <input type="search" placeholder="Search" name="search" id="search"
@@ -98,19 +98,47 @@ $unique_products_json = json_encode($unique_products);
               return;
             }
 
+           
+
             // Build the dropdown content
             var content = '';
             filteredProducts.forEach(function(product) {
+               // Calculate the final price
+               console.log("product Price: ", product.price);
+               console.log("product Sale Price: ", product.sale_price);
+            let finalPrice = product.price;
+            if (product.sale_price > 0) {
+              if (product.unit_of_sale === "Price") {
+                finalPrice -= product.sale_price; // Deduct the sale price
+              } else if (product.unit_of_sale === "Percentage") {
+                finalPrice -= (product.price * product.sale_price) / 100; // Deduct the sale percentage
+              }
+            }
+            if(finalPrice == product.price){
               content += `
           <a href="product_details?id=${product.id}" class="flex items-center px-4 py-2 hover:bg-gray-100">
-            <img src="./image/${product.image}" alt="${product.name}" class="w-12 h-12 rounded-full object-cover mr-4" />
+            <img src="./image/products/${product.image}" alt="${product.name}" class="w-12 h-16 rounded-md object-cover mr-4" />
             <div>
               <p class="font-semibold text-gray-800">${product.name}</p>
-              <p class="text-sm text-gray-500">${product.description}</p>
-              <p class="text-sm font-bold text-red-600">Rs.${product.price}</p>
+              <p class="text-xs text-gray-500">${product.description}</p>
+              <p class="text-sm font-bold text-red-600 mt-2">Rs.${finalPrice}</p>
             </div>
           </a>
         `;
+            }else{
+
+              content += `
+          <a href="product_details?id=${product.id}" class="flex items-center px-4 py-2 hover:bg-gray-100">
+            <img src="./image/products/${product.image}" alt="${product.name}" class="w-12 h-16 rounded-md object-cover mr-4" />
+            <div>
+              <p class="font-semibold text-gray-800">${product.name}</p>
+              <p class="text-xs text-gray-500">${product.description}</p>
+              <p class="text-sm font-bold text-red-600 mt-2">Rs.${finalPrice} <span class="line-through text-gray-400 ml-1 text-xs">Rs.${product.price}</span> </p>
+            </div>
+          </a>
+        `;
+      }
+
             });
 
             dropdown.innerHTML = content;
@@ -145,8 +173,8 @@ $unique_products_json = json_encode($unique_products);
     </div>
     <!-- Acccount And Cart Start -->
     <div class="flex justify-center space-x-10 text-white items-center mt-7 md:mt-0">
-    <i id="menu-icon" class="fa-solid fa-bars sm:hidden block text-lg text-white cursor-pointer md:hidden"
-    onclick="toggleNavbar()"></i>
+      <i id="menu-icon" class="fa-solid fa-bars sm:hidden block text-lg text-white cursor-pointer md:hidden"
+        onclick="toggleNavbar()"></i>
       <!-- Account -->
       <div class="flex items-center space-x-3 text-lg sm:text-xl">
         <?php
@@ -175,7 +203,7 @@ $unique_products_json = json_encode($unique_products);
           </div>
 
           <!-- Cart Text -->
-          <span class="ml-2">Cart</span>
+          <!-- <span class="ml-2">Cart</span> -->
         </a>
       </div>
     </div>
@@ -184,27 +212,36 @@ $unique_products_json = json_encode($unique_products);
 
   <!-- Navbar Start -->
   <nav id="navbar"
-    class="bg-black border-t-2 relative border-slate-900 h-auto hidden sm:flex justify-center items-center px-14">
-    <!-- List Of All Main Pags -->
+    class="bg-black border-t-2 relative border-slate-900 h-auto hidden sm:flex justify-center items-center px-14 uppercase">
+    <!-- List Of All Main Pages -->
     <ul class="flex flex-col sm:flex-row gap-4 sm:gap-10 text-white text-center py-3">
-      <a href="index">Home</a>
+      <a href="index">
+        <li class="hover:cursor-pointer hover:underline">Home</li>
+      </a>
       <li class="hover:cursor-pointer" id="shop" onclick="toggleShop()">
         Shop
         <i class="fa-solid fa-angle-down ml-1 align-middle text-sm"></i>
         <!-- Menu For Shop -->
-        <ul
-          class="hidden w-full absolute bg-white text-black shadow-xl grid-cols-2 sm:grid-cols-4 gap-10 z-50 top-12 left-0 p-10"
+        <ul class="hidden w-full absolute bg-white text-black shadow-xl grid-cols-2 sm:grid-cols-4 gap-10 z-50 top-12 left-0 p-10"
           id="menu">
-          <div class="w-full hover:underline absolute top-0 flex justify-center align-middle left-0 font-bold border-b p-1 md:hidden" onclick="toggleShop()">
+          <div class="w-full hover:underline absolute top-0 flex justify-center align-middle left-0 font-bold border-b p-1 md:hidden"
+            onclick="toggleShop()">
             <i class="fa-solid fa-xmark text-base cursor-pointer pr-2" onclick="toggleShop()"></i>
             <p onclick="toggleShop()">Close</p>
           </div>
           <li class="text-start font-semibold">
-          <a href="shop?" class="font-semibold">All Products</a>
-          <ul class="mt-2 font-thin flex flex-col gap-1">
-          <a href="shop?genders=1"><li class="hover:underline hover:cursor-pointer">Man</li></a>
-          <a href="shop?genders=2"><li class="hover:underline hover:cursor-pointer">Woman</li></a>
-          </ul>
+            <a href="shop?" class="font-semibold">All Products</a>
+            <ul class="mt-2 font-thin flex flex-col gap-1">
+              <a href="shop?genders=1">
+                <li class="hover:underline hover:cursor-pointer">Man</li>
+              </a>
+              <a href="shop?genders=2">
+                <li class="hover:underline hover:cursor-pointer">Woman</li>
+              </a>
+              <a href="shop?genders=3">
+                <li class="hover:underline hover:cursor-pointer">Unisex</li>
+              </a>
+            </ul>
           </li>
           <?php
           // Fetch categories
@@ -227,10 +264,11 @@ $unique_products_json = json_encode($unique_products);
             echo '</li>';
           }
           ?>
-
         </ul>
       </li>
-      <a href="shop?price_filter=less_1500">Less than 1500</a>
+      <a href="shop?price_filter=less_1500">
+        <li class="hover:underline hover:cursor-pointer">Less Than 1500</li>
+      </a>
       <a href="bundles">
         <li class="hover:underline hover:cursor-pointer">Bundles</li>
       </a>
@@ -241,11 +279,10 @@ $unique_products_json = json_encode($unique_products);
       <div class="relative flex justify-center">
         <div class="hover:cursor-pointer flex items-center" id="contactDropdownToggle" onclick="toggleDropdown()">
           <li class="hover:underline hover:cursor-pointer">Contact</li>
-          <i class="fa-solid fa-angle-down ml-1.5 mt-1 align-middle text-sm"></i>
+          <i class="fa-solid fa-angle-down ml-2.5 mt-1 align-middle text-sm"></i>
         </div>
-
         <!-- Dropdown Menu -->
-        <div id="contactDropdownMenu" class="hidden absolute rght-0 top-6 md:left-0  w-48 border-2 bg-white rounded-md shadow-lg z-50">
+        <div id="contactDropdownMenu" class="hidden absolute rght-0 top-6 md:left-0 w-48 border-2 bg-white rounded-md shadow-lg z-50">
           <ul class="py-1">
             <li>
               <a href="contact" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-gray-900 border-b-slate-400 border-b">
@@ -262,4 +299,5 @@ $unique_products_json = json_encode($unique_products);
       </div>
     </ul>
   </nav>
+
   <!-- Navbar End -->

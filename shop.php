@@ -309,13 +309,12 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
             if (in_array($list['id'], $unique_products)) continue;
             $unique_products[] = $list['id'];
 
-            // Fetch all type_id values for the product from the product_details table
+            // Fetch product details like type_id, season_id, etc.
             $productDetailsQuery = mysqli_query($con, "SELECT GROUP_CONCAT(gender_id) AS gender_id, GROUP_CONCAT(genre_id) AS genre_id, GROUP_CONCAT(type_id) AS type_id, GROUP_CONCAT(season_id) AS season_id, GROUP_CONCAT(sillage_id) AS sillage_id, GROUP_CONCAT(lasting_id) AS lasting_id
-                                               FROM product_details 
-                                               WHERE product_id = '{$list['id']}'");
+                                                   FROM product_details 
+                                                   WHERE product_id = '{$list['id']}'");
             $productDetails = mysqli_fetch_assoc($productDetailsQuery);
 
-            // Convert the type_id and season_id into comma-separated values
             $gender_id = $productDetails['gender_id'];
             $genre_id = $productDetails['genre_id'];
             $type_id = $productDetails['type_id'];
@@ -323,62 +322,87 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
             $sillage_id = $productDetails['sillage_id'];
             $lasting_id = $productDetails['lasting_id'];
 
-            $product_formats = []; // Get product formats
+            // Fetch product formats for the current product
+            $product_formats = [];
             foreach ($get_product as $p) {
                 if ($p['id'] == $list['id']) {
-                    // Query to get the total ordered quantity for the current format
+                    // Calculate available stock for each format
                     $order_qty_result = mysqli_query($con, "SELECT SUM(qty) AS total_ordered_qty FROM orders_detail WHERE product_id = '{$p['id']}' AND format = '{$p['format']}'");
                     $order_qty_row = mysqli_fetch_assoc($order_qty_result);
-                    $total_ordered_qty = $order_qty_row['total_ordered_qty'] ?? 0; // If no orders, default to 0
+                    $total_ordered_qty = $order_qty_row['total_ordered_qty'] ?? 0;
 
-                    // Subtract total ordered quantity from available stock in product_format
                     $available_qty = $p['qty'] - $total_ordered_qty;
-                    $available_qty = max(0, $available_qty); // Ensure we don't have negative quantities
+                    $available_qty = max(0, $available_qty);
 
                     $product_formats[] = [
                         'format' => $p['format'],
                         'price' => $p['price'],
-                        'qty' => $available_qty // Store available quantity
+                        'sale_price' => $p['sale_price'],
+                        'unit_of_sale' => $p['unit_of_sale'],
+                        'unit_of_measure' => $p['unit_of_measure'],
+                        'qty' => $available_qty
                     ];
                 }
             }
+
+            // Select the first format (or implement your own logic for selecting a format)
+            $selected_format = !empty($product_formats) ? $product_formats[0] : null;
         ?>
-            <div class="product-card w-96 md:w-72 h-[40rem] md:h-[30rem] flex gap-2 flex-col relative group shadow"
+            <div class="product-card w-96 md:w-72 h-[40rem] md:h-[37rem] flex gap-2 flex-col relative group shadow"
                 data-gender-id="<?= $gender_id ?>" data-genre-id="<?= $genre_id ?>" data-type-id="<?= $type_id ?>" data-season-id="<?= $season_id ?>" data-sillage-id="<?= $sillage_id ?>" data-lasting-id="<?= $lasting_id ?>">
                 <div class="openModalBtn z-10 absolute -top-2 -right-2 bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full p-3 flex items-center justify-center text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out cursor-pointer"
                     data-product-id="<?= $list['id'] ?>" data-product-name="<?= $list['name'] ?>"
                     data-product-formats="<?= htmlspecialchars(json_encode($product_formats)) ?>">
                     <i class="fas fa-plus text-white pl-0.5 font-semibold"></i>
                 </div>
+                <?php
+                // Check if any format has a sale price
+                $has_sale = false;
+                foreach ($product_formats as $format) {
+                    if (!empty($format['sale_price']) && $format['sale_price'] > 0) {
+                        $has_sale = true;
+                        break; // No need to continue once we find a sale
+                    }
+                }
+                // Display the Sale tag if any format is on sale
+                if ($has_sale) {
+                ?>
+                    <div class="bg-red-600 absolute z-10 top-0 left-0 px-3 rounded-tl-md">
+                        <p class="text-white">Sale</p>
+                    </div>
+                <?php
+                }
+                ?>
 
-                <!-- Product image wrapper -->
-                <div class="relative h-[70%] w-full">
-                    <a href="product_details?id=<?= $list['id'] ?>" class="product-link w-full">
-                        <?php
-                        // Determine which image to display as the main image
-                        $main_image = '';
-                        if (!empty($list['image'])) {
-                            $main_image = $list['image'];
-                        } elseif (!empty($list['image2'])) {
-                            $main_image = $list['image2'];
-                        } elseif (!empty($list['image3'])) {
-                            $main_image = $list['image3'];
-                        }
-                        ?>
 
-                        <img src="./image/<?= $main_image ?>" alt="<?= $list['name'] ?>"
-                            class="h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0">
+                <?php
+                // Fetch the hover image from the product_image table
+                $hover_image = null;
+                $product_id = $list['id'];
 
-                        <?php if ($list['image2'] != '' && $list['image2'] != $main_image): ?>
-                            <img src="./image/<?= $list['image2'] ?>" alt="<?= $list['name'] ?> Hover"
-                                class="absolute top-0 left-0 h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100">
-                        <?php elseif ($list['image3'] != '' && $list['image3'] != $main_image): ?>
-                            <img src="./image/<?= $list['image3'] ?>" alt="<?= $list['name'] ?> Hover"
-                                class="absolute top-0 left-0 h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100">
-                        <?php else: ?>
-                            <img src="./image/<?= $main_image ?>" alt="<?= $list['name'] ?> Hover"
-                                class="absolute top-0 left-0 h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100">
-                        <?php endif; ?>
+                // Assuming you have a mysqli database connection $conn
+                $query = "SELECT image_path FROM product_images WHERE product_id = $product_id LIMIT 1";
+                $result = mysqli_query($con, $query);
+
+                if ($result && mysqli_num_rows($result) > 0) {
+                    $row = mysqli_fetch_assoc($result);
+                    $hover_image = $row['image_path']; // Fetch the hover image path
+                }
+
+                // Determine the main image
+                $main_image = $list['image'];
+                ?>
+
+                <!-- Product image -->
+                <div class="relative h-[1200px] w-full">
+                    <a href="product_details?id=<?= $product_id ?>" class="product-link w-full">
+                        <!-- Main image -->
+                        <img src="./image/products/<?= $main_image ?>" alt="<?= $list['name'] ?>"
+                            class="h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0 border">
+
+                        <!-- Hover image -->
+                        <img src="./image/products/<?= $hover_image ?: $main_image ?>" alt="<?= $list['name'] ?> Hover"
+                            class="absolute top-0 left-0 h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100 border">
                     </a>
                 </div>
 
@@ -388,88 +412,112 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
                         class="text-lg font-bold hover:underline"><?= htmlspecialchars($list['name']) ?></a>
                     <p class="text-gray-600 overflow-hidden text-ellipsis line-clamp-2">
                         <?= htmlspecialchars($list['description']) ?></p>
-                    <p class="text-lg font-bold text-red-500">Rs. <?= htmlspecialchars($list['price']) ?></p>
+
+                    <!-- Display selected format -->
+                    <?php if ($selected_format): ?>
+                        <?php
+                        $final_price = $selected_format['price'];
+                        $non_sale_price = $selected_format['price'];
+
+                        if (!empty($selected_format['sale_price']) && $selected_format['sale_price'] > 0) {
+                            if ($selected_format['unit_of_sale'] === 'Price') {
+                                $final_price = $selected_format['price'] - $selected_format['sale_price'];
+                            } elseif ($selected_format['unit_of_sale'] === 'Percentage') {
+                                $final_price = $selected_format['price'] - floor($selected_format['price'] * ($selected_format['sale_price'] / 100));
+                            }
+                            $final_price = max(0, $final_price);
+                        }
+                        ?>
+                        <p class="text-lg font-bold text-red-500">
+                            Rs. <?= htmlspecialchars($final_price) ?>
+                            <?php if ($final_price < $non_sale_price): ?>
+                                <span class="text-gray-500 line-through text-sm ml-2">Rs. <?= htmlspecialchars($non_sale_price) ?></span>
+                            <?php endif; ?>
+                        </p>
+                    <?php else: ?>
+                        <p class="text-gray-500">No formats available</p>
+                    <?php endif; ?>
                 </div>
             </div>
         <?php } ?>
     </div>
 
+
 </section>
 
 <script>
     function filterProducts() {
-    const selectedGenders = Array.from(document.querySelectorAll('.gender-checkbox:checked')).map(checkbox =>
-    checkbox.value);
-    const selectedGenres = Array.from(document.querySelectorAll('.genre-checkbox:checked')).map(checkbox =>
-    checkbox.value);
-    const selectedTypes = Array.from(document.querySelectorAll('.type-checkbox:checked')).map(checkbox =>
-    checkbox.value);
-    const selectedSeasons = Array.from(document.querySelectorAll('.season-checkbox:checked')).map(checkbox =>
-    checkbox.value);
-    const selectedSillages = Array.from(document.querySelectorAll('.sillage-checkbox:checked')).map(checkbox =>
-    checkbox.value);
-    const selectedLastings = Array.from(document.querySelectorAll('.lasting-checkbox:checked')).map(checkbox =>
-    checkbox.value);
+        const selectedGenders = Array.from(document.querySelectorAll('.gender-checkbox:checked')).map(checkbox =>
+            checkbox.value);
+        const selectedGenres = Array.from(document.querySelectorAll('.genre-checkbox:checked')).map(checkbox =>
+            checkbox.value);
+        const selectedTypes = Array.from(document.querySelectorAll('.type-checkbox:checked')).map(checkbox =>
+            checkbox.value);
+        const selectedSeasons = Array.from(document.querySelectorAll('.season-checkbox:checked')).map(checkbox =>
+            checkbox.value);
+        const selectedSillages = Array.from(document.querySelectorAll('.sillage-checkbox:checked')).map(checkbox =>
+            checkbox.value);
+        const selectedLastings = Array.from(document.querySelectorAll('.lasting-checkbox:checked')).map(checkbox =>
+            checkbox.value);
 
-    // Update URL with selected filters
-    const url = new URL(window.location.href);
-    const filterParams = {
-    genders: selectedGenders,
-    genres: selectedGenres,
-    types: selectedTypes,
-    seasons: selectedSeasons,
-    sillages: selectedSillages,
-    lastings: selectedLastings
-    };
+        // Update URL with selected filters
+        const url = new URL(window.location.href);
+        const filterParams = {
+            genders: selectedGenders,
+            genres: selectedGenres,
+            types: selectedTypes,
+            seasons: selectedSeasons,
+            sillages: selectedSillages,
+            lastings: selectedLastings
+        };
 
-    Object.entries(filterParams).forEach(([key, value]) => {
-    if (value.length > 0) {
-    url.searchParams.set(key, value.join(','));
-    } else {
-    url.searchParams.delete(key);
-    }
-    });
+        Object.entries(filterParams).forEach(([key, value]) => {
+            if (value.length > 0) {
+                url.searchParams.set(key, value.join(','));
+            } else {
+                url.searchParams.delete(key);
+            }
+        });
 
-    window.history.replaceState({}, '', url); // Update URL without reloading
+        window.history.replaceState({}, '', url); // Update URL without reloading
 
-    // Filter products based on selected filters
-    const products = document.querySelectorAll('.product-card');
-    let visibleCount = 0;
+        // Filter products based on selected filters
+        const products = document.querySelectorAll('.product-card');
+        let visibleCount = 0;
 
-    products.forEach(product => {
-    const productGenderIds = product.getAttribute('data-gender-id').split(',');
-    const productGenreIds = product.getAttribute('data-genre-id').split(',');
-    const productTypeIds = product.getAttribute('data-type-id').split(',');
-    const productSeasonIds = product.getAttribute('data-season-id').split(',');
-    const productSillageIds = product.getAttribute('data-sillage-id').split(',');
-    const productLastingIds = product.getAttribute('data-lasting-id').split(',');
+        products.forEach(product => {
+            const productGenderIds = product.getAttribute('data-gender-id').split(',');
+            const productGenreIds = product.getAttribute('data-genre-id').split(',');
+            const productTypeIds = product.getAttribute('data-type-id').split(',');
+            const productSeasonIds = product.getAttribute('data-season-id').split(',');
+            const productSillageIds = product.getAttribute('data-sillage-id').split(',');
+            const productLastingIds = product.getAttribute('data-lasting-id').split(',');
 
-    const matches = {
-    gender: selectedGenders.length === 0 || selectedGenders.some(id => productGenderIds.includes(id)),
-    genre: selectedGenres.length === 0 || selectedGenres.some(id => productGenreIds.includes(id)),
-    type: selectedTypes.length === 0 || selectedTypes.some(id => productTypeIds.includes(id)),
-    season: selectedSeasons.length === 0 || selectedSeasons.some(id => productSeasonIds.includes(id)),
-    sillage: selectedSillages.length === 0 || selectedSillages.some(id => productSillageIds.includes(id)),
-    lasting: selectedLastings.length === 0 || selectedLastings.some(id => productLastingIds.includes(id))
-    };
+            const matches = {
+                gender: selectedGenders.length === 0 || selectedGenders.some(id => productGenderIds.includes(id)),
+                genre: selectedGenres.length === 0 || selectedGenres.some(id => productGenreIds.includes(id)),
+                type: selectedTypes.length === 0 || selectedTypes.some(id => productTypeIds.includes(id)),
+                season: selectedSeasons.length === 0 || selectedSeasons.some(id => productSeasonIds.includes(id)),
+                sillage: selectedSillages.length === 0 || selectedSillages.some(id => productSillageIds.includes(id)),
+                lasting: selectedLastings.length === 0 || selectedLastings.some(id => productLastingIds.includes(id))
+            };
 
-    const isVisible = Object.values(matches).every(Boolean);
-    product.style.display = isVisible ? 'flex' : 'none';
-    if (isVisible) visibleCount++;
-    });
+            const isVisible = Object.values(matches).every(Boolean);
+            product.style.display = isVisible ? 'flex' : 'none';
+            if (isVisible) visibleCount++;
+        });
 
-    // Update the product count dynamically
-    document.getElementById('product-count').textContent = `${visibleCount} Products`;
+        // Update the product count dynamically
+        document.getElementById('product-count').textContent = `${visibleCount} Products`;
 
-    // Handle sorting selection
-    const sortSelect = document.querySelector('select');
-    sortSelect.addEventListener('change', function () {
-    const url = new URL(window.location.href);
-    url.searchParams.set('sort', this.value);
-    window.location.href = url.toString();
-    });
-    document.querySelector(`select option[value="${new URLSearchParams(window.location.search).get('sort')}"]`).selected
-    = true;
+        // Handle sorting selection
+        const sortSelect = document.querySelector('select');
+        sortSelect.addEventListener('change', function() {
+            const url = new URL(window.location.href);
+            url.searchParams.set('sort', this.value);
+            window.location.href = url.toString();
+        });
+        document.querySelector(`select option[value="${new URLSearchParams(window.location.search).get('sort')}"]`).selected = true;
     }
     // Function to set checkbox states from URL parameters
     function setCheckboxStates() {
@@ -507,9 +555,23 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
     function addToCartAndCheckout(productId) {
         const selectedFormat = document.querySelector('#format-container .bg-gray-200'); // Get the selected format
         const quantity = document.getElementById('qty').value; // Get the quantity
+
         if (selectedFormat) {
             const format = selectedFormat.innerText.split(' - ')[0]; // Get the format text (remove price)
-            const price = selectedFormat.dataset.price; // Get the price of the selected format
+            const price = parseFloat(selectedFormat.dataset.price); // Get the regular price
+            const salePrice = parseFloat(selectedFormat.dataset.salePrice) || 0; // Get the sale price or default to 0
+            const unitOfSale = selectedFormat.dataset.unitOfSale; // Get the unit of sale
+
+            // Calculate the final price
+            let finalPrice = price;
+            if (salePrice > 0) {
+                if (unitOfSale === "Price") {
+                    finalPrice -= salePrice; // Deduct the sale price
+                } else if (unitOfSale === "Percentage") {
+                    finalPrice -= (price * salePrice) / 100; // Deduct the sale percentage
+                }
+            }
+
             // Use AJAX to call manage_cart without reloading the page
             const xhr = new XMLHttpRequest();
             xhr.open('POST', 'manage_cart', true); // Adjust this URL if needed
@@ -520,8 +582,11 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
                     window.location.href = 'checkout';
                 }
             };
+
             // Send the cart data (adjust these parameters as needed)
-            xhr.send(`pid=${productId}&type=add&qty=${quantity}&format=${format}&price=${price}`);
+            xhr.send(`pid=${productId}&type=add&qty=${quantity}&format=${format}&price=${finalPrice}`);
+        } else {
+            alert("Please select a format.");
         }
     }
 </script>
@@ -536,7 +601,7 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
         <!-- Options -->
         <div id="modal-formats" class="mt-2">
             <p class="font-semibold">Formats:</p>
-            <div id="format-container" class="flex gap-2">
+            <div id="format-container" class="flex flex-wrap max-h-[230px] overflow-y-auto gap-2">
                 <!-- Formats will be inserted here dynamically -->
             </div>
         </div>
@@ -607,55 +672,103 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
         btn.addEventListener('click', () => {
             const productName = btn.getAttribute('data-product-name');
             const productFormats = JSON.parse(btn.getAttribute('data-product-formats'));
+
             // Populate modal
             document.getElementById('modal-product-name').innerText = productName;
+
             // Clear previous formats
             const formatContainer = document.getElementById('format-container');
             formatContainer.innerHTML = ''; // Clear previous formats
+
             let firstAvailableFormatFound = false;
+
             productFormats.forEach((formatObj, index) => {
                 const formatDiv = document.createElement('div');
                 formatDiv.className = 'border-2 border-black p-2 cursor-pointer w-fit my-2';
+                let unitOfMeasure = formatObj.unit_of_measure == 0 || formatObj.unit_of_measure == "" ? '' : formatObj.unit_of_measure;
                 formatDiv.innerText = `${formatObj.format}`;
+
+                // Add additional data attributes
                 formatDiv.dataset.price = formatObj.price;
+                // formatDiv.dataset.unitOfMeasure = formatObj.unit_of_measure; // unit of measure
+                formatDiv.dataset.salePrice = formatObj.sale_price; // Sale price
+                formatDiv.dataset.unitOfSale = formatObj.unit_of_sale; // Unit of sale
                 formatDiv.dataset.qty = formatObj.qty; // Include quantity data
+
                 // Check if the format is in stock
                 if (formatObj.qty > 0) {
+                    // Calculate final price based on unit_of_sale
+                    let finalPrice = formatObj.price;
+                    if (formatObj.sale_price && formatObj.unit_of_sale === "Price") {
+                        finalPrice -= formatObj.sale_price; // Deduct price
+                    } else if (formatObj.sale_price && formatObj.unit_of_sale === "Percentage") {
+                        finalPrice -= (formatObj.price * formatObj.sale_price) / 100; // Deduct percentage
+                    }
+
                     // If it's the first available format, select it by default
                     if (!firstAvailableFormatFound) {
                         formatDiv.classList.add('bg-gray-200');
-                        modalProductPrice.innerText = `Rs. ${formatObj.price}`;
+
+                        if (formatObj.sale_price && formatObj.sale_price > 0) {
+                            // Show both regular and sale price
+                            modalProductPrice.innerHTML = `
+                            <span class="line-through text-sm text-gray-500">Rs. ${formatObj.price}</span>
+                            <span class="text-lg font-bold"> Rs. ${finalPrice}</span>
+                        `;
+                        } else {
+                            // Show only the regular price
+                            modalProductPrice.innerHTML = `
+                            <span class="text-lg font-bold">Rs. ${formatObj.price}</span>
+                        `;
+                        }
                         firstAvailableFormatFound = true;
                     }
+
                     // Add click event listener for selecting a format
                     formatDiv.addEventListener('click', () => {
                         // Remove 'selected' class from all formats
-                        document.querySelectorAll('#format-container div').forEach(
-                            div => {
-                                div.classList.remove('bg-gray-200');
-                            });
+                        document.querySelectorAll('#format-container div').forEach(div => {
+                            div.classList.remove('bg-gray-200');
+                        });
+
                         // Add 'selected' class to the clicked format
                         formatDiv.classList.add('bg-gray-200');
+
                         // Update price in modal
-                        modalProductPrice.innerText = `Rs. ${formatDiv.dataset.price}`;
+                        if (formatDiv.dataset.salePrice && formatDiv.dataset.salePrice > 0) {
+                            modalProductPrice.innerHTML = `
+                            <span class="line-through text-sm text-gray-500">Rs. ${formatDiv.dataset.price}</span>
+                            <span class="text-lg font-bold"> Rs. ${
+                                formatDiv.dataset.unitOfSale === "Price"
+                                    ? (formatDiv.dataset.price - formatDiv.dataset.salePrice)
+                                    : (formatDiv.dataset.price - (formatDiv.dataset.price * formatDiv.dataset.salePrice) / 100)
+                            }</span>
+                        `;
+                        } else {
+                            modalProductPrice.innerHTML = `
+                            <span class="text-lg font-bold">Rs. ${formatDiv.dataset.price}</span>
+                        `;
+                        }
                     });
                 } else {
                     // If out of stock, disable this format
                     formatDiv.classList.add('opacity-50', 'cursor-not-allowed');
                 }
+
                 formatContainer.appendChild(formatDiv);
             });
+
             // If no available format found, show a warning or disable the "Add to Cart" button
             if (!firstAvailableFormatFound) {
                 modalProductPrice.innerText = 'Out of Stock';
-                document.getElementById('addToCartBtn').classList.add('opacity-50',
-                    'cursor-not-allowed');
+                document.getElementById('addToCartBtn').classList.add('opacity-50', 'cursor-not-allowed');
             } else {
-                document.getElementById('addToCartBtn').classList.remove('opacity-50',
-                    'cursor-not-allowed');
+                document.getElementById('addToCartBtn').classList.remove('opacity-50', 'cursor-not-allowed');
             }
+
             // Set the current product ID
             currentProductId = btn.getAttribute('data-product-id');
+
             // Show modal and overlay
             modal.classList.remove('hidden');
             modalOverlay.classList.remove('hidden');
@@ -663,6 +776,8 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
             modalOverlay.classList.add('flex'); // Show the overlay
         });
     });
+
+
     // Event listener to close modal on button click
     closeModalBtn.addEventListener('click', closeModal);
     // Event listener to close modal when clicking outside the modal
@@ -673,21 +788,33 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
             closeModal();
         }
     });
-    // Add to Cart button event listener
+
     function AddToCartBtn() {
         const selectedFormat = document.querySelector('#format-container .bg-gray-200');
         const quantity = document.getElementById('qty').value; // Get the quantity from the input
+
         if (selectedFormat && !selectedFormat.classList.contains('cursor-not-allowed')) {
             const format = selectedFormat.innerText; // Get the selected format text
-            const price = selectedFormat.dataset.price; // Get the selected format price
-            // Call manage_cart with the current product ID, selected format, and quantity
-            manage_cart(currentProductId, 'add', quantity, format, price); // Pass the quantity and format
+            const price = parseFloat(selectedFormat.dataset.price); // Get the regular price
+            const salePrice = parseFloat(selectedFormat.dataset.salePrice) || 0; // Get the sale price or default to 0
+            const unitOfSale = selectedFormat.dataset.unitOfSale; // Get the unit of sale
+
+            // Calculate the final price
+            let finalPrice = price;
+            if (salePrice > 0) {
+                if (unitOfSale === "Price") {
+                    finalPrice -= salePrice; // Deduct the sale price
+                } else if (unitOfSale === "Percentage") {
+                    finalPrice -= (price * salePrice) / 100; // Deduct the sale percentage
+                }
+            }
+
+            // Call manage_cart with the current product ID, selected format, quantity, and final price
+            manage_cart(currentProductId, 'add', quantity, format, finalPrice);
         } else {
             alert("Please select an available format.");
         }
     }
-    // document.getElementById('addToCartBtn').addEventListener('click', () => {
-    // });
 </script>
 
 <?php

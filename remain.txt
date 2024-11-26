@@ -1,0 +1,15 @@
+----------------- Remaining -------------------
+Stock (Separate Form to manage stocks, Table on Same Page of Form)
+Bundles (Multiple Products)
+
+
+
+----------------- Completed -------------------
+Types (Search, Show Selected in input)
+Description (Editable Input, Show Description as it was written)
+Add UniSex Gender
+Fonts Style
+Navbar Capital
+Format (Multiple Formats Increment, Units Dropdown)
+Sale (Price, Percentage)
+Images (Delete On DB, Show DB images)

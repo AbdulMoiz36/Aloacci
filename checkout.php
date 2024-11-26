@@ -67,30 +67,36 @@ if (isset($_POST['submit'])) {
         mysqli_query($con, "INSERT INTO orders (name, email, mobile, address, city, total_price, shipping, order_status, date) 
                         VALUES ('$name', '$email', '$mobile', '$address', '$city', '$total_price', '$shipping_cost', '$order_status', '$date')");
         $order_id = mysqli_insert_id($con); // Get the order ID for the order
-        // Insert each product in the cart into orders_detail
         foreach ($_SESSION['cart'] as $key => $val) {
             list($pid, $selected_format) = explode('_', $key); // Split product ID and format
             $price = $val['price'];
             $qty = $val['qty'];
-
-            // Insert each product format into the orders_detail table
+            $unit_of_measure = isset($val['unit_of_measure']) ? $val['unit_of_measure'] : '';
+        
+            // Concatenate format and unit of measure
+            $formatted_value = $selected_format . $unit_of_measure;
+        
+            // Insert each product with the concatenated format into the orders_detail table
             mysqli_query($con, "INSERT INTO orders_detail (order_id, product_id, format, qty, price) 
-                            VALUES ('$order_id', '$pid', '$selected_format', '$qty', '$price')");
+                                VALUES ('$order_id', '$pid', '$formatted_value', '$qty', '$price')");
         }
     } else {
         // Insert order details into the orders table
         mysqli_query($con, "INSERT INTO orders (user_id, email, mobile, address, city, total_price, shipping, order_status, date) 
                         VALUES ('$user_id', '$email', '$mobile', '$address', '$city', '$total_price', '$shipping_cost', '$order_status', '$date')");
         $order_id = mysqli_insert_id($con); // Get the order ID for the order
-        // Insert each product in the cart into orders_detail
         foreach ($_SESSION['cart'] as $key => $val) {
             list($pid, $selected_format) = explode('_', $key); // Split product ID and format
             $price = $val['price'];
             $qty = $val['qty'];
-
-            // Insert each product format into the orders_detail table
+            $unit_of_measure = isset($val['unit_of_measure']) ? $val['unit_of_measure'] : '';
+        
+            // Concatenate format and unit of measure
+            $formatted_value = $selected_format . ' (' . $unit_of_measure . ')';
+        
+            // Insert each product with the concatenated format into the orders_detail table
             mysqli_query($con, "INSERT INTO orders_detail (order_id, product_id, format, qty, price) 
-                            VALUES ('$order_id', '$pid', '$selected_format', '$qty', '$price')");
+                                VALUES ('$order_id', '$pid', '$formatted_value', '$qty', '$price')");
         }
     }
 
@@ -133,7 +139,7 @@ while ($row = mysqli_fetch_assoc($cities_result)) {
                     <input type="tel" name="mobile" value="<?= $data['mobile'] ?>"
                         placeholder="Phone Number (11 Digits)"
                         class="border placeholder:text-sm border-gray-300 rounded-md outline-none p-2"
-                        required pattern="\d{11}" title="Phone number must contain 11 digits">
+                        required pattern="\d{11}" title="Phone number must contain 11 digits" max="11" min="11">
                 </div>
                 <div class="flex flex-col">
                     <label for="city" class="flex ">
@@ -236,7 +242,9 @@ while ($row = mysqli_fetch_assoc($cities_result)) {
                         $pname = $productArr[0]['name'];
                         $qty = $val['qty'];
                         $price = $val['price'];
-                        $selected_format = $val['format'];
+                        // $selected_format = $val['format'];
+                        $selected_format = $val['format'] . ' ' . $val['unit_of_measure'];
+                        
 
                         $cart_total += $price * $qty;
                 ?>
@@ -244,7 +252,7 @@ while ($row = mysqli_fetch_assoc($cities_result)) {
                         <div class="flex justify-between p-2 w-full border-b flex-wrap">
                             <div class="flex">
                                 <div class="relative px-2 w-[70px] h-[70px]">
-                                    <img src="./image/<?= $image ?>" class="w-[70px] h-[70px]" alt="Product Image">
+                                    <img src="./image/products/<?= $image ?>" class="w-[70px] h-[70px]" alt="Product Image">
                                     <p
                                         class="rounded-full bg-red-700 absolute -top-2 -right-2 text-sm px-2 py-1 text-white font-bold">
                                         <?= $qty ?></p>

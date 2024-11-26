@@ -87,7 +87,7 @@ function getStatusClass($status)
                     <!-- Order Detail Structure -->
                     <div class="flex flex-col lg:flex-row items-center py-6 border-b border-gray-200 gap-6 w-full">
                         <div class="img-box max-lg:w-full">
-                            <img src="./image/<?= $product_image ?>" alt="<?= $product_name ?> image"
+                            <img src="./image/products/<?= $product_image ?>" alt="<?= $product_name ?> image"
                                 class="aspect-square w-full lg:max-w-[140px] rounded-xl object-cover">
                         </div>
                         <div class="flex flex-row items-center w-full">
