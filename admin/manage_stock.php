@@ -128,8 +128,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                      <input type="number" name="quantity" id="quantity" value="<?= $row['qty'] ?>" class="form-control" min="1" placeholder="Enter Quantity" required>
                   </div>
                </div>
-               <button id="payment-button" name="submit" type="submit" class="btn btn-lg btn-primary btn-block">
-                  <span id="payment-button-amount">Submit</span>
+               <button id="payment-button" name="submit" type="submit" class="btn btn-lg btn-primary btn-block mt-3">
+                  <span id="payment-button-amount ">Submit</span>
                </button>
                <div style="color: red; margin-top: 10px;">
                   <?= $msg ?>
