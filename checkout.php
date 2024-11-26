@@ -74,11 +74,11 @@ if (isset($_POST['submit'])) {
             $unit_of_measure = isset($val['unit_of_measure']) ? $val['unit_of_measure'] : '';
         
             // Concatenate format and unit of measure
-            $formatted_value = $selected_format . $unit_of_measure;
+            $formatted_value = $selected_format ;
         
             // Insert each product with the concatenated format into the orders_detail table
-            mysqli_query($con, "INSERT INTO orders_detail (order_id, product_id, format, qty, price) 
-                                VALUES ('$order_id', '$pid', '$formatted_value', '$qty', '$price')");
+            mysqli_query($con, "INSERT INTO orders_detail (order_id, product_id, format, unit_of_measure, qty, price) 
+                                VALUES ('$order_id', '$pid', '$formatted_value', '$unit_of_measure','$qty', '$price')");
         }
     } else {
         // Insert order details into the orders table
@@ -92,11 +92,11 @@ if (isset($_POST['submit'])) {
             $unit_of_measure = isset($val['unit_of_measure']) ? $val['unit_of_measure'] : '';
         
             // Concatenate format and unit of measure
-            $formatted_value = $selected_format . ' (' . $unit_of_measure . ')';
+            $formatted_value = $selected_format;
         
             // Insert each product with the concatenated format into the orders_detail table
-            mysqli_query($con, "INSERT INTO orders_detail (order_id, product_id, format, qty, price) 
-                                VALUES ('$order_id', '$pid', '$formatted_value', '$qty', '$price')");
+            mysqli_query($con, "INSERT INTO orders_detail (order_id, product_id, format, unit_of_measure, qty, price) 
+                                VALUES ('$order_id', '$pid', '$formatted_value', '$unit_of_measure', '$qty', '$price')");
         }
     }
 
@@ -242,8 +242,8 @@ while ($row = mysqli_fetch_assoc($cities_result)) {
                         $pname = $productArr[0]['name'];
                         $qty = $val['qty'];
                         $price = $val['price'];
-                        // $selected_format = $val['format'];
-                        $selected_format = $val['format'] . ' ' . $val['unit_of_measure'];
+                        $unit_of_measure = $val['unit_of_measure'];
+                        $selected_format = $val['format'];
                         
 
                         $cart_total += $price * $qty;
@@ -259,7 +259,7 @@ while ($row = mysqli_fetch_assoc($cities_result)) {
                                 </div>
                                 <div class="self-center ml-2">
                                     <p class="self-center text-wrap"><?= $pname ?></p>
-                                    <p class="self-center text-sm text-slate-600">Format: <?= $selected_format ?></p>
+                                    <p class="self-center text-sm text-slate-600">Format: <?= $selected_format ?> <?=$unit_of_measure?></p>
                                 </div>
                             </div>
                             <div class="self-center text-wrap">

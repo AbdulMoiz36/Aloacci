@@ -198,7 +198,7 @@ foreach ($get_product as $product) {
                 </div>
                 <!-- Display the calculated price -->
                 <p id="product-price" class="font-semibold text-lg mt-2">
-                    Price: <span>Rs. <?= isset($displayPrice) ? number_format($displayPrice) : '00' ?></span>
+                    Price: <span><?= isset($displayPrice) ? 'Rs.'.number_format($displayPrice) : '' ?></span>
                     <span class="line-through text-gray-500 ml-2 <?= $displayPrice === $originalPrice ? 'hidden' : '' ?> ">Rs. <?= isset($originalPrice) ? number_format($originalPrice) : '00' ?></span>
                 </p>
             </div>
@@ -222,8 +222,8 @@ foreach ($get_product as $product) {
                         const finalPrice = selectedFormat.getAttribute('data-final-price');
                         const originalPrice = selectedFormat.getAttribute('data-price');
                         priceDisplay.innerHTML = `
-                        Price: <span>Rs. ${parseFloat(finalPrice)}</span>
-            <span class="line-through text-gray-500 ml-2">Rs. ${parseFloat(originalPrice)}</span>
+                        Price: <span>Rs. ${finalPrice}</span>
+            <span class="line-through text-gray-500 ml-2">Rs. ${originalPrice}</span>
         `;
                     }
 
@@ -275,7 +275,7 @@ foreach ($get_product as $product) {
                     function changeQty(change) {
                         var qtyInput = document.getElementById('qty');
                         var selectedFormat = document.querySelector('#format-container .bg-gray-200');
-                        var availableQty = selectedFormat ? parseInt(selectedFormat.dataset.qty) : 1;
+                        var availableQty = selectedFormat ? parseInt(selectedFormat.dataset.qty) : 0;
                         var newValue = parseInt(qtyInput.value) + change;
 
                         // Check if the new value exceeds available stock
