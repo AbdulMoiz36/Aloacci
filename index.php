@@ -4,7 +4,7 @@ include "header.php";
 $about_select = "SELECT * FROM about";
 $about_res = mysqli_query($con, $about_select);
 $about_row = mysqli_fetch_assoc($about_res);
-$sel_data = mysqli_query($con,"SELECT * FROM homepage_data");
+$sel_data = mysqli_query($con, "SELECT * FROM homepage_data");
 $data = mysqli_fetch_assoc($sel_data);
 
 $select = "SELECT * FROM banner";
@@ -126,24 +126,40 @@ if (mysqli_num_rows($res) > 0) {
 
             // Add the product ID to the unique products array
             $unique_products[] = $list['id'];
-
+            $hover_image = '';
+            $p_id = $list['id'];
             // Determine which images to display based on availability
-            $main_image = $list['image'] ?: ($list['image2'] ?: $list['image3']);
-            $hover_image = ($main_image === $list['image'] && $list['image2']) ? $list['image2'] : $list['image3'];
-            if (!$hover_image) {
-                $hover_image = $main_image; // Default to main image if no hover image is found
+            $main_image = $list['image'];
+            $fetch_hover = mysqli_query($con, "SELECT image_path FROM product_images WHERE product_id = '$p_id' LIMIT 1 ");
+            if ($res = mysqli_fetch_assoc($fetch_hover)) {
+                $hover_image = $res['image_path'];
+            } else {
+                $hover_image = $main_image;
             }
+            // $hover_image = ($main_image === $list['image']);
+            // if (!$hover_image) {
+            //     $hover_image = $main_image; // Default to main image if no hover image is found
+            // }
         ?>
 
             <div
                 class="product-card min-w-28 lg:w-full md:w-72 h-[20rem] lg:h-[40rem] flex gap-2 flex-col relative group shadow">
+                <?php
+                if ($list['sale_price'] > 0) {
+                ?>
+                    <div class="bg-red-600 absolute z-10 top-0 left-0 px-3 rounded-tl-md">
+                        <p class="text-white">Sale</p>
+                    </div>
+                <?php
+                }
+                ?>
 
                 <!-- Product image wrapper -->
                 <div class="relative h-[65%] w-full">
                     <a href="product_details?id=<?= $list['id'] ?>" class="product-link w-full">
                         <img src="./image/products/<?= $main_image ?>" alt="<?= $list['name'] ?>"
                             class="h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0">
-                        <img src="./image/<?= $hover_image ?>" alt="<?= $list['name'] ?> Hover"
+                        <img src="./image/products/<?= $hover_image ?>" alt="<?= $list['name'] ?> Hover"
                             class="absolute top-0 left-0 h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100">
                     </a>
                 </div>
@@ -179,10 +195,10 @@ if (mysqli_num_rows($res) > 0) {
             <div
                 class="w-full justify-center items-start gap-6 grid grid-cols-2  lg:order-first order-last">
                 <div class="pt-24 lg:justify-center sm:justify-end justify-start items-start gap-2.5 flex">
-                    <img class=" rounded-xl object-cover" src=".<?=$imagePath1?>"
+                    <img class=" rounded-xl object-cover" src=".<?= $imagePath1 ?>"
                         alt="about Us image" />
                 </div>
-                <img class="sm:ml-0 ml-auto rounded-xl object-cover" src=".<?=$imagePath2?>"
+                <img class="sm:ml-0 ml-auto rounded-xl object-cover" src=".<?= $imagePath2 ?>"
                     alt="about Us image" />
             </div>
             <div class="w-full flex-col justify-center lg:items-start items-center gap-10 inline-flex">
@@ -190,10 +206,10 @@ if (mysqli_num_rows($res) > 0) {
                     <div class="w-full flex-col justify-start lg:items-start items-center gap-3 flex">
                         <h2
                             class="text-gray-900 text-4xl font-bold font-manrope leading-normal lg:text-start text-center">
-                            <?=$data['text_input1']?></h2>
+                            <?= $data['text_input1'] ?></h2>
                         <p
                             class="text-gray-500 text-base font-normal leading-relaxed lg:text-start text-center">
-                            <?=$data['editable_input1']?>
+                            <?= $data['editable_input1'] ?>
                         </p>
                     </div>
                     <div
@@ -251,12 +267,15 @@ if (mysqli_num_rows($res) > 0) {
 
                 // Add the product ID to the unique products array
                 $unique_products[] = $list['id'];
-
+                $hover_image = '';
+                $p_id = $list['id'];
                 // Determine which images to display based on availability
-                $main_image = $list['image'] ?: ($list['image2'] ?: $list['image3']);
-                $hover_image = ($main_image === $list['image'] && $list['image2']) ? $list['image2'] : $list['image3'];
-                if (!$hover_image) {
-                    $hover_image = $main_image; // Default to main image if no hover image is found
+                $main_image = $list['image'];
+                $fetch_hover = mysqli_query($con, "SELECT image_path FROM product_images WHERE product_id = '$p_id' LIMIT 1 ");
+                if ($res = mysqli_fetch_assoc($fetch_hover)) {
+                    $hover_image = $res['image_path'];
+                } else {
+                    $hover_image = $main_image;
                 }
         ?>
 
@@ -270,7 +289,7 @@ if (mysqli_num_rows($res) > 0) {
                         <a href="product_details?id=<?= $list['id'] ?>" class="product-link w-full">
                             <img src="./image/products/<?= $main_image ?>" alt="<?= $list['name'] ?>"
                                 class="h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0">
-                            <img src="./image/<?= $hover_image ?>" alt="<?= $list['name'] ?> Hover"
+                            <img src="./image/products/<?= $hover_image ?>" alt="<?= $list['name'] ?> Hover"
                                 class="absolute top-0 left-0 h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100">
                         </a>
                     </div>
@@ -316,14 +335,14 @@ if (mysqli_num_rows($res) > 0) {
                 <div class="sm:text-center lg:text-left">
 
                     <p>
-                    <?=$data['editable_input2']?>
+                        <?= $data['editable_input2'] ?>
                     </p>
                 </div>
             </main>
         </div>
     </div>
     <div class="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2">
-        <img class="h-56 w-full object-cover object-center sm:h-72 md:h-96 lg:w-full lg:h-full" src=".<?=$imagePath3?>" alt="">
+        <img class="h-56 w-full object-cover object-center sm:h-72 md:h-96 lg:w-full lg:h-full" src=".<?= $imagePath3 ?>" alt="">
     </div>
 </div>
 <?php
