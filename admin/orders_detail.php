@@ -52,7 +52,7 @@ if(isset($_POST['update_order_status'])){
               <tr class="pb-0">
                 <td><img src="../image/products/<?= htmlspecialchars($row['image']) ?>" height="50" width="50" alt="">
                   <?= htmlspecialchars($row['name']) ?></td>
-                <td><?= htmlspecialchars($row['format']) ?></td>
+                <td><?= htmlspecialchars($row['format']) ?><?= htmlspecialchars($row['unit_of_measure']) ?></td>
                 <td><?= htmlspecialchars($row['qty']) ?></td>
                 <td><?= htmlspecialchars($row['price']) ?></td>
                 <td><?= htmlspecialchars($row['qty'] * $row['price']) ?></td>

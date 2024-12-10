@@ -42,7 +42,7 @@ foreach ($get_product as $product) {
 
 <section class="w-full">
     <div class="flex flex-wrap p-2 md:p-10">
-        <div class="w-full md:w-1/2 flex gap-2">
+        <div class="w-full md:w-1/2 flex flex-col-reverse md:flex-row  gap-2">
             <?php
             // Assuming $product_image contains the main image path
             $mainImage = $product_image;
@@ -63,7 +63,7 @@ foreach ($get_product as $product) {
 
             <!-- Sidebar Thumbnails (Left Side) -->
             <?php if (!empty($additionalImages)): ?>
-                <div class="w-full md:w-1/6 space-y-2 max-h-[800px] overflow-y-auto custom-scrollbar">
+                <div class="w-full md:w-2/6 lg:w-1/6 space-y-2 h-24 md:h-[35rem]  flex flex-row-reverse md:block gap-2 overflow-y-hidden overflow-x-auto lg:overflow-y-auto custom-scrollbar">
                     <img src="./image/products/<?= $product_image ?>" alt="Thumbnail" class="cursor-pointer border-2 border-slate-200"
                         onclick="changeImage(this.src)">
                     <?php foreach ($additionalImages as $imagePath): ?>
@@ -75,7 +75,7 @@ foreach ($get_product as $product) {
             <?php endif; ?>
 
             <!-- Main Image (Right Side) -->
-            <div class="w-full md:w-3/4">
+            <div class="w-full max-w-60 lg:max-w-[30rem] mx-auto md:w-3/4">
                 <img id="mainImage" src="./image/products/<?= $mainImage ?>" alt="Selected Product Image"
                     class="border-2 border-slate-200 max-h-[850px] mx-auto">
             </div>
@@ -86,7 +86,7 @@ foreach ($get_product as $product) {
                 /* For consistent layout with a scrollbar on the left */
                 direction: rtl;
                 /* Temporarily reverse the content direction */
-                overflow-y: scroll;
+                overflow-y: auto;
                 padding-right: 10px;
                 /* Avoid content overlapping with the scrollbar */
             }

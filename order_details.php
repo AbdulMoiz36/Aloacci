@@ -81,6 +81,7 @@ function getStatusClass($status)
                     $quantity = $order_d['qty'];
                     $price = $order_d['price'];
                     $format = $order_d['format'];
+                    $unit_of_measure = $order_d['unit_of_measure'];
                     $product_id = $order_d['product_id'];
                 ?>
 
@@ -112,7 +113,7 @@ WHERE pd.product_id = '$product_id' AND pd.gender_id != 0");
                                             endif; ?></p>
                                         <div class="flex items-center">
                                             <p class="font-medium text-base leading-7 text-black pr-4 mr-4 border-r border-gray-200">
-                                                Size: <span class="text-gray-500"><?= $format ?></span></p> 
+                                                Size: <span class="text-gray-500"><?= $format ?> <?= $unit_of_measure ?></span></p> 
                                             <p class="font-medium text-base leading-7 text-black">Qty: <span class="text-gray-500"><?= $quantity ?></span></p>
                                         </div>
                                     </div>

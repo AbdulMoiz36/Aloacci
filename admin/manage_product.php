@@ -19,6 +19,7 @@ $image3 = '';
 $image_required = 'required';
 
 // Initializing the format-related variables as arrays
+$format_ids = isset($_POST['formats_ids']) ? $_POST['formats_ids'] : [];
 $formats = isset($_POST['formats']) ? $_POST['formats'] : [];
 $prices = isset($_POST['prices']) ? $_POST['prices'] : [];
 $sale_prices = isset($_POST['sale_prices']) ? $_POST['sale_prices'] : [];
@@ -77,6 +78,7 @@ if (isset($_GET['id']) && $_GET['id'] != '') {
         // Fetch product formats from the product_format table
         $format_res = mysqli_query($con, "SELECT * FROM product_format WHERE product_id=$_id");
         while ($format_row = mysqli_fetch_assoc($format_res)) {
+            $format_ids[] = $format_row['id'];
             $formats[] = $format_row['format'];
             $prices[] = $format_row['price'];
             $unit_of_measures[] = $format_row['unit_of_measure'];
@@ -114,6 +116,7 @@ if (isset($_REQUEST['submit'])) {
 
     // Fetch the dynamic formats, prices, and qty arrays
     // Initializing the format-related variables as arrays
+    $format_ids = isset($_POST['format_ids']) ? $_POST['format_ids'] : [];
     $formats = isset($_POST['formats']) ? $_POST['formats'] : [];
     $prices = isset($_POST['prices']) ? $_POST['prices'] : [];
     $sale_prices = isset($_POST['sale_prices']) ? $_POST['sale_prices'] : [];
@@ -173,36 +176,67 @@ if (isset($_REQUEST['submit'])) {
                 mysqli_query($con, "INSERT INTO product_details (product_id, lasting_id) VALUES ('$_id', '$lasting_id')");
             }
 
+            // Remove deleted Formats
+            if (isset($_POST['removed_format_ids']) && !empty($_POST['removed_format_ids'])) {
+                $removedFormatIds = explode(',', $_POST['removed_format_ids']);
+
+                // Sanitize and validate IDs
+                $removedFormatIds = array_filter($removedFormatIds, 'is_numeric'); // Keep only numeric IDs
+
+                if (!empty($removedFormatIds)) {
+                    // Convert the array to a comma-separated string for the SQL IN clause
+                    $idsToDelete = implode(',', $removedFormatIds);
+
+                    // Construct the DELETE query
+                    $query = "DELETE FROM product_format WHERE id IN ($idsToDelete)";
+
+                    // Execute the query
+                    $del = mysqli_query($con, $query);
+
+                    if ($del) {
+                        echo "Records deleted successfully.";
+                    } else {
+                        echo "Error deleting records: " . mysqli_error($con);
+                    }
+                } else {
+                    echo "No valid IDs to delete.";
+                }
+            } else {
+                echo "No IDs were submitted.";
+            }
+
+
+
 
             // Prepare format updates and inserts
-foreach ($formats as $key => $format) {
-    $price = isset($prices[$key]) ? $prices[$key] : '';
-    $qty = isset($qtys[$key]) ? $qtys[$key] : '';
-    $sale_price = isset($sale_prices[$key]) ? $sale_prices[$key] : '';
-    $unit_of_sale = isset($sale_units[$key]) ? $sale_units[$key] : '';
-    $unit_of_measure = isset($unit_of_measures[$key]) ? $unit_of_measures[$key] : '';
+            foreach ($formats as $key => $format) {
+                $format_id = isset($format_ids[$key]) ? $format_ids[$key] : '';
+                $price = isset($prices[$key]) ? $prices[$key] : '';
+                $qty = isset($qtys[$key]) ? $qtys[$key] : '';
+                $sale_price = isset($sale_prices[$key]) ? $sale_prices[$key] : '';
+                $unit_of_sale = isset($sale_units[$key]) ? $sale_units[$key] : '';
+                $unit_of_measure = isset($unit_of_measures[$key]) ? $unit_of_measures[$key] : '';
 
-    // Check if the format already exists in the database
-    $checkQuery = "SELECT id FROM product_format WHERE product_id='$_id' AND format='$format'";
-    $checkResult = mysqli_query($con, $checkQuery);
+                // Check if the format already exists in the database
+                $checkQuery = "SELECT format FROM product_format WHERE id ='$format_id'";
+                $checkResult = mysqli_query($con, $checkQuery);
 
-    if (mysqli_num_rows($checkResult) > 0) {
-        // If the format exists, update the existing record
-        $row = mysqli_fetch_assoc($checkResult);
-        $formatId = $row['id'];
-        $updateQuery = "
+                if (mysqli_num_rows($checkResult) > 0) {
+                    // If the format exists, update the existing record
+                    $row = mysqli_fetch_assoc($checkResult);
+                    $updateQuery = "
             UPDATE product_format 
-            SET unit_of_measure='$unit_of_measure', price='$price', qty='$qty', sale_price='$sale_price', unit_of_sale='$unit_of_sale' 
-            WHERE id='$formatId'";
-        mysqli_query($con, $updateQuery);
-    } else {
-        // If the format does not exist, insert a new record
-        $insertQuery = "
+            SET format='$format',unit_of_measure='$unit_of_measure', price='$price', qty='$qty', sale_price='$sale_price', unit_of_sale='$unit_of_sale' 
+            WHERE id='$format_id'";
+                    mysqli_query($con, $updateQuery);
+                } else {
+                    // If the format does not exist, insert a new record
+                    $insertQuery = "
             INSERT INTO product_format (product_id, format, unit_of_measure, price, qty, sale_price, unit_of_sale) 
             VALUES ('$_id', '$format', '$unit_of_measure', '$price', '$qty', '$sale_price', '$unit_of_sale')";
-        mysqli_query($con, $insertQuery);
-    }
-}
+                    mysqli_query($con, $insertQuery);
+                }
+            }
 
 
             // Process selected image paths (decode the JSON string)
@@ -437,6 +471,8 @@ VALUES ('$category_id', '$sub_category_id', '$name', '$brief', '$description', '
                     </style>
                     <hr>
                     <div id="formats-container">
+                        <!-- Add a hidden input to store removed format IDs -->
+                        <input type="hidden" name="removed_format_ids" id="removed-format-ids" value="">
                         <!-- Quick Sale Toggle -->
                         <div style="display: flex; justify-content: end; align-items: center;">
                             <p style="font-size: x-small; color:#888; line-height:12px;margin-bottom:2px;">Enable to apply same sale on every <br> product, From 1st format.</p>
@@ -449,6 +485,7 @@ VALUES ('$category_id', '$sub_category_id', '$name', '$brief', '$description', '
                                 <span class="slider"></span>
                             </label>
                         </div>
+                        
                         <?php
                         // Fetch units of measure from the database
                         $unitsQuery = "SELECT name FROM units_of_measure"; // Replace with your table and column names
@@ -467,9 +504,10 @@ VALUES ('$category_id', '$sub_category_id', '$name', '$brief', '$description', '
                             // Loop through the formats array and generate input fields for each format
                             for ($i = 0; $i < count($formats); $i++) {
                         ?>
-                                <div class="format-container form-row" id="format-row-<?= $i + 1 ?>">
+                                <div class="format-container form-row" id="format-row-<?= $i + 1 ?>" data-format-id="<?= '' ?>">
                                     <div class="form-group col-2">
                                         <label for="format<?= $i + 1 ?>" class="form-control-label">Format</label>
+                                        <input type="hidden" name="format_ids[]" class="form-control" value="<?= $format_ids[$i] ?? '' ?>" <?= $i == 0 ? 'required' : '' ?> />
                                         <input type="text" name="formats[]" class="form-control" value="<?= $formats[$i] ?? '' ?>" <?= $i == 0 ? 'required' : '' ?> />
                                     </div>
                                     <div class="form-group col-2">
@@ -501,10 +539,51 @@ VALUES ('$category_id', '$sub_category_id', '$name', '$brief', '$description', '
                                     </div>
                                     <?php if ($i > 0) { ?>
                                         <div class="form-group cols-1">
-                                            <button type="button" class="btn btn-danger delete-format-btn" data-row="format-row-<?= $i + 1 ?>" style="margin-top: 55%; margin-left: 20px;">X</button>
+                                            <button type="button" class="btn btn-danger delete-format-btn " id="old-format" data-format-id="<?= $format_ids[$i] ?>" data-row="format-row-<?= $i + 1 ?>" style="margin-top: 55%; margin-left: 20px;">X</button>
                                         </div>
                                     <?php } ?>
                                 </div>
+                                <script>
+                                    document.addEventListener('DOMContentLoaded', function() {
+                                        const removedFormatIdsInput = document.getElementById('removed-format-ids');
+                                        const deleteButtons = document.querySelectorAll('#old-format');
+                                        deleteButtons.forEach(button => {
+                                            button.addEventListener('click', function() {
+                                                const formatId = this.getAttribute('data-format-id');
+                                                const rowId = this.getAttribute('data-row');
+
+                                                // Add the format ID to the hidden input field
+                                                let removedIds = removedFormatIdsInput.value.split(',').filter(id => id);
+                                                if (!removedIds.includes(formatId)) {
+                                                    removedIds.push(formatId);
+                                                    console.log('Pushed to delete :',formatId);
+                                                    console.log(removedFormatIdsInput);
+                                                }
+                                                removedFormatIdsInput.value = removedIds.join(',');
+
+                                                // Optionally, hide or remove the row from the DOM
+                                                const rowElement = document.getElementById(rowId);
+                                                if (rowElement) {
+                                                    rowElement.remove(); // Or use rowElement.remove();
+                                                }
+                                            });
+                                        });
+                                    });
+                                    // Attach event listener to the document to handle dynamically added delete buttons
+                                    // document.addEventListener("click", function(event) {
+                                    //     // Check if the clicked element has the class 'delete-format-btn'
+                                    //     if (event.target.classList.contains("delete-format-btn")) {
+                                    //         // Get the row ID from the data-row attribute
+                                    //         const rowId = event.target.getAttribute("data-row");
+                                    //         const rowElement = document.getElementById(rowId);
+
+                                    //         // Remove the row element if it exists
+                                    //         if (rowElement) {
+                                    //             rowElement.remove();
+                                    //         }
+                                    //     }
+                                    // });
+                                </script>
 
                             <?php
                             }
@@ -1371,7 +1450,7 @@ VALUES ('$category_id', '$sub_category_id', '$name', '$brief', '$description', '
                                         // Add new images to the gallery
                                         data.newImages.forEach(imagePath => {
                                             const img = document.createElement('img');
-                                            img.src = imagePath; 
+                                            img.src = imagePath;
                                             img.className = 'gallery-image';
                                             img.onclick = () => selectSingleImage(imagePath);
                                             gallery.appendChild(img);
@@ -1749,7 +1828,7 @@ VALUES ('$category_id', '$sub_category_id', '$name', '$brief', '$description', '
                         <!-- Quill editor container -->
                         <div id="editor-container" placeholder="Enter Product Brief"><?= $brief ?></div>
                         <!-- Hidden input to store the Quill content -->
-                        <input type="hidden" name="brief" id="brief" value="<?= $brief ?>">
+                        <input type="hidden" name="brief" id="brief" style="display: none;" value="">
                     </div>
 
                     <!-- Add Quill editor toolbar -->
@@ -1775,10 +1854,10 @@ VALUES ('$category_id', '$sub_category_id', '$name', '$brief', '$description', '
                         quill.root.innerHTML = briefContent;
 
                         // Save Quill content to hidden input on form submission
+                        // document.querySelector('form').onsubmit = function() {
+                        // };
                         document.querySelector('form').onsubmit = function() {
                             document.querySelector('#brief').value = quill.root.innerHTML;
-                        };
-                        document.querySelector('form').onsubmit = function() {
                             // Collect image paths from the selected images in the preview container
                             const selectedImages = Array.from(document.querySelectorAll('#selectedImagesPreview img'))
                                 .map(img => img.getAttribute('src')); // Get the full image paths

@@ -11,7 +11,7 @@ if (isset($_POST['product_id'])) {
     if (mysqli_num_rows($result) > 0) {
         echo '<option selected disabled>Select Product Variant</option>';
         while ($row = mysqli_fetch_assoc($result)) {
-            echo "<option value='{$row['id']}' data-price='{$row['price']}'>{$row['format']} {$row['unit_of_measure']}</option>"; // Adjust the field names as needed
+            echo "<option value='{$row['id']}' data-format='{$row['format']}' data-unit='{$row['unit_of_measure']}' data-price='{$row['price']}'>{$row['format']} {$row['unit_of_measure']}</option>"; // Adjust the field names as needed
         }
     } else {
         echo '<option selected disabled>No Product Variants Available</option>';

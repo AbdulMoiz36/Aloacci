@@ -138,7 +138,8 @@ isAdmin();
                             var format_id = $('#format').val();
                             var qty = $('#qty').val();
                             var product_name = $('#product option:selected').text();
-                            var format_name = $('#format option:selected').text();
+                            var format_name = $('#format option:selected').data('format');
+                            var format_unit = $('#format option:selected').data('unit');
                             var price = $('#format option:selected').data(
                                 'price'); // Get price from the selected format
                             var total_price = qty * price;
@@ -181,7 +182,7 @@ isAdmin();
                                         // Create a new row
                                         var row = `<tr>
                                                         <td>${product_name}</td>
-                                                        <td>${format_name}</td>
+                                                        <td>${format_name}${format_unit}</td>
                                                         <td>${qty}</td>
                                                         <td>${price}</td>
                                                         <td>${total_price}</td>

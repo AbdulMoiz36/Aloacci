@@ -4,9 +4,20 @@ include "header.php";
 $about_select = "SELECT * FROM about";
 $about_res = mysqli_query($con, $about_select);
 $about_row = mysqli_fetch_assoc($about_res);
+$sel_data = mysqli_query($con,"SELECT * FROM homepage_data");
+$data = mysqli_fetch_assoc($sel_data);
 
 $select = "SELECT * FROM banner";
 $res = mysqli_query($con, $select);
+
+$imagePath1 = $data['image1_path'];
+$imagePath2 = $data['image2_path'];
+$imagePath3 = $data['image3_path'];
+// Remove the first dot from the path if it exists at the beginning
+$imagePath1 = ltrim($imagePath1, '.');
+$imagePath2 = ltrim($imagePath2, '.');
+$imagePath3 = ltrim($imagePath3, '.');
+
 
 if (mysqli_num_rows($res) > 0) {
     $images = [];
@@ -22,7 +33,9 @@ if (mysqli_num_rows($res) > 0) {
                 <!-- Carousel items -->
                 <?php foreach ($images as $index => $image) { ?>
                     <div class="carousel-item min-w-full h-full">
-                        <img src="./image/<?= $image ?>" alt="Banner" class="object-cover md:object-fit w-full h-full" defer>
+                        <img src="./image/<?= $image ?>" alt="Banner" class="object-cover md:object-fit w-full h-full"
+                            loading="<?= $index === 0 ? 'eager' : 'lazy' ?>" width="1920" height="600">
+
                     </div>
                 <?php } ?>
             </div>
@@ -35,41 +48,32 @@ if (mysqli_num_rows($res) > 0) {
             </div>
         </div>
         <script>
-            // JavaScript for carousel functionality
-            let currentSlide = 0;
-            const slides = document.querySelectorAll('#heroCarousel .carousel-item');
-            const indicators = document.querySelectorAll('#heroCarousel .indicator');
-            const track = document.querySelector('#heroCarousel .carousel-track');
+            document.addEventListener('DOMContentLoaded', () => {
+                let currentSlide = 0;
+                const slides = document.querySelectorAll('#heroCarousel .carousel-item');
+                const indicators = document.querySelectorAll('#heroCarousel .indicator');
+                const track = document.querySelector('#heroCarousel .carousel-track');
 
-            function showSlide(index) {
-                const slideWidth = slides[0].offsetWidth;
-                const offset = -slideWidth * index;
-                track.style.transform = `translateX(${offset}px)`;
+                function showSlide(index) {
+                    const slideWidth = slides[0].offsetWidth;
+                    track.style.transform = `translateX(${-slideWidth * index}px)`;
 
-                // Update currentSlide
-                currentSlide = index;
+                    indicators.forEach((indicator, i) => {
+                        indicator.classList.toggle('bg-gray-700', i === index);
+                        indicator.classList.toggle('bg-gray-400', i !== index);
+                    });
 
-                // Update active indicator
-                indicators.forEach((indicator, i) => {
-                    indicator.classList.toggle('bg-gray-700', i === index); // Active indicator styling
-                    indicator.classList.toggle('bg-gray-200', i !== index); // Inactive indicator styling
+                    currentSlide = index;
+                }
+
+                indicators.forEach((indicator, index) => {
+                    indicator.addEventListener('click', () => showSlide(index));
                 });
-            }
 
-            indicators.forEach((indicator, index) => {
-                indicator.addEventListener('click', () => {
-                    showSlide(index);
-                });
+                setInterval(() => showSlide((currentSlide + 1) % slides.length), 5000);
+
+                showSlide(0);
             });
-
-            // Optionally add automatic sliding
-            setInterval(() => {
-                let nextSlide = (currentSlide + 1) % slides.length;
-                showSlide(nextSlide);
-            }, 5000); // Slide every 5 seconds
-
-            // Initialize the first slide as active
-            showSlide(0);
         </script>
         <style>
             .carousel-item {
@@ -98,15 +102,15 @@ if (mysqli_num_rows($res) > 0) {
 
 
 <!-- New Arrival -->
-<section class="px-5">
+<section class="p-1 lg:px-5">
     <!-- Heading and View All -->
-    <div class="py-5 px-8 lg:py-16 flex justify-between">
+    <div class="py-5 px-2 lg:px-8 lg:py-16 flex justify-between">
         <h2 class="font-bold text-2xl md:text-3xl underline">New Arrival:</h2>
     </div>
 
     <!-- Products section -->
     <div id="products-container"
-        class="w-full p-3 flex justify-start gap-2 md:gap-5 overflow-hidden overflow-x-auto">
+        class="w-full p-0 lg:p-3 flex justify-start gap-2 md:gap-5 overflow-hidden overflow-x-auto">
         <?php
         // Fetch all products
         $get_product = get_product($con);
@@ -132,7 +136,7 @@ if (mysqli_num_rows($res) > 0) {
         ?>
 
             <div
-                class="product-card w-full md:w-72 h-[20rem] lg:h-[30rem] flex gap-2 flex-col relative group shadow">
+                class="product-card min-w-28 lg:w-full md:w-72 h-[20rem] lg:h-[40rem] flex gap-2 flex-col relative group shadow">
 
                 <!-- Product image wrapper -->
                 <div class="relative h-[65%] w-full">
@@ -175,10 +179,10 @@ if (mysqli_num_rows($res) > 0) {
             <div
                 class="w-full justify-center items-start gap-6 grid grid-cols-2  lg:order-first order-last">
                 <div class="pt-24 lg:justify-center sm:justify-end justify-start items-start gap-2.5 flex">
-                    <img class=" rounded-xl object-cover"  src="./image/umeed_77_11zon.jpeg"
+                    <img class=" rounded-xl object-cover" src=".<?=$imagePath1?>"
                         alt="about Us image" />
                 </div>
-                <img class="sm:ml-0 ml-auto rounded-xl object-cover" src="./image/umeed.jpeg"
+                <img class="sm:ml-0 ml-auto rounded-xl object-cover" src=".<?=$imagePath2?>"
                     alt="about Us image" />
             </div>
             <div class="w-full flex-col justify-center lg:items-start items-center gap-10 inline-flex">
@@ -186,12 +190,10 @@ if (mysqli_num_rows($res) > 0) {
                     <div class="w-full flex-col justify-start lg:items-start items-center gap-3 flex">
                         <h2
                             class="text-gray-900 text-4xl font-bold font-manrope leading-normal lg:text-start text-center">
-                            Lorem ipsum dolor sit amet.</h2>
+                            <?=$data['text_input1']?></h2>
                         <p
                             class="text-gray-500 text-base font-normal leading-relaxed lg:text-start text-center">
-                            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quaerat delectus beatae
-                            harum culpa reprehenderit perspiciatis dignissimos suscipit id repellendus repellat
-                            exercitationem debitis explicabo, ipsam pariatur ipsum eos doloremque soluta illum.
+                            <?=$data['editable_input1']?>
                         </p>
                     </div>
                     <div
@@ -218,77 +220,80 @@ if (mysqli_num_rows($res) > 0) {
     </div>
 </section>
 
-
-<!-- Products Showcase -->
-<section>
+<section class="p-1 lg:px-5">
     <!-- Heading and View All -->
-    <div class="p-8 py-5 lg:py-16 flex justify-between">
+    <div class="py-5 p-2 lg:px-8 lg:py-16 flex justify-between">
         <h2 class="font-bold text-2xl md:text-3xl underline">On Sale:</h2>
     </div>
 
     <!-- Products section -->
     <div id="products-container"
-        class="w-full px-3 py-2 flex justify-start gap-2 md:gap-5 overflow-hidden overflow-x-auto">
+        class="w-full p-3 flex justify-start gap-2 md:gap-5 overflow-hidden overflow-x-auto">
         <?php
         // Fetch all products
         $get_product = get_product($con);
 
         $unique_products = []; // Array to track unique products
         $displayed_products = 0; // Counter for displayed products
+        $products_on_sale = array_filter($get_product, function ($product) {
+            // Filter products with sale_price > 0 or not empty
+            return !empty($product['sale_price']) && $product['sale_price'] > 0;
+        });
 
-        foreach ($get_product as $list) {
-            // Check if the product belongs to the "Best Sellers" category
-            if ($list['categories'] !== 'Best Sellers') {
-                continue; // Skip products that are not in the "Best Sellers" category
-            }
+        if (empty($products_on_sale)) {
+            echo '<p class="text-gray-500 text-center w-full">No products on sale.</p>';
+        } else {
+            foreach ($products_on_sale as $list) {
+                // Skip the product if it's already been displayed
+                if (in_array($list['id'], $unique_products)) {
+                    continue;
+                }
 
-            // Skip the product if it's already been displayed
-            if (in_array($list['id'], $unique_products)) {
-                continue;
-            }
+                // Add the product ID to the unique products array
+                $unique_products[] = $list['id'];
 
-            // Add the product ID to the unique products array
-            $unique_products[] = $list['id'];
-
-            // Determine which images to display based on availability
-            $main_image = $list['image'] ?: ($list['image2'] ?: $list['image3']);
-            $hover_image = ($main_image === $list['image'] && $list['image2']) ? $list['image2'] : $list['image3'];
-            if (!$hover_image) {
-                $hover_image = $main_image; // Default to main image if no hover image is found
-            }
+                // Determine which images to display based on availability
+                $main_image = $list['image'] ?: ($list['image2'] ?: $list['image3']);
+                $hover_image = ($main_image === $list['image'] && $list['image2']) ? $list['image2'] : $list['image3'];
+                if (!$hover_image) {
+                    $hover_image = $main_image; // Default to main image if no hover image is found
+                }
         ?>
 
-            <div
-                class="product-card w-full md:w-72 h-[20rem] lg:h-[30rem] flex gap-2 flex-col relative group shadow">
+                <div
+                    class="product-card min-w-28  md:w-72 h-[20rem] lg:h-[40rem] flex gap-2 flex-col relative group shadow">
+                    <div class="bg-red-600 absolute z-10 top-0 left-0 px-3 rounded-tl-md">
+                        <p class="text-white">Sale</p>
+                    </div>
+                    <!-- Product image wrapper -->
+                    <div class="relative h-[65%] w-full">
+                        <a href="product_details?id=<?= $list['id'] ?>" class="product-link w-full">
+                            <img src="./image/products/<?= $main_image ?>" alt="<?= $list['name'] ?>"
+                                class="h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0">
+                            <img src="./image/<?= $hover_image ?>" alt="<?= $list['name'] ?> Hover"
+                                class="absolute top-0 left-0 h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100">
+                        </a>
+                    </div>
 
-                <!-- Product image wrapper -->
-                <div class="relative h-[65%] w-full">
-                    <a href="product_details?id=<?= $list['id'] ?>" class="product-link w-full">
-                        <img src="./image/<?= $main_image ?>" alt="<?= $list['name'] ?>"
-                            class="h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0">
-                        <img src="./image/<?= $hover_image ?>" alt="<?= $list['name'] ?> Hover"
-                            class="absolute top-0 left-0 h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100">
-                    </a>
+                    <!-- Product details -->
+                    <div class="px-4 py-2 h-[35%] flex flex-col justify-evenly">
+                        <a href="product_details?id=<?= $list['id'] ?>"
+                            class="text-sm md:text-lg font-bold hover:underline"><?= $list['name'] ?></a>
+                        <p class="text-gray-600 overflow-hidden text-ellipsis line-clamp-2 text-xs md:text-base">
+                            <?= $list['description'] ?> </p>
+                        <p class="text-xs md:text-lg font-bold text-red-500">Rs. <?= $list['sale_price'] ?></p>
+                    </div>
                 </div>
-
-                <!-- Product details -->
-                <div class="px-4 py-2 h-[35%] flex flex-col justify-evenly">
-                    <a href="product_details?id=<?= $list['id'] ?>"
-                        class="text-sm md:text-lg font-bold hover:underline"><?= $list['name'] ?></a>
-                    <p class="text-gray-600 overflow-hidden text-ellipsis line-clamp-2 text-xs md:text-base">
-                        <?= $list['description'] ?> </p>
-                    <p class="text-xs md:text-lg font-bold text-red-500">Rs. <?= $list['price'] ?></p>
-                </div>
-            </div>
 
         <?php
 
-            // Increment the displayed products counter
-            $displayed_products++;
+                // Increment the displayed products counter
+                $displayed_products++;
 
-            // Stop displaying more products if the limit of 5 is reached
-            if ($displayed_products >= 5) {
-                break;
+                // Stop displaying more products if the limit of 5 is reached
+                if ($displayed_products >= 5) {
+                    break;
+                }
             }
         }
         ?>
@@ -296,7 +301,8 @@ if (mysqli_num_rows($res) > 0) {
 </section>
 
 
-<div id="about" class="relative bg-white overflow-hidden p-5 md:p-0 ">
+
+<div id="about" class="relative bg-white overflow-hidden p-5 md:p-0  mt-20">
     <div class="max-w-7xl mx-auto">
         <div class="relative z-10 pb-8 bg-white sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32">
             <svg class="hidden lg:block absolute right-0 inset-y-0 h-full w-48 text-white transform translate-x-1/2"
@@ -310,14 +316,14 @@ if (mysqli_num_rows($res) > 0) {
                 <div class="sm:text-center lg:text-left">
 
                     <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, quo mollitia exercitationem animi atque obcaecati ut consequuntur! Similique voluptas, sit, nulla recusandae deleniti ducimus eos, quia facilis dolores est adipisci ut modi accusantium. Itaque nihil blanditiis aliquam distinctio labore, porro tempora dolore ratione deserunt? Soluta commodi quod consectetur repellat voluptatem ipsa.
+                    <?=$data['editable_input2']?>
                     </p>
                 </div>
             </main>
         </div>
     </div>
     <div class="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2">
-        <img class="h-56 w-full object-cover object-center sm:h-72 md:h-96 lg:w-full lg:h-full" src="./image/crossmyheart.jpeg" alt="">
+        <img class="h-56 w-full object-cover object-center sm:h-72 md:h-96 lg:w-full lg:h-full" src=".<?=$imagePath3?>" alt="">
     </div>
 </div>
 <?php

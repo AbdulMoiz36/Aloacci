@@ -94,11 +94,14 @@ $row = mysqli_fetch_array($res);
               <li class="dropdown <?= $active == "product.php" || $active == "manage_product.php" ? 'active' : ''; ?>">
                 <a href="product" class="nav-link"><i data-feather="archive"></i><span>Products</span></a>
               </li>
-              <li class="dropdown <?= $active == "stock.php" ? 'active' : ''; ?>">
+              <li class="dropdown <?= $active == "stock.php" || $active == "manage_stock.php" ? 'active' : ''; ?>">
                 <a href="stock" class="nav-link"><i data-feather="package"></i><span>Stocks</span></a>
               </li>
               <li class="dropdown <?= $active == "shipment.php" || $active == "manage_free_shipment.php" ? 'active' : ''; ?>">
-                <a href="shipment" class="nav-link"><i data-feather="gift"></i><span>Manage Free Shipment</span></a>
+                <a href="shipment" class="nav-link"><i data-feather="gift"></i><span>Free Shipment</span></a>
+              </li>
+              <li class="dropdown <?= $active == "bundles.php" || $active == "manage_bundles.php" ? 'active' : ''; ?>">
+                <a href="bundles" class="nav-link"><i data-feather="bold"></i><span>Bundles</span></a>
               </li>
               <li class="menu-header">Product Features</li>
               <li class="dropdown <?= $active == "categories.php" || $active == "manage_categories.php" ? 'active' : ''; ?>">

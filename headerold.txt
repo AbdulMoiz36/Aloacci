@@ -61,15 +61,10 @@ $ban_row = mysqli_fetch_array($banner_select);
   <button hidden id="registration_success"></button>
   <button hidden id="message_send"></button>
 
-  
 
   <!-- Header Start -->
   <header
-    class="bg-black h-auto flex-wrap-reverse justify-center items-center sm:flex sm:justify-around sm:px-10 px-5 py-3">
-    <!-- Logo Start -->
-    <div class="flex justify-center">
-      <a href="index"><img src="./img/logo-cropped-bottom.png" alt="Logo" width="70px" class="hidden md:block" /></a>
-    </div>
+    class="bg-black h-auto flex-wrap-reverse justify-center items-center sm:flex sm:justify-between sm:px-10 px-5 py-3">
     <!-- Search Box Start -->
     <div class="flex gap-4">
       <a href="index" class="md:hidden"><img src="./img/logo-cropped-bottom.png" alt="Logo" width="50px" /></a>
@@ -180,7 +175,10 @@ $ban_row = mysqli_fetch_array($banner_select);
 
     </div>
     </div>
-    
+    <!-- Logo Start -->
+    <div class="flex justify-center">
+      <a href="index"><img src="./img/logo-cropped-bottom.png" alt="Logo" width="100px" class="hidden md:block" /></a>
+    </div>
     <!-- Acccount And Cart Start -->
     <div class="flex justify-center space-x-10 text-white items-center mt-7 md:mt-0">
       <i id="menu-icon" class="fa-solid fa-bars sm:hidden block text-lg text-white cursor-pointer md:hidden"

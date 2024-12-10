@@ -6,7 +6,7 @@
 
       <!-- Column 1: Logo Section -->
       <div class="mb-6 md:mb-0 flex justify-center">
-        <img src="./img/logo.png" alt="Company Logo" class="w-2/4 md:w-3/4 lg:max-w-32 mb-4">
+        <img src="./img/logo.png" alt="Company Logo" width="100px" class="w-2/4 md:w-3/4 lg:max-w-32 mb-4" loading="lazy">
       </div>
 
       <!-- Column 2: About Section -->
@@ -137,9 +137,12 @@
       <p>&copy; 2024 Al-Oacci. All rights reserved.</p>
     </div>
   </div>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <?php
+  include_once 'chat.php';
+  ?>
 </footer>
 <!-- JS -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!-- Sweet Alert -->
 <!-- Custom -->
 <!-- scripts -->

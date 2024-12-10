@@ -123,7 +123,7 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
 
 <!-- Sticky filter and sort section -->
 <div
-    class="w-full py-3 flex flex-wrap justify-around md:justify-end px-2 md:px-10 border-b-2 border-slate-200 sticky md:static top-0 z-10 bg-white">
+    class="w-full py-3 flex flex-wrap justify-around md:justify-end px-2 md:px-10 border-b-2 border-slate-200 sticky md:static top-0 z-[1000] bg-white">
     <p class="md:hidden cursor-pointer text-sm md:text-base" id="filter-btn"><span class="mr-2"><i
                 class="fa-solid fa-sliders"></i></span>Filter</p>
     <div class="text-sm md:text-base">
@@ -302,7 +302,7 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
     </div>
 
     <!-- Products section -->
-    <div id="products-container" class="w-full p-3 flex flex-wrap justify-center gap-5">
+    <div id="products-container" class="w-full p-2 flex flex-wrap justify-center gap-2 md:gap-4">
         <?php
         $unique_products = [];
         foreach ($get_product as $list) {
@@ -348,7 +348,7 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
             // Select the first format (or implement your own logic for selecting a format)
             $selected_format = !empty($product_formats) ? $product_formats[0] : null;
         ?>
-            <div class="product-card w-96 md:w-72 h-[40rem] md:h-[37rem] flex gap-2 flex-col relative group shadow"
+            <div class="product-card flex  max-w-[48%] md:max-w-[23%] gap-2 flex-col relative group shadow"
                 data-gender-id="<?= $gender_id ?>" data-genre-id="<?= $genre_id ?>" data-type-id="<?= $type_id ?>" data-season-id="<?= $season_id ?>" data-sillage-id="<?= $sillage_id ?>" data-lasting-id="<?= $lasting_id ?>">
                 <div class="openModalBtn z-10 absolute -top-2 -right-2 bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full p-3 flex items-center justify-center text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out cursor-pointer"
                     data-product-id="<?= $list['id'] ?>" data-product-name="<?= $list['name'] ?>"
@@ -394,23 +394,23 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
                 ?>
 
                 <!-- Product image -->
-                <div class="relative h-[1200px] w-full">
-                    <a href="product_details?id=<?= $product_id ?>" class="product-link w-full">
+                <div class="relative">
+                    <a href="product_details?id=<?= $product_id ?>" class="product-link">
                         <!-- Main image -->
                         <img src="./image/products/<?= $main_image ?>" alt="<?= $list['name'] ?>"
-                            class="h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0 border">
+                            class=" object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0 border">
 
                         <!-- Hover image -->
                         <img src="./image/products/<?= $hover_image ?: $main_image ?>" alt="<?= $list['name'] ?> Hover"
-                            class="absolute top-0 left-0 h-full w-full object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100 border">
+                            class="absolute top-0 left-0  object-cover rounded-t-lg transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100 border">
                     </a>
                 </div>
 
                 <!-- Product details -->
                 <div class="px-4 py-2 h-full flex flex-col justify-evenly">
                     <a href="product_details?id=<?= $list['id'] ?>"
-                        class="text-lg font-bold hover:underline"><?= htmlspecialchars($list['name']) ?></a>
-                    <p class="text-gray-600 overflow-hidden text-ellipsis line-clamp-2">
+                        class="text-sm md:text-lg font-bold hover:underline"><?= htmlspecialchars($list['name']) ?></a>
+                    <p class="text-gray-600 overflow-hidden text-xs md:text-base text-ellipsis line-clamp-2">
                         <?= htmlspecialchars($list['description']) ?></p>
 
                     <!-- Display selected format -->
@@ -428,10 +428,10 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
                             $final_price = max(0, $final_price);
                         }
                         ?>
-                        <p class="text-lg font-bold text-red-500">
+                        <p class="text-sm md:text-lg font-bold text-red-500">
                             Rs. <?= htmlspecialchars($final_price) ?>
                             <?php if ($final_price < $non_sale_price): ?>
-                                <span class="text-gray-500 line-through text-sm ml-2">Rs. <?= htmlspecialchars($non_sale_price) ?></span>
+                                <span class="text-gray-500 line-through text-xs md:text-sm ml-2">Rs. <?= htmlspecialchars($non_sale_price) ?></span>
                             <?php endif; ?>
                         </p>
                     <?php else: ?>
@@ -592,10 +592,10 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
 </script>
 
 <!-- Modal Overlay -->
-<div id="modalOverlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50"></div>
+<div id="modalOverlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-[5000]"></div>
 
 <!-- Modal -->
-<div id="modal" class="fixed inset-0 items-center justify-center hidden z-50">
+<div id="modal" class="fixed inset-0 items-center justify-center hidden z-[5001]">
     <div class="bg-white p-10 rounded-lg shadow-lg w-5/6 md:w-2/3 lg:w-1/3 relative">
         <h2 class="text-2xl font-bold mb-4" id="modal-product-name">Product Name</h2>
         <!-- Options -->
@@ -683,14 +683,27 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
             let firstAvailableFormatFound = false;
 
             productFormats.forEach((formatObj, index) => {
+                // Create the parent div
                 const formatDiv = document.createElement('div');
                 formatDiv.className = 'border-2 border-black p-2 cursor-pointer w-fit my-2';
+
+                // Create the child element for the format
+                const formatText = document.createElement('span');
+                formatText.className = 'format-text'; // Optional class for styling or identification
+                formatText.innerText = formatObj.format;
+
+                // Create the child element for the unit of measure
+                const unitText = document.createElement('span');
+                unitText.className = 'unit-text'; // Optional class for styling or identification
                 let unitOfMeasure = formatObj.unit_of_measure == 0 || formatObj.unit_of_measure == "" ? '' : formatObj.unit_of_measure;
-                formatDiv.innerText = `${formatObj.format}`;
+                unitText.innerText = unitOfMeasure;
+                // Append the child elements to the parent div
+                formatDiv.appendChild(formatText);
+                formatDiv.appendChild(unitText);
 
                 // Add additional data attributes
                 formatDiv.dataset.price = formatObj.price;
-                // formatDiv.dataset.unitOfMeasure = formatObj.unit_of_measure; // unit of measure
+                formatDiv.dataset.unitOfMeasure = formatObj.unit_of_measure; // unit of measure
                 formatDiv.dataset.salePrice = formatObj.sale_price; // Sale price
                 formatDiv.dataset.unitOfSale = formatObj.unit_of_sale; // Unit of sale
                 formatDiv.dataset.qty = formatObj.qty; // Include quantity data
@@ -791,10 +804,13 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
 
     function AddToCartBtn() {
         const selectedFormat = document.querySelector('#format-container .bg-gray-200');
+        const selectedFormatText = document.querySelector('#format-container .bg-gray-200 .format-text');
+        const selectedUnit = document.querySelector('#format-container .bg-gray-200 .unit-text');
         const quantity = document.getElementById('qty').value; // Get the quantity from the input
 
         if (selectedFormat && !selectedFormat.classList.contains('cursor-not-allowed')) {
-            const format = selectedFormat.innerText; // Get the selected format text
+            const format = selectedFormatText.innerText; // Get the selected format text
+            const unit = selectedUnit.innerText; // Get the selected unit text
             const price = parseFloat(selectedFormat.dataset.price); // Get the regular price
             const salePrice = parseFloat(selectedFormat.dataset.salePrice) || 0; // Get the sale price or default to 0
             const unitOfSale = selectedFormat.dataset.unitOfSale; // Get the unit of sale
@@ -809,11 +825,16 @@ while ($row = mysqli_fetch_assoc($lastingQuery)) {
                 }
             }
 
+            // Convert finalPrice to an integer
+            finalPrice = Math.round(finalPrice); // Rounds to the nearest integer
+            const qty = parseInt(quantity, 10); // Parse quantity as an integer
+            // console.log(currentProductId,qty,format,finalPrice,unit);
             // Call manage_cart with the current product ID, selected format, quantity, and final price
-            manage_cart(currentProductId, 'add', quantity, format, finalPrice);
+            manage_cart(currentProductId, 'add', qty, format, finalPrice, unit);
         } else {
             alert("Please select an available format.");
         }
+
     }
 </script>
 

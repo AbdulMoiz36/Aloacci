@@ -66,15 +66,16 @@ if (mysqli_query($con, $order_query)) {
         $price = $product['price'];
 
         // Get the format name based on format_id
-        $format_query = "SELECT format FROM product_format WHERE id = '$format_id'";
+        $format_query = "SELECT format,unit_of_measure FROM product_format WHERE id = '$format_id'";
         $format_result = mysqli_query($con, $format_query);
         $format_name = '';
         if ($format_row = mysqli_fetch_assoc($format_result)) {
             $format_name = $format_row['format'];
+            $format_unit = $format_row['unit_of_measure'];
         }
 
         // Insert into order_details table
-        $details_query = "INSERT INTO orders_detail (order_id, product_id, format, qty, price) VALUES ('$order_id', '$product_id', '$format_name', '$qty', '$price')";
+        $details_query = "INSERT INTO orders_detail (order_id, product_id, format, qty, price, unit_of_measure) VALUES ('$order_id', '$product_id', '$format_name', '$qty', '$price', '$format_unit')";
         mysqli_query($con, $details_query);
     }
     
