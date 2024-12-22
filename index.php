@@ -145,7 +145,18 @@ if (mysqli_num_rows($res) > 0) {
             <div
                 class="product-card min-w-28 lg:w-full md:w-72 h-[20rem] lg:h-[40rem] flex gap-2 flex-col relative group shadow">
                 <?php
-                if ($list['sale_price'] > 0) {
+                $final_price = $list['price'];
+                $non_sale_price = $list['price'];
+
+                if (!empty($list['sale_price']) && $list['sale_price'] > 0) {
+                    if ($list['unit_of_sale'] === 'Price') {
+                        $final_price = $list['price'] - $list['sale_price'];
+                    } elseif ($list['unit_of_sale'] === 'Percentage') {
+                        $final_price = $list['price'] - floor($list['price'] * ($list['sale_price'] / 100));
+                    }
+                    $final_price = max(0, $final_price);
+                }
+                if ($list['sale_price'] > 0) { 
                 ?>
                     <div class="bg-red-600 absolute z-10 top-0 left-0 px-3 rounded-tl-md">
                         <p class="text-white">Sale</p>
@@ -170,7 +181,12 @@ if (mysqli_num_rows($res) > 0) {
                         class="text-sm md:text-lg font-bold hover:underline"><?= $list['name'] ?></a>
                     <p class="text-gray-600 overflow-hidden text-ellipsis line-clamp-2 text-xs md:text-base">
                         <?= $list['description'] ?> </p>
-                    <p class="text-xs md:text-lg font-bold text-red-500">Rs. <?= $list['price'] ?></p>
+                        <p class="text-sm md:text-lg font-bold text-red-500">
+                            Rs. <?= htmlspecialchars($final_price) ?>
+                            <?php if ($final_price < $non_sale_price): ?>
+                                <span class="text-gray-500 line-through text-xs md:text-sm ml-2">Rs. <?= htmlspecialchars($non_sale_price) ?></span>
+                            <?php endif; ?>
+                        </p>
                 </div>
             </div>
 
@@ -277,6 +293,17 @@ if (mysqli_num_rows($res) > 0) {
                 } else {
                     $hover_image = $main_image;
                 }
+                $final_price = $list['price'];
+                $non_sale_price = $list['price'];
+
+                if (!empty($list['sale_price']) && $list['sale_price'] > 0) {
+                    if ($list['unit_of_sale'] === 'Price') {
+                        $final_price = $list['price'] - $list['sale_price'];
+                    } elseif ($list['unit_of_sale'] === 'Percentage') {
+                        $final_price = $list['price'] - floor($list['price'] * ($list['sale_price'] / 100));
+                    }
+                    $final_price = max(0, $final_price);
+                }
         ?>
 
                 <div
@@ -297,10 +324,17 @@ if (mysqli_num_rows($res) > 0) {
                     <!-- Product details -->
                     <div class="px-4 py-2 h-[35%] flex flex-col justify-evenly">
                         <a href="product_details?id=<?= $list['id'] ?>"
-                            class="text-sm md:text-lg font-bold hover:underline"><?= $list['name'] ?></a>
+                            class="text-sm md:text-lg font-bold hover:underline"><?= $list['name'] ?>
+                            <span class="text-gray-600 text-xs">(<?= $list['format'] ?> <?= $list['unit_of_measure'] ?>)</span>
+                        </a>
                         <p class="text-gray-600 overflow-hidden text-ellipsis line-clamp-2 text-xs md:text-base">
                             <?= $list['description'] ?> </p>
-                        <p class="text-xs md:text-lg font-bold text-red-500">Rs. <?= $list['sale_price'] ?></p>
+                            <p class="text-sm md:text-lg font-bold text-red-500">
+                                Rs. <?= htmlspecialchars($final_price) ?>
+                                <?php if ($final_price < $non_sale_price): ?>
+                                    <span class="text-gray-500 line-through text-xs md:text-sm ml-2">Rs. <?= htmlspecialchars($non_sale_price) ?></span>
+                                    <?php endif; ?>
+                        </p>
                     </div>
                 </div>
 
